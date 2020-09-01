@@ -1,0 +1,112 @@
+@import "~@angular/material/theming";
+// Plus imports for other components in your app.
+
+// Include the common styles for Angular Material. We include this here so that you only
+// have to load a single css file for Angular Material in your app.
+// **Be sure that you only ever include this mixin once!**
+@include mat-core();
+
+//#7fc600
+$flotte-green: (
+  50: #f0f8e0,
+  100: #d9eeb3,
+  200: #bfe380,
+  300: #a5d74d,
+  400: #92cf26,
+  500: #7fc600,
+  600: #77c000,
+  700: #6cb900,
+  800: #62b100,
+  900: #4fa400,
+  A100: #e2ffce,
+  A200: #c4ff9b,
+  A400: #a6ff68,
+  A700: #97ff4f,
+  contrast: (
+    50: #000000,
+    100: #000000,
+    200: #000000,
+    300: #000000,
+    400: #000000,
+    500: #000000,
+    600: #000000,
+    700: #000000,
+    800: #000000,
+    900: #ffffff,
+    A100: #000000,
+    A200: #000000,
+    A400: #000000,
+    A700: #000000,
+  ),
+);
+
+$flotte-orange: (
+  50: #fdeee0,
+  100: #fad5b3,
+  200: #f7ba80,
+  300: #f39e4d,
+  400: #f18926,
+  500: #ee7400,
+  600: #ec6c00,
+  700: #e96100,
+  800: #e75700,
+  900: #e24400,
+  A100: #ffffff,
+  A200: #ffe0d6,
+  A400: #ffb9a3,
+  A700: #ffa58a,
+  contrast: (
+    50: #000000,
+    100: #000000,
+    200: #000000,
+    300: #000000,
+    400: #000000,
+    500: #000000,
+    600: #000000,
+    700: #ffffff,
+    800: #ffffff,
+    900: #ffffff,
+    A100: #000000,
+    A200: #000000,
+    A400: #000000,
+    A700: #000000,
+  ),
+);
+// Define the default theme (same as the example above).
+$light-primary: mat-palette($flotte-green);
+$light-accent: mat-palette($flotte-orange);
+$light-theme: mat-light-theme(
+  (
+    color: (
+      primary: $light-primary,
+      accent: $light-accent,
+    ),
+  )
+);
+.light-theme {
+  @include angular-material-theme($light-theme);
+}
+
+// Define an alternate dark theme.
+$dark-primary: mat-palette($flotte-green);
+$dark-accent: mat-palette($flotte-orange);
+$dark-warn: mat-palette($mat-deep-orange);
+$dark-theme: mat-dark-theme(
+  (
+    color: (
+      primary: $dark-primary,
+      accent: $dark-accent,
+      warn: $dark-warn,
+    ),
+  )
+);
+
+// Include the dark color styles inside of a block with a CSS class. You can make this
+// CSS class whatever you want. In this example, any component inside of an element with
+// `.unicorn-dark-theme` will be affected by this alternate dark theme instead of the default theme.
+.dark-theme {
+  @include angular-material-theme($dark-theme);
+}
+
+// Include the default theme styles (color and default density)
+//@include angular-material-theme($dark-theme);
