@@ -8,9 +8,18 @@ import { ColorThemeService } from './services/colorTheme.service';
 })
 export class AppComponent {
   title = 'flotte-frontend';
+  darkThemeIsActive: boolean = false;
 
-  constructor(private renderer: Renderer2, private themeService: ColorThemeService) {
+  constructor(
+    private renderer: Renderer2,
+    private themeService: ColorThemeService
+  ) {
     this.renderer.addClass(document.body, 'mat-app-background'); //so the background color changes dependent on current theme
     this.themeService.load();
+    this.darkThemeIsActive = this.themeService.currentActive() === 'dark-theme';
+  }
+
+  changeTheme(event) {
+    this.themeService.update(event.checked ? 'dark-theme' : 'light-theme');
   }
 }

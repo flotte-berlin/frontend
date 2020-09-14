@@ -9,13 +9,14 @@ import {MatInputModule} from '@angular/material/input';
 import {MatMenuModule} from '@angular/material/menu';
 import {MatSlideToggleModule} from '@angular/material/slide-toggle';
 import {MatIconModule} from '@angular/material/icon';
+import {MatSidenavModule} from '@angular/material/sidenav';
+import {MatListModule} from '@angular/material/list';
 
 
 import { AppRoutingModule } from './app-routing.module';
 import { AppComponent } from './app.component';
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 import { LoginComponent } from './pages/login/login.component';
-import { NavbarComponent } from './components/navbar/navbar.component';
 import { BikesComponent } from './pages/bikes/bikes.component';
 
 
@@ -24,7 +25,6 @@ import { BikesComponent } from './pages/bikes/bikes.component';
   declarations: [
     AppComponent,
     LoginComponent,
-    NavbarComponent,
     BikesComponent
   ],
   imports: [
@@ -37,7 +37,9 @@ import { BikesComponent } from './pages/bikes/bikes.component';
     MatInputModule,
     MatMenuModule,
     MatSlideToggleModule,
-    MatIconModule
+    MatIconModule,
+    MatSidenavModule,
+    MatListModule
   ],
   providers: [],
   bootstrap: [AppComponent]
