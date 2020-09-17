@@ -1,5 +1,6 @@
 import { Component, Renderer2 } from '@angular/core';
 import { ColorThemeService } from './services/colorTheme.service';
+import { AuthService } from './services/auth.service';
 
 @Component({
   selector: 'app-root',
@@ -7,16 +8,19 @@ import { ColorThemeService } from './services/colorTheme.service';
   styleUrls: ['./app.component.scss'],
 })
 export class AppComponent {
-  title = 'flotte-frontend';
+  title = 'fLotte-fRontend';
   darkThemeIsActive: boolean = false;
+  loggedIn = false;
 
   constructor(
     private renderer: Renderer2,
-    private themeService: ColorThemeService
+    private themeService: ColorThemeService,
+    private authService: AuthService
   ) {
     this.renderer.addClass(document.body, 'mat-app-background'); //so the background color changes dependent on current theme
     this.themeService.load();
     this.darkThemeIsActive = this.themeService.currentActive() === 'dark-theme';
+    this.authService.loggedIn.subscribe((value) => (this.loggedIn = value));
   }
 
   changeTheme(event) {

@@ -3,3 +3,17 @@
 
 html, body { height: 100%; }
 body { margin: 0; font-family: Roboto, "Helvetica Neue", sans-serif; }
+
+h1 {
+    display: block;
+    padding-bottom: 5px;
+    position: relative;
+}
+h1:before {
+    content: "";
+    position: absolute;
+    width: 5rem;
+    height: 1px;
+    bottom: 0;
+    border-bottom: 3px solid #7fc600;
+}

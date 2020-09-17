@@ -1,9 +1,9 @@
 <div id="page-wrapper">
   <mat-toolbar id="navbar">
-    <button mat-icon-button (click)="sidenav.toggle()">
+    <button mat-icon-button (click)="sidenav.toggle()" *ngIf="loggedIn">
       <mat-icon>menu</mat-icon>
     </button>
-    <span>Flotte</span>
+    <span>fLotte</span>
     <button mat-icon-button [matMenuTriggerFor]="menu" id="menu-trigger-button">
       <mat-icon>more_vert</mat-icon>
     </button>
@@ -16,6 +16,7 @@
         <mat-slide-toggle
           (change)="changeTheme($event)"
           [checked]="darkThemeIsActive"
+          color="primary"
           >Dark Mode</mat-slide-toggle
         >
       </div>
