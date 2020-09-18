@@ -1,5 +1,5 @@
 import { Component, OnInit } from '@angular/core';
-import { BikesGQL, BikesQuery, CargoBike } from '../../../generated/graphql';
+import { CargoBikesGQL, CargoBikesQuery, CargoBike } from '../../../generated/graphql';
 
 @Component({
   selector: 'app-bikes',
@@ -9,9 +9,9 @@ import { BikesGQL, BikesQuery, CargoBike } from '../../../generated/graphql';
 export class BikesComponent implements OnInit {
   displayedColumns: string[] = ['position', 'name', 'weight', 'symbol'];
   dataSource = ELEMENT_DATA;
-  bikes: BikesQuery;
+  bikes: CargoBikesQuery;
 
-  constructor(private bikesGQL: BikesGQL) {
+  constructor(private bikesGQL: CargoBikesGQL) {
     this.bikesGQL.watch().valueChanges.subscribe((result) => {
       console.log(result);
       this.bikes = result.data;

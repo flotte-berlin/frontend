@@ -1,4 +1,4 @@
-query Bikes {
+query CargoBikes {
   cargoBikes {
     id
     name

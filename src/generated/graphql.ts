@@ -657,10 +657,10 @@ export enum CacheControlScope {
 }
 
 
-export type BikesQueryVariables = Exact<{ [key: string]: never; }>;
+export type CargoBikesQueryVariables = Exact<{ [key: string]: never; }>;
 
 
-export type BikesQuery = (
+export type CargoBikesQuery = (
   { __typename?: 'Query' }
   & { cargoBikes: Array<Maybe<(
     { __typename?: 'CargoBike' }
@@ -678,8 +678,8 @@ export type BikesQuery = (
   )>> }
 );
 
-export const BikesDocument = gql`
-    query Bikes {
+export const CargoBikesDocument = gql`
+    query CargoBikes {
   cargoBikes {
     id
     name
@@ -700,8 +700,8 @@ export const BikesDocument = gql`
   @Injectable({
     providedIn: 'root'
   })
-  export class BikesGQL extends Apollo.Query<BikesQuery, BikesQueryVariables> {
-    document = BikesDocument;
+  export class CargoBikesGQL extends Apollo.Query<CargoBikesQuery, CargoBikesQueryVariables> {
+    document = CargoBikesDocument;
     
     constructor(apollo: Apollo.Apollo) {
       super(apollo);
