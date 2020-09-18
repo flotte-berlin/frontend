@@ -23,6 +23,7 @@ import { AppComponent } from './app.component';
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 import { LoginComponent } from './pages/login/login.component';
 import { BikesComponent } from './pages/bikes/bikes.component';
+import { GraphQLModule } from './graphql.module';
 
 
 
@@ -50,7 +51,8 @@ import { BikesComponent } from './pages/bikes/bikes.component';
     MatListModule,
     MatFormFieldModule,
     MatProgressSpinnerModule,
-    MatProgressBarModule
+    MatProgressBarModule,
+    GraphQLModule
   ],
   providers: [],
   bootstrap: [AppComponent]

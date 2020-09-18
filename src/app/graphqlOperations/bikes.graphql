@@ -1,0 +1,16 @@
+query Bikes {
+  cargoBikes {
+    id
+    name
+    events {
+      date
+    }
+    insuranceData {
+      billing
+    }
+    dimensionsAndLoad {
+      bikeLength
+      bikeWeight
+    }
+  }
+}
