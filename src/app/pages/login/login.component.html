@@ -35,4 +35,7 @@
   <button mat-stroked-button color="primary" (click)="login()">
     Login
   </button>
+  <mat-error class="login-error-message" *ngIf="errorOccurred">
+    {{errorMessage}}
+  </mat-error>
 </div>

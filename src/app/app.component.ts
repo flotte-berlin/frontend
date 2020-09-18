@@ -1,6 +1,7 @@
 import { Component, Renderer2 } from '@angular/core';
 import { ColorThemeService } from './services/colorTheme.service';
 import { AuthService } from './services/auth.service';
+import { Router } from '@angular/router';
 
 @Component({
   selector: 'app-root',
@@ -15,7 +16,8 @@ export class AppComponent {
   constructor(
     private renderer: Renderer2,
     private themeService: ColorThemeService,
-    private authService: AuthService
+    private authService: AuthService,
+    private router: Router,
   ) {
     this.renderer.addClass(document.body, 'mat-app-background'); //so the background color changes dependent on current theme
     this.themeService.load();
@@ -25,5 +27,9 @@ export class AppComponent {
 
   changeTheme(event) {
     this.themeService.update(event.checked ? 'dark-theme' : 'light-theme');
+  }
+
+  logout() {
+    this.authService.logout().subscribe().add(() => this.router.navigate(['login']));
   }
 }

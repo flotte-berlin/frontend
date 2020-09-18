@@ -20,6 +20,10 @@
           >Dark Mode</mat-slide-toggle
         >
       </div>
+      <button *ngIf="loggedIn" mat-menu-item (click)="logout()">
+        <mat-icon>exit_to_app</mat-icon>
+        <span>Ausloggen</span>
+      </button>
     </mat-menu>
   </mat-toolbar>
 
