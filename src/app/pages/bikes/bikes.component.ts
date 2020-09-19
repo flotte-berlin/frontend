@@ -1,5 +1,8 @@
 import { Component, OnInit } from '@angular/core';
-import { CargoBikesGQL, CargoBikesQuery, CargoBike } from '../../../generated/graphql';
+import { DeepExtractTypeSkipArrays } from 'ts-deep-extract-types';
+import { GetCargoBikesGQL, GetCargoBikesQuery } from '../../../generated/graphql';
+
+type CargoBikeResult = DeepExtractTypeSkipArrays<GetCargoBikesQuery, ["cargoBikes"]>;
 
 @Component({
   selector: 'app-bikes',
@@ -9,12 +12,12 @@ import { CargoBikesGQL, CargoBikesQuery, CargoBike } from '../../../generated/gr
 export class BikesComponent implements OnInit {
   displayedColumns: string[] = ['position', 'name', 'weight', 'symbol'];
   dataSource = ELEMENT_DATA;
-  bikes: CargoBikesQuery;
+  
+  bikes: CargoBikeResult[];
 
-  constructor(private bikesGQL: CargoBikesGQL) {
+  constructor(private bikesGQL: GetCargoBikesGQL) {
     this.bikesGQL.watch().valueChanges.subscribe((result) => {
-      console.log(result);
-      this.bikes = result.data;
+      this.bikes = result.data.cargoBikes;
     });
   }
 

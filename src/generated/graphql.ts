@@ -657,14 +657,14 @@ export enum CacheControlScope {
 }
 
 
-export type CargoBikesQueryVariables = Exact<{ [key: string]: never; }>;
+export type GetCargoBikesQueryVariables = Exact<{ [key: string]: never; }>;
 
 
-export type CargoBikesQuery = (
+export type GetCargoBikesQuery = (
   { __typename?: 'Query' }
   & { cargoBikes: Array<Maybe<(
     { __typename?: 'CargoBike' }
-    & Pick<CargoBike, 'id' | 'name'>
+    & Pick<CargoBike, 'id' | 'name' | 'numberOfChildren'>
     & { events?: Maybe<Array<Maybe<(
       { __typename?: 'BikeEvent' }
       & Pick<BikeEvent, 'date'>
@@ -673,13 +673,16 @@ export type CargoBikesQuery = (
       & Pick<InsuranceData, 'billing'>
     ), dimensionsAndLoad: (
       { __typename?: 'DimensionsAndLoad' }
-      & Pick<DimensionsAndLoad, 'bikeLength' | 'bikeWeight'>
+      & Pick<DimensionsAndLoad, 'bikeLength' | 'bikeWeight' | 'bikeHeight' | 'bikeWidth' | 'boxHeight' | 'boxLength' | 'boxWidth' | 'hasCoverBox' | 'lockable' | 'maxWeightBox' | 'maxWeightLuggageRack' | 'maxWeightTotal'>
+    ), security: (
+      { __typename?: 'Security' }
+      & Pick<Security, 'frameNumber'>
     ) }
   )>> }
 );
 
-export const CargoBikesDocument = gql`
-    query CargoBikes {
+export const GetCargoBikesDocument = gql`
+    query GetCargoBikes {
   cargoBikes {
     id
     name
@@ -692,6 +695,34 @@ export const CargoBikesDocument = gql`
     dimensionsAndLoad {
       bikeLength
       bikeWeight
+      bikeHeight
+      bikeWidth
+      boxHeight
+      boxLength
+      boxWidth
+      hasCoverBox
+      lockable
+      maxWeightBox
+      maxWeightLuggageRack
+      maxWeightTotal
+    }
+    numberOfChildren
+    security {
+      frameNumber
+    }
+    dimensionsAndLoad {
+      bikeHeight
+      bikeLength
+      bikeWeight
+      bikeWidth
+      boxHeight
+      boxLength
+      boxWidth
+      hasCoverBox
+      lockable
+      maxWeightBox
+      maxWeightLuggageRack
+      maxWeightTotal
     }
   }
 }
@@ -700,8 +731,8 @@ export const CargoBikesDocument = gql`
   @Injectable({
     providedIn: 'root'
   })
-  export class CargoBikesGQL extends Apollo.Query<CargoBikesQuery, CargoBikesQueryVariables> {
-    document = CargoBikesDocument;
+  export class GetCargoBikesGQL extends Apollo.Query<GetCargoBikesQuery, GetCargoBikesQueryVariables> {
+    document = GetCargoBikesDocument;
     
     constructor(apollo: Apollo.Apollo) {
       super(apollo);
