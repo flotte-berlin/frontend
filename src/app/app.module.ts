@@ -22,8 +22,11 @@ import { AppRoutingModule } from './app-routing.module';
 import { AppComponent } from './app.component';
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 import { LoginComponent } from './pages/login/login.component';
-import { BikesComponent } from './pages/bikes/bikes.component';
+import { BikesComponent } from './pages/tables/bikes/bikes.component';
 import { GraphQLModule } from './graphql.module';
+import { ParticipantsComponent } from './pages/tables/participants/participants.component';
+import { LendingStationsComponent } from './pages/tables/lending-stations/lending-stations.component';
+import { TableOverviewComponent } from './pages/table-overview/table-overview.component';
 
 
 
@@ -31,7 +34,10 @@ import { GraphQLModule } from './graphql.module';
   declarations: [
     AppComponent,
     LoginComponent,
-    BikesComponent
+    BikesComponent,
+    ParticipantsComponent,
+    LendingStationsComponent,
+    TableOverviewComponent
   ],
   imports: [
     BrowserModule,

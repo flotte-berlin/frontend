@@ -29,13 +29,11 @@
 
   <mat-sidenav-container id="content">
     <mat-sidenav #sidenav>
-      <mat-nav-list>
-        <a mat-list-item [routerLink]="'/accounts'"> Accounts </a>
-        <a mat-list-item [routerLink]="'/create-account'"> Create Account </a>
-        <a mat-list-item [routerLink]="'/contacts'"> Contacts </a>
-        <a mat-list-item [routerLink]="'/create-contact'"> Create Contact </a>
-        <a mat-list-item [routerLink]="'/activities'"> Activities </a>
-        <a mat-list-item [routerLink]="'/create-activity'"> Create Activity </a>
+      <mat-nav-list (click)="sidenav.toggle()">
+        <a mat-list-item [routerLink]="'/tableOverview'"> Tabellenübersicht </a>
+        <a mat-list-item [routerLink]="'/table/bikes'"> Lastenräder </a>
+        <a mat-list-item [routerLink]="'/table/participants'"> Beteiligte </a>
+        <a mat-list-item [routerLink]="'/table/lendingStations'"> Ausleihstationen </a>
       </mat-nav-list>
     </mat-sidenav>
     <mat-sidenav-content>

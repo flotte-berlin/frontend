@@ -1,6 +1,6 @@
 import { Component, OnInit } from '@angular/core';
 import { DeepExtractTypeSkipArrays } from 'ts-deep-extract-types';
-import { GetCargoBikesGQL, GetCargoBikesQuery } from '../../../generated/graphql';
+import { GetCargoBikesGQL, GetCargoBikesQuery } from '../../../../generated/graphql';
 
 type CargoBikeResult = DeepExtractTypeSkipArrays<GetCargoBikesQuery, ["cargoBikes"]>;
 
