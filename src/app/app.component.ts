@@ -2,6 +2,8 @@ import { Component, Renderer2 } from '@angular/core';
 import { ColorThemeService } from './services/colorTheme.service';
 import { AuthService } from './services/auth.service';
 import { Router } from '@angular/router';
+import { ViewChild } from '@angular/core';
+import { MatSidenav } from '@angular/material/sidenav';
 
 @Component({
   selector: 'app-root',
@@ -12,6 +14,8 @@ export class AppComponent {
   title = 'fLotte-fRontend';
   darkThemeIsActive: boolean = false;
   loggedIn = false;
+
+  @ViewChild('sidenav') public sideNav:MatSidenav;
 
   constructor(
     private renderer: Renderer2,
@@ -31,5 +35,6 @@ export class AppComponent {
 
   logout() {
     this.authService.logout().subscribe().add(() => this.router.navigate(['login']));
+    this.sideNav.close();
   }
 }

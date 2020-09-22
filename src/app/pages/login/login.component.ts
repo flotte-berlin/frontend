@@ -29,7 +29,7 @@ export class LoginComponent implements OnInit {
     this.authService
       .login(this.email.value, this.password.value)
       .subscribe(
-        () => this.router.navigate(['bikes']),
+        () => this.router.navigate(['tableOverview']),
         (error) => {
           this.errorOccurred = true;
           this.errorMessage =

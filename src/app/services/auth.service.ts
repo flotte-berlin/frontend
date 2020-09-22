@@ -1,6 +1,6 @@
 import { Injectable } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
-import { map, tap } from 'rxjs/operators';
+import { finalize, map, tap } from 'rxjs/operators';
 import { environment } from '../../environments/environment';
 import { BehaviorSubject } from 'rxjs';
 
@@ -43,7 +43,7 @@ export class AuthService {
   logout() {
     // remove token from local storage to log user out
     return this.http
-      .post<any>(`${environment.authUrl}/logout`, { request_token: this.requestToken }).pipe(tap(() => {
+      .post<any>(`${environment.authUrl}/logout`, { request_token: this.requestToken }).pipe(finalize(() => {
         localStorage.removeItem('requestToken');
         localStorage.removeItem('refreshToken');
         this.checkIfUserIsLoggedIn();
