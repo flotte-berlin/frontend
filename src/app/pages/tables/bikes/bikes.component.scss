@@ -20,6 +20,11 @@
         box-sizing: border-box;
       }
 
+      .mat-table-sticky {
+        filter: brightness(90%);
+        //opacity: 1;
+      }
+
       .button-wrapper {
         display: flex;
         flex-direction: row;

@@ -21,9 +21,12 @@ export class BikesComponent {
     bikesService.loadBikes();
   }
 
+  edit(id: string) {
+    console.log(id);
+  }
+
   drop(event: CdkDragDrop<string[]>) {
-    console.log(event);
-    moveItemInArray(this.displayedColumns, event.previousIndex + 1, event.currentIndex + 1); // + 1 because the first (selection) column is not dragable
+    moveItemInArray(this.displayedColumns, event.previousIndex + 2, event.currentIndex + 2); // +2 because the first 2 (selection + name) columns are not dragable
   }
 
   /** Whether the number of selected elements matches the total number of rows. */

@@ -78,7 +78,7 @@
         <th mat-header-cell *matHeaderCellDef></th>
         <td mat-cell *matCellDef="let element">
           <div class="button-wrapper">
-            <button mat-icon-button>
+            <button mat-icon-button (click)="edit(element.id)">
               <mat-icon>edit</mat-icon>
             </button>
             <button mat-icon-button>
