@@ -7,7 +7,7 @@ import { BikesService, CargoBikeResult } from 'src/app/services/bikes.service';
   styleUrls: ['./bikes.component.scss'],
 })
 export class BikesComponent {
-  displayedColumns: string[] = ['id', 'name', 'weight', 'symbol'];
+  displayedColumns: string[] = ['id', 'name', 'frameNumber', 'numberOfChildren'];
   
   bikes: CargoBikeResult[];
 

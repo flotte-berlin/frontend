@@ -26,19 +26,20 @@
   </ng-container>
 
   <!-- Weight Column -->
-  <ng-container matColumnDef="weight">
-    <th mat-header-cell *matHeaderCellDef>Weight</th>
+  <ng-container matColumnDef="frameNumber">
+    <th mat-header-cell *matHeaderCellDef>Fahrgestellnummer</th>
     <td mat-cell *matCellDef="let element">
-      <mat-form-field
-        ><input matInput color="warn" [value]="element.weight"
-      /></mat-form-field>
+      <!--<mat-form-field>
+        <input matInput color="warn" [value]="element.security.frameNumber"/>
+      </mat-form-field>-->
+      {{ element.security.frameNumber }}
     </td>
   </ng-container>
 
   <!-- Symbol Column -->
-  <ng-container matColumnDef="symbol">
-    <th mat-header-cell *matHeaderCellDef>Symbol</th>
-    <td mat-cell *matCellDef="let element">{{ element.symbol }}</td>
+  <ng-container matColumnDef="numberOfChildren">
+    <th mat-header-cell *matHeaderCellDef>Anzahl Kinder</th>
+    <td mat-cell *matCellDef="let element">{{ element.numberOfChildren }}</td>
   </ng-container>
 
   <tr mat-header-row *matHeaderRowDef="displayedColumns"></tr>
