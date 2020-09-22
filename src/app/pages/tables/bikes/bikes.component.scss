@@ -1,24 +1,29 @@
-.table-control {
-  margin: 0.5em;
-}
-#table-container {
-  width: 100%;
-  max-width: 100%;
-  overflow: auto;
-  table {
+.table-page-wrapper {
+  display: flex;
+  flex-direction: column;
+  height: 100%;
+  .table-control {
+    margin: 0.5em;
+    flex: none;
+  }
+  .table-container {
+    flex: 1;
     width: 100%;
-    th.mat-column-name,
-    td.mat-column-name {
-      padding-left: 8px;
-    }
+    max-width: 100%;
+    overflow: auto;
+    table {
+      width: 100%;
+      .mat-header-cell,
+      .mat-footer-cell,
+      .mat-cell {
+        min-width: 80px;
+        box-sizing: border-box;
+      }
 
-    .mat-table-sticky:first-child {
-      border-right: 1px solid #ffffff1f;
-      padding-right: 1em;
-    }
-
-    .mat-table-sticky:last-child {
-      border-left: 1px solid #ffffff1f;
+      .button-wrapper {
+        display: flex;
+        flex-direction: row;
+      }
     }
   }
 }
