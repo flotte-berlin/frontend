@@ -1,6 +1,24 @@
 .table-control {
-    margin: 0.5em;
+  margin: 0.5em;
 }
-table {
+#table-container {
+  width: 100%;
+  max-width: 100%;
+  overflow: auto;
+  table {
     width: 100%;
+    th.mat-column-name,
+    td.mat-column-name {
+      padding-left: 8px;
+    }
+
+    .mat-table-sticky:first-child {
+      border-right: 1px solid #ffffff1f;
+      padding-right: 1em;
+    }
+
+    .mat-table-sticky:last-child {
+      border-left: 1px solid #ffffff1f;
+    }
+  }
 }
