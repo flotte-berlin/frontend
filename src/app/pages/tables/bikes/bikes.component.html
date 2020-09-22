@@ -78,9 +78,10 @@
         <th mat-header-cell *matHeaderCellDef></th>
         <td mat-cell *matCellDef="let element">
           <div class="button-wrapper">
-            <button mat-icon-button (click)="edit(element.id)">
+            <button mat-icon-button (click)="edit(element)" [hidden]="isGettingEdited || waitingForEditPermissions">
               <mat-icon>edit</mat-icon>
             </button>
+            <mat-spinner [diameter]="32" *ngIf="waitingForEditPermissions"></mat-spinner>
             <button mat-icon-button>
               <mat-icon>delete</mat-icon>
             </button>
