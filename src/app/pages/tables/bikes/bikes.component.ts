@@ -3,6 +3,8 @@ import { Component } from '@angular/core';
 import { CdkDragDrop, moveItemInArray } from '@angular/cdk/drag-drop';
 import { BikesService, CargoBikeResult } from 'src/app/services/bikes.service';
 import { deepCopy } from 'src/app/helperFunctions/deepCopy';
+import { filter } from 'graphql-anywhere';
+import {CargoBikeFieldsMutableFragmentDoc} from 'src/generated/graphql';
 
 type CargoBikeDataRow = CargoBikeResult & {
   waitingForEditPermissions: boolean;
@@ -55,7 +57,7 @@ export class BikesComponent {
 
   save(row: CargoBikeDataRow) {
     //remove lock
-    this.bikesService.updateBike({bike: row})
+    this.bikesService.updateBike({bike: filter(CargoBikeFieldsMutableFragmentDoc, row)})
   }
 
   cancel(row: CargoBikeDataRow) {

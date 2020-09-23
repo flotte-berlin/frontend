@@ -27,6 +27,7 @@
     "@apollo/client": "^3.0.0",
     "apollo-angular": "^2.0.4",
     "graphql": "^15.3.0",
+    "graphql-anywhere": "^4.2.7",
     "rxjs": "~6.5.5",
     "ts-deep-extract-types": "^1.0.1",
     "tslib": "^2.0.0",

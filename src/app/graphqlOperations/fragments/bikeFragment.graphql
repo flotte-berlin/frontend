@@ -1,28 +1,24 @@
-fragment CargoBikeFields on CargoBike {
-    id
-    group
-    name
-    bikeEvents {
-      date
-      id  
-    }
-    insuranceData {
+fragment CargoBikeFieldsMutable on CargoBike {
+  id
+  group
+  name
+  insuranceData {
     billing
     hasFixedRate
-    }
-    dimensionsAndLoad {
+  }
+  dimensionsAndLoad {
     bikeLength
     bikeWeight
-    }
-    numberOfChildren
-    security {
+  }
+  numberOfChildren
+  security {
     frameNumber
     adfcCoding
     keyNumberAXAChain
     keyNumberFrameLock
     policeCoding
-    }
-    dimensionsAndLoad {
+  }
+  dimensionsAndLoad {
     bikeHeight
     bikeLength
     bikeWeight
@@ -35,6 +31,13 @@ fragment CargoBikeFields on CargoBike {
     maxWeightBox
     maxWeightLuggageRack
     maxWeightTotal
-    }
+  }
 }
 
+fragment CargoBikeFields on CargoBike {
+  ...CargoBikeFieldsMutable
+  bikeEvents {
+    date
+    id
+  }
+}

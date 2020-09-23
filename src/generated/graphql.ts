@@ -900,13 +900,10 @@ export type GetCargoBikesQuery = (
   )>> }
 );
 
-export type CargoBikeFieldsFragment = (
+export type CargoBikeFieldsMutableFragment = (
   { __typename?: 'CargoBike' }
   & Pick<CargoBike, 'id' | 'group' | 'name' | 'numberOfChildren'>
-  & { bikeEvents?: Maybe<Array<Maybe<(
-    { __typename?: 'BikeEvent' }
-    & Pick<BikeEvent, 'date' | 'id'>
-  )>>>, insuranceData: (
+  & { insuranceData: (
     { __typename?: 'InsuranceData' }
     & Pick<InsuranceData, 'billing' | 'hasFixedRate'>
   ), dimensionsAndLoad: (
@@ -918,15 +915,20 @@ export type CargoBikeFieldsFragment = (
   ) }
 );
 
-export const CargoBikeFieldsFragmentDoc = gql`
-    fragment CargoBikeFields on CargoBike {
+export type CargoBikeFieldsFragment = (
+  { __typename?: 'CargoBike' }
+  & { bikeEvents?: Maybe<Array<Maybe<(
+    { __typename?: 'BikeEvent' }
+    & Pick<BikeEvent, 'date' | 'id'>
+  )>>> }
+  & CargoBikeFieldsMutableFragment
+);
+
+export const CargoBikeFieldsMutableFragmentDoc = gql`
+    fragment CargoBikeFieldsMutable on CargoBike {
   id
   group
   name
-  bikeEvents {
-    date
-    id
-  }
   insuranceData {
     billing
     hasFixedRate
@@ -969,6 +971,15 @@ export const CargoBikeFieldsFragmentDoc = gql`
   }
 }
     `;
+export const CargoBikeFieldsFragmentDoc = gql`
+    fragment CargoBikeFields on CargoBike {
+  ...CargoBikeFieldsMutable
+  bikeEvents {
+    date
+    id
+  }
+}
+    ${CargoBikeFieldsMutableFragmentDoc}`;
 export const GetCargoBikeByIdDocument = gql`
     query GetCargoBikeById($id: ID!) {
   cargoBikeById(id: $id) {
