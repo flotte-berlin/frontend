@@ -909,7 +909,7 @@ export type GetCargoBikesQuery = (
 
 export type CargoBikeFieldsMutableFragment = (
   { __typename?: 'CargoBike' }
-  & Pick<CargoBike, 'id' | 'group' | 'name' | 'lockedBy' | 'lockedUntil' | 'numberOfChildren'>
+  & Pick<CargoBike, 'id' | 'group' | 'name' | 'lockedBy' | 'lockedUntil' | 'numberOfChildren' | 'numberOfWheels'>
   & { insuranceData: (
     { __typename?: 'InsuranceData' }
     & Pick<InsuranceData, 'billing' | 'hasFixedRate'>
@@ -957,6 +957,7 @@ export const CargoBikeFieldsMutableFragmentDoc = gql`
     maxWeightTotal
   }
   numberOfChildren
+  numberOfWheels
   security {
     frameNumber
     adfcCoding

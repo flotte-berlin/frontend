@@ -13,6 +13,7 @@ fragment CargoBikeFieldsMutable on CargoBike {
     bikeWeight
   }
   numberOfChildren
+  numberOfWheels
   security {
     frameNumber
     adfcCoding

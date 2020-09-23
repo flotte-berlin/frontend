@@ -1,4 +1,5 @@
 overwrite: true
+watch: true
 schema: "http://localhost:4000/graphql"
 documents: "src/app/graphqlOperations/**/*.graphql"
 generates:

@@ -74,6 +74,18 @@
         </td>
       </ng-container>
 
+      <!-- NumberOfWheels Column -->
+      <ng-container matColumnDef="numberOfWheels">
+        <th mat-header-cell cdkDrag *matHeaderCellDef i18n="WheelCount">Räderanzahl</th>
+        <td mat-cell *matCellDef="let element">
+          <app-string-cell
+            [editable]="element.isGettingEdited"
+            [(value)]="element.numberOfWheels"
+            inputType="number"
+          ></app-string-cell>
+        </td>
+      </ng-container>
+
       <!-- Buttons Column -->
       <ng-container matColumnDef="buttons" stickyEnd>
         <th mat-header-cell *matHeaderCellDef></th>
