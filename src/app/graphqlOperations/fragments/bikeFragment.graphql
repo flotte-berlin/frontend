@@ -6,6 +6,8 @@ fragment CargoBikeFieldsMutable on CargoBike {
     billing
     hasFixedRate
   }
+  lockedBy
+  lockedUntil
   dimensionsAndLoad {
     bikeLength
     bikeWeight

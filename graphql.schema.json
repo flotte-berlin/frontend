@@ -1284,13 +1284,9 @@
             "name": "hasFixedRate",
             "description": null,
             "type": {
-              "kind": "NON_NULL",
-              "name": null,
-              "ofType": {
-                "kind": "SCALAR",
-                "name": "Boolean",
-                "ofType": null
-              }
+              "kind": "SCALAR",
+              "name": "Boolean",
+              "ofType": null
             },
             "defaultValue": null
           },
@@ -5782,7 +5778,7 @@
           },
           {
             "name": "lockCargoBikeById",
-            "description": "lock cargoBike - not implemented",
+            "description": "lock cargoBike returns true if bike is not locked or if it doesnt exist",
             "args": [
               {
                 "name": "id",
@@ -5867,6 +5863,37 @@
               "ofType": {
                 "kind": "OBJECT",
                 "name": "Equipment",
+                "ofType": null
+              }
+            },
+            "isDeprecated": false,
+            "deprecationReason": null
+          },
+          {
+            "name": "lockEquipmentById",
+            "description": "lock equipment returns true if bike is not locked or if it doesnt exist",
+            "args": [
+              {
+                "name": "id",
+                "description": null,
+                "type": {
+                  "kind": "NON_NULL",
+                  "name": null,
+                  "ofType": {
+                    "kind": "SCALAR",
+                    "name": "ID",
+                    "ofType": null
+                  }
+                },
+                "defaultValue": null
+              }
+            ],
+            "type": {
+              "kind": "NON_NULL",
+              "name": null,
+              "ofType": {
+                "kind": "SCALAR",
+                "name": "Boolean",
                 "ofType": null
               }
             },

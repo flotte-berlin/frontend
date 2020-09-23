@@ -174,7 +174,7 @@ export type InsuranceDataUpdateInput = {
   maintananceResponsible?: Maybe<Scalars['String']>;
   maintananceBenefactor?: Maybe<Scalars['String']>;
   maintananceAgreement?: Maybe<Scalars['String']>;
-  hasFixedRate: Scalars['Boolean'];
+  hasFixedRate?: Maybe<Scalars['Boolean']>;
   fixedRate?: Maybe<Scalars['Float']>;
   /** Projektzuschuss */
   projectAllowance?: Maybe<Scalars['Float']>;
@@ -767,12 +767,14 @@ export type Mutation = {
   __typename?: 'Mutation';
   /** creates new cargoBike and returns cargobike with new ID */
   createCargoBike: CargoBike;
-  /** lock cargoBike - not implemented */
+  /** lock cargoBike returns true if bike is not locked or if it doesnt exist */
   lockCargoBikeById: Scalars['Boolean'];
   /** updates cargoBike of given ID with supplied fields and returns updated cargoBike */
   updateCargoBike: CargoBike;
   /** creates new peace of unique Equipment */
   createEquipment: Equipment;
+  /** lock equipment returns true if bike is not locked or if it doesnt exist */
+  lockEquipmentById: Scalars['Boolean'];
   /** update Equipment, returns updated equipment. CargoBike will be null, if cargoBikeId is not set. Pass null for cargoBikeIs to delete the relation */
   updateEquipment: Equipment;
   /** creates new lendingStation and returns lendingStation with new ID */
@@ -810,6 +812,11 @@ export type MutationUpdateCargoBikeArgs = {
 
 export type MutationCreateEquipmentArgs = {
   equipment: EquipmentCreateInput;
+};
+
+
+export type MutationLockEquipmentByIdArgs = {
+  id: Scalars['ID'];
 };
 
 
@@ -902,7 +909,7 @@ export type GetCargoBikesQuery = (
 
 export type CargoBikeFieldsMutableFragment = (
   { __typename?: 'CargoBike' }
-  & Pick<CargoBike, 'id' | 'group' | 'name' | 'numberOfChildren'>
+  & Pick<CargoBike, 'id' | 'group' | 'name' | 'lockedBy' | 'lockedUntil' | 'numberOfChildren'>
   & { insuranceData: (
     { __typename?: 'InsuranceData' }
     & Pick<InsuranceData, 'billing' | 'hasFixedRate'>
@@ -933,6 +940,8 @@ export const CargoBikeFieldsMutableFragmentDoc = gql`
     billing
     hasFixedRate
   }
+  lockedBy
+  lockedUntil
   dimensionsAndLoad {
     bikeLength
     bikeWeight
