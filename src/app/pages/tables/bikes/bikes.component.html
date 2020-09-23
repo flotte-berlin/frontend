@@ -1,7 +1,6 @@
 <div class="table-page-wrapper">
   <div class="table-control">
-    <button mat-raised-button color="primary">Primary</button>
-    <button mat-raised-button color="accent">Accent</button>
+    <button mat-raised-button color="primary">Alle ausgewählten Fahrräder bearbeiten</button>
   </div>
   <div class="table-container">
     <table
@@ -86,7 +85,8 @@
               *ngIf="
                 !element.isGettingEdited &&
                 !element.waitingForEditPermissions &&
-                !element.locked
+                !element.locked &&
+                !element.saving
               "
             >
               <mat-icon>edit</mat-icon>
@@ -96,7 +96,8 @@
               *ngIf="
                 !element.isGettingEdited &&
                 !element.waitingForEditPermissions &&
-                !element.locked
+                !element.locked &&
+                !element.saving
               "
             >
               <mat-icon>delete</mat-icon>
@@ -104,7 +105,7 @@
 
             <mat-spinner
               [diameter]="32"
-              *ngIf="element.waitingForEditPermissions"
+              *ngIf="element.waitingForEditPermissions || element.saving"
             ></mat-spinner>
 
             <button

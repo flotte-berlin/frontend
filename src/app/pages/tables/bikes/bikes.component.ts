@@ -4,10 +4,11 @@ import { CdkDragDrop, moveItemInArray } from '@angular/cdk/drag-drop';
 import { BikesService, CargoBikeResult } from 'src/app/services/bikes.service';
 import { deepCopy } from 'src/app/helperFunctions/deepCopy';
 import { filter } from 'graphql-anywhere';
-import {CargoBikeFieldsMutableFragmentDoc} from 'src/generated/graphql';
+import {CargoBikeFieldsMutableFragmentDoc, CargoBikeUpdateInput} from 'src/generated/graphql';
 
 type CargoBikeDataRow = CargoBikeResult & {
   waitingForEditPermissions: boolean;
+  saving: boolean;
   isGettingEdited: boolean;
   locked: boolean;
 };
@@ -37,6 +38,7 @@ export class BikesComponent {
           waitingForEditPermissions: false,
           isGettingEdited: false,
           locked: false,
+          saving: false
         });
       });
       if (this.bikes.length > 6) {
@@ -56,15 +58,17 @@ export class BikesComponent {
   }
 
   save(row: CargoBikeDataRow) {
-    //remove lock
-    this.bikesService.updateBike({bike: filter(CargoBikeFieldsMutableFragmentDoc, row)})
+    //TODO: remove lock
+    row.saving = true;
+    row.isGettingEdited = false;
+    const bike: CargoBikeUpdateInput = filter(CargoBikeFieldsMutableFragmentDoc, row)
+    this.bikesService.updateBike({bike})
   }
 
   cancel(row: CargoBikeDataRow) {
     //fetch it again
     //TODO: remove lock
     this.bikesService.reloadBike({ id: row.id });
-    console.log('cancel');
   }
 
   drop(event: CdkDragDrop<string[]>) {
