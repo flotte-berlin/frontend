@@ -114,7 +114,11 @@
             >
               <mat-icon>save</mat-icon>
             </button>
-            <button mat-icon-button *ngIf="element.isGettingEdited">
+            <button
+              mat-icon-button
+              *ngIf="element.isGettingEdited"
+              (click)="cancel(element)"
+            >
               <mat-icon>cancel</mat-icon>
             </button>
 

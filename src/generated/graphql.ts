@@ -39,22 +39,36 @@ export type CargoBike = {
   technicalEquipment?: Maybe<TechnicalEquipment>;
   /** Does not refere to an extra table in the database. */
   dimensionsAndLoad: DimensionsAndLoad;
-  events?: Maybe<Array<Maybe<BikeEvent>>>;
+  bikeEvents?: Maybe<Array<Maybe<BikeEvent>>>;
   equipment?: Maybe<Array<Maybe<Equipment>>>;
   /** Refers to equipment that is not unique. See kommentierte info tabelle -> Fragen -> Frage 2 */
-  otherEquipment?: Maybe<Array<Maybe<Scalars['String']>>>;
-  chainSwaps?: Maybe<Array<Maybe<ChainSwap>>>;
+  miscellaneousEquipment?: Maybe<Array<Maybe<Scalars['String']>>>;
   /** Sticker State */
   stickerBikeNameState?: Maybe<StickerBikeNameState>;
   note?: Maybe<Scalars['String']>;
   provider?: Maybe<Provider>;
   coordinator?: Maybe<Participant>;
   insuranceData: InsuranceData;
-  lendingstation?: Maybe<LendingStation>;
+  lendingStation?: Maybe<LendingStation>;
   taxes?: Maybe<Taxes>;
+  engagement?: Maybe<Array<Maybe<Engagement>>>;
   /** null if not locked by other user */
   lockedBy?: Maybe<Scalars['ID']>;
   lockedUntil?: Maybe<Scalars['Date']>;
+};
+
+
+/** The CargoBike type is central to the graph. You could call it the root. */
+export type CargoBikeEquipmentArgs = {
+  offset: Scalars['Int'];
+  limit: Scalars['Int'];
+};
+
+
+/** The CargoBike type is central to the graph. You could call it the root. */
+export type CargoBikeEngagementArgs = {
+  offset: Scalars['Int'];
+  limit: Scalars['Int'];
 };
 
 export type CargoBikeCreateInput = {
@@ -76,13 +90,13 @@ export type CargoBikeCreateInput = {
   /** Does not refere to an extra table in the database. */
   dimensionsAndLoad: DimensionsAndLoadCreateInput;
   /** Refers to equipment that is not unique. See kommentierte info tabelle -> Fragen -> Frage 2 */
-  otherEquipment?: Maybe<Array<Maybe<Scalars['String']>>>;
+  miscellaneousEquipment?: Maybe<Array<Maybe<Scalars['String']>>>;
   /** Sticker State */
   stickerBikeNameState?: Maybe<StickerBikeNameState>;
   note?: Maybe<Scalars['String']>;
   provider?: Maybe<Scalars['String']>;
   insuranceData: InsuranceDataCreateInput;
-  taxes?: Maybe<TaxesCreateInput>;
+  taxes: TaxesCreateInput;
 };
 
 export type CargoBikeUpdateInput = {
@@ -105,7 +119,8 @@ export type CargoBikeUpdateInput = {
   /** Does not refere to an extra table in the database. */
   dimensionsAndLoad?: Maybe<DimensionsAndLoadUpdateInput>;
   /** Refers to equipment that is not unique. See kommentierte info tabelle -> Fragen -> Frage 2 */
-  otherEquipment?: Maybe<Array<Maybe<Scalars['String']>>>;
+  miscellaneousEquipment?: Maybe<Array<Maybe<Scalars['String']>>>;
+  lendingStationId?: Maybe<Scalars['ID']>;
   /** Sticker State */
   stickerBikeNameState?: Maybe<StickerBikeNameState>;
   note?: Maybe<Scalars['String']>;
@@ -194,13 +209,13 @@ export type Participant = {
   __typename?: 'Participant';
   id: Scalars['ID'];
   start: Scalars['Date'];
-  end: Scalars['Date'];
-  mentor: ContactInformation;
+  end?: Maybe<Scalars['Date']>;
+  contactInformation: ContactInformation;
   usernamefLotte?: Maybe<Scalars['String']>;
   usernameSlack?: Maybe<Scalars['String']>;
   memberADFC: Scalars['Boolean'];
   locationZIPs?: Maybe<Array<Maybe<Scalars['String']>>>;
-  roleCoreTeam: Scalars['Boolean'];
+  memberCoreTeam: Scalars['Boolean'];
   roleCoordinator: Scalars['Boolean'];
   roleEmployeADFC: Scalars['Boolean'];
   /** Wahr, wenn die Person Pate ist. */
@@ -219,6 +234,52 @@ export type Participant = {
    */
   distributedActiveBikeParte: Scalars['Boolean'];
   reserve?: Maybe<Scalars['String']>;
+  engagement?: Maybe<Array<Maybe<Engagement>>>;
+};
+
+export type ParticipantCreateInput = {
+  start: Scalars['Date'];
+  end?: Maybe<Scalars['Date']>;
+  /** must create contactinformation first, if you want to use new */
+  contactInformationId: Scalars['ID'];
+  usernamefLotte?: Maybe<Scalars['String']>;
+  usernameSlack?: Maybe<Scalars['String']>;
+  memberADFC: Scalars['Boolean'];
+  locationZIPs?: Maybe<Array<Maybe<Scalars['String']>>>;
+  memberCoreTeam: Scalars['Boolean'];
+  /** Date of workshop to become Mentor dt. Pate */
+  workshopMentor?: Maybe<Scalars['Date']>;
+  /** Date of last Erste Hilfe Kurs? */
+  workshopAmbulance?: Maybe<Scalars['Date']>;
+  reserve?: Maybe<Scalars['String']>;
+};
+
+export type Engagement = {
+  __typename?: 'Engagement';
+  id: Scalars['ID'];
+  from: Scalars['Date'];
+  to?: Maybe<Scalars['Date']>;
+  participant?: Maybe<Participant>;
+  cargoBike?: Maybe<CargoBike>;
+  roleCoordinator: Scalars['Boolean'];
+  roleEmployeADFC: Scalars['Boolean'];
+  /** Wahr, wenn die Person Pate ist. */
+  roleMentor: Scalars['Boolean'];
+  roleAmbulance: Scalars['Boolean'];
+  roleBringer: Scalars['Boolean'];
+};
+
+export type EngagementCreateInput = {
+  from: Scalars['Date'];
+  to?: Maybe<Scalars['Date']>;
+  participantId: Scalars['ID'];
+  cargoBikeId: Scalars['ID'];
+  roleCoordinator: Scalars['Boolean'];
+  roleEmployeADFC: Scalars['Boolean'];
+  /** Wahr, wenn die Person Pate ist. */
+  roleMentor: Scalars['Boolean'];
+  roleAmbulance: Scalars['Boolean'];
+  roleBringer: Scalars['Boolean'];
 };
 
 export type Taxes = {
@@ -261,21 +322,53 @@ export type Equipment = {
   serialNo: Scalars['String'];
   /** TODO unclear what this means. tomy fragen */
   investable?: Maybe<Scalars['Boolean']>;
-  name?: Maybe<Scalars['String']>;
+  title: Scalars['String'];
+  description?: Maybe<Scalars['String']>;
+  cargoBike?: Maybe<CargoBike>;
+};
+
+export type EquipmentCreateInput = {
+  serialNo: Scalars['String'];
+  /** TODO unclear what this means. tomy fragen */
+  title: Scalars['String'];
+  description?: Maybe<Scalars['String']>;
+  investable?: Maybe<Scalars['Boolean']>;
+  cargoBikeId?: Maybe<Scalars['ID']>;
+};
+
+export type EquipmentUpdateInput = {
+  id: Scalars['ID'];
+  serialNo?: Maybe<Scalars['String']>;
+  /** TODO unclear what this means. tomy fragen */
+  title?: Maybe<Scalars['String']>;
+  description?: Maybe<Scalars['String']>;
+  investable?: Maybe<Scalars['Boolean']>;
+  cargoBikeId?: Maybe<Scalars['ID']>;
 };
 
 /** An Event is a point in time, when the state of the bike somehow changed. */
 export type BikeEvent = {
   __typename?: 'BikeEvent';
   id: Scalars['ID'];
-  eventType?: Maybe<BikeEventType>;
+  eventType: BikeEventType;
+  cargoBike: CargoBike;
   date: Scalars['Date'];
   note?: Maybe<Scalars['String']>;
   /** Path to documents */
-  documents?: Maybe<Array<Maybe<Scalars['String']>>>;
+  documents: Array<Maybe<Scalars['String']>>;
 };
 
-/** TODO: Some eventTypes are missing (und auf deutsch) */
+export type BikeEventCreateInput = {
+  eventType: BikeEventType;
+  /** it is enough to pass the cargoBike id */
+  cargoBikeId: Scalars['ID'];
+  date: Scalars['Date'];
+  note?: Maybe<Scalars['String']>;
+  /** Path to documents */
+  documents: Array<Maybe<Scalars['String']>>;
+};
+
+/** TODO: Some eventTypes are missing */
 export enum BikeEventType {
   /**
    * The enum EventType can also be represented as an enum in postgresQL.
@@ -286,7 +379,8 @@ export enum BikeEventType {
   Kauf = 'KAUF',
   Inbetriebnahme = 'INBETRIEBNAHME',
   Ausfall = 'AUSFALL',
-  Wartung = 'WARTUNG'
+  Wartung = 'WARTUNG',
+  Andere = 'ANDERE'
 }
 
 /** How are the dimensions and how much weight can handle a bike. This data is merged in the CargoBike table and the BikeModel table. */
@@ -408,7 +502,6 @@ export type Provider = {
   id: Scalars['ID'];
   name: Scalars['String'];
   formularName?: Maybe<Scalars['String']>;
-  address?: Maybe<Address>;
   providerContactPerson?: Maybe<Array<Maybe<ContactInformation>>>;
   isPrivatePerson: Scalars['Boolean'];
   organisation?: Maybe<Organisation>;
@@ -431,8 +524,8 @@ export type ContactInformation = {
 };
 
 export type ContactInformationCreateInput = {
-  name?: Maybe<Scalars['String']>;
-  firstName?: Maybe<Scalars['String']>;
+  name: Scalars['String'];
+  firstName: Scalars['String'];
   retiredAt?: Maybe<Scalars['Date']>;
   phoneExtern?: Maybe<Scalars['String']>;
   phone2Extern?: Maybe<Scalars['String']>;
@@ -457,9 +550,28 @@ export type ContactInformationUpdateInput = {
   note?: Maybe<Scalars['String']>;
 };
 
+export type ContactPerson = {
+  __typename?: 'ContactPerson';
+  id: Scalars['ID'];
+  intern: Scalars['Boolean'];
+  contactInformation: ContactInformation;
+};
+
+export type ContactPersonCreateInput = {
+  intern: Scalars['Boolean'];
+  contactInformationId: Scalars['ID'];
+};
+
+export type ContactPersonUpdateInput = {
+  id: Scalars['ID'];
+  intern?: Maybe<Scalars['Boolean']>;
+  contactInformationId?: Maybe<Scalars['ID']>;
+};
+
 export type Organisation = {
   __typename?: 'Organisation';
   id: Scalars['ID'];
+  address?: Maybe<Address>;
   /** (dt. Ausleihstation) */
   lendingStations?: Maybe<Array<Maybe<LendingStation>>>;
   /** registration number of association */
@@ -475,18 +587,21 @@ export type LendingStation = {
   __typename?: 'LendingStation';
   id: Scalars['ID'];
   name: Scalars['String'];
-  contactInformation: Array<Maybe<ContactInformation>>;
+  contactPersons: Array<Maybe<ContactPerson>>;
   address: Address;
-  loanTimes?: Maybe<LoanTimes>;
-  loanPeriods: Array<Maybe<LoanPeriod>>;
+  timeFrames: Array<Maybe<TimeFrame>>;
+  loanPeriods?: Maybe<LoanPeriods>;
+  cargoBikes?: Maybe<Array<Maybe<CargoBike>>>;
+  /** Totola Amount of cargoBikes currently assigned to the lending station */
+  numCargoBikes: Scalars['Int'];
 };
 
 export type LendingStationCreateInput = {
   name: Scalars['String'];
   contactInformation: Array<Maybe<ContactInformationCreateInput>>;
   address: AddressCreateInput;
-  loanTimes?: Maybe<LoanTimesInput>;
-  loanPeriods: Array<Maybe<LoanPeriodCreateInput>>;
+  loanPeriods?: Maybe<LoanPeriodsInput>;
+  timeFrames: Array<Maybe<TimeFrameCreateInput>>;
 };
 
 export type LendingStationUpdateInput = {
@@ -494,13 +609,13 @@ export type LendingStationUpdateInput = {
   name?: Maybe<Scalars['String']>;
   contactInformation?: Maybe<Array<Maybe<ContactInformationUpdateInput>>>;
   address?: Maybe<AddressUpdateInput>;
-  loanTimes?: Maybe<LoanTimesInput>;
-  loanPeriods?: Maybe<Array<Maybe<LoanPeriodUpdateInput>>>;
+  loanPeriods?: Maybe<LoanPeriodsInput>;
+  timeFrames?: Maybe<Array<Maybe<TimeFrameUpdateInput>>>;
 };
 
-/** (dt. Ausleihzeiten) */
-export type LoanTimes = {
-  __typename?: 'LoanTimes';
+/** (dt. Ausleihzeiten) not implemented */
+export type LoanPeriods = {
+  __typename?: 'LoanPeriods';
   generalRemark?: Maybe<Scalars['String']>;
   /** notes for each day of the week, starting on Monday */
   notes?: Maybe<Array<Maybe<Scalars['String']>>>;
@@ -512,7 +627,7 @@ export type LoanTimes = {
 };
 
 /** (dt. Ausleihzeiten) */
-export type LoanTimesInput = {
+export type LoanPeriodsInput = {
   generalRemark?: Maybe<Scalars['String']>;
   /** notes for each day of the week, starting on Monday */
   notes?: Maybe<Array<Maybe<Scalars['String']>>>;
@@ -524,8 +639,8 @@ export type LoanTimesInput = {
 };
 
 /** (dt. Zeitscheibe) */
-export type LoanPeriod = {
-  __typename?: 'LoanPeriod';
+export type TimeFrame = {
+  __typename?: 'TimeFrame';
   id: Scalars['ID'];
   from: Scalars['Date'];
   to?: Maybe<Scalars['Date']>;
@@ -534,7 +649,7 @@ export type LoanPeriod = {
   cargoBike: CargoBike;
 };
 
-export type LoanPeriodCreateInput = {
+export type TimeFrameCreateInput = {
   from?: Maybe<Scalars['Date']>;
   to?: Maybe<Scalars['Date']>;
   note?: Maybe<Scalars['String']>;
@@ -542,7 +657,7 @@ export type LoanPeriodCreateInput = {
   cargoBikeID?: Maybe<CargoBikeCreateInput>;
 };
 
-export type LoanPeriodUpdateInput = {
+export type TimeFrameUpdateInput = {
   id: Scalars['ID'];
   from?: Maybe<Scalars['Date']>;
   to?: Maybe<Scalars['Date']>;
@@ -572,18 +687,26 @@ export type AddressUpdateInput = {
 
 export type Query = {
   __typename?: 'Query';
+  /** Will (evetually) return all properties of cargo bike */
   cargoBikeById?: Maybe<CargoBike>;
-  /** returns all cargoBikes */
+  /** returns cargoBikes ordered by name ascending, relations are not loaded, use cargoBikeById instead */
   cargoBikes: Array<Maybe<CargoBike>>;
-  /** not important, you can just use providerById {cargoBikes} */
-  cargoBikesByProvider: Array<Maybe<CargoBike>>;
+  /** return null if id not found */
   providerById?: Maybe<Provider>;
+  /** unique equipment with pagination, contains relation to bike (with no further joins), so if you wanna know more about the bike, use cargoBikeById */
+  equipment: Array<Maybe<Equipment>>;
+  /** equipment by id, will return null if id not found */
+  equipmentById?: Maybe<Equipment>;
   providers: Array<Maybe<Provider>>;
+  /** particcipant by id */
   participantById?: Maybe<Participant>;
+  /** p */
   participants: Array<Maybe<Participant>>;
   lendingStationById?: Maybe<LendingStation>;
   lendingStations: Array<Maybe<LendingStation>>;
   contactInformation: Array<Maybe<ContactInformation>>;
+  /** returns BikeEvent with CargoBike */
+  bikeEventById: BikeEvent;
 };
 
 
@@ -592,12 +715,24 @@ export type QueryCargoBikeByIdArgs = {
 };
 
 
-export type QueryCargoBikesByProviderArgs = {
-  providerId: Scalars['ID'];
+export type QueryCargoBikesArgs = {
+  offset: Scalars['Int'];
+  limit: Scalars['Int'];
 };
 
 
 export type QueryProviderByIdArgs = {
+  id: Scalars['ID'];
+};
+
+
+export type QueryEquipmentArgs = {
+  offset: Scalars['Int'];
+  limit: Scalars['Int'];
+};
+
+
+export type QueryEquipmentByIdArgs = {
   id: Scalars['ID'];
 };
 
@@ -607,28 +742,54 @@ export type QueryParticipantByIdArgs = {
 };
 
 
+export type QueryParticipantsArgs = {
+  offset: Scalars['Int'];
+  limit: Scalars['Int'];
+};
+
+
 export type QueryLendingStationByIdArgs = {
+  id: Scalars['ID'];
+};
+
+
+export type QueryLendingStationsArgs = {
+  offset: Scalars['Int'];
+  limit: Scalars['Int'];
+};
+
+
+export type QueryBikeEventByIdArgs = {
   id: Scalars['ID'];
 };
 
 export type Mutation = {
   __typename?: 'Mutation';
-  /** for testing */
-  addBike: CargoBike;
   /** creates new cargoBike and returns cargobike with new ID */
   createCargoBike: CargoBike;
+  /** lock cargoBike - not implemented */
+  lockCargoBikeById: Scalars['Boolean'];
   /** updates cargoBike of given ID with supplied fields and returns updated cargoBike */
   updateCargoBike: CargoBike;
+  /** creates new peace of unique Equipment */
+  createEquipment: Equipment;
+  /** update Equipment, returns updated equipment. CargoBike will be null, if cargoBikeId is not set. Pass null for cargoBikeIs to delete the relation */
+  updateEquipment: Equipment;
   /** creates new lendingStation and returns lendingStation with new ID */
   createLendingStation: LendingStation;
   /** updates lendingStation of given ID with supplied fields and returns updated lendingStation */
   updateLendingStation: LendingStation;
-};
-
-
-export type MutationAddBikeArgs = {
-  id: Scalars['ID'];
-  name?: Maybe<Scalars['String']>;
+  /** creates new BikeEvent */
+  createBikeEvent: BikeEvent;
+  /** create participant */
+  createParticipant: Participant;
+  /** create new contactInfo */
+  createContactInformation: ContactInformation;
+  /** create Engagement */
+  createEngagement: Engagement;
+  /** createContacPerson ,return null if contactInformationId does not exist */
+  createContactPerson?: Maybe<ContactPerson>;
+  updateContactPerson?: Maybe<ContactPerson>;
 };
 
 
@@ -637,8 +798,23 @@ export type MutationCreateCargoBikeArgs = {
 };
 
 
+export type MutationLockCargoBikeByIdArgs = {
+  id: Scalars['ID'];
+};
+
+
 export type MutationUpdateCargoBikeArgs = {
   cargoBike: CargoBikeUpdateInput;
+};
+
+
+export type MutationCreateEquipmentArgs = {
+  equipment: EquipmentCreateInput;
+};
+
+
+export type MutationUpdateEquipmentArgs = {
+  equipment: EquipmentUpdateInput;
 };
 
 
@@ -649,6 +825,36 @@ export type MutationCreateLendingStationArgs = {
 
 export type MutationUpdateLendingStationArgs = {
   lendingstation: LendingStationUpdateInput;
+};
+
+
+export type MutationCreateBikeEventArgs = {
+  bikeEvent?: Maybe<BikeEventCreateInput>;
+};
+
+
+export type MutationCreateParticipantArgs = {
+  participant: ParticipantCreateInput;
+};
+
+
+export type MutationCreateContactInformationArgs = {
+  contactInformation: ContactInformationCreateInput;
+};
+
+
+export type MutationCreateEngagementArgs = {
+  engagement?: Maybe<EngagementCreateInput>;
+};
+
+
+export type MutationCreateContactPersonArgs = {
+  contactPerson?: Maybe<ContactPersonCreateInput>;
+};
+
+
+export type MutationUpdateContactPersonArgs = {
+  contactPerson?: Maybe<ContactPersonUpdateInput>;
 };
 
 export enum CacheControlScope {
@@ -666,8 +872,21 @@ export type GetCargoBikeByIdQuery = (
   { __typename?: 'Query' }
   & { cargoBikeById?: Maybe<(
     { __typename?: 'CargoBike' }
-    & CargoBikeFragmentFragment
+    & CargoBikeFieldsFragment
   )> }
+);
+
+export type UpdateCargoBikeMutationVariables = Exact<{
+  bike: CargoBikeUpdateInput;
+}>;
+
+
+export type UpdateCargoBikeMutation = (
+  { __typename?: 'Mutation' }
+  & { updateCargoBike: (
+    { __typename?: 'CargoBike' }
+    & CargoBikeFieldsFragment
+  ) }
 );
 
 export type GetCargoBikesQueryVariables = Exact<{ [key: string]: never; }>;
@@ -677,19 +896,19 @@ export type GetCargoBikesQuery = (
   { __typename?: 'Query' }
   & { cargoBikes: Array<Maybe<(
     { __typename?: 'CargoBike' }
-    & CargoBikeFragmentFragment
+    & CargoBikeFieldsFragment
   )>> }
 );
 
-export type CargoBikeFragmentFragment = (
+export type CargoBikeFieldsFragment = (
   { __typename?: 'CargoBike' }
   & Pick<CargoBike, 'id' | 'group' | 'name' | 'numberOfChildren'>
-  & { events?: Maybe<Array<Maybe<(
+  & { bikeEvents?: Maybe<Array<Maybe<(
     { __typename?: 'BikeEvent' }
-    & Pick<BikeEvent, 'date'>
+    & Pick<BikeEvent, 'date' | 'id'>
   )>>>, insuranceData: (
     { __typename?: 'InsuranceData' }
-    & Pick<InsuranceData, 'billing'>
+    & Pick<InsuranceData, 'billing' | 'hasFixedRate'>
   ), dimensionsAndLoad: (
     { __typename?: 'DimensionsAndLoad' }
     & Pick<DimensionsAndLoad, 'bikeLength' | 'bikeWeight' | 'bikeHeight' | 'bikeWidth' | 'boxHeight' | 'boxLength' | 'boxWidth' | 'hasCoverBox' | 'lockable' | 'maxWeightBox' | 'maxWeightLuggageRack' | 'maxWeightTotal'>
@@ -699,16 +918,18 @@ export type CargoBikeFragmentFragment = (
   ) }
 );
 
-export const CargoBikeFragmentFragmentDoc = gql`
-    fragment CargoBikeFragment on CargoBike {
+export const CargoBikeFieldsFragmentDoc = gql`
+    fragment CargoBikeFields on CargoBike {
   id
   group
   name
-  events {
+  bikeEvents {
     date
+    id
   }
   insuranceData {
     billing
+    hasFixedRate
   }
   dimensionsAndLoad {
     bikeLength
@@ -751,10 +972,10 @@ export const CargoBikeFragmentFragmentDoc = gql`
 export const GetCargoBikeByIdDocument = gql`
     query GetCargoBikeById($id: ID!) {
   cargoBikeById(id: $id) {
-    ...CargoBikeFragment
+    ...CargoBikeFields
   }
 }
-    ${CargoBikeFragmentFragmentDoc}`;
+    ${CargoBikeFieldsFragmentDoc}`;
 
   @Injectable({
     providedIn: 'root'
@@ -766,13 +987,31 @@ export const GetCargoBikeByIdDocument = gql`
       super(apollo);
     }
   }
-export const GetCargoBikesDocument = gql`
-    query GetCargoBikes {
-  cargoBikes {
-    ...CargoBikeFragment
+export const UpdateCargoBikeDocument = gql`
+    mutation UpdateCargoBike($bike: CargoBikeUpdateInput!) {
+  updateCargoBike(cargoBike: $bike) {
+    ...CargoBikeFields
   }
 }
-    ${CargoBikeFragmentFragmentDoc}`;
+    ${CargoBikeFieldsFragmentDoc}`;
+
+  @Injectable({
+    providedIn: 'root'
+  })
+  export class UpdateCargoBikeGQL extends Apollo.Mutation<UpdateCargoBikeMutation, UpdateCargoBikeMutationVariables> {
+    document = UpdateCargoBikeDocument;
+    
+    constructor(apollo: Apollo.Apollo) {
+      super(apollo);
+    }
+  }
+export const GetCargoBikesDocument = gql`
+    query GetCargoBikes {
+  cargoBikes(limit: 100, offset: 0) {
+    ...CargoBikeFields
+  }
+}
+    ${CargoBikeFieldsFragmentDoc}`;
 
   @Injectable({
     providedIn: 'root'

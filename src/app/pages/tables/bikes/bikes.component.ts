@@ -2,7 +2,7 @@ import { SelectionModel } from '@angular/cdk/collections';
 import { Component } from '@angular/core';
 import { CdkDragDrop, moveItemInArray } from '@angular/cdk/drag-drop';
 import { BikesService, CargoBikeResult } from 'src/app/services/bikes.service';
-import { deepCopy } from 'src/app/services/deepCopy';
+import { deepCopy } from 'src/app/helperFunctions/deepCopy';
 
 type CargoBikeDataRow = CargoBikeResult & {
   waitingForEditPermissions: boolean;
@@ -50,17 +50,19 @@ export class BikesComponent {
     setTimeout(() => {
       row.waitingForEditPermissions = false;
       row.isGettingEdited = true;
-    }, 800);
+    }, Math.random()*1000);
   }
 
   save(row: CargoBikeDataRow) {
-    console.log(row);
+    //remove lock
+    this.bikesService.updateBike({bike: row})
   }
 
   cancel(row: CargoBikeDataRow) {
     //fetch it again
     //TODO: remove lock
-    this.bikesService.reloadBike({id: row.id});
+    this.bikesService.reloadBike({ id: row.id });
+    console.log('cancel');
   }
 
   drop(event: CdkDragDrop<string[]>) {

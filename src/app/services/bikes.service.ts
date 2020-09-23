@@ -1,6 +1,6 @@
 import { Injectable } from '@angular/core';
 import { BehaviorSubject } from 'rxjs';
-import { GetCargoBikesGQL, GetCargoBikesQuery, GetCargoBikeByIdGQL, GetCargoBikeByIdQuery, GetCargoBikeByIdQueryVariables } from 'src/generated/graphql';
+import { GetCargoBikesGQL, GetCargoBikesQuery, GetCargoBikeByIdGQL, GetCargoBikeByIdQueryVariables, UpdateCargoBikeGQL, UpdateCargoBikeMutationVariables, UpdateCargoBikeDocument, CargoBikeFieldsFragmentDoc} from 'src/generated/graphql';
 import { DeepExtractTypeSkipArrays } from 'ts-deep-extract-types';
 
 export type CargoBikeResult = DeepExtractTypeSkipArrays<GetCargoBikesQuery, ["cargoBikes"]>;
@@ -11,18 +11,25 @@ export type CargoBikeResult = DeepExtractTypeSkipArrays<GetCargoBikesQuery, ["ca
 export class BikesService {
   bikes: BehaviorSubject<CargoBikeResult[]> = new BehaviorSubject([]);
 
-  constructor(private getCargoBikesGQL: GetCargoBikesGQL, private getCargoBikeByIdGQL: GetCargoBikeByIdGQL) { }
+  constructor(private getCargoBikesGQL: GetCargoBikesGQL, private getCargoBikeByIdGQL: GetCargoBikeByIdGQL, private updateCargoBikeGQL: UpdateCargoBikeGQL) { }
 
   loadBikes() {
-    this.getCargoBikesGQL.watch().valueChanges.subscribe((result) => {
+    this.getCargoBikesGQL.fetch().subscribe((result) => {
       this.bikes.next(result.data.cargoBikes);
     });
   }
 
-  reloadBike(parameter: GetCargoBikeByIdQueryVariables) {
-    this.getCargoBikeByIdGQL.watch().valueChanges.subscribe((result) => {
+  reloadBike(variables: GetCargoBikeByIdQueryVariables) {
+    this.getCargoBikeByIdGQL.fetch(variables).subscribe((result) => {
       const newBike = result.data.cargoBikeById;
       this.bikes.next(this.bikes.value.map(bike => (newBike.id === bike.id) ? newBike : bike));
     });
+  }
+
+  updateBike(variableValues: UpdateCargoBikeMutationVariables) {
+    this.updateCargoBikeGQL.mutate(variableValues).subscribe((result) => {
+      const newBike = result.data.updateCargoBike;
+      this.bikes.next(this.bikes.value.map(bike => (newBike.id === bike.id) ? newBike : bike));
+    })
   }
 }

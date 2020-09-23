@@ -1,5 +1,11 @@
-query GetCargoBikeById($id: ID!){
+query GetCargoBikeById($id: ID!) {
   cargoBikeById(id: $id) {
-    ...CargoBikeFragment    
+    ...CargoBikeFields
+  }
+}
+
+mutation UpdateCargoBike($bike: CargoBikeUpdateInput!) {
+  updateCargoBike(cargoBike: $bike) {
+    ...CargoBikeFields
   }
 }

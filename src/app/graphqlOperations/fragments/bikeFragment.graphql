@@ -1,12 +1,14 @@
-fragment CargoBikeFragment on CargoBike {
+fragment CargoBikeFields on CargoBike {
     id
     group
     name
-    events {
-    date
+    bikeEvents {
+      date
+      id  
     }
     insuranceData {
     billing
+    hasFixedRate
     }
     dimensionsAndLoad {
     bikeLength
