@@ -657,6 +657,19 @@ export enum CacheControlScope {
 }
 
 
+export type GetCargoBikeByIdQueryVariables = Exact<{
+  id: Scalars['ID'];
+}>;
+
+
+export type GetCargoBikeByIdQuery = (
+  { __typename?: 'Query' }
+  & { cargoBikeById?: Maybe<(
+    { __typename?: 'CargoBike' }
+    & CargoBikeFragmentFragment
+  )> }
+);
+
 export type GetCargoBikesQueryVariables = Exact<{ [key: string]: never; }>;
 
 
@@ -664,69 +677,102 @@ export type GetCargoBikesQuery = (
   { __typename?: 'Query' }
   & { cargoBikes: Array<Maybe<(
     { __typename?: 'CargoBike' }
-    & Pick<CargoBike, 'id' | 'name' | 'numberOfChildren'>
-    & { events?: Maybe<Array<Maybe<(
-      { __typename?: 'BikeEvent' }
-      & Pick<BikeEvent, 'date'>
-    )>>>, insuranceData: (
-      { __typename?: 'InsuranceData' }
-      & Pick<InsuranceData, 'billing'>
-    ), dimensionsAndLoad: (
-      { __typename?: 'DimensionsAndLoad' }
-      & Pick<DimensionsAndLoad, 'bikeLength' | 'bikeWeight' | 'bikeHeight' | 'bikeWidth' | 'boxHeight' | 'boxLength' | 'boxWidth' | 'hasCoverBox' | 'lockable' | 'maxWeightBox' | 'maxWeightLuggageRack' | 'maxWeightTotal'>
-    ), security: (
-      { __typename?: 'Security' }
-      & Pick<Security, 'frameNumber'>
-    ) }
+    & CargoBikeFragmentFragment
   )>> }
 );
 
-export const GetCargoBikesDocument = gql`
-    query GetCargoBikes {
-  cargoBikes {
-    id
-    name
-    events {
-      date
-    }
-    insuranceData {
-      billing
-    }
-    dimensionsAndLoad {
-      bikeLength
-      bikeWeight
-      bikeHeight
-      bikeWidth
-      boxHeight
-      boxLength
-      boxWidth
-      hasCoverBox
-      lockable
-      maxWeightBox
-      maxWeightLuggageRack
-      maxWeightTotal
-    }
-    numberOfChildren
-    security {
-      frameNumber
-    }
-    dimensionsAndLoad {
-      bikeHeight
-      bikeLength
-      bikeWeight
-      bikeWidth
-      boxHeight
-      boxLength
-      boxWidth
-      hasCoverBox
-      lockable
-      maxWeightBox
-      maxWeightLuggageRack
-      maxWeightTotal
-    }
+export type CargoBikeFragmentFragment = (
+  { __typename?: 'CargoBike' }
+  & Pick<CargoBike, 'id' | 'group' | 'name' | 'numberOfChildren'>
+  & { events?: Maybe<Array<Maybe<(
+    { __typename?: 'BikeEvent' }
+    & Pick<BikeEvent, 'date'>
+  )>>>, insuranceData: (
+    { __typename?: 'InsuranceData' }
+    & Pick<InsuranceData, 'billing'>
+  ), dimensionsAndLoad: (
+    { __typename?: 'DimensionsAndLoad' }
+    & Pick<DimensionsAndLoad, 'bikeLength' | 'bikeWeight' | 'bikeHeight' | 'bikeWidth' | 'boxHeight' | 'boxLength' | 'boxWidth' | 'hasCoverBox' | 'lockable' | 'maxWeightBox' | 'maxWeightLuggageRack' | 'maxWeightTotal'>
+  ), security: (
+    { __typename?: 'Security' }
+    & Pick<Security, 'frameNumber' | 'adfcCoding' | 'keyNumberAXAChain' | 'keyNumberFrameLock' | 'policeCoding'>
+  ) }
+);
+
+export const CargoBikeFragmentFragmentDoc = gql`
+    fragment CargoBikeFragment on CargoBike {
+  id
+  group
+  name
+  events {
+    date
+  }
+  insuranceData {
+    billing
+  }
+  dimensionsAndLoad {
+    bikeLength
+    bikeWeight
+    bikeHeight
+    bikeWidth
+    boxHeight
+    boxLength
+    boxWidth
+    hasCoverBox
+    lockable
+    maxWeightBox
+    maxWeightLuggageRack
+    maxWeightTotal
+  }
+  numberOfChildren
+  security {
+    frameNumber
+    adfcCoding
+    keyNumberAXAChain
+    keyNumberFrameLock
+    policeCoding
+  }
+  dimensionsAndLoad {
+    bikeHeight
+    bikeLength
+    bikeWeight
+    bikeWidth
+    boxHeight
+    boxLength
+    boxWidth
+    hasCoverBox
+    lockable
+    maxWeightBox
+    maxWeightLuggageRack
+    maxWeightTotal
   }
 }
     `;
+export const GetCargoBikeByIdDocument = gql`
+    query GetCargoBikeById($id: ID!) {
+  cargoBikeById(id: $id) {
+    ...CargoBikeFragment
+  }
+}
+    ${CargoBikeFragmentFragmentDoc}`;
+
+  @Injectable({
+    providedIn: 'root'
+  })
+  export class GetCargoBikeByIdGQL extends Apollo.Query<GetCargoBikeByIdQuery, GetCargoBikeByIdQueryVariables> {
+    document = GetCargoBikeByIdDocument;
+    
+    constructor(apollo: Apollo.Apollo) {
+      super(apollo);
+    }
+  }
+export const GetCargoBikesDocument = gql`
+    query GetCargoBikes {
+  cargoBikes {
+    ...CargoBikeFragment
+  }
+}
+    ${CargoBikeFragmentFragmentDoc}`;
 
   @Injectable({
     providedIn: 'root'

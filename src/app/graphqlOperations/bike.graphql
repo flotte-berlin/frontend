@@ -1,0 +1,5 @@
+query GetCargoBikeById($id: ID!){
+  cargoBikeById(id: $id) {
+    ...CargoBikeFragment    
+  }
+}

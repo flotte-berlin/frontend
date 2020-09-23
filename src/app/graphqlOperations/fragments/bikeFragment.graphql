@@ -1,0 +1,38 @@
+fragment CargoBikeFragment on CargoBike {
+    id
+    group
+    name
+    events {
+    date
+    }
+    insuranceData {
+    billing
+    }
+    dimensionsAndLoad {
+    bikeLength
+    bikeWeight
+    }
+    numberOfChildren
+    security {
+    frameNumber
+    adfcCoding
+    keyNumberAXAChain
+    keyNumberFrameLock
+    policeCoding
+    }
+    dimensionsAndLoad {
+    bikeHeight
+    bikeLength
+    bikeWeight
+    bikeWidth
+    boxHeight
+    boxLength
+    boxWidth
+    hasCoverBox
+    lockable
+    maxWeightBox
+    maxWeightLuggageRack
+    maxWeightTotal
+    }
+}
+
