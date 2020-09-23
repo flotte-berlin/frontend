@@ -1,0 +1,6 @@
+<mat-form-field *ngIf="editable; else nonEditableText">
+  <input matInput [type]="inputType" [ngModel]="value" (ngModelChange)="change($event)"/>
+</mat-form-field>
+<ng-template #nonEditableText>
+  {{ value }}
+</ng-template>

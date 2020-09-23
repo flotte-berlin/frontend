@@ -38,13 +38,11 @@
       <!-- Name Column -->
       <ng-container matColumnDef="name" sticky>
         <th mat-header-cell *matHeaderCellDef>Name</th>
-        <td
-          mat-cell
-          *matCellDef="let element"
-          contenteditable
-          (input)="onTableInput(element)"
-        >
-          {{ element.name }}
+        <td mat-cell *matCellDef="let element">
+          <app-string-cell
+            [editable]="element.isGettingEdited"
+            [(value)]="element.name"
+          ></app-string-cell>
         </td>
       </ng-container>
 
@@ -58,10 +56,10 @@
       <ng-container matColumnDef="frameNumber">
         <th mat-header-cell cdkDrag *matHeaderCellDef>Fahrgestellnummer</th>
         <td mat-cell *matCellDef="let element">
-          <!--<mat-form-field>
-        <input matInput color="warn" [value]="element.security.frameNumber"/>
-      </mat-form-field>-->
-          {{ element.security.frameNumber }}
+          <app-string-cell
+            [editable]="element.isGettingEdited"
+            [(value)]="element.security.frameNumber"
+          ></app-string-cell>
         </td>
       </ng-container>
 
@@ -69,7 +67,11 @@
       <ng-container matColumnDef="numberOfChildren">
         <th mat-header-cell cdkDrag *matHeaderCellDef>Anzahl Kinder</th>
         <td mat-cell *matCellDef="let element">
-          {{ element.numberOfChildren }}
+          <app-string-cell
+            [editable]="element.isGettingEdited"
+            [(value)]="element.numberOfChildren"
+            inputType="number"
+          ></app-string-cell>
         </td>
       </ng-container>
 
@@ -78,13 +80,45 @@
         <th mat-header-cell *matHeaderCellDef></th>
         <td mat-cell *matCellDef="let element">
           <div class="button-wrapper">
-            <button mat-icon-button (click)="edit(element)" [hidden]="isGettingEdited || waitingForEditPermissions">
+            <button
+              mat-icon-button
+              (click)="edit(element)"
+              *ngIf="
+                !element.isGettingEdited &&
+                !element.waitingForEditPermissions &&
+                !element.locked
+              "
+            >
               <mat-icon>edit</mat-icon>
             </button>
-            <mat-spinner [diameter]="32" *ngIf="waitingForEditPermissions"></mat-spinner>
-            <button mat-icon-button>
+            <button
+              mat-icon-button
+              *ngIf="
+                !element.isGettingEdited &&
+                !element.waitingForEditPermissions &&
+                !element.locked
+              "
+            >
               <mat-icon>delete</mat-icon>
             </button>
+
+            <mat-spinner
+              [diameter]="32"
+              *ngIf="element.waitingForEditPermissions"
+            ></mat-spinner>
+
+            <button
+              mat-icon-button
+              *ngIf="element.isGettingEdited"
+              (click)="save(element)"
+            >
+              <mat-icon>save</mat-icon>
+            </button>
+            <button mat-icon-button *ngIf="element.isGettingEdited">
+              <mat-icon>cancel</mat-icon>
+            </button>
+
+            <mat-icon *ngIf="element.locked">locked</mat-icon>
           </div>
         </td>
       </ng-container>

@@ -31,6 +31,7 @@ import { GraphQLModule } from './graphql.module';
 import { ParticipantsComponent } from './pages/tables/participants/participants.component';
 import { LendingStationsComponent } from './pages/tables/lending-stations/lending-stations.component';
 import { TableOverviewComponent } from './pages/table-overview/table-overview.component';
+import { StringCellComponent } from './components/tableComponents/string-cell/string-cell.component';
 
 
 
@@ -41,7 +42,8 @@ import { TableOverviewComponent } from './pages/table-overview/table-overview.co
     BikesComponent,
     ParticipantsComponent,
     LendingStationsComponent,
-    TableOverviewComponent
+    TableOverviewComponent,
+    StringCellComponent
   ],
   imports: [
     BrowserModule,

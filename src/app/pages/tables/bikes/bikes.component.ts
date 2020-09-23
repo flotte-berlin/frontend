@@ -1,12 +1,13 @@
 import { SelectionModel } from '@angular/cdk/collections';
-import { Component, ChangeDetectorRef } from '@angular/core';
+import { Component } from '@angular/core';
 import { CdkDragDrop, moveItemInArray } from '@angular/cdk/drag-drop';
 import { BikesService, CargoBikeResult } from 'src/app/services/bikes.service';
-import { MatTableDataSource } from '@angular/material/table';
+import { deepCopy } from 'src/app/services/deepCopy';
 
 type CargoBikeDataRow = CargoBikeResult & {
   waitingForEditPermissions: boolean;
   isGettingEdited: boolean;
+  locked: boolean;
 };
 
 @Component({
@@ -24,36 +25,42 @@ export class BikesComponent {
     'buttons',
   ];
 
-  bikes = new MatTableDataSource(<Array<CargoBikeDataRow>>[]);
+  bikes = <Array<any>>[];
   selection = new SelectionModel<CargoBikeDataRow>(true, []);
 
-  constructor(
-    private bikesService: BikesService,
-    private changeDetectorRefs: ChangeDetectorRef
-  ) {
+  constructor(private bikesService: BikesService) {
     bikesService.bikes.subscribe((bikes) => {
-      this.bikes = new MatTableDataSource(
-        bikes.map((bike) => {
-          return Object.assign({}, bike, {
-            waitingForEditPermissions: false,
-            isGettingEdited: false,
-          });
-        })
-      );
+      this.bikes = bikes.map((bike) => {
+        return <any>Object.assign({}, deepCopy(bike), {
+          waitingForEditPermissions: false,
+          isGettingEdited: false,
+          locked: false,
+        });
+      });
+      if (this.bikes.length > 6) {
+        this.bikes[5].locked = true;
+        this.bikes[2].locked = true;
+      }
     });
     bikesService.loadBikes();
   }
 
   edit(row: CargoBikeDataRow) {
-    console.log('isGettingEdited: ' + row.isGettingEdited);
     row.waitingForEditPermissions = true;
-    console.log('edit');
-    console.log(row.waitingForEditPermissions);
     setTimeout(() => {
       row.waitingForEditPermissions = false;
       row.isGettingEdited = true;
-      console.log('gets edited');
-    }, 100);
+    }, 800);
+  }
+
+  save(row: CargoBikeDataRow) {
+    console.log(row);
+  }
+
+  cancel(row: CargoBikeDataRow) {
+    //fetch it again
+    //TODO: remove lock
+    this.bikesService.reloadBike({id: row.id});
   }
 
   drop(event: CdkDragDrop<string[]>) {
@@ -67,7 +74,7 @@ export class BikesComponent {
   /** Whether the number of selected elements matches the total number of rows. */
   isAllSelected() {
     const numSelected = this.selection.selected.length;
-    const numRows = this.bikes.data.length;
+    const numRows = this.bikes.length;
     return numSelected === numRows;
   }
 
@@ -75,6 +82,6 @@ export class BikesComponent {
   masterToggle() {
     this.isAllSelected()
       ? this.selection.clear()
-      : this.bikes.data.forEach((row) => this.selection.select(row));
+      : this.bikes.forEach((row) => this.selection.select(row));
   }
 }
