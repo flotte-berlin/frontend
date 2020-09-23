@@ -11,15 +11,8 @@ import { environment } from '../environments/environment';
 
 const uri = environment.apiUrl + '/graphql'; // <-- add the URL of the GraphQL server here
 
-const cleanTypeName = new ApolloLink((operation, forward) => {
-  if (operation.variables) {
-    const omitTypename = (key: string, value: any) =>
-      key === '__typename' ? undefined : value;
-    operation.variables = JSON.parse(
-      JSON.stringify(operation.variables),
-      omitTypename
-    );
-  }
+const authMiddleware = new ApolloLink((operation, forward) => {
+  //Add token here <-------------------------------------------------------
   return forward(operation).map((data) => {
     return data;
   });
@@ -27,7 +20,7 @@ const cleanTypeName = new ApolloLink((operation, forward) => {
 
 export function createApollo(httpLink: HttpLink): ApolloClientOptions<any> {
   return {
-    link: concat(cleanTypeName, httpLink.create({ uri })),
+    link: concat(authMiddleware, httpLink.create({ uri })),
     cache: new InMemoryCache({}),
   };
 }

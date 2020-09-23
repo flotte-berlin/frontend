@@ -1,4 +1,5 @@
 import { Component, Input, Output, EventEmitter } from '@angular/core';
+import { catchError } from 'rxjs/operators';
 
 @Component({
   selector: 'app-string-cell',
@@ -15,7 +16,7 @@ export class StringCellComponent {
   inputType = 'text';
 
   change(newValue) {
-    this.value = newValue;
-    this.valueChange.emit(newValue);
+    this.value = this.inputType === 'number' ? +newValue : newValue;
+    this.valueChange.emit(this.value);
   }
 }
