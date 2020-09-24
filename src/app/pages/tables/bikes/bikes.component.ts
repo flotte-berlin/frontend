@@ -25,6 +25,7 @@ export class BikesComponent {
     'id',
     'frameNumber',
     'numberOfChildren',
+    'numberOfWheels',
     'buttons',
   ];
 
