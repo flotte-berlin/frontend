@@ -940,8 +940,6 @@ export const CargoBikeFieldsMutableFragmentDoc = gql`
     billing
     hasFixedRate
   }
-  lockedBy
-  lockedUntil
   dimensionsAndLoad {
     bikeLength
     bikeWeight

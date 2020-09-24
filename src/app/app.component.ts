@@ -1,9 +1,10 @@
-import { Component, Renderer2 } from '@angular/core';
+import { Component, ElementRef, Renderer2 } from '@angular/core';
 import { ColorThemeService } from './services/colorTheme.service';
 import { AuthService } from './services/auth.service';
 import { Router } from '@angular/router';
 import { ViewChild } from '@angular/core';
 import { MatSidenav } from '@angular/material/sidenav';
+import { NavService } from './components/menu-list-item/nav.service';
 
 @Component({
   selector: 'app-root',
@@ -16,12 +17,14 @@ export class AppComponent {
   loggedIn = false;
 
   @ViewChild('sidenav') public sideNav:MatSidenav;
+  @ViewChild('appDrawer') appDrawer: ElementRef;
 
   constructor(
     private renderer: Renderer2,
     private themeService: ColorThemeService,
     private authService: AuthService,
     private router: Router,
+    private navService: NavService
   ) {
     this.renderer.addClass(document.body, 'mat-app-background'); //so the background color changes dependent on current theme
     this.themeService.load();
@@ -36,5 +39,9 @@ export class AppComponent {
   logout() {
     this.authService.logout().subscribe().add(() => this.router.navigate(['login']));
     this.sideNav.close();
+  }
+
+  ngAfterViewInit() {
+    this.navService.appDrawer = this.appDrawer;
   }
 }

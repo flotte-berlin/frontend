@@ -19,6 +19,8 @@ import { MatFormFieldModule } from '@angular/material/form-field';
 import { MatProgressSpinnerModule } from '@angular/material/progress-spinner';
 import { MatProgressBarModule } from '@angular/material/progress-bar';
 import { MatCheckboxModule } from '@angular/material/checkbox';
+import {MatCardModule} from '@angular/material/card';
+import {MatGridListModule} from '@angular/material/grid-list';
 
 import { AppRoutingModule } from './app-routing.module';
 import { AppComponent } from './app.component';
@@ -30,10 +32,13 @@ import { ParticipantsComponent } from './pages/tables/participants/participants.
 import { LendingStationsComponent } from './pages/tables/lending-stations/lending-stations.component';
 import { TableOverviewComponent } from './pages/table-overview/table-overview.component';
 import { StringCellComponent } from './components/tableComponents/string-cell/string-cell.component';
+import { MenuListItemComponent } from './components/menu-list-item/menu-list-item.component';
+import { NavService }from './components/menu-list-item/nav.service';
 
 @NgModule({
   declarations: [
     AppComponent,
+    MenuListItemComponent,
     LoginComponent,
     BikesComponent,
     ParticipantsComponent,
@@ -51,6 +56,8 @@ import { StringCellComponent } from './components/tableComponents/string-cell/st
     MatToolbarModule,
     MatButtonModule,
     MatTableModule,
+    MatCardModule,
+    MatGridListModule,
     MatInputModule,
     MatMenuModule,
     MatSlideToggleModule,
@@ -64,7 +71,7 @@ import { StringCellComponent } from './components/tableComponents/string-cell/st
     GraphQLModule,
     DragDropModule,
   ],
-  providers: [],
+  providers: [NavService],
   bootstrap: [AppComponent],
 })
 export class AppModule {
