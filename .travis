@@ -8,5 +8,5 @@ services:
 script:
   - docker login -u="$DOCKER_USER" -p="$DOCKER_PW" https://flotte-docker-registry.spdns.org/
   - docker build -t frontend-server .
-  - docker tag afrontend-server flotte-docker-registry.spdns.org/frontend-server
+  - docker tag frontend-server flotte-docker-registry.spdns.org/frontend-server
   - docker push flotte-docker-registry.spdns.org/frontend-server:latest
