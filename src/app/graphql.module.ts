@@ -9,10 +9,16 @@ import {
 import { HttpLink } from 'apollo-angular/http';
 import { environment } from '../environments/environment';
 
+
 const uri = environment.apiUrl + '/graphql'; // <-- add the URL of the GraphQL server here
 
 const authMiddleware = new ApolloLink((operation, forward) => {
-  //Add token here <-------------------------------------------------------
+  //Add token here TODO: use AuthService to get the Token
+  operation.setContext({
+    headers: {
+      authorization: localStorage.getItem('requestToken') || null,
+    }
+  });
   return forward(operation).map((data) => {
     return data;
   });
