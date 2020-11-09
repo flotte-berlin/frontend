@@ -31,7 +31,7 @@ import { GraphQLModule } from './graphql.module';
 import { ParticipantsComponent } from './pages/tables/participants/participants.component';
 import { LendingStationsComponent } from './pages/tables/lending-stations/lending-stations.component';
 import { TableOverviewComponent } from './pages/table-overview/table-overview.component';
-import { StringCellComponent } from './components/tableComponents/string-cell/string-cell.component';
+import { CellComponent } from './components/tableComponents/cell/cell.component';
 import { MenuListItemComponent } from './components/menu-list-item/menu-list-item.component';
 import { NavService }from './components/menu-list-item/nav.service';
 
@@ -44,7 +44,7 @@ import { NavService }from './components/menu-list-item/nav.service';
     ParticipantsComponent,
     LendingStationsComponent,
     TableOverviewComponent,
-    StringCellComponent,
+    CellComponent,
   ],
   imports: [
     BrowserModule,
