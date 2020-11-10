@@ -8,12 +8,14 @@ import { catchError } from 'rxjs/operators';
 })
 export class CellComponent {
   @Input()
-  value: number | string;
-  @Output() valueChange = new EventEmitter<number | string>();
+  value: number | string | boolean;
+  @Output() valueChange = new EventEmitter<number | string | boolean>();
   @Input()
   editable = false;
   @Input()
   inputType = 'text';
+  @Input()
+  enumValues: string[] = [];
 
   change(newValue) {
     this.value = this.inputType === 'number' ? +newValue : newValue;

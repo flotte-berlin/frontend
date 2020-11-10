@@ -57,9 +57,6 @@ fragment CargoBikeFieldsMutable on CargoBike {
     projectAllowance
     notes
   }
-  lendingStation {
-    ...LendingStationFieldsGeneral
-  }
   taxes {
     costCenter
     organisationArea
@@ -70,6 +67,9 @@ fragment CargoBikeFields on CargoBike {
   ...CargoBikeFieldsMutable
   provider {
     ...ProviderFieldsGeneral
+  }
+  lendingStation {
+    ...LendingStationFieldsGeneral
   }
   isLocked
   isLockedByMe

@@ -22,6 +22,8 @@ import { MatCheckboxModule } from '@angular/material/checkbox';
 import {MatCardModule} from '@angular/material/card';
 import {MatGridListModule} from '@angular/material/grid-list';
 import {MatTooltipModule} from '@angular/material/tooltip';
+import {MatSelectModule} from '@angular/material/select';
+
 
 
 import { AppRoutingModule } from './app-routing.module';
@@ -72,7 +74,8 @@ import { NavService }from './components/menu-list-item/nav.service';
     MatCheckboxModule,
     GraphQLModule,
     DragDropModule,
-    MatTooltipModule
+    MatTooltipModule,
+    MatSelectModule,
   ],
   providers: [NavService],
   bootstrap: [AppComponent],

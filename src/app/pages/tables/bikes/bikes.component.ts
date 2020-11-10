@@ -25,13 +25,17 @@ export class BikesComponent {
     'select',
     'name',
     'id',
+    'group',
     'frameNumber',
+    'forChildren',
     'numberOfChildren',
     'numberOfWheels',
+    'forCargo',
     'buttons',
   ];
 
   bikes = <Array<any>>[];
+  groupEnum: string[] = [];
   selection = new SelectionModel<CargoBikeDataRow>(true, []);
 
   reloadingTable = false;
@@ -40,6 +44,10 @@ export class BikesComponent {
   relockingDuration = 1000 * 60 * 1;
 
   constructor(private bikesService: BikesService) {
+    bikesService.groupEnum.subscribe(groupEnum => {
+      this.groupEnum = groupEnum;
+    })
+
     bikesService.bikes.subscribe((bikes) => {
       this.reloadingTable = false;
       this.bikes = bikes.map((bike) => {
@@ -68,7 +76,6 @@ export class BikesComponent {
   }
 
   reloadTable() {
-    console.log("reload")
     this.reloadingTable = true;
     this.bikesService.loadBikes();
   }

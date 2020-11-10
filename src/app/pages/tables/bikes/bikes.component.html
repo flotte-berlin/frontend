@@ -64,6 +64,21 @@
         <td mat-cell *matCellDef="let element">{{ element.id }}</td>
       </ng-container>
 
+      <!-- Group Column -->
+      <ng-container matColumnDef="group">
+        <th mat-header-cell cdkDrag *matHeaderCellDef mat-sort-header>
+          Gruppe
+        </th>
+        <td mat-cell *matCellDef="let element">
+          <app-cell
+            [editable]="element.isLockedByMe"
+            [(value)]="element.group"
+            inputType="enum"
+            [(enumValues)]="groupEnum"
+          ></app-cell>
+        </td>
+      </ng-container>
+
       <!-- FrameNumber Column -->
       <ng-container matColumnDef="frameNumber">
         <th mat-header-cell cdkDrag *matHeaderCellDef mat-sort-header>
@@ -73,6 +88,20 @@
           <app-cell
             [editable]="element.isLockedByMe"
             [(value)]="element.security.frameNumber"
+          ></app-cell>
+        </td>
+      </ng-container>
+
+      <!-- ForChildren Column -->
+      <ng-container matColumnDef="forChildren">
+        <th mat-header-cell cdkDrag *matHeaderCellDef mat-sort-header>
+          Für Kinder
+        </th>
+        <td mat-cell *matCellDef="let element">
+          <app-cell
+            [editable]="element.isLockedByMe"
+            [(value)]="element.forChildren"
+            inputType="boolean"
           ></app-cell>
         </td>
       </ng-container>
@@ -101,6 +130,20 @@
             [editable]="element.isLockedByMe"
             [(value)]="element.numberOfWheels"
             inputType="number"
+          ></app-cell>
+        </td>
+      </ng-container>
+
+      <!-- ForCargo Column -->
+      <ng-container matColumnDef="forCargo">
+        <th mat-header-cell cdkDrag *matHeaderCellDef mat-sort-header>
+          Für Lasten
+        </th>
+        <td mat-cell *matCellDef="let element">
+          <app-cell
+            [editable]="element.isLockedByMe"
+            [(value)]="element.forCargo"
+            inputType="boolean"
           ></app-cell>
         </td>
       </ng-container>

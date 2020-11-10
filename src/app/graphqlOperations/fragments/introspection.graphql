@@ -1,0 +1,8 @@
+fragment Introspection on Query {
+  __type(name: "Group") {
+    name
+    enumValues {
+      name
+    }
+  }
+}

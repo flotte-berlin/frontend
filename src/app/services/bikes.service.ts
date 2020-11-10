@@ -24,6 +24,7 @@ export type CargoBikeResult = DeepExtractTypeSkipArrays<
 })
 export class BikesService {
   bikes: BehaviorSubject<CargoBikeResult[]> = new BehaviorSubject([]);
+  groupEnum: BehaviorSubject<string[]> = new BehaviorSubject<string[]>([]);
 
   constructor(
     private getCargoBikesGQL: GetCargoBikesGQL,
@@ -36,6 +37,8 @@ export class BikesService {
   loadBikes() {
     this.getCargoBikesGQL.fetch().subscribe((result) => {
       this.bikes.next(result.data.cargoBikes);
+      let enumValues = result.data.__type.enumValues.map(value => value.name);
+      this.groupEnum.next(enumValues);
     });
   }
 
@@ -72,7 +75,7 @@ export class BikesService {
     })
   }
 
-  unlockBike(variables: LockCargoBikeMutationVariables) {
+  unlockBike(variables: UnlockCargoBikeMutationVariables) {
     this.unlockCargoBikeGQL.mutate(variables).subscribe((result) => {
       const unlockedBike = result.data.unlockCargoBike;
       this.bikes.next(
