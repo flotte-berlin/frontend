@@ -9,3 +9,15 @@ mutation UpdateCargoBike($bike: CargoBikeUpdateInput!) {
     ...CargoBikeFields
   }
 }
+
+mutation LockCargoBike($id: ID!) {
+  lockCargoBike(id: $id) {
+    ...CargoBikeFields
+  }
+}
+
+mutation UnlockCargoBike($id: ID!) {
+  unlockCargoBike(id: $id) {
+    ...CargoBikeFields
+  }
+}

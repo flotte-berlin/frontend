@@ -4,13 +4,15 @@ import { CdkDragDrop, moveItemInArray } from '@angular/cdk/drag-drop';
 import { BikesService, CargoBikeResult } from 'src/app/services/bikes.service';
 import { deepCopy } from 'src/app/helperFunctions/deepCopy';
 import { filter } from 'graphql-anywhere';
-import {CargoBikeFieldsMutableFragmentDoc, CargoBikeUpdateInput} from 'src/generated/graphql';
+import {
+  CargoBikeFieldsMutableFragmentDoc,
+  CargoBikeUpdateInput,
+} from 'src/generated/graphql';
 
 type CargoBikeDataRow = CargoBikeResult & {
   waitingForEditPermissions: boolean;
   saving: boolean;
-  isGettingEdited: boolean;
-  locked: boolean;
+  unlocking: boolean;
 };
 
 @Component({
@@ -32,44 +34,62 @@ export class BikesComponent {
   bikes = <Array<any>>[];
   selection = new SelectionModel<CargoBikeDataRow>(true, []);
 
+  reloadingTable = false;
+
+  relockingInterval = null;
+  relockingDuration = 1000 * 60 * 1;
+
   constructor(private bikesService: BikesService) {
     bikesService.bikes.subscribe((bikes) => {
+      this.reloadingTable = false;
       this.bikes = bikes.map((bike) => {
         return <any>Object.assign({}, deepCopy(bike), {
           waitingForEditPermissions: false,
-          isGettingEdited: false,
-          locked: false,
-          saving: false
+          saving: false,
+          unlocking: false,
         });
       });
-      if (this.bikes.length > 6) {
-        this.bikes[5].locked = true;
-        this.bikes[2].locked = true;
-      }
     });
     bikesService.loadBikes();
   }
 
+  ngOnInit() {
+    this.relockingInterval = setInterval(() => {
+      for (const bike of this.bikes) {
+        if (bike.isLockedByMe) {
+          this.bikesService.relockBike({ id: bike.id });
+        }
+      }
+    }, this.relockingDuration);
+  }
+
+  ngOnDestroy() {
+    clearInterval(this.relockingInterval);
+  }
+
+  reloadTable() {
+    console.log("reload")
+    this.reloadingTable = true;
+    this.bikesService.loadBikes();
+  }
+
   edit(row: CargoBikeDataRow) {
     row.waitingForEditPermissions = true;
-    setTimeout(() => {
-      row.waitingForEditPermissions = false;
-      row.isGettingEdited = true;
-    }, Math.random()*1000);
+    this.bikesService.lockBike({ id: row.id });
   }
 
   save(row: CargoBikeDataRow) {
-    //TODO: remove lock
     row.saving = true;
-    row.isGettingEdited = false;
-    const bike: CargoBikeUpdateInput = filter(CargoBikeFieldsMutableFragmentDoc, row)
-    this.bikesService.updateBike({bike})
+    const bike: CargoBikeUpdateInput = filter(
+      CargoBikeFieldsMutableFragmentDoc,
+      row
+    );
+    this.bikesService.updateBike({ bike });
   }
 
   cancel(row: CargoBikeDataRow) {
-    //fetch it again
-    //TODO: remove lock
-    this.bikesService.reloadBike({ id: row.id });
+    row.unlocking = true;
+    this.bikesService.unlockBike({ id: row.id });
   }
 
   drop(event: CdkDragDrop<string[]>) {

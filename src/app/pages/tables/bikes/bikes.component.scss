@@ -5,6 +5,9 @@
   .table-control {
     margin: 0.5em;
     flex: none;
+    .table-control-button {
+      margin: 0.25em;
+    }
   }
   .table-container {
     flex: 1;

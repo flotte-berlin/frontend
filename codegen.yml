@@ -1,6 +1,6 @@
 overwrite: true
 watch: true
-schema: "http://localhost:4000/graphql"
+schema: "http://173.212.197.169:4002/graphql"
 documents: "src/app/graphqlOperations/**/*.graphql"
 generates:
   src/generated/graphql.ts:

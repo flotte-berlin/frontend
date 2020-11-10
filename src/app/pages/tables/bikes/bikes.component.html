@@ -1,6 +1,18 @@
 <div class="table-page-wrapper">
   <div class="table-control">
-    <button mat-raised-button color="primary">Alle ausgewählten Fahrräder bearbeiten</button>
+    <button mat-raised-button color="primary" class="table-control-button" i18n>
+      Alle ausgewählten Fahrräder bearbeiten
+    </button>
+    <button
+      mat-raised-button
+      class="table-control-button"
+      matTooltip="Tabllendaten aktualisieren. Achtung! Alle ungespeicherten Änderungen gehen verloren."
+      (click)="reloadTable()"
+      [disabled]="reloadingTable"
+      i18n
+    >
+      <mat-icon class="spin">sync</mat-icon>
+    </button>
   </div>
   <div class="table-container">
     <table
@@ -40,7 +52,7 @@
         <th mat-header-cell *matHeaderCellDef mat-sort-header>Name</th>
         <td mat-cell *matCellDef="let element">
           <app-cell
-            [editable]="element.isGettingEdited"
+            [editable]="element.isLockedByMe"
             [(value)]="element.name"
           ></app-cell>
         </td>
@@ -54,10 +66,12 @@
 
       <!-- FrameNumber Column -->
       <ng-container matColumnDef="frameNumber">
-        <th mat-header-cell cdkDrag *matHeaderCellDef mat-sort-header>Fahrgestellnummer</th>
+        <th mat-header-cell cdkDrag *matHeaderCellDef mat-sort-header>
+          Fahrgestellnummer
+        </th>
         <td mat-cell *matCellDef="let element">
           <app-cell
-            [editable]="element.isGettingEdited"
+            [editable]="element.isLockedByMe"
             [(value)]="element.security.frameNumber"
           ></app-cell>
         </td>
@@ -65,10 +79,12 @@
 
       <!-- NumberOfChildren Column -->
       <ng-container matColumnDef="numberOfChildren">
-        <th mat-header-cell cdkDrag *matHeaderCellDef mat-sort-header>Anzahl Kinder</th>
+        <th mat-header-cell cdkDrag *matHeaderCellDef mat-sort-header>
+          Anzahl Kinder
+        </th>
         <td mat-cell *matCellDef="let element">
           <app-cell
-            [editable]="element.isGettingEdited"
+            [editable]="element.isLockedByMe"
             [(value)]="element.numberOfChildren"
             inputType="number"
           ></app-cell>
@@ -77,10 +93,12 @@
 
       <!-- NumberOfWheels Column -->
       <ng-container matColumnDef="numberOfWheels">
-        <th mat-header-cell cdkDrag *matHeaderCellDef i18n="WheelCount">Räderanzahl</th>
+        <th mat-header-cell cdkDrag *matHeaderCellDef i18n="WheelCount">
+          Räderanzahl
+        </th>
         <td mat-cell *matCellDef="let element">
           <app-cell
-            [editable]="element.isGettingEdited"
+            [editable]="element.isLockedByMe"
             [(value)]="element.numberOfWheels"
             inputType="number"
           ></app-cell>
@@ -96,10 +114,11 @@
               mat-icon-button
               (click)="edit(element)"
               *ngIf="
-                !element.isGettingEdited &&
+                !element.isLockedByMe &&
                 !element.waitingForEditPermissions &&
-                !element.locked &&
-                !element.saving
+                !element.isLocked &&
+                !element.saving &&
+                !element.unlocking
               "
             >
               <mat-icon>edit</mat-icon>
@@ -107,10 +126,11 @@
             <button
               mat-icon-button
               *ngIf="
-                !element.isGettingEdited &&
+                !element.isLockedByMe &&
                 !element.waitingForEditPermissions &&
-                !element.locked &&
-                !element.saving
+                !element.isLocked &&
+                !element.saving &&
+                !element.unlocking
               "
             >
               <mat-icon>delete</mat-icon>
@@ -118,25 +138,38 @@
 
             <mat-spinner
               [diameter]="32"
-              *ngIf="element.waitingForEditPermissions || element.saving"
+              *ngIf="
+                element.waitingForEditPermissions ||
+                element.saving ||
+                element.unlocking
+              "
             ></mat-spinner>
 
             <button
               mat-icon-button
-              *ngIf="element.isGettingEdited"
+              *ngIf="
+                element.isLockedByMe && !element.unlocking && !element.saving
+              "
               (click)="save(element)"
             >
               <mat-icon>save</mat-icon>
             </button>
             <button
               mat-icon-button
-              *ngIf="element.isGettingEdited"
+              matTooltip="Alle ungespeicherten Änderungen verwerfen."
+              *ngIf="
+                element.isLockedByMe && !element.unlocking && !element.saving
+              "
               (click)="cancel(element)"
             >
               <mat-icon>cancel</mat-icon>
             </button>
 
-            <mat-icon *ngIf="element.locked">locked</mat-icon>
+            <mat-icon
+              *ngIf="element.isLocked"
+              matTooltip="Dieser Eintrag wird gerade von einem anderen Bearbeiter editiert. Aktualisieren Sie die Tabelle, um den neuen Status abzurufen."
+              >locked</mat-icon
+            >
           </div>
         </td>
       </ng-container>

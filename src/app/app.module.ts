@@ -21,6 +21,8 @@ import { MatProgressBarModule } from '@angular/material/progress-bar';
 import { MatCheckboxModule } from '@angular/material/checkbox';
 import {MatCardModule} from '@angular/material/card';
 import {MatGridListModule} from '@angular/material/grid-list';
+import {MatTooltipModule} from '@angular/material/tooltip';
+
 
 import { AppRoutingModule } from './app-routing.module';
 import { AppComponent } from './app.component';
@@ -70,6 +72,7 @@ import { NavService }from './components/menu-list-item/nav.service';
     MatCheckboxModule,
     GraphQLModule,
     DragDropModule,
+    MatTooltipModule
   ],
   providers: [NavService],
   bootstrap: [AppComponent],
