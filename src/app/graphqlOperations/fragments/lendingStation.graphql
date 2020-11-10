@@ -1,0 +1,9 @@
+fragment LendingStationFieldsGeneral on LendingStation {
+  id
+  name
+  address {
+    number
+    street
+    zip
+  }
+}

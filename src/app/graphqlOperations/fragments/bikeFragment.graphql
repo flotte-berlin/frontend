@@ -2,6 +2,7 @@ fragment CargoBikeFieldsMutable on CargoBike {
   id
   group
   name
+  modelName
   insuranceData {
     billing
     hasFixedRate
@@ -12,12 +13,20 @@ fragment CargoBikeFieldsMutable on CargoBike {
   }
   numberOfChildren
   numberOfWheels
+  forCargo
+  forChildren
   security {
     frameNumber
     adfcCoding
     keyNumberAXAChain
     keyNumberFrameLock
     policeCoding
+  }
+  technicalEquipment {
+    bicycleShift
+    isEBike
+    hasLightSystem
+    specialFeatures
   }
   dimensionsAndLoad {
     bikeHeight
@@ -33,13 +42,34 @@ fragment CargoBikeFieldsMutable on CargoBike {
     maxWeightLuggageRack
     maxWeightTotal
   }
+  stickerBikeNameState
+  note
+  insuranceData {
+    name
+    benefactor
+    billing
+    noPnP
+    maintenanceResponsible
+    maintenanceBenefactor
+    maintenanceAgreement
+    hasFixedRate
+    fixedRate
+    projectAllowance
+    notes
+  }
+  lendingStation {
+    ...LendingStationFieldsGeneral
+  }
+  taxes {
+    costCenter
+    organisationArea
+  }
 }
 
 fragment CargoBikeFields on CargoBike {
   ...CargoBikeFieldsMutable
-  bikeEvents {
-    date
-    id
+  provider {
+    ...ProviderFieldsGeneral
   }
   isLocked
   isLockedByMe

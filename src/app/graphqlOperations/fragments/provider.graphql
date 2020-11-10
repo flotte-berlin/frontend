@@ -1,0 +1,15 @@
+fragment ProviderFieldsGeneral on Provider {
+  id
+  formName
+  privatePerson {
+    id
+    person {
+      id
+      name
+      firstName
+      contactInformation {
+        email
+      }
+    }
+  }
+}

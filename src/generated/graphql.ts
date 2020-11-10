@@ -138,13 +138,13 @@ export type CargoBikeUpdateInput = {
   dimensionsAndLoad?: Maybe<DimensionsAndLoadUpdateInput>;
   /**
    * Refers to equipment that is not unique. See kommentierte info tabelle -> Fragen -> Frage 2
-   * If set, ols realtions will be over written. Set [] to delete all
+   * If set, ols relations will be over written. Set [] to delete all
    */
   equipmentTypeIds?: Maybe<Array<Maybe<Scalars['ID']>>>;
   /** Sticker State */
   stickerBikeNameState?: Maybe<StickerBikeNameState>;
   note?: Maybe<Scalars['String']>;
-  provider?: Maybe<Scalars['String']>;
+  providerId?: Maybe<Scalars['ID']>;
   insuranceData?: Maybe<InsuranceDataUpdateInput>;
   taxes?: Maybe<TaxesUpdateInput>;
   /** will keep Bike locked if set to true, default = false */
@@ -1731,39 +1731,122 @@ export type GetCargoBikesQuery = (
   )>> }
 );
 
+export type BikeEventFieldsFragment = (
+  { __typename?: 'BikeEvent' }
+  & Pick<BikeEvent, 'id' | 'date'>
+  & { bikeEventType: (
+    { __typename?: 'BikeEventType' }
+    & Pick<BikeEventType, 'id' | 'name' | 'isLocked' | 'isLockedByMe'>
+  ), responsible?: Maybe<(
+    { __typename?: 'Participant' }
+    & Pick<Participant, 'id'>
+  )> }
+);
+
 export type CargoBikeFieldsMutableFragment = (
   { __typename?: 'CargoBike' }
-  & Pick<CargoBike, 'id' | 'group' | 'name' | 'numberOfChildren' | 'numberOfWheels'>
+  & Pick<CargoBike, 'id' | 'group' | 'name' | 'modelName' | 'numberOfChildren' | 'numberOfWheels' | 'forCargo' | 'forChildren' | 'stickerBikeNameState' | 'note'>
   & { insuranceData: (
     { __typename?: 'InsuranceData' }
-    & Pick<InsuranceData, 'billing' | 'hasFixedRate'>
+    & Pick<InsuranceData, 'billing' | 'hasFixedRate' | 'name' | 'benefactor' | 'noPnP' | 'maintenanceResponsible' | 'maintenanceBenefactor' | 'maintenanceAgreement' | 'fixedRate' | 'projectAllowance' | 'notes'>
   ), dimensionsAndLoad: (
     { __typename?: 'DimensionsAndLoad' }
     & Pick<DimensionsAndLoad, 'bikeLength' | 'bikeWeight' | 'bikeHeight' | 'bikeWidth' | 'boxHeight' | 'boxLength' | 'boxWidth' | 'hasCoverBox' | 'lockable' | 'maxWeightBox' | 'maxWeightLuggageRack' | 'maxWeightTotal'>
   ), security: (
     { __typename?: 'Security' }
     & Pick<Security, 'frameNumber' | 'adfcCoding' | 'keyNumberAXAChain' | 'keyNumberFrameLock' | 'policeCoding'>
-  ) }
+  ), technicalEquipment?: Maybe<(
+    { __typename?: 'TechnicalEquipment' }
+    & Pick<TechnicalEquipment, 'bicycleShift' | 'isEBike' | 'hasLightSystem' | 'specialFeatures'>
+  )>, lendingStation?: Maybe<(
+    { __typename?: 'LendingStation' }
+    & LendingStationFieldsGeneralFragment
+  )>, taxes?: Maybe<(
+    { __typename?: 'Taxes' }
+    & Pick<Taxes, 'costCenter' | 'organisationArea'>
+  )> }
 );
 
 export type CargoBikeFieldsFragment = (
   { __typename?: 'CargoBike' }
   & Pick<CargoBike, 'isLocked' | 'isLockedByMe' | 'lockedBy' | 'lockedUntil'>
-  & { bikeEvents?: Maybe<Array<Maybe<(
-    { __typename?: 'BikeEvent' }
-    & Pick<BikeEvent, 'date' | 'id'>
-  )>>> }
+  & { provider?: Maybe<(
+    { __typename?: 'Provider' }
+    & ProviderFieldsGeneralFragment
+  )> }
   & CargoBikeFieldsMutableFragment
 );
 
+export type LendingStationFieldsGeneralFragment = (
+  { __typename?: 'LendingStation' }
+  & Pick<LendingStation, 'id' | 'name'>
+  & { address: (
+    { __typename?: 'Address' }
+    & Pick<Address, 'number' | 'street' | 'zip'>
+  ) }
+);
+
+export type ProviderFieldsGeneralFragment = (
+  { __typename?: 'Provider' }
+  & Pick<Provider, 'id' | 'formName'>
+  & { privatePerson?: Maybe<(
+    { __typename?: 'ContactInformation' }
+    & Pick<ContactInformation, 'id'>
+    & { person: (
+      { __typename?: 'Person' }
+      & Pick<Person, 'id' | 'name' | 'firstName'>
+      & { contactInformation?: Maybe<Array<Maybe<(
+        { __typename?: 'ContactInformation' }
+        & Pick<ContactInformation, 'email'>
+      )>>> }
+    ) }
+  )> }
+);
+
+export const BikeEventFieldsFragmentDoc = gql`
+    fragment BikeEventFields on BikeEvent {
+  id
+  date
+  bikeEventType {
+    id
+    name
+    isLocked
+    isLockedByMe
+  }
+  responsible {
+    id
+  }
+}
+    `;
+export const LendingStationFieldsGeneralFragmentDoc = gql`
+    fragment LendingStationFieldsGeneral on LendingStation {
+  id
+  name
+  address {
+    number
+    street
+    zip
+  }
+}
+    `;
 export const CargoBikeFieldsMutableFragmentDoc = gql`
     fragment CargoBikeFieldsMutable on CargoBike {
   id
   group
   name
+  modelName
   insuranceData {
     billing
     hasFixedRate
+    name
+    benefactor
+    noPnP
+    maintenanceResponsible
+    maintenanceBenefactor
+    maintenanceAgreement
+    fixedRate
+    projectAllowance
+    notes
   }
   dimensionsAndLoad {
     bikeLength
@@ -1781,12 +1864,20 @@ export const CargoBikeFieldsMutableFragmentDoc = gql`
   }
   numberOfChildren
   numberOfWheels
+  forCargo
+  forChildren
   security {
     frameNumber
     adfcCoding
     keyNumberAXAChain
     keyNumberFrameLock
     policeCoding
+  }
+  technicalEquipment {
+    bicycleShift
+    isEBike
+    hasLightSystem
+    specialFeatures
   }
   dimensionsAndLoad {
     bikeHeight
@@ -1802,21 +1893,60 @@ export const CargoBikeFieldsMutableFragmentDoc = gql`
     maxWeightLuggageRack
     maxWeightTotal
   }
+  stickerBikeNameState
+  note
+  insuranceData {
+    name
+    benefactor
+    billing
+    noPnP
+    maintenanceResponsible
+    maintenanceBenefactor
+    maintenanceAgreement
+    hasFixedRate
+    fixedRate
+    projectAllowance
+    notes
+  }
+  lendingStation {
+    ...LendingStationFieldsGeneral
+  }
+  taxes {
+    costCenter
+    organisationArea
+  }
+}
+    ${LendingStationFieldsGeneralFragmentDoc}`;
+export const ProviderFieldsGeneralFragmentDoc = gql`
+    fragment ProviderFieldsGeneral on Provider {
+  id
+  formName
+  privatePerson {
+    id
+    person {
+      id
+      name
+      firstName
+      contactInformation {
+        email
+      }
+    }
+  }
 }
     `;
 export const CargoBikeFieldsFragmentDoc = gql`
     fragment CargoBikeFields on CargoBike {
   ...CargoBikeFieldsMutable
-  bikeEvents {
-    date
-    id
+  provider {
+    ...ProviderFieldsGeneral
   }
   isLocked
   isLockedByMe
   lockedBy
   lockedUntil
 }
-    ${CargoBikeFieldsMutableFragmentDoc}`;
+    ${CargoBikeFieldsMutableFragmentDoc}
+${ProviderFieldsGeneralFragmentDoc}`;
 export const GetCargoBikeByIdDocument = gql`
     query GetCargoBikeById($id: ID!) {
   cargoBikeById(id: $id) {
