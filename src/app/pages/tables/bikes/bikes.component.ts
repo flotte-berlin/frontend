@@ -21,6 +21,7 @@ export class BikesComponent {
     { name: 'group', header: 'Gruppe', type: 'enum', enumValues: [] },
   ];
 
+  //properties that wont be shown in the table
   blacklistedColumns = [
     '__typename',
     'isLocked',
@@ -36,7 +37,7 @@ export class BikesComponent {
 
   loadingRowIds: string[] = [];
 
-  bikes = <Array<any>>[];
+  data = <Array<any>>[];
   selection = new SelectionModel<CargoBikeResult>(true, []);
 
   reloadingTable = false;
@@ -61,13 +62,19 @@ export class BikesComponent {
     bikesService.bikes.subscribe((bikes) => {
       this.reloadingTable = false;
     
-      this.bikes = bikes;
-      if (bikes[0]) {
+      this.data = bikes;
+      
+
+
+      if (this.data[0]) {
         this.displayedColumns = [];
         this.dataColumns = [];
 
-        this.addColumnsFromObject('', bikes[0]);
+        this.addColumnsFromObject('', this.data[0]);
 
+        for (const bike of this.data)
+
+        //sort, so the displayedColumns array is in the same order as the columnInfo
         this.dataColumns.sort((columnA, columnB) => {
           const indexA = this.columnInfo.findIndex((c) => c.name == columnA);
           const indexB = this.columnInfo.findIndex((c) => c.name == columnB);
@@ -89,9 +96,9 @@ export class BikesComponent {
 
   ngOnInit() {
     this.relockingInterval = setInterval(() => {
-      for (const bike of this.bikes) {
-        if (bike.isLockedByMe) {
-          this.bikesService.relockBike({ id: bike.id });
+      for (const row of this.data) {
+        if (row.isLockedByMe) {
+          this.bikesService.relockBike({ id: row.id });
         }
       }
     }, this.relockingDuration);
@@ -187,7 +194,7 @@ export class BikesComponent {
   /** Whether the number of selected elements matches the total number of rows. */
   isAllSelected() {
     const numSelected = this.selection.selected.length;
-    const numRows = this.bikes.length;
+    const numRows = this.data.length;
     return numSelected === numRows;
   }
 
@@ -195,6 +202,6 @@ export class BikesComponent {
   masterToggle() {
     this.isAllSelected()
       ? this.selection.clear()
-      : this.bikes.forEach((row) => this.selection.select(row));
+      : this.data.forEach((row) => this.selection.select(row));
   }
 }
