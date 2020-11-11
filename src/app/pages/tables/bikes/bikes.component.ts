@@ -21,21 +21,26 @@ type CargoBikeDataRow = CargoBikeResult & {
   styleUrls: ['./bikes.component.scss'],
 })
 export class BikesComponent {
-  displayedColumns: string[] = [
-    'select',
-    'name',
-    'id',
-    'group',
-    'frameNumber',
-    'forChildren',
-    'numberOfChildren',
-    'numberOfWheels',
-    'forCargo',
-    'buttons',
+  columnInfo = [
+    { name: 'name', header: 'Name', type: 'string', sticky: true },
+    { name: 'id', header: 'ID', type: 'number', readonly: true },
+    { name: 'group', header: 'Gruppe', type: 'enum', enumValues: [] },
   ];
 
+  blacklistedColumns = [
+    '__typename',
+    'isLocked',
+    'isLockedByMe',
+    'lockedBy',
+    'lockedUntil',
+  ];
+
+  dataColumns: string[] = [];
+  additionalColumnsFront: string[] = ['select'];
+  additionalColumnsBack: string[] = ['buttons'];
+  displayedColumns: string[] = [];
+
   bikes = <Array<any>>[];
-  groupEnum: string[] = [];
   selection = new SelectionModel<CargoBikeDataRow>(true, []);
 
   reloadingTable = false;
@@ -44,9 +49,14 @@ export class BikesComponent {
   relockingDuration = 1000 * 60 * 1;
 
   constructor(private bikesService: BikesService) {
-    bikesService.groupEnum.subscribe(groupEnum => {
-      this.groupEnum = groupEnum;
-    })
+    this.displayedColumns.unshift(this.additionalColumnsFront[0]);
+    this.displayedColumns.push(this.additionalColumnsBack[0]);
+
+    bikesService.groupEnum.subscribe((groupEnum) => {
+      this.columnInfo.find(
+        (column) => column.name === 'group'
+      ).enumValues = groupEnum;
+    });
 
     bikesService.bikes.subscribe((bikes) => {
       this.reloadingTable = false;
@@ -57,6 +67,27 @@ export class BikesComponent {
           unlocking: false,
         });
       });
+      if (bikes[0]) {
+        this.displayedColumns = [];
+        this.dataColumns = [];
+
+        this.addColumnsFromObject('', bikes[0]);
+
+        this.dataColumns.sort((columnA, columnB) => {
+          const indexA = this.columnInfo.findIndex((c) => c.name == columnA);
+          const indexB = this.columnInfo.findIndex((c) => c.name == columnB);
+          if (indexA == -1) {
+            return 1;
+          } else if (indexB == -1) {
+            return -1;
+          } else {
+            return indexA - indexB;
+          }
+        });
+        this.displayedColumns.push(...this.dataColumns);
+        this.displayedColumns.unshift(...this.additionalColumnsFront);
+        this.displayedColumns.push(...this.additionalColumnsBack);
+      }
     });
     bikesService.loadBikes();
   }
@@ -73,6 +104,54 @@ export class BikesComponent {
 
   ngOnDestroy() {
     clearInterval(this.relockingInterval);
+  }
+
+  addColumnsFromObject(prefix: string, object: Object) {
+    for (const prop in object) {
+      let propName = prefix + prop;
+      console.log(typeof object[prop]);
+      if (typeof object[prop] === 'object') {
+        console.log(object);
+        this.addColumnsFromObject(prefix + prop + '.', object[prop]);
+      } else if (!this.blacklistedColumns.includes(propName)) {
+        this.dataColumns.push(propName);
+      }
+    }
+  }
+
+  getHeader(propertyName: string) {
+    return (
+      this.columnInfo.find((column) => column.name === propertyName)?.header ||
+      propertyName
+    );
+  }
+
+  getType(propertyName: string) {
+    return (
+      this.columnInfo.find((column) => column.name === propertyName)?.type ||
+      'string'
+    );
+  }
+
+  isReadonly(propertyName: string) {
+    return (
+      this.columnInfo.find((column) => column.name === propertyName)?.readonly ||
+      false
+    );
+  }
+
+  isStickyColumn(propertyName: string) {
+    return (
+      this.columnInfo.find((column) => column.name === propertyName)?.sticky ||
+      false
+    );
+  }
+
+  getEnumValues(propertyName: string) {
+    return (
+      this.columnInfo.find((column) => column.name === propertyName)?.enumValues ||
+      []
+    );
   }
 
   reloadTable() {

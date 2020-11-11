@@ -47,103 +47,18 @@
         </td>
       </ng-container>
 
-      <!-- Name Column -->
-      <ng-container matColumnDef="name" sticky>
-        <th mat-header-cell *matHeaderCellDef mat-sort-header>Name</th>
-        <td mat-cell *matCellDef="let element">
-          <app-cell
-            [editable]="element.isLockedByMe"
-            [(value)]="element.name"
-          ></app-cell>
-        </td>
-      </ng-container>
-
-      <!-- ID Column -->
-      <ng-container matColumnDef="id">
-        <th mat-header-cell cdkDrag *matHeaderCellDef mat-sort-header>ID</th>
-        <td mat-cell *matCellDef="let element">{{ element.id }}</td>
-      </ng-container>
-
-      <!-- Group Column -->
-      <ng-container matColumnDef="group">
-        <th mat-header-cell cdkDrag *matHeaderCellDef mat-sort-header>
-          Gruppe
+      <!-- Other Columns -->
+      <ng-container *ngFor="let column of dataColumns;" [matColumnDef]="column" [sticky]=isStickyColumn(column)>
+        <!-- add cdkDrag to make columns draggable-->
+        <th mat-header-cell *matHeaderCellDef mat-sort-header>
+          {{getHeader(column)}}
         </th>
         <td mat-cell *matCellDef="let element">
           <app-cell
-            [editable]="element.isLockedByMe"
-            [(value)]="element.group"
-            inputType="enum"
-            [(enumValues)]="groupEnum"
-          ></app-cell>
-        </td>
-      </ng-container>
-
-      <!-- FrameNumber Column -->
-      <ng-container matColumnDef="frameNumber">
-        <th mat-header-cell cdkDrag *matHeaderCellDef mat-sort-header>
-          Fahrgestellnummer
-        </th>
-        <td mat-cell *matCellDef="let element">
-          <app-cell
-            [editable]="element.isLockedByMe"
-            [(value)]="element.security.frameNumber"
-          ></app-cell>
-        </td>
-      </ng-container>
-
-      <!-- ForChildren Column -->
-      <ng-container matColumnDef="forChildren">
-        <th mat-header-cell cdkDrag *matHeaderCellDef mat-sort-header>
-          Für Kinder
-        </th>
-        <td mat-cell *matCellDef="let element">
-          <app-cell
-            [editable]="element.isLockedByMe"
-            [(value)]="element.forChildren"
-            inputType="boolean"
-          ></app-cell>
-        </td>
-      </ng-container>
-
-      <!-- NumberOfChildren Column -->
-      <ng-container matColumnDef="numberOfChildren">
-        <th mat-header-cell cdkDrag *matHeaderCellDef mat-sort-header>
-          Anzahl Kinder
-        </th>
-        <td mat-cell *matCellDef="let element">
-          <app-cell
-            [editable]="element.isLockedByMe"
-            [(value)]="element.numberOfChildren"
-            inputType="number"
-          ></app-cell>
-        </td>
-      </ng-container>
-
-      <!-- NumberOfWheels Column -->
-      <ng-container matColumnDef="numberOfWheels">
-        <th mat-header-cell cdkDrag *matHeaderCellDef i18n="WheelCount">
-          Räderanzahl
-        </th>
-        <td mat-cell *matCellDef="let element">
-          <app-cell
-            [editable]="element.isLockedByMe"
-            [(value)]="element.numberOfWheels"
-            inputType="number"
-          ></app-cell>
-        </td>
-      </ng-container>
-
-      <!-- ForCargo Column -->
-      <ng-container matColumnDef="forCargo">
-        <th mat-header-cell cdkDrag *matHeaderCellDef mat-sort-header>
-          Für Lasten
-        </th>
-        <td mat-cell *matCellDef="let element">
-          <app-cell
-            [editable]="element.isLockedByMe"
-            [(value)]="element.forCargo"
-            inputType="boolean"
+            [editable]="element.isLockedByMe && !isReadonly(column)"
+            [(value)]="element[column]"
+            [inputType]="getType(column)"
+            [enumValues]="getEnumValues(column)"
           ></app-cell>
         </td>
       </ng-container>
