@@ -9,12 +9,6 @@ import {
   CargoBikeUpdateInput,
 } from 'src/generated/graphql';
 
-type CargoBikeDataRow = CargoBikeResult & {
-  waitingForEditPermissions: boolean;
-  saving: boolean;
-  unlocking: boolean;
-};
-
 @Component({
   selector: 'app-bikes',
   templateUrl: './bikes.component.html',
@@ -40,8 +34,10 @@ export class BikesComponent {
   additionalColumnsBack: string[] = ['buttons'];
   displayedColumns: string[] = [];
 
+  loadingRowIds: string[] = [];
+
   bikes = <Array<any>>[];
-  selection = new SelectionModel<CargoBikeDataRow>(true, []);
+  selection = new SelectionModel<CargoBikeResult>(true, []);
 
   reloadingTable = false;
 
@@ -58,15 +54,14 @@ export class BikesComponent {
       ).enumValues = groupEnum;
     });
 
+    bikesService.loadingRowIds.subscribe(rowIds => {
+      this.loadingRowIds = rowIds;
+    })
+
     bikesService.bikes.subscribe((bikes) => {
       this.reloadingTable = false;
-      this.bikes = bikes.map((bike) => {
-        return <any>Object.assign({}, deepCopy(bike), {
-          waitingForEditPermissions: false,
-          saving: false,
-          unlocking: false,
-        });
-      });
+    
+      this.bikes = bikes;
       if (bikes[0]) {
         this.displayedColumns = [];
         this.dataColumns = [];
@@ -109,14 +104,16 @@ export class BikesComponent {
   addColumnsFromObject(prefix: string, object: Object) {
     for (const prop in object) {
       let propName = prefix + prop;
-      console.log(typeof object[prop]);
       if (typeof object[prop] === 'object') {
-        console.log(object);
         this.addColumnsFromObject(prefix + prop + '.', object[prop]);
       } else if (!this.blacklistedColumns.includes(propName)) {
         this.dataColumns.push(propName);
       }
     }
+  }
+
+  flatten(object: Object) {
+    return object;
   }
 
   getHeader(propertyName: string) {
@@ -135,8 +132,8 @@ export class BikesComponent {
 
   isReadonly(propertyName: string) {
     return (
-      this.columnInfo.find((column) => column.name === propertyName)?.readonly ||
-      false
+      this.columnInfo.find((column) => column.name === propertyName)
+        ?.readonly || false
     );
   }
 
@@ -149,9 +146,13 @@ export class BikesComponent {
 
   getEnumValues(propertyName: string) {
     return (
-      this.columnInfo.find((column) => column.name === propertyName)?.enumValues ||
-      []
+      this.columnInfo.find((column) => column.name === propertyName)
+        ?.enumValues || []
     );
+  }
+
+  isLoading(id: string) {
+    return this.loadingRowIds.includes(id);
   }
 
   reloadTable() {
@@ -159,13 +160,11 @@ export class BikesComponent {
     this.bikesService.loadBikes();
   }
 
-  edit(row: CargoBikeDataRow) {
-    row.waitingForEditPermissions = true;
+  edit(row: CargoBikeResult) {
     this.bikesService.lockBike({ id: row.id });
   }
 
-  save(row: CargoBikeDataRow) {
-    row.saving = true;
+  save(row: CargoBikeResult) {
     const bike: CargoBikeUpdateInput = filter(
       CargoBikeFieldsMutableFragmentDoc,
       row
@@ -173,8 +172,7 @@ export class BikesComponent {
     this.bikesService.updateBike({ bike });
   }
 
-  cancel(row: CargoBikeDataRow) {
-    row.unlocking = true;
+  cancel(row: CargoBikeResult) {
     this.bikesService.unlockBike({ id: row.id });
   }
 

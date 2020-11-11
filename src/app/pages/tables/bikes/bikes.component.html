@@ -48,10 +48,14 @@
       </ng-container>
 
       <!-- Other Columns -->
-      <ng-container *ngFor="let column of dataColumns;" [matColumnDef]="column" [sticky]=isStickyColumn(column)>
+      <ng-container
+        *ngFor="let column of dataColumns"
+        [matColumnDef]="column"
+        [sticky]="isStickyColumn(column)"
+      >
         <!-- add cdkDrag to make columns draggable-->
         <th mat-header-cell *matHeaderCellDef mat-sort-header>
-          {{getHeader(column)}}
+          {{ getHeader(column) }}
         </th>
         <td mat-cell *matCellDef="let element">
           <app-cell
@@ -73,10 +77,8 @@
               (click)="edit(element)"
               *ngIf="
                 !element.isLockedByMe &&
-                !element.waitingForEditPermissions &&
                 !element.isLocked &&
-                !element.saving &&
-                !element.unlocking
+                !isLoading(element.id)
               "
             >
               <mat-icon>edit</mat-icon>
@@ -85,10 +87,8 @@
               mat-icon-button
               *ngIf="
                 !element.isLockedByMe &&
-                !element.waitingForEditPermissions &&
-                !element.isLocked &&
-                !element.saving &&
-                !element.unlocking
+                !isLoading(element.id) &&
+                !element.isLocked
               "
             >
               <mat-icon>delete</mat-icon>
@@ -96,17 +96,13 @@
 
             <mat-spinner
               [diameter]="32"
-              *ngIf="
-                element.waitingForEditPermissions ||
-                element.saving ||
-                element.unlocking
-              "
+              *ngIf="isLoading(element.id)"
             ></mat-spinner>
 
             <button
               mat-icon-button
               *ngIf="
-                element.isLockedByMe && !element.unlocking && !element.saving
+                element.isLockedByMe && !isLoading(element.id)
               "
               (click)="save(element)"
             >
@@ -116,7 +112,7 @@
               mat-icon-button
               matTooltip="Alle ungespeicherten Änderungen verwerfen."
               *ngIf="
-                element.isLockedByMe && !element.unlocking && !element.saving
+                element.isLockedByMe && !isLoading(element.id)
               "
               (click)="cancel(element)"
             >
