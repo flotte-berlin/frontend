@@ -55,16 +55,14 @@ export class BikesComponent {
       ).enumValues = groupEnum;
     });
 
-    bikesService.loadingRowIds.subscribe(rowIds => {
+    bikesService.loadingRowIds.subscribe((rowIds) => {
       this.loadingRowIds = rowIds;
-    })
+    });
 
     bikesService.bikes.subscribe((bikes) => {
       this.reloadingTable = false;
-    
-      this.data = bikes;
-      
 
+      this.data = bikes;
 
       if (this.data[0]) {
         this.displayedColumns = [];
@@ -72,7 +70,9 @@ export class BikesComponent {
 
         this.addColumnsFromObject('', this.data[0]);
 
-        for (const bike of this.data)
+        for (let row of this.data) {
+          row = this.flatten(row);
+        }
 
         //sort, so the displayedColumns array is in the same order as the columnInfo
         this.dataColumns.sort((columnA, columnB) => {
@@ -119,8 +119,24 @@ export class BikesComponent {
     }
   }
 
-  flatten(object: Object) {
-    return object;
+  flatten(object: Object, prefix: string = '') {
+    let newObject = new Object();
+    for (const prop in object) {
+      let propName = prefix + prop;
+      if (typeof object[prop] === 'object' && object[prop] !== null) {
+        const flattenedObject = this.flatten(object[prop], propName + '.');
+        console.log(flattenedObject);
+        for (const flattenedProperty in flattenedObject) {
+          console.log(flattenedProperty);
+          Object.defineProperty(newObject, flattenedProperty, {
+            value: object[flattenedProperty],
+          });
+        }
+      } else {
+        Object.defineProperty(newObject, propName, { value: object[prop] });
+      }
+    }
+    return newObject;
   }
 
   getHeader(propertyName: string) {
