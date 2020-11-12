@@ -8,7 +8,7 @@ export function flatten(object: Object, prefix: string = ''): any {
           newObject[flattenedProperty] =
             flattenedObject[flattenedProperty];
         }
-      } else if(!prop.includes('_', 0)) {
+      } else {
         newObject[propName] = object[prop];
       }
     }

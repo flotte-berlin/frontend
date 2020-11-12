@@ -69,12 +69,16 @@ export class BikesComponent {
       if (this.data[0]) {
         this.displayedColumns = [];
         this.dataColumns = [];
-
-        this.addColumnsFromObject('', this.data[0]);
         
         for (let index in this.data) {
           this.data[index] = flatten(this.data[index]);
         }   
+
+        for (const prop in this.data[0]) {
+          if (!this.blacklistedColumns.includes(prop) && !prop.includes("__")) {
+            this.dataColumns.push(prop);
+          }
+        }
 
         //sort, so the displayedColumns array is in the same order as the columnInfo
         this.dataColumns.sort((columnA, columnB) => {
@@ -108,17 +112,6 @@ export class BikesComponent {
 
   ngOnDestroy() {
     clearInterval(this.relockingInterval);
-  }
-
-  addColumnsFromObject(prefix: string, object: Object) {
-    for (const prop in object) {
-      let propName = prefix + prop;
-      if (typeof object[prop] === 'object') {
-        this.addColumnsFromObject(prefix + prop + '.', object[prop]);
-      } else if (!this.blacklistedColumns.includes(propName)) {
-        this.dataColumns.push(propName);
-      }
-    }
   }
 
   getHeader(propertyName: string) {
