@@ -2,8 +2,9 @@ import { SelectionModel } from '@angular/cdk/collections';
 import { Component } from '@angular/core';
 import { CdkDragDrop, moveItemInArray } from '@angular/cdk/drag-drop';
 import { BikesService, CargoBikeResult } from 'src/app/services/bikes.service';
-import { deepCopy } from 'src/app/helperFunctions/deepCopy';
-import { filter } from 'graphql-anywhere';
+import { flatten } from 'src/app/helperFunctions/flattenObject';
+import { deepen } from 'src/app/helperFunctions/deepenObject';
+import { filter, propType } from 'graphql-anywhere';
 import {
   CargoBikeFieldsMutableFragmentDoc,
   CargoBikeUpdateInput,
@@ -71,7 +72,12 @@ export class BikesComponent {
         this.addColumnsFromObject('', this.data[0]);
         
         for (let index in this.data) {
-          this.data[index] = this.flatten(this.data[index]);
+          this.data[index] = flatten(this.data[index]);
+        }   
+        
+        console.log(CargoBikeFieldsMutableFragmentDoc);
+        for (const prop in Object.keys(CargoBikeFieldsMutableFragmentDoc)) {
+          console.log(prop);
         }
 
         //sort, so the displayedColumns array is in the same order as the columnInfo
@@ -119,45 +125,6 @@ export class BikesComponent {
     }
   }
 
-  flatten(object: Object, prefix: string = ''): any {
-    let newObject = {};
-    for (const prop in object) {
-      let propName = prefix + prop;
-      if (typeof object[prop] === 'object' && object[prop] !== null) {
-        const flattenedObject = this.flatten(object[prop], propName + '.');
-        for (const flattenedProperty in flattenedObject) {
-          newObject[flattenedProperty] =
-            flattenedObject[flattenedProperty];
-        }
-      } else if(!prop.includes('_', 0)) {
-        newObject[propName] = object[prop];
-      }
-    }
-    return newObject;
-  }
-
-  deepen(object: Object): any {
-    let newObject = {};
-    for (const prop in object) {
-      if (prop.includes('.')) {
-        const splittedProp = prop.split('.');
-        const outerProp = splittedProp[0];
-        const innerProp = splittedProp.slice(1).join('.');
-        if (!newObject[outerProp]) {
-          newObject[outerProp] = {};
-        }
-        newObject[outerProp][innerProp] = object[prop];
-      } else {
-        newObject[prop] = object[prop];
-      }
-    }
-    for (const prop in newObject) {
-      if (typeof newObject[prop] === 'object' && newObject[prop] !== null)
-        newObject[prop] = this.deepen(newObject[prop]);
-    }
-    return newObject;
-  }
-
   getHeader(propertyName: string) {
     return (
       this.columnInfo.find((column) => column.name === propertyName)?.header ||
@@ -165,10 +132,10 @@ export class BikesComponent {
     );
   }
 
-  getType(propertyName: string) {
+  getType(propertyName: string, row) {
     return (
       this.columnInfo.find((column) => column.name === propertyName)?.type ||
-      'string'
+      (typeof row[propertyName])
     );
   }
 
@@ -207,12 +174,11 @@ export class BikesComponent {
   }
 
   save(row: CargoBikeResult) {
-    const bla: CargoBikeUpdateInput = filter(
+    const deepenRow: CargoBikeUpdateInput = filter(
       CargoBikeFieldsMutableFragmentDoc,
-      this.deepen(row)
+      deepen(row)
     );
-    console.log(bla);
-    this.bikesService.updateBike({ bike: bla });
+    this.bikesService.updateBike({ bike: deepenRow });
   }
 
   cancel(row: CargoBikeResult) {
