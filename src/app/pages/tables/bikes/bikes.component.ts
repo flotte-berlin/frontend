@@ -4,7 +4,8 @@ import { CdkDragDrop, moveItemInArray } from '@angular/cdk/drag-drop';
 import { BikesService, CargoBikeResult } from 'src/app/services/bikes.service';
 import { flatten } from 'src/app/helperFunctions/flattenObject';
 import { deepen } from 'src/app/helperFunctions/deepenObject';
-import { filter, propType } from 'graphql-anywhere';
+import { isPartOfGraphQLDoc } from 'src/app/helperFunctions/isPartOfGraphQLFunction';
+import { filter } from 'graphql-anywhere';
 import {
   CargoBikeFieldsMutableFragmentDoc,
   CargoBikeUpdateInput,
@@ -74,11 +75,6 @@ export class BikesComponent {
         for (let index in this.data) {
           this.data[index] = flatten(this.data[index]);
         }   
-        
-        console.log(CargoBikeFieldsMutableFragmentDoc);
-        for (const prop in Object.keys(CargoBikeFieldsMutableFragmentDoc)) {
-          console.log(prop);
-        }
 
         //sort, so the displayedColumns array is in the same order as the columnInfo
         this.dataColumns.sort((columnA, columnB) => {
@@ -133,6 +129,7 @@ export class BikesComponent {
   }
 
   getType(propertyName: string, row) {
+    //TODO: get type from introspection query
     return (
       this.columnInfo.find((column) => column.name === propertyName)?.type ||
       (typeof row[propertyName])
@@ -142,7 +139,7 @@ export class BikesComponent {
   isReadonly(propertyName: string) {
     return (
       this.columnInfo.find((column) => column.name === propertyName)
-        ?.readonly || false
+        ?.readonly || !isPartOfGraphQLDoc(propertyName, CargoBikeFieldsMutableFragmentDoc)
     );
   }
 
