@@ -69,9 +69,9 @@ export class BikesComponent {
         this.dataColumns = [];
 
         this.addColumnsFromObject('', this.data[0]);
-
-        for (let row of this.data) {
-          row = this.flatten(row);
+        
+        for (let index in this.data) {
+          this.data[index] = this.flatten(this.data[index]);
         }
 
         //sort, so the displayedColumns array is in the same order as the columnInfo
@@ -119,22 +119,41 @@ export class BikesComponent {
     }
   }
 
-  flatten(object: Object, prefix: string = '') {
-    let newObject = new Object();
+  flatten(object: Object, prefix: string = ''): any {
+    let newObject = {};
     for (const prop in object) {
       let propName = prefix + prop;
       if (typeof object[prop] === 'object' && object[prop] !== null) {
         const flattenedObject = this.flatten(object[prop], propName + '.');
-        console.log(flattenedObject);
         for (const flattenedProperty in flattenedObject) {
-          console.log(flattenedProperty);
-          Object.defineProperty(newObject, flattenedProperty, {
-            value: object[flattenedProperty],
-          });
+          newObject[flattenedProperty] =
+            flattenedObject[flattenedProperty];
         }
-      } else {
-        Object.defineProperty(newObject, propName, { value: object[prop] });
+      } else if(!prop.includes('_', 0)) {
+        newObject[propName] = object[prop];
       }
+    }
+    return newObject;
+  }
+
+  deepen(object: Object): any {
+    let newObject = {};
+    for (const prop in object) {
+      if (prop.includes('.')) {
+        const splittedProp = prop.split('.');
+        const outerProp = splittedProp[0];
+        const innerProp = splittedProp.slice(1).join('.');
+        if (!newObject[outerProp]) {
+          newObject[outerProp] = {};
+        }
+        newObject[outerProp][innerProp] = object[prop];
+      } else {
+        newObject[prop] = object[prop];
+      }
+    }
+    for (const prop in newObject) {
+      if (typeof newObject[prop] === 'object' && newObject[prop] !== null)
+        newObject[prop] = this.deepen(newObject[prop]);
     }
     return newObject;
   }
@@ -188,11 +207,12 @@ export class BikesComponent {
   }
 
   save(row: CargoBikeResult) {
-    const bike: CargoBikeUpdateInput = filter(
+    const bla: CargoBikeUpdateInput = filter(
       CargoBikeFieldsMutableFragmentDoc,
-      row
+      this.deepen(row)
     );
-    this.bikesService.updateBike({ bike });
+    console.log(bla);
+    this.bikesService.updateBike({ bike: bla });
   }
 
   cancel(row: CargoBikeResult) {
