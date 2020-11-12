@@ -1,5 +1,6 @@
 import { Injectable } from '@angular/core';
 import { BehaviorSubject } from 'rxjs';
+import { SchemaService } from './schema.service';
 import {
   GetCargoBikesGQL,
   GetCargoBikesQuery,
@@ -28,6 +29,7 @@ export class BikesService {
   groupEnum: BehaviorSubject<string[]> = new BehaviorSubject<string[]>([]);
 
   constructor(
+    private schemaService: SchemaService,
     private getCargoBikesGQL: GetCargoBikesGQL,
     private getCargoBikeByIdGQL: GetCargoBikeByIdGQL,
     private updateCargoBikeGQL: UpdateCargoBikeGQL,
@@ -50,8 +52,7 @@ export class BikesService {
   loadBikes() {
     this.getCargoBikesGQL.fetch().subscribe((result) => {
       this.bikes.next(result.data.cargoBikes);
-      let enumValues = result.data.__type.enumValues.map((value) => value.name);
-      this.groupEnum.next(enumValues);
+      this.schemaService.nextSchema(result.data.__schema);
     });
   }
 

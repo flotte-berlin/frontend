@@ -1668,6 +1668,22 @@ export enum CacheControlScope {
 }
 
 
+/** A GraphQL Schema defines the capabilities of a GraphQL server. It exposes all available types and directives on the server, as well as the entry points for query, mutation, and subscription operations. */
+export type __Schema = {
+  __typename?: '__Schema';
+  description?: Maybe<Scalars['String']>;
+  /** A list of all types supported by this server. */
+  types: Array<__Type>;
+  /** The type that query operations will be rooted at. */
+  queryType: __Type;
+  /** If this server supports mutation, the type that mutation operations will be rooted at. */
+  mutationType?: Maybe<__Type>;
+  /** If this server support subscription, the type that subscription operations will be rooted at. */
+  subscriptionType?: Maybe<__Type>;
+  /** A list of all directives supported by this server. */
+  directives: Array<__Directive>;
+};
+
 /**
  * The fundamental unit of any GraphQL Schema is the type. There are many kinds of types in GraphQL as represented by the `__TypeKind` enum.
  * 
@@ -1757,6 +1773,62 @@ export type __EnumValue = {
   deprecationReason?: Maybe<Scalars['String']>;
 };
 
+/**
+ * A Directive provides a way to describe alternate runtime execution and type validation behavior in a GraphQL document.
+ * 
+ * In some cases, you need to provide options to alter GraphQL's execution behavior in ways field arguments will not suffice, such as conditionally including or skipping a field. Directives provide this by describing additional information to the executor.
+ */
+export type __Directive = {
+  __typename?: '__Directive';
+  name: Scalars['String'];
+  description?: Maybe<Scalars['String']>;
+  isRepeatable: Scalars['Boolean'];
+  locations: Array<__DirectiveLocation>;
+  args: Array<__InputValue>;
+};
+
+/** A Directive can be adjacent to many parts of the GraphQL language, a __DirectiveLocation describes one such possible adjacencies. */
+export enum __DirectiveLocation {
+  /** Location adjacent to a query operation. */
+  Query = 'QUERY',
+  /** Location adjacent to a mutation operation. */
+  Mutation = 'MUTATION',
+  /** Location adjacent to a subscription operation. */
+  Subscription = 'SUBSCRIPTION',
+  /** Location adjacent to a field. */
+  Field = 'FIELD',
+  /** Location adjacent to a fragment definition. */
+  FragmentDefinition = 'FRAGMENT_DEFINITION',
+  /** Location adjacent to a fragment spread. */
+  FragmentSpread = 'FRAGMENT_SPREAD',
+  /** Location adjacent to an inline fragment. */
+  InlineFragment = 'INLINE_FRAGMENT',
+  /** Location adjacent to a variable definition. */
+  VariableDefinition = 'VARIABLE_DEFINITION',
+  /** Location adjacent to a schema definition. */
+  Schema = 'SCHEMA',
+  /** Location adjacent to a scalar definition. */
+  Scalar = 'SCALAR',
+  /** Location adjacent to an object type definition. */
+  Object = 'OBJECT',
+  /** Location adjacent to a field definition. */
+  FieldDefinition = 'FIELD_DEFINITION',
+  /** Location adjacent to an argument definition. */
+  ArgumentDefinition = 'ARGUMENT_DEFINITION',
+  /** Location adjacent to an interface definition. */
+  Interface = 'INTERFACE',
+  /** Location adjacent to a union definition. */
+  Union = 'UNION',
+  /** Location adjacent to an enum definition. */
+  Enum = 'ENUM',
+  /** Location adjacent to an enum value definition. */
+  EnumValue = 'ENUM_VALUE',
+  /** Location adjacent to an input object type definition. */
+  InputObject = 'INPUT_OBJECT',
+  /** Location adjacent to an input object field definition. */
+  InputFieldDefinition = 'INPUT_FIELD_DEFINITION'
+}
+
 export type GetCargoBikeByIdQueryVariables = Exact<{
   id: Scalars['ID'];
 }>;
@@ -1818,7 +1890,7 @@ export type GetCargoBikesQuery = (
     { __typename?: 'CargoBike' }
     & CargoBikeFieldsFragment
   )>> }
-  & IntrospectionFragment
+  & SchemaIntrospectionFragment
 );
 
 export type BikeEventFieldsFragment = (
@@ -1867,7 +1939,7 @@ export type CargoBikeFieldsFragment = (
   & CargoBikeFieldsMutableFragment
 );
 
-export type IntrospectionFragment = (
+export type GroupIntrospectionFragment = (
   { __typename?: 'Query' }
   & { __type?: Maybe<(
     { __typename?: '__Type' }
@@ -1877,6 +1949,32 @@ export type IntrospectionFragment = (
       & Pick<__EnumValue, 'name'>
     )>> }
   )> }
+);
+
+export type SchemaIntrospectionFragment = (
+  { __typename?: 'Query' }
+  & { __schema: (
+    { __typename?: '__Schema' }
+    & { types: Array<(
+      { __typename?: '__Type' }
+      & Pick<__Type, 'name' | 'kind'>
+      & { enumValues?: Maybe<Array<(
+        { __typename?: '__EnumValue' }
+        & Pick<__EnumValue, 'name'>
+      )>>, fields?: Maybe<Array<(
+        { __typename?: '__Field' }
+        & Pick<__Field, 'name'>
+        & { type: (
+          { __typename?: '__Type' }
+          & Pick<__Type, 'name' | 'kind'>
+          & { ofType?: Maybe<(
+            { __typename?: '__Type' }
+            & Pick<__Type, 'name' | 'kind'>
+          )> }
+        ) }
+      )>> }
+    )> }
+  ) }
 );
 
 export type LendingStationFieldsGeneralFragment = (
@@ -2050,12 +2148,36 @@ export const CargoBikeFieldsFragmentDoc = gql`
     ${CargoBikeFieldsMutableFragmentDoc}
 ${ProviderFieldsGeneralFragmentDoc}
 ${LendingStationFieldsGeneralFragmentDoc}`;
-export const IntrospectionFragmentDoc = gql`
-    fragment Introspection on Query {
+export const GroupIntrospectionFragmentDoc = gql`
+    fragment GroupIntrospection on Query {
   __type(name: "Group") {
     name
     enumValues {
       name
+    }
+  }
+}
+    `;
+export const SchemaIntrospectionFragmentDoc = gql`
+    fragment SchemaIntrospection on Query {
+  __schema {
+    types {
+      name
+      kind
+      enumValues {
+        name
+      }
+      fields {
+        name
+        type {
+          name
+          kind
+          ofType {
+            name
+            kind
+          }
+        }
+      }
     }
   }
 }
@@ -2134,12 +2256,12 @@ export const UnlockCargoBikeDocument = gql`
   }
 export const GetCargoBikesDocument = gql`
     query GetCargoBikes {
-  ...Introspection
+  ...SchemaIntrospection
   cargoBikes(limit: 100, offset: 0) {
     ...CargoBikeFields
   }
 }
-    ${IntrospectionFragmentDoc}
+    ${SchemaIntrospectionFragmentDoc}
 ${CargoBikeFieldsFragmentDoc}`;
 
   @Injectable({
