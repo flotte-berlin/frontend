@@ -9,6 +9,7 @@ COPY . .
 RUN ng build --prod --crossOrigin=anonymous
 
 FROM golang:1.13.4-alpine as builder2
+ENV ARCH=amd64
 RUN apk add git
 WORKDIR /
 COPY --from=builder /frontend/dist /dist 
@@ -16,7 +17,7 @@ RUN go get github.com/rakyll/statik
 RUN statik --src=/dist/flotte-frontend
 COPY *.go *.sum *.mod /
 COPY vendor /vendor
-RUN CGO_ENABLED=0 GOOS=linux go build --mod=vendor -o frontend_server
+RUN CGO_ENABLED=0 GOARCH=$ARCH GOOS=linux go build --mod=vendor -o frontend_server
 
 FROM scratch
 WORKDIR /
