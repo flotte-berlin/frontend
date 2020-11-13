@@ -5,8 +5,24 @@ language: bash
 services:
   - docker
 
+env:
+  global:
+    - DOCKER_CLI_EXPERIMENTAL=enabled
+
 script:
   - docker login -u="$DOCKER_USER" -p="$DOCKER_PW" https://flotte-docker-registry.spdns.org/
-  - docker build -t frontend-server .
-  - docker tag frontend-server flotte-docker-registry.spdns.org/frontend-server
-  - docker push flotte-docker-registry.spdns.org/frontend-server:latest
+  - sudo chmod o+xr -R /home/travis/.docker
+  - sudo chmod o+xr -R /etc/docker
+  - docker build -t frontend-server:amd64 . --build-arg ARCH=amd64
+  - docker build -t frontend-server:arm . --build-arg ARCH=arm
+  - docker build -t frontend-server:arm64 . --build-arg ARCH=arm64
+  - docker tag frontend-server:amd64 flotte-docker-registry.spdns.org/frontend-server:amd64
+  - docker push flotte-docker-registry.spdns.org/frontend-server:amd64
+  - docker tag frontend-server:arm64 flotte-docker-registry.spdns.org/frontend-server:arm64
+  - docker push flotte-docker-registry.spdns.org/frontend-server:arm64
+  - docker tag frontend-server:arm flotte-docker-registry.spdns.org/frontend-server:arm
+  - docker push flotte-docker-registry.spdns.org/frontend-server:arm
+  - docker manifest create --amend flotte-docker-registry.spdns.org/frontend-server:latest flotte-docker-registry.spdns.org/frontend-server:arm flotte-docker-registry.spdns.org/frontend-server:arm64 flotte-docker-registry.spdns.org/frontend-server:amd64
+  - docker manifest annotate flotte-docker-registry.spdns.org/frontend-server:latest flotte-docker-registry.spdns.org/frontend-server:arm --os linux --arch arm --variant v7 
+  - docker manifest annotate flotte-docker-registry.spdns.org/frontend-server:latest flotte-docker-registry.spdns.org/frontend-server:arm64 --os linux --arch arm64 --variant v8 
+  - docker manifest push flotte-docker-registry.spdns.org/frontend-server:latest
