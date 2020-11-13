@@ -12,9 +12,9 @@ script:
   - docker build -t frontend-server:arm64 . --build-arg ARCH=arm64
   - docker tag frontend-server:amd64 flotte-docker-registry.spdns.org/frontend-server:amd64
   - docker push flotte-docker-registry.spdns.org/frontend-server:amd64
-  - docker tag frontend-server flotte-docker-registry.spdns.org/frontend-server:arm64
+  - docker tag frontend-server:arm64 flotte-docker-registry.spdns.org/frontend-server:arm64
   - docker push flotte-docker-registry.spdns.org/frontend-server:arm64
-  - docker tag frontend-server flotte-docker-registry.spdns.org/frontend-server:arm
+  - docker tag frontend-server:arm flotte-docker-registry.spdns.org/frontend-server:arm
   - docker push flotte-docker-registry.spdns.org/frontend-server:arm
   - docker manifest create --amend flotte-docker-registry.spdns.org/frontend-server:latest flotte-docker-registry.spdns.org/frontend-server:arm flotte-docker-registry.spdns.org/frontend-server:arm64 flotte-docker-registry.spdns.org/frontend-server:amd64
   - docker manifest annotate flotte-docker-registry.spdns.org/frontend-server:latest flotte-docker-registry.spdns.org/frontend-server:arm --os linux --arch arm --variant v7 
