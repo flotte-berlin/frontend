@@ -1677,45 +1677,7 @@ export type GetCargoBikeByIdQuery = (
   { __typename?: 'Query' }
   & { cargoBikeById?: Maybe<(
     { __typename?: 'CargoBike' }
-    & Pick<CargoBike, 'id' | 'group' | 'name' | 'modelName' | 'numberOfChildren' | 'numberOfWheels' | 'forCargo' | 'forChildren' | 'stickerBikeNameState' | 'note' | 'isLocked' | 'isLockedByMe' | 'lockedBy' | 'lockedUntil'>
-    & { insuranceData: (
-      { __typename?: 'InsuranceData' }
-      & Pick<InsuranceData, 'billing' | 'hasFixedRate' | 'name' | 'benefactor' | 'noPnP' | 'maintenanceResponsible' | 'maintenanceBenefactor' | 'maintenanceAgreement' | 'fixedRate' | 'projectAllowance' | 'notes'>
-    ), dimensionsAndLoad: (
-      { __typename?: 'DimensionsAndLoad' }
-      & Pick<DimensionsAndLoad, 'bikeLength' | 'bikeWeight' | 'bikeHeight' | 'bikeWidth' | 'boxHeight' | 'boxLength' | 'boxWidth' | 'hasCoverBox' | 'lockable' | 'maxWeightBox' | 'maxWeightLuggageRack' | 'maxWeightTotal'>
-    ), security: (
-      { __typename?: 'Security' }
-      & Pick<Security, 'frameNumber' | 'adfcCoding' | 'keyNumberAXAChain' | 'keyNumberFrameLock' | 'policeCoding'>
-    ), technicalEquipment?: Maybe<(
-      { __typename?: 'TechnicalEquipment' }
-      & Pick<TechnicalEquipment, 'bicycleShift' | 'isEBike' | 'hasLightSystem' | 'specialFeatures'>
-    )>, taxes?: Maybe<(
-      { __typename?: 'Taxes' }
-      & Pick<Taxes, 'costCenter' | 'organisationArea'>
-    )>, provider?: Maybe<(
-      { __typename?: 'Provider' }
-      & Pick<Provider, 'id' | 'formName'>
-      & { privatePerson?: Maybe<(
-        { __typename?: 'ContactInformation' }
-        & Pick<ContactInformation, 'id'>
-        & { person: (
-          { __typename?: 'Person' }
-          & Pick<Person, 'id' | 'name' | 'firstName'>
-          & { contactInformation?: Maybe<Array<Maybe<(
-            { __typename?: 'ContactInformation' }
-            & Pick<ContactInformation, 'email'>
-          )>>> }
-        ) }
-      )> }
-    )>, lendingStation?: Maybe<(
-      { __typename?: 'LendingStation' }
-      & Pick<LendingStation, 'id' | 'name'>
-      & { address: (
-        { __typename?: 'Address' }
-        & Pick<Address, 'number' | 'street' | 'zip'>
-      ) }
-    )> }
+    & CargoBikeFieldsFragment
   )> }
 );
 
@@ -1728,45 +1690,7 @@ export type UpdateCargoBikeMutation = (
   { __typename?: 'Mutation' }
   & { updateCargoBike: (
     { __typename?: 'CargoBike' }
-    & Pick<CargoBike, 'id' | 'group' | 'name' | 'modelName' | 'numberOfChildren' | 'numberOfWheels' | 'forCargo' | 'forChildren' | 'stickerBikeNameState' | 'note' | 'isLocked' | 'isLockedByMe' | 'lockedBy' | 'lockedUntil'>
-    & { insuranceData: (
-      { __typename?: 'InsuranceData' }
-      & Pick<InsuranceData, 'billing' | 'hasFixedRate' | 'name' | 'benefactor' | 'noPnP' | 'maintenanceResponsible' | 'maintenanceBenefactor' | 'maintenanceAgreement' | 'fixedRate' | 'projectAllowance' | 'notes'>
-    ), dimensionsAndLoad: (
-      { __typename?: 'DimensionsAndLoad' }
-      & Pick<DimensionsAndLoad, 'bikeLength' | 'bikeWeight' | 'bikeHeight' | 'bikeWidth' | 'boxHeight' | 'boxLength' | 'boxWidth' | 'hasCoverBox' | 'lockable' | 'maxWeightBox' | 'maxWeightLuggageRack' | 'maxWeightTotal'>
-    ), security: (
-      { __typename?: 'Security' }
-      & Pick<Security, 'frameNumber' | 'adfcCoding' | 'keyNumberAXAChain' | 'keyNumberFrameLock' | 'policeCoding'>
-    ), technicalEquipment?: Maybe<(
-      { __typename?: 'TechnicalEquipment' }
-      & Pick<TechnicalEquipment, 'bicycleShift' | 'isEBike' | 'hasLightSystem' | 'specialFeatures'>
-    )>, taxes?: Maybe<(
-      { __typename?: 'Taxes' }
-      & Pick<Taxes, 'costCenter' | 'organisationArea'>
-    )>, provider?: Maybe<(
-      { __typename?: 'Provider' }
-      & Pick<Provider, 'id' | 'formName'>
-      & { privatePerson?: Maybe<(
-        { __typename?: 'ContactInformation' }
-        & Pick<ContactInformation, 'id'>
-        & { person: (
-          { __typename?: 'Person' }
-          & Pick<Person, 'id' | 'name' | 'firstName'>
-          & { contactInformation?: Maybe<Array<Maybe<(
-            { __typename?: 'ContactInformation' }
-            & Pick<ContactInformation, 'email'>
-          )>>> }
-        ) }
-      )> }
-    )>, lendingStation?: Maybe<(
-      { __typename?: 'LendingStation' }
-      & Pick<LendingStation, 'id' | 'name'>
-      & { address: (
-        { __typename?: 'Address' }
-        & Pick<Address, 'number' | 'street' | 'zip'>
-      ) }
-    )> }
+    & CargoBikeFieldsFragment
   ) }
 );
 
@@ -1779,45 +1703,7 @@ export type LockCargoBikeMutation = (
   { __typename?: 'Mutation' }
   & { lockCargoBike: (
     { __typename?: 'CargoBike' }
-    & Pick<CargoBike, 'id' | 'group' | 'name' | 'modelName' | 'numberOfChildren' | 'numberOfWheels' | 'forCargo' | 'forChildren' | 'stickerBikeNameState' | 'note' | 'isLocked' | 'isLockedByMe' | 'lockedBy' | 'lockedUntil'>
-    & { insuranceData: (
-      { __typename?: 'InsuranceData' }
-      & Pick<InsuranceData, 'billing' | 'hasFixedRate' | 'name' | 'benefactor' | 'noPnP' | 'maintenanceResponsible' | 'maintenanceBenefactor' | 'maintenanceAgreement' | 'fixedRate' | 'projectAllowance' | 'notes'>
-    ), dimensionsAndLoad: (
-      { __typename?: 'DimensionsAndLoad' }
-      & Pick<DimensionsAndLoad, 'bikeLength' | 'bikeWeight' | 'bikeHeight' | 'bikeWidth' | 'boxHeight' | 'boxLength' | 'boxWidth' | 'hasCoverBox' | 'lockable' | 'maxWeightBox' | 'maxWeightLuggageRack' | 'maxWeightTotal'>
-    ), security: (
-      { __typename?: 'Security' }
-      & Pick<Security, 'frameNumber' | 'adfcCoding' | 'keyNumberAXAChain' | 'keyNumberFrameLock' | 'policeCoding'>
-    ), technicalEquipment?: Maybe<(
-      { __typename?: 'TechnicalEquipment' }
-      & Pick<TechnicalEquipment, 'bicycleShift' | 'isEBike' | 'hasLightSystem' | 'specialFeatures'>
-    )>, taxes?: Maybe<(
-      { __typename?: 'Taxes' }
-      & Pick<Taxes, 'costCenter' | 'organisationArea'>
-    )>, provider?: Maybe<(
-      { __typename?: 'Provider' }
-      & Pick<Provider, 'id' | 'formName'>
-      & { privatePerson?: Maybe<(
-        { __typename?: 'ContactInformation' }
-        & Pick<ContactInformation, 'id'>
-        & { person: (
-          { __typename?: 'Person' }
-          & Pick<Person, 'id' | 'name' | 'firstName'>
-          & { contactInformation?: Maybe<Array<Maybe<(
-            { __typename?: 'ContactInformation' }
-            & Pick<ContactInformation, 'email'>
-          )>>> }
-        ) }
-      )> }
-    )>, lendingStation?: Maybe<(
-      { __typename?: 'LendingStation' }
-      & Pick<LendingStation, 'id' | 'name'>
-      & { address: (
-        { __typename?: 'Address' }
-        & Pick<Address, 'number' | 'street' | 'zip'>
-      ) }
-    )> }
+    & CargoBikeFieldsFragment
   ) }
 );
 
@@ -1830,45 +1716,7 @@ export type UnlockCargoBikeMutation = (
   { __typename?: 'Mutation' }
   & { unlockCargoBike: (
     { __typename?: 'CargoBike' }
-    & Pick<CargoBike, 'id' | 'group' | 'name' | 'modelName' | 'numberOfChildren' | 'numberOfWheels' | 'forCargo' | 'forChildren' | 'stickerBikeNameState' | 'note' | 'isLocked' | 'isLockedByMe' | 'lockedBy' | 'lockedUntil'>
-    & { insuranceData: (
-      { __typename?: 'InsuranceData' }
-      & Pick<InsuranceData, 'billing' | 'hasFixedRate' | 'name' | 'benefactor' | 'noPnP' | 'maintenanceResponsible' | 'maintenanceBenefactor' | 'maintenanceAgreement' | 'fixedRate' | 'projectAllowance' | 'notes'>
-    ), dimensionsAndLoad: (
-      { __typename?: 'DimensionsAndLoad' }
-      & Pick<DimensionsAndLoad, 'bikeLength' | 'bikeWeight' | 'bikeHeight' | 'bikeWidth' | 'boxHeight' | 'boxLength' | 'boxWidth' | 'hasCoverBox' | 'lockable' | 'maxWeightBox' | 'maxWeightLuggageRack' | 'maxWeightTotal'>
-    ), security: (
-      { __typename?: 'Security' }
-      & Pick<Security, 'frameNumber' | 'adfcCoding' | 'keyNumberAXAChain' | 'keyNumberFrameLock' | 'policeCoding'>
-    ), technicalEquipment?: Maybe<(
-      { __typename?: 'TechnicalEquipment' }
-      & Pick<TechnicalEquipment, 'bicycleShift' | 'isEBike' | 'hasLightSystem' | 'specialFeatures'>
-    )>, taxes?: Maybe<(
-      { __typename?: 'Taxes' }
-      & Pick<Taxes, 'costCenter' | 'organisationArea'>
-    )>, provider?: Maybe<(
-      { __typename?: 'Provider' }
-      & Pick<Provider, 'id' | 'formName'>
-      & { privatePerson?: Maybe<(
-        { __typename?: 'ContactInformation' }
-        & Pick<ContactInformation, 'id'>
-        & { person: (
-          { __typename?: 'Person' }
-          & Pick<Person, 'id' | 'name' | 'firstName'>
-          & { contactInformation?: Maybe<Array<Maybe<(
-            { __typename?: 'ContactInformation' }
-            & Pick<ContactInformation, 'email'>
-          )>>> }
-        ) }
-      )> }
-    )>, lendingStation?: Maybe<(
-      { __typename?: 'LendingStation' }
-      & Pick<LendingStation, 'id' | 'name'>
-      & { address: (
-        { __typename?: 'Address' }
-        & Pick<Address, 'number' | 'street' | 'zip'>
-      ) }
-    )> }
+    & CargoBikeFieldsFragment
   ) }
 );
 
@@ -1879,48 +1727,6 @@ export type GetCargoBikesQuery = (
   { __typename?: 'Query' }
   & { cargoBikes: Array<Maybe<(
     { __typename?: 'CargoBike' }
-<<<<<<< HEAD
-    & Pick<CargoBike, 'id' | 'group' | 'name' | 'modelName' | 'numberOfChildren' | 'numberOfWheels' | 'forCargo' | 'forChildren' | 'stickerBikeNameState' | 'note' | 'isLocked' | 'isLockedByMe' | 'lockedBy' | 'lockedUntil'>
-    & { insuranceData: (
-      { __typename?: 'InsuranceData' }
-      & Pick<InsuranceData, 'billing' | 'hasFixedRate' | 'name' | 'benefactor' | 'noPnP' | 'maintenanceResponsible' | 'maintenanceBenefactor' | 'maintenanceAgreement' | 'fixedRate' | 'projectAllowance' | 'notes'>
-    ), dimensionsAndLoad: (
-      { __typename?: 'DimensionsAndLoad' }
-      & Pick<DimensionsAndLoad, 'bikeLength' | 'bikeWeight' | 'bikeHeight' | 'bikeWidth' | 'boxHeight' | 'boxLength' | 'boxWidth' | 'hasCoverBox' | 'lockable' | 'maxWeightBox' | 'maxWeightLuggageRack' | 'maxWeightTotal'>
-    ), security: (
-      { __typename?: 'Security' }
-      & Pick<Security, 'frameNumber' | 'adfcCoding' | 'keyNumberAXAChain' | 'keyNumberFrameLock' | 'policeCoding'>
-    ), technicalEquipment?: Maybe<(
-      { __typename?: 'TechnicalEquipment' }
-      & Pick<TechnicalEquipment, 'bicycleShift' | 'isEBike' | 'hasLightSystem' | 'specialFeatures'>
-    )>, taxes?: Maybe<(
-      { __typename?: 'Taxes' }
-      & Pick<Taxes, 'costCenter' | 'organisationArea'>
-    )>, provider?: Maybe<(
-      { __typename?: 'Provider' }
-      & Pick<Provider, 'id' | 'formName'>
-      & { privatePerson?: Maybe<(
-        { __typename?: 'ContactInformation' }
-        & Pick<ContactInformation, 'id'>
-        & { person: (
-          { __typename?: 'Person' }
-          & Pick<Person, 'id' | 'name' | 'firstName'>
-          & { contactInformation?: Maybe<Array<Maybe<(
-            { __typename?: 'ContactInformation' }
-            & Pick<ContactInformation, 'email'>
-          )>>> }
-        ) }
-      )> }
-    )>, lendingStation?: Maybe<(
-      { __typename?: 'LendingStation' }
-      & Pick<LendingStation, 'id' | 'name'>
-      & { address: (
-        { __typename?: 'Address' }
-        & Pick<Address, 'number' | 'street' | 'zip'>
-      ) }
-    )> }
-  )>> }
-=======
     & CargoBikeFieldsFragment
   )>> }
 );
@@ -1995,7 +1801,6 @@ export type ProviderFieldsGeneralFragment = (
       )>>> }
     ) }
   )> }
->>>>>>> master
 );
 
 export const BikeEventFieldsFragmentDoc = gql`
@@ -2022,10 +1827,29 @@ export const CargoBikeFieldsMutableFragmentDoc = gql`
   insuranceData {
     billing
     hasFixedRate
+    name
+    benefactor
+    noPnP
+    maintenanceResponsible
+    maintenanceBenefactor
+    maintenanceAgreement
+    fixedRate
+    projectAllowance
+    notes
   }
   dimensionsAndLoad {
     bikeLength
     bikeWeight
+    bikeHeight
+    bikeWidth
+    boxHeight
+    boxLength
+    boxWidth
+    hasCoverBox
+    lockable
+    maxWeightBox
+    maxWeightLuggageRack
+    maxWeightTotal
   }
   numberOfChildren
   numberOfWheels
