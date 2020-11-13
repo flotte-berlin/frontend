@@ -10,6 +10,6 @@ generates:
       - "typescript-apollo-angular"
     config:
       immutableTypes: false
-  ./graphql.schema.json:
+  src/generated/graphql.schema.json:
     plugins:
       - "introspection"

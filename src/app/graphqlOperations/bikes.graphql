@@ -1,5 +1,4 @@
 query GetCargoBikes {
-  ...SchemaIntrospection
   cargoBikes(limit: 100, offset: 0) {
     ...CargoBikeFields   
     

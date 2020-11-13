@@ -52,7 +52,6 @@ export class BikesService {
   loadBikes() {
     this.getCargoBikesGQL.fetch().subscribe((result) => {
       this.bikes.next(result.data.cargoBikes);
-      this.schemaService.nextSchema(result.data.__schema);
     });
   }
 
