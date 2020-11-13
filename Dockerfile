@@ -9,7 +9,7 @@ COPY . .
 RUN ng build --prod --crossOrigin=anonymous
 
 FROM golang:1.13.4-alpine as builder2
-ENV ARCH=amd64
+ARG ARCH=amd64
 RUN apk add git
 WORKDIR /
 COPY --from=builder /frontend/dist /dist 
