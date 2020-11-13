@@ -1,6 +1,5 @@
 query GetCargoBikes {
   cargoBikes(limit: 100, offset: 0) {
     ...CargoBikeFields   
-    
   }
 }

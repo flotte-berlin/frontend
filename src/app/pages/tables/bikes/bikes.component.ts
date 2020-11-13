@@ -9,6 +9,7 @@ import { filter } from 'graphql-anywhere';
 import {
   CargoBikeFieldsMutableFragmentDoc,
   CargoBikeUpdateInput,
+  GetCargoBikesDocument
 } from 'src/generated/graphql';
 import { SchemaService } from 'src/app/services/schema.service';
 
@@ -24,7 +25,7 @@ export class BikesComponent {
     { name: 'group', header: 'Gruppe'},
   ];
 
-  //properties that wont be shown in the table
+  // properties that wont be shown in the table
   blacklistedColumns = [
     '__typename',
     'isLocked',
@@ -40,7 +41,7 @@ export class BikesComponent {
 
   loadingRowIds: string[] = [];
 
-  data = <Array<any>>[];
+  data =  [] as Array<any>;
   selection = new SelectionModel<CargoBikeResult>(true, []);
 
   reloadingTable = false;
@@ -68,7 +69,7 @@ export class BikesComponent {
         this.displayedColumns = [];
         this.dataColumns = [];
 
-        for (let index in this.data) {
+        for (const index in this.data) {
           this.data[index] = flatten(this.data[index]);
         }
 
@@ -78,13 +79,13 @@ export class BikesComponent {
           }
         }
 
-        //sort, so the displayedColumns array is in the same order as the columnInfo
+        // sort, so the displayedColumns array is in the same order as the columnInfo
         this.dataColumns.sort((columnA, columnB) => {
-          const indexA = this.columnInfo.findIndex((c) => c.name == columnA);
-          const indexB = this.columnInfo.findIndex((c) => c.name == columnB);
-          if (indexA == -1) {
+          const indexA = this.columnInfo.findIndex((c) => c.name === columnA);
+          const indexB = this.columnInfo.findIndex((c) => c.name === columnB);
+          if (indexA === -1) {
             return 1;
-          } else if (indexB == -1) {
+          } else if (indexB === -1) {
             return -1;
           } else {
             return indexA - indexB;
@@ -106,6 +107,8 @@ export class BikesComponent {
         }
       }
     }, this.relockingDuration);
+
+    console.log(GetCargoBikesDocument);
   }
 
   ngOnDestroy() {
@@ -120,9 +123,9 @@ export class BikesComponent {
   }
 
   getType(propertyName: string, row) {
-    //console.log(propertyName, this.schemaService.getPropertyTypeFromSchema("CargoBike", propertyName))
+    // console.log(propertyName, this.schemaService.getPropertyTypeFromSchema("CargoBike", propertyName))
     return (
-      this.schemaService.getPropertyTypeFromSchema("CargoBike", propertyName)
+      this.schemaService.getPropertyTypeFromSchema('CargoBike', propertyName)
     );
   }
 
