@@ -22,7 +22,7 @@ script:
   - docker push flotte-docker-registry.spdns.org/frontend-server:arm64
   - docker tag frontend-server:arm flotte-docker-registry.spdns.org/frontend-server:arm
   - docker push flotte-docker-registry.spdns.org/frontend-server:arm
-  - sudo docker manifest create --amend flotte-docker-registry.spdns.org/frontend-server:latest flotte-docker-registry.spdns.org/frontend-server:arm flotte-docker-registry.spdns.org/frontend-server:arm64 flotte-docker-registry.spdns.org/frontend-server:amd64
-  - sudo docker manifest annotate flotte-docker-registry.spdns.org/frontend-server:latest flotte-docker-registry.spdns.org/frontend-server:arm --os linux --arch arm --variant v7 
-  - sudo docker manifest annotate flotte-docker-registry.spdns.org/frontend-server:latest flotte-docker-registry.spdns.org/frontend-server:arm64 --os linux --arch arm64 --variant v8 
-  - sudo docker manifest push flotte-docker-registry.spdns.org/frontend-server:latest
+  - docker manifest create --amend flotte-docker-registry.spdns.org/frontend-server:latest flotte-docker-registry.spdns.org/frontend-server:arm flotte-docker-registry.spdns.org/frontend-server:arm64 flotte-docker-registry.spdns.org/frontend-server:amd64
+  - docker manifest annotate flotte-docker-registry.spdns.org/frontend-server:latest flotte-docker-registry.spdns.org/frontend-server:arm --os linux --arch arm --variant v7 
+  - docker manifest annotate flotte-docker-registry.spdns.org/frontend-server:latest flotte-docker-registry.spdns.org/frontend-server:arm64 --os linux --arch arm64 --variant v8 
+  - docker manifest push flotte-docker-registry.spdns.org/frontend-server:latest
