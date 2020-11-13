@@ -11,6 +11,8 @@ env:
 
 script:
   - docker login -u="$DOCKER_USER" -p="$DOCKER_PW" https://flotte-docker-registry.spdns.org/
+  - sudo chmod o+xr -R /home/travis/.docker
+  - sudo chmod o+xr -R /etc/docker
   - docker build -t frontend-server:amd64 . --build-arg ARCH=amd64
   - docker build -t frontend-server:arm . --build-arg ARCH=arm
   - docker build -t frontend-server:arm64 . --build-arg ARCH=arm64
@@ -20,7 +22,7 @@ script:
   - docker push flotte-docker-registry.spdns.org/frontend-server:arm64
   - docker tag frontend-server:arm flotte-docker-registry.spdns.org/frontend-server:arm
   - docker push flotte-docker-registry.spdns.org/frontend-server:arm
-  - docker manifest create --amend flotte-docker-registry.spdns.org/frontend-server:latest flotte-docker-registry.spdns.org/frontend-server:arm flotte-docker-registry.spdns.org/frontend-server:arm64 flotte-docker-registry.spdns.org/frontend-server:amd64
-  - docker manifest annotate flotte-docker-registry.spdns.org/frontend-server:latest flotte-docker-registry.spdns.org/frontend-server:arm --os linux --arch arm --variant v7 
-  - docker manifest annotate flotte-docker-registry.spdns.org/frontend-server:latest flotte-docker-registry.spdns.org/frontend-server:arm64 --os linux --arch arm64 --variant v8 
-  - docker manifest push flotte-docker-registry.spdns.org/frontend-server:latest
+  - sudo docker manifest create --amend flotte-docker-registry.spdns.org/frontend-server:latest flotte-docker-registry.spdns.org/frontend-server:arm flotte-docker-registry.spdns.org/frontend-server:arm64 flotte-docker-registry.spdns.org/frontend-server:amd64
+  - sudo docker manifest annotate flotte-docker-registry.spdns.org/frontend-server:latest flotte-docker-registry.spdns.org/frontend-server:arm --os linux --arch arm --variant v7 
+  - sudo docker manifest annotate flotte-docker-registry.spdns.org/frontend-server:latest flotte-docker-registry.spdns.org/frontend-server:arm64 --os linux --arch arm64 --variant v8 
+  - sudo docker manifest push flotte-docker-registry.spdns.org/frontend-server:latest
