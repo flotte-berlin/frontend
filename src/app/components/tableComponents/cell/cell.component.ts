@@ -1,5 +1,4 @@
 import { Component, Input, Output, EventEmitter } from '@angular/core';
-import { catchError } from 'rxjs/operators';
 
 @Component({
   selector: 'app-cell',
@@ -14,8 +13,22 @@ export class CellComponent {
   editable = false;
   @Input()
   inputType = 'text';
-  @Input()
-  enumValues: string[] = [];
+
+  enumValues = [];
+
+  ngOnChanges() {
+    if (this.inputType.split('//')[0] === 'Enum') {
+      this.enumValues = this.inputType.split('//').slice(1);
+    } else if (this.inputType === 'Int' || this.inputType === 'Float') {
+      this.inputType = 'number';
+    } else if (this.inputType === 'ID' || this.inputType === 'String') {
+      this.inputType = 'text';
+    } else if (this.inputType === 'Boolean') {
+      
+    } else {
+      console.log(this.inputType);
+    }
+  }
 
   change(newValue) {
     this.value = this.inputType === 'number' ? +newValue : newValue;

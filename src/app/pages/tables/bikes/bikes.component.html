@@ -62,7 +62,6 @@
             [editable]="element.isLockedByMe && !isReadonly(column)"
             [(value)]="element[column]"
             [inputType]="getType(column, element)"
-            [enumValues]="getEnumValues(column)"
           ></app-cell>
         </td>
       </ng-container>

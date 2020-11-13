@@ -19,7 +19,7 @@ function isPartOfSelectionSet(
         if (variablePath.length === 1) {
             return true;
         }
-        return isPartOfSelectionSet(variablePath.slice(1).join(), nextSelectionObject);
+        return isPartOfSelectionSet(variablePath.slice(1).join('.'), nextSelectionObject);
     } else {
         return false;
     }

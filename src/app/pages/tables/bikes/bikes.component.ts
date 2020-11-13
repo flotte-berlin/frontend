@@ -10,6 +10,7 @@ import {
   CargoBikeFieldsMutableFragmentDoc,
   CargoBikeUpdateInput,
 } from 'src/generated/graphql';
+import { SchemaService } from 'src/app/services/schema.service';
 
 @Component({
   selector: 'app-bikes',
@@ -18,9 +19,9 @@ import {
 })
 export class BikesComponent {
   columnInfo = [
-    { name: 'name', header: 'Name', type: 'string', sticky: true },
-    { name: 'id', header: 'ID', type: 'number', readonly: true },
-    { name: 'group', header: 'Gruppe', type: 'enum', enumValues: [] },
+    { name: 'name', header: 'Name', sticky: true },
+    { name: 'id', header: 'ID', readonly: true },
+    { name: 'group', header: 'Gruppe'},
   ];
 
   //properties that wont be shown in the table
@@ -47,15 +48,12 @@ export class BikesComponent {
   relockingInterval = null;
   relockingDuration = 1000 * 60 * 1;
 
-  constructor(private bikesService: BikesService) {
+  constructor(
+    private bikesService: BikesService,
+    private schemaService: SchemaService
+  ) {
     this.displayedColumns.unshift(this.additionalColumnsFront[0]);
     this.displayedColumns.push(this.additionalColumnsBack[0]);
-
-    bikesService.groupEnum.subscribe((groupEnum) => {
-      this.columnInfo.find(
-        (column) => column.name === 'group'
-      ).enumValues = groupEnum;
-    });
 
     bikesService.loadingRowIds.subscribe((rowIds) => {
       this.loadingRowIds = rowIds;
@@ -69,13 +67,13 @@ export class BikesComponent {
       if (this.data[0]) {
         this.displayedColumns = [];
         this.dataColumns = [];
-        
+
         for (let index in this.data) {
           this.data[index] = flatten(this.data[index]);
-        }   
+        }
 
         for (const prop in this.data[0]) {
-          if (!this.blacklistedColumns.includes(prop) && !prop.includes("__")) {
+          if (!this.blacklistedColumns.includes(prop) && !prop.includes('__')) {
             this.dataColumns.push(prop);
           }
         }
@@ -122,17 +120,17 @@ export class BikesComponent {
   }
 
   getType(propertyName: string, row) {
-    //TODO: get type from introspection query
+    //console.log(propertyName, this.schemaService.getPropertyTypeFromSchema("CargoBike", propertyName))
     return (
-      this.columnInfo.find((column) => column.name === propertyName)?.type ||
-      (typeof row[propertyName])
+      this.schemaService.getPropertyTypeFromSchema("CargoBike", propertyName)
     );
   }
 
   isReadonly(propertyName: string) {
     return (
       this.columnInfo.find((column) => column.name === propertyName)
-        ?.readonly || !isPartOfGraphQLDoc(propertyName, CargoBikeFieldsMutableFragmentDoc)
+        ?.readonly ||
+      !isPartOfGraphQLDoc(propertyName, CargoBikeFieldsMutableFragmentDoc)
     );
   }
 
@@ -140,13 +138,6 @@ export class BikesComponent {
     return (
       this.columnInfo.find((column) => column.name === propertyName)?.sticky ||
       false
-    );
-  }
-
-  getEnumValues(propertyName: string) {
-    return (
-      this.columnInfo.find((column) => column.name === propertyName)
-        ?.enumValues || []
     );
   }
 
