@@ -23,10 +23,6 @@ export class CellComponent {
       this.inputType = 'number';
     } else if (this.inputType === 'ID' || this.inputType === 'String') {
       this.inputType = 'text';
-    } else if (this.inputType === 'Boolean') {
-      
-    } else {
-      console.log(this.inputType);
     }
   }
 

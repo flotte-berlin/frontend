@@ -114,10 +114,20 @@ export class BikesComponent {
 
     bikesService.bikes.subscribe((newTableDataSource) => {
       this.reloadingTable = false;
-      this.data = [];
+      const tempDataSource = [];
       for (const row of newTableDataSource) {
-        this.data.push(flatten(row));
+        const oldRow = this.getRowById(row.id);
+        /** make sure to not overwrite a row that is being edited */
+        if (!oldRow) {
+          tempDataSource.push(flatten(row));
+        }
+        else if (!(oldRow.isLockedByMe && row.isLockedByMe)) {
+          tempDataSource.push(flatten(row));
+        } else if (!!oldRow) {
+          tempDataSource.push(oldRow);
+        }
       }
+      this.data = tempDataSource;
     });
     bikesService.loadBikes();
   }
@@ -189,6 +199,10 @@ export class BikesComponent {
 
   cancel(row: CargoBikeResult) {
     this.bikesService.unlockBike({ id: row.id });
+  }
+
+  getRowById(id: string) {
+    return this.data.find(row => row.id === id);
   }
 
   drop(event: CdkDragDrop<string[]>) {
