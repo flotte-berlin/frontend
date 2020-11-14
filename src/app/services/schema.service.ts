@@ -1,5 +1,4 @@
 import { Injectable } from '@angular/core';
-import { BehaviorSubject } from 'rxjs';
 import jsonSchema from 'src/generated/graphql.schema.json';
 
 @Injectable({
