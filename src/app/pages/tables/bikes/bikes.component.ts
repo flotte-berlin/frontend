@@ -9,9 +9,10 @@ import { filter } from 'graphql-anywhere';
 import {
   CargoBikeFieldsMutableFragmentDoc,
   CargoBikeUpdateInput,
-  GetCargoBikesDocument
 } from 'src/generated/graphql';
 import { SchemaService } from 'src/app/services/schema.service';
+
+import { logArrayInColumnInfoForm } from 'src/app/helperFunctions/logArrayInColumnInfoForm';
 
 @Component({
   selector: 'app-bikes',
@@ -19,29 +20,77 @@ import { SchemaService } from 'src/app/services/schema.service';
   styleUrls: ['./bikes.component.scss'],
 })
 export class BikesComponent {
+  /** this array defines the columns and headers of the table and the order they are displayed  */
   columnInfo = [
     { name: 'name', header: 'Name', sticky: true },
     { name: 'id', header: 'ID', readonly: true },
-    { name: 'group', header: 'Gruppe'},
+    { name: 'group', header: 'Gruppe' },
+    { name: 'modelName', header: 'Modelname' },
+    { name: 'insuranceData.billing', header: '' },
+    { name: 'insuranceData.hasFixedRate', header: '' },
+    { name: 'insuranceData.name', header: '' },
+    { name: 'insuranceData.benefactor', header: '' },
+    { name: 'insuranceData.noPnP', header: '' },
+    { name: 'insuranceData.maintenanceResponsible', header: '' },
+    { name: 'insuranceData.maintenanceBenefactor', header: '' },
+    { name: 'insuranceData.maintenanceAgreement', header: '' },
+    { name: 'insuranceData.fixedRate', header: '' },
+    { name: 'insuranceData.projectAllowance', header: '' },
+    { name: 'insuranceData.notes', header: '' },
+    { name: 'dimensionsAndLoad.bikeLength', header: '' },
+    { name: 'dimensionsAndLoad.bikeWeight', header: '' },
+    { name: 'dimensionsAndLoad.bikeHeight', header: '' },
+    { name: 'dimensionsAndLoad.bikeWidth', header: '' },
+    { name: 'dimensionsAndLoad.boxHeight', header: '' },
+    { name: 'dimensionsAndLoad.boxLength', header: '' },
+    { name: 'dimensionsAndLoad.boxWidth', header: '' },
+    { name: 'dimensionsAndLoad.hasCoverBox', header: '' },
+    { name: 'dimensionsAndLoad.lockable', header: '' },
+    { name: 'dimensionsAndLoad.maxWeightBox', header: '' },
+    { name: 'dimensionsAndLoad.maxWeightLuggageRack', header: '' },
+    { name: 'dimensionsAndLoad.maxWeightTotal', header: '' },
+    { name: 'numberOfChildren', header: '' },
+    { name: 'numberOfWheels', header: '' },
+    { name: 'forCargo', header: '' },
+    { name: 'forChildren', header: '' },
+    { name: 'security.frameNumber', header: '' },
+    { name: 'security.adfcCoding', header: '' },
+    { name: 'security.keyNumberAXAChain', header: '' },
+    { name: 'security.keyNumberFrameLock', header: '' },
+    { name: 'security.policeCoding', header: '' },
+    { name: 'technicalEquipment.bicycleShift', header: '' },
+    { name: 'technicalEquipment.isEBike', header: '' },
+    { name: 'technicalEquipment.hasLightSystem', header: '' },
+    { name: 'technicalEquipment.specialFeatures', header: '' },
+    { name: 'stickerBikeNameState', header: '' },
+    { name: 'note', header: '' },
+    { name: 'taxes.costCenter', header: '' },
+    { name: 'taxes.organisationArea', header: '' },
+    { name: 'provider.id', header: '' },
+    { name: 'provider.formName', header: '' },
+    { name: 'provider.privatePerson.id', header: '' },
+    { name: 'provider.privatePerson.person.id', header: '' },
+    { name: 'provider.privatePerson.person.name', header: '' },
+    { name: 'provider.privatePerson.person.firstName', header: '' },
+    {
+      name: 'provider.privatePerson.person.contactInformation.email',
+      header: '',
+    },
+    { name: 'lendingStation.id', header: '' },
+    { name: 'lendingStation.name', header: '' },
+    { name: 'lendingStation.address.number', header: '' },
+    { name: 'lendingStation.address.street', header: '' },
+    { name: 'lendingStation.address.zip', header: '' },
   ];
 
-  // properties that wont be shown in the table
-  blacklistedColumns = [
-    '__typename',
-    'isLocked',
-    'isLockedByMe',
-    'lockedBy',
-    'lockedUntil',
-  ];
-
-  dataColumns: string[] = [];
   additionalColumnsFront: string[] = ['select'];
   additionalColumnsBack: string[] = ['buttons'];
   displayedColumns: string[] = [];
 
   loadingRowIds: string[] = [];
 
-  data =  [] as Array<any>;
+  /** data source of the table */
+  data = [] as Array<any>;
   selection = new SelectionModel<CargoBikeResult>(true, []);
 
   reloadingTable = false;
@@ -53,6 +102,9 @@ export class BikesComponent {
     private bikesService: BikesService,
     private schemaService: SchemaService
   ) {
+    this.columnInfo.forEach((column) =>
+      this.displayedColumns.push(column.name)
+    );
     this.displayedColumns.unshift(this.additionalColumnsFront[0]);
     this.displayedColumns.push(this.additionalColumnsBack[0]);
 
@@ -60,40 +112,11 @@ export class BikesComponent {
       this.loadingRowIds = rowIds;
     });
 
-    bikesService.bikes.subscribe((bikes) => {
+    bikesService.bikes.subscribe((newTableDataSource) => {
       this.reloadingTable = false;
-
-      this.data = bikes;
-
-      if (this.data[0]) {
-        this.displayedColumns = [];
-        this.dataColumns = [];
-
-        for (const index in this.data) {
-          this.data[index] = flatten(this.data[index]);
-        }
-
-        for (const prop in this.data[0]) {
-          if (!this.blacklistedColumns.includes(prop) && !prop.includes('__')) {
-            this.dataColumns.push(prop);
-          }
-        }
-
-        // sort, so the displayedColumns array is in the same order as the columnInfo
-        this.dataColumns.sort((columnA, columnB) => {
-          const indexA = this.columnInfo.findIndex((c) => c.name === columnA);
-          const indexB = this.columnInfo.findIndex((c) => c.name === columnB);
-          if (indexA === -1) {
-            return 1;
-          } else if (indexB === -1) {
-            return -1;
-          } else {
-            return indexA - indexB;
-          }
-        });
-        this.displayedColumns.push(...this.dataColumns);
-        this.displayedColumns.unshift(...this.additionalColumnsFront);
-        this.displayedColumns.push(...this.additionalColumnsBack);
+      this.data = [];
+      for (const row of newTableDataSource) {
+        this.data.push(flatten(row));
       }
     });
     bikesService.loadBikes();
@@ -107,8 +130,6 @@ export class BikesComponent {
         }
       }
     }, this.relockingDuration);
-
-    console.log(GetCargoBikesDocument);
   }
 
   ngOnDestroy() {
@@ -122,10 +143,11 @@ export class BikesComponent {
     );
   }
 
-  getType(propertyName: string, row) {
+  getType(propertyName: string) {
     // console.log(propertyName, this.schemaService.getPropertyTypeFromSchema("CargoBike", propertyName))
-    return (
-      this.schemaService.getPropertyTypeFromSchema('CargoBike', propertyName)
+    return this.schemaService.getPropertyTypeFromSchema(
+      'CargoBike',
+      propertyName
     );
   }
 

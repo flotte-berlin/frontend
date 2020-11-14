@@ -49,19 +49,19 @@
 
       <!-- Other Columns -->
       <ng-container
-        *ngFor="let column of dataColumns"
-        [matColumnDef]="column"
-        [sticky]="isStickyColumn(column)"
+        *ngFor="let column of columnInfo"
+        [matColumnDef]="column.name"
+        [sticky]="isStickyColumn(column.name)"
       >
         <!-- add cdkDrag to make columns draggable-->
         <th mat-header-cell *matHeaderCellDef mat-sort-header>
-          {{ getHeader(column) }}
+          {{ getHeader(column.name) }}
         </th>
         <td mat-cell *matCellDef="let element">
           <app-cell
-            [editable]="element.isLockedByMe && !isReadonly(column)"
-            [(value)]="element[column]"
-            [inputType]="getType(column, element)"
+            [editable]="element.isLockedByMe && !isReadonly(column.name)"
+            [(value)]="element[column.name]"
+            [inputType]="getType(column.name)"
           ></app-cell>
         </td>
       </ng-container>
