@@ -52,13 +52,12 @@ export class BikesService {
 
   loadBikes() {
     this.getCargoBikesGQL.fetch().subscribe((result) => {
-      console.time("addMoreBikes");
-      for (let i = 1; i <= 500; i++) {
+      // comment in for performance testing
+      /*for (let i = 1; i <= 500; i++) {
         const newBike = deepCopy(result.data.cargoBikes[0]);
         newBike.id = (i + 100).toString();
         result.data.cargoBikes.push(newBike);
-      }
-      console.timeEnd("addMoreBikes");
+      }*/
       this.bikes.next(result.data.cargoBikes);
 
     });

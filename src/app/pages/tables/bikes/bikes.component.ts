@@ -1,5 +1,5 @@
 import { SelectionModel } from '@angular/cdk/collections';
-import { Component, ChangeDetectionStrategy, ChangeDetectorRef } from '@angular/core';
+import { Component, ViewChild } from '@angular/core';
 import { CdkDragDrop, moveItemInArray } from '@angular/cdk/drag-drop';
 import { BikesService, CargoBikeResult } from 'src/app/services/bikes.service';
 import { flatten } from 'src/app/helperFunctions/flattenObject';
@@ -14,12 +14,13 @@ import { SchemaService } from 'src/app/services/schema.service';
 
 import { logArrayInColumnInfoForm } from 'src/app/helperFunctions/logArrayInColumnInfoForm';
 import { MatTableDataSource } from '@angular/material/table';
+import { MatPaginator } from '@angular/material/paginator';
+import { MatSort } from '@angular/material/sort';
 
 @Component({
   selector: 'app-bikes',
   templateUrl: './bikes.component.html',
   styleUrls: ['./bikes.component.scss'],
-  //changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class BikesComponent {
   /** this array defines the columns and headers of the table and the order they are displayed  */
@@ -91,6 +92,9 @@ export class BikesComponent {
     { name: 'lendingStation.address.zip', header: '' },
   ];
 
+  @ViewChild(MatPaginator) paginator: MatPaginator;
+  @ViewChild(MatSort) sort: MatSort;
+
   additionalColumnsFront: string[] = ['select'];
   additionalColumnsBack: string[] = ['buttons'];
   displayedColumns: string[] = [];
@@ -98,7 +102,7 @@ export class BikesComponent {
   loadingRowIds: string[] = [];
 
   /** data source of the table */
-  data: MatTableDataSource<any> = new MatTableDataSource() ;
+  data: MatTableDataSource<any> = new MatTableDataSource();
   selection = new SelectionModel<CargoBikeResult>(true, []);
 
   reloadingTable = false;
@@ -108,15 +112,15 @@ export class BikesComponent {
 
   constructor(
     private bikesService: BikesService,
-    private schemaService: SchemaService,
-    //private cdr: ChangeDetectorRef
+    private schemaService: SchemaService
   ) {}
 
   ngAfterViewInit() {
-    //this.cdr.detach();
-
     this.addTypesToColumnInfo();
     this.addReadOnlyPropertiesToColumnInfo();
+    this.data.paginator = this.paginator;
+    this.data.sort = this.sort;
+
     this.columnInfo.forEach((column) =>
       this.displayedColumns.push(column.name)
     );
@@ -128,10 +132,8 @@ export class BikesComponent {
     });
 
     this.bikesService.bikes.subscribe((newTableDataSource) => {
-      console.time("newBikes");
       this.reloadingTable = false;
       const tempDataSource = [];
-      console.time("overwriteCheck");
       for (const row of newTableDataSource) {
         const oldRow = this.getRowById(row.id);
         /** make sure to not overwrite a row that is being edited */
@@ -143,13 +145,7 @@ export class BikesComponent {
           tempDataSource.push(oldRow);
         }
       }
-      console.timeEnd("overwriteCheck");
-      console.time("assignData");
       this.data.data = tempDataSource;
-      console.timeEnd("assignData");
-
-      console.timeEnd("newBikes");
-
     });
     this.bikesService.loadBikes();
 
@@ -190,7 +186,6 @@ export class BikesComponent {
   }
 
   getType(propertyName: string) {
-    // console.log(propertyName, this.schemaService.getPropertyTypeFromSchema("CargoBike", propertyName))
     return this.schemaService.getPropertyTypeFromSchema(
       'CargoBike',
       propertyName
@@ -260,5 +255,10 @@ export class BikesComponent {
     this.isAllSelected()
       ? this.selection.clear()
       : this.data.data.forEach((row) => this.selection.select(row));
+  }
+
+  applyFilter(event: Event) {
+    const filterValue = (event.target as HTMLInputElement).value;
+    this.data.filter = filterValue.trim().toLowerCase();
   }
 }

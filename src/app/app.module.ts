@@ -23,7 +23,8 @@ import {MatCardModule} from '@angular/material/card';
 import {MatGridListModule} from '@angular/material/grid-list';
 import {MatTooltipModule} from '@angular/material/tooltip';
 import {MatSelectModule} from '@angular/material/select';
-
+import { MatPaginatorModule } from '@angular/material/paginator';
+import { MatSortModule } from '@angular/material/sort';
 
 
 import { AppRoutingModule } from './app-routing.module';
@@ -76,6 +77,8 @@ import { NavService }from './components/menu-list-item/nav.service';
     DragDropModule,
     MatTooltipModule,
     MatSelectModule,
+    MatPaginatorModule,
+    MatSortModule
   ],
   providers: [NavService],
   bootstrap: [AppComponent],
