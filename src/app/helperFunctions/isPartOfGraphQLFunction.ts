@@ -1,14 +1,14 @@
 import { DocumentNode } from 'graphql';
 
 export function isPartOfGraphQLDoc(
-  variableName: String,
+  variableName: string,
   doc: DocumentNode
 ): boolean {
   return isPartOfSelectionSet(variableName, doc.definitions[0]);
 }
 
 function isPartOfSelectionSet(
-  variableName: String,
+  variableName: string,
   selectionObject: any
 ): boolean {
   const variablePath = variableName.split('.');

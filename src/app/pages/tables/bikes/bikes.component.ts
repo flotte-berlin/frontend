@@ -1,5 +1,5 @@
 import { SelectionModel } from '@angular/cdk/collections';
-import { Component } from '@angular/core';
+import { Component, ChangeDetectionStrategy, ChangeDetectorRef } from '@angular/core';
 import { CdkDragDrop, moveItemInArray } from '@angular/cdk/drag-drop';
 import { BikesService, CargoBikeResult } from 'src/app/services/bikes.service';
 import { flatten } from 'src/app/helperFunctions/flattenObject';
@@ -13,15 +13,23 @@ import {
 import { SchemaService } from 'src/app/services/schema.service';
 
 import { logArrayInColumnInfoForm } from 'src/app/helperFunctions/logArrayInColumnInfoForm';
+import { MatTableDataSource } from '@angular/material/table';
 
 @Component({
   selector: 'app-bikes',
   templateUrl: './bikes.component.html',
   styleUrls: ['./bikes.component.scss'],
+  //changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class BikesComponent {
   /** this array defines the columns and headers of the table and the order they are displayed  */
-  columnInfo = [
+  columnInfo: {
+    name: string;
+    header: string;
+    sticky?: boolean;
+    readonly?: boolean;
+    type?: string;
+  }[] = [
     { name: 'name', header: 'Name', sticky: true },
     { name: 'id', header: 'ID', readonly: true },
     { name: 'group', header: 'Gruppe' },
@@ -90,7 +98,7 @@ export class BikesComponent {
   loadingRowIds: string[] = [];
 
   /** data source of the table */
-  data = [] as Array<any>;
+  data: MatTableDataSource<any> = new MatTableDataSource() ;
   selection = new SelectionModel<CargoBikeResult>(true, []);
 
   reloadingTable = false;
@@ -100,41 +108,53 @@ export class BikesComponent {
 
   constructor(
     private bikesService: BikesService,
-    private schemaService: SchemaService
-  ) {
+    private schemaService: SchemaService,
+    //private cdr: ChangeDetectorRef
+  ) {}
+
+  ngAfterViewInit() {
+    //this.cdr.detach();
+
+    this.addTypesToColumnInfo();
+    this.addReadOnlyPropertiesToColumnInfo();
     this.columnInfo.forEach((column) =>
       this.displayedColumns.push(column.name)
     );
     this.displayedColumns.unshift(this.additionalColumnsFront[0]);
     this.displayedColumns.push(this.additionalColumnsBack[0]);
 
-    bikesService.loadingRowIds.subscribe((rowIds) => {
+    this.bikesService.loadingRowIds.subscribe((rowIds) => {
       this.loadingRowIds = rowIds;
     });
 
-    bikesService.bikes.subscribe((newTableDataSource) => {
+    this.bikesService.bikes.subscribe((newTableDataSource) => {
+      console.time("newBikes");
       this.reloadingTable = false;
       const tempDataSource = [];
+      console.time("overwriteCheck");
       for (const row of newTableDataSource) {
         const oldRow = this.getRowById(row.id);
         /** make sure to not overwrite a row that is being edited */
         if (!oldRow) {
           tempDataSource.push(flatten(row));
-        }
-        else if (!(oldRow.isLockedByMe && row.isLockedByMe)) {
+        } else if (!(oldRow.isLockedByMe && row.isLockedByMe)) {
           tempDataSource.push(flatten(row));
         } else if (!!oldRow) {
           tempDataSource.push(oldRow);
         }
       }
-      this.data = tempDataSource;
-    });
-    bikesService.loadBikes();
-  }
+      console.timeEnd("overwriteCheck");
+      console.time("assignData");
+      this.data.data = tempDataSource;
+      console.timeEnd("assignData");
 
-  ngOnInit() {
+      console.timeEnd("newBikes");
+
+    });
+    this.bikesService.loadBikes();
+
     this.relockingInterval = setInterval(() => {
-      for (const row of this.data) {
+      for (const row of this.data.data) {
         if (row.isLockedByMe) {
           this.bikesService.relockBike({ id: row.id });
         }
@@ -144,6 +164,22 @@ export class BikesComponent {
 
   ngOnDestroy() {
     clearInterval(this.relockingInterval);
+  }
+
+  addTypesToColumnInfo() {
+    for (const column of this.columnInfo) {
+      if (!column.type) {
+        column.type = this.getType(column.name);
+      }
+    }
+  }
+
+  addReadOnlyPropertiesToColumnInfo() {
+    for (const column of this.columnInfo) {
+      if (!column.readonly) {
+        column.readonly = this.isReadonly(column.name);
+      }
+    }
   }
 
   getHeader(propertyName: string) {
@@ -163,8 +199,7 @@ export class BikesComponent {
 
   isReadonly(propertyName: string) {
     return (
-      this.columnInfo.find((column) => column.name === propertyName)
-        ?.readonly ||
+      this.columnInfo.find((column) => column.name === propertyName).readonly ||
       !isPartOfGraphQLDoc(propertyName, CargoBikeFieldsMutableFragmentDoc)
     );
   }
@@ -202,7 +237,7 @@ export class BikesComponent {
   }
 
   getRowById(id: string) {
-    return this.data.find(row => row.id === id);
+    return this.data.data.find((row) => row.id === id);
   }
 
   drop(event: CdkDragDrop<string[]>) {
@@ -216,7 +251,7 @@ export class BikesComponent {
   /** Whether the number of selected elements matches the total number of rows. */
   isAllSelected() {
     const numSelected = this.selection.selected.length;
-    const numRows = this.data.length;
+    const numRows = this.data.data.length;
     return numSelected === numRows;
   }
 
@@ -224,6 +259,6 @@ export class BikesComponent {
   masterToggle() {
     this.isAllSelected()
       ? this.selection.clear()
-      : this.data.forEach((row) => this.selection.select(row));
+      : this.data.data.forEach((row) => this.selection.select(row));
   }
 }

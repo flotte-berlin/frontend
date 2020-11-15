@@ -17,12 +17,12 @@
   <div class="table-container">
     <table
       mat-table
-      [dataSource]="data"
       class="mat-elevation-z8"
       matSort
       cdkDropList
       cdkDropListOrientation="horizontal"
       (cdkDropListDropped)="drop($event)"
+      [dataSource]="data"
     >
       <!--- Note that these columns can be defined in any order.
         The actual rendered columns are set as a property on the row definition" -->
@@ -59,10 +59,12 @@
         </th>
         <td mat-cell *matCellDef="let element">
           <app-cell
-            [editable]="element.isLockedByMe && !isReadonly(column.name)"
+            *ngIf="!column.readonly && element.isLockedByMe; else stringValue"
+            [editable]="true"
             [(value)]="element[column.name]"
-            [inputType]="getType(column.name)"
+            [inputType]="column.type"
           ></app-cell>
+          <ng-template #stringValue>{{ element[column.name] }}</ng-template>
         </td>
       </ng-container>
 
@@ -100,9 +102,7 @@
 
             <button
               mat-icon-button
-              *ngIf="
-                element.isLockedByMe && !isLoading(element.id)
-              "
+              *ngIf="element.isLockedByMe && !isLoading(element.id)"
               (click)="save(element)"
             >
               <mat-icon>save</mat-icon>
@@ -110,9 +110,7 @@
             <button
               mat-icon-button
               matTooltip="Alle ungespeicherten Änderungen verwerfen."
-              *ngIf="
-                element.isLockedByMe && !isLoading(element.id)
-              "
+              *ngIf="element.isLockedByMe && !isLoading(element.id)"
               (click)="cancel(element)"
             >
               <mat-icon>cancel</mat-icon>
