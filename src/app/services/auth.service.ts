@@ -9,6 +9,8 @@ import { BehaviorSubject } from 'rxjs';
 })
 export class AuthService {
   public loggedIn: BehaviorSubject<boolean>;
+  private readonly REQUEST_TOKEN = 'requestToken';
+  private readonly REFRESH_TOKEN = 'refreshToken';
 
   constructor(private http: HttpClient) {
     this.loggedIn = new BehaviorSubject<boolean>(false);
@@ -16,15 +18,15 @@ export class AuthService {
   }
 
   private checkIfUserIsLoggedIn(): void {
-    this.loggedIn.next(!!this.requestToken);
+    this.loggedIn.next(!!this.getRequestToken());
   }
 
-  public get requestToken(): string {
-    return localStorage.getItem('requestToken');
+  public getRequestToken(): string {
+    return localStorage.getItem(this.REQUEST_TOKEN);
   }
 
-  public get refreshToken(): string {
-    return localStorage.getItem('refreshToken');
+  public getRefreshToken(): string {
+    return localStorage.getItem(this.REFRESH_TOKEN);
   }
 
   login(email: string, password: string) {
@@ -33,8 +35,7 @@ export class AuthService {
       .pipe(
         map((response) => {
           // store request and refresh token in local storage to keep user logged in between page refreshes
-          localStorage.setItem('requestToken', response.request_token);
-          localStorage.setItem('refreshToken', response.refresh_token);
+          this.storeTokens(response);
           this.checkIfUserIsLoggedIn();
         })
       );
@@ -43,11 +44,34 @@ export class AuthService {
   logout() {
     // remove token from local storage to log user out
     return this.http
-      .post<any>(`${environment.authUrl}/logout`, { request_token: this.requestToken }).pipe(finalize(() => {
-        localStorage.removeItem('requestToken');
-        localStorage.removeItem('refreshToken');
+      .post<any>(`${environment.authUrl}/logout`, { request_token: this.getRequestToken() }).pipe(finalize(() => {
+        this.removeTokens();
         this.checkIfUserIsLoggedIn();
       }
       ));
   }
+
+  refreshToken() {
+    return this.http.post<any>(`${environment.authUrl}/new-token`, {
+      'refresh_token': this.getRefreshToken()
+    }).pipe(tap((tokens: any) => {
+      this.storeTokens(tokens);
+    }));
+  }
+
+  private storeRequestToken(jwt: string) {
+    localStorage.setItem(this.REQUEST_TOKEN, jwt);
+  }
+
+  private storeTokens(tokens: any) {
+    localStorage.setItem(this.REQUEST_TOKEN, tokens.request_token);
+    localStorage.setItem(this.REFRESH_TOKEN, tokens.refresh_token);
+  }
+
+  private removeTokens() {
+    localStorage.removeItem(this.REQUEST_TOKEN);
+    localStorage.removeItem(this.REFRESH_TOKEN);
+  }
+
+
 }

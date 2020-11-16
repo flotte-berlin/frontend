@@ -1,7 +1,7 @@
 import { BrowserModule } from '@angular/platform-browser';
 import { NgModule } from '@angular/core';
 import { FormsModule, ReactiveFormsModule } from '@angular/forms';
-import { HttpClientModule } from '@angular/common/http';
+import { HttpClientModule, HTTP_INTERCEPTORS } from '@angular/common/http';
 
 import { DragDropModule } from '@angular/cdk/drag-drop';
 
@@ -39,6 +39,7 @@ import { TableOverviewComponent } from './pages/table-overview/table-overview.co
 import { CellComponent } from './components/tableComponents/cell/cell.component';
 import { MenuListItemComponent } from './components/menu-list-item/menu-list-item.component';
 import { NavService }from './components/menu-list-item/nav.service';
+import { TokenInterceptor } from './helper/token.interceptor'
 
 @NgModule({
   declarations: [
@@ -80,7 +81,9 @@ import { NavService }from './components/menu-list-item/nav.service';
     MatPaginatorModule,
     MatSortModule
   ],
-  providers: [NavService],
+  providers: [NavService,
+    { provide: HTTP_INTERCEPTORS, useClass: TokenInterceptor, multi: true }],
+  
   bootstrap: [AppComponent],
 })
 export class AppModule {
