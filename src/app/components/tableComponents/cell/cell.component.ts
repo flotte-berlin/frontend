@@ -1,4 +1,10 @@
-import { Component, Input, Output, EventEmitter, ChangeDetectionStrategy } from '@angular/core';
+import {
+  Component,
+  Input,
+  Output,
+  EventEmitter,
+  ChangeDetectionStrategy,
+} from '@angular/core';
 
 @Component({
   selector: 'app-cell',
@@ -16,18 +22,30 @@ export class CellComponent {
 
   enumValues = [];
 
+  htmlInputType: string = 'string';
+
   ngOnChanges() {
+    this.getHtmlInputType(this.inputType);
+  }
+
+  getHtmlInputType(type: string) {
     if (this.inputType.split('//')[0] === 'Enum') {
       this.enumValues = this.inputType.split('//').slice(1);
+      this.htmlInputType = 'enum';
     } else if (this.inputType === 'Int' || this.inputType === 'Float') {
-      this.inputType = 'number';
+      this.htmlInputType = 'number';
     } else if (this.inputType === 'ID' || this.inputType === 'String') {
-      this.inputType = 'text';
+      this.htmlInputType = 'text';
+    } else if (this.inputType === 'Boolean') {
+      this.htmlInputType = 'boolean';
     }
   }
 
   change(newValue) {
-    this.value = this.inputType === 'number' ? +newValue : newValue;
+    if (this.inputType === "Int") {
+      newValue = newValue.toString().replace('.', '');
+    }
+    this.value = this.htmlInputType === 'number' ? +newValue : newValue;
     this.valueChange.emit(this.value);
   }
 }

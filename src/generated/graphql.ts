@@ -2022,7 +2022,7 @@ export const UnlockCargoBikeDocument = gql`
   }
 export const GetCargoBikesDocument = gql`
     query GetCargoBikes {
-  cargoBikes(limit: 100, offset: 0) {
+  cargoBikes(limit: 1000, offset: 0) {
     ...CargoBikeFields
   }
 }
