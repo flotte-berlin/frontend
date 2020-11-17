@@ -1,6 +1,6 @@
 <div id="page-wrapper">
   <mat-toolbar id="navbar">
-    <button mat-icon-button (click)="sidenav.toggle()" *ngIf="loggedIn">
+    <button mat-icon-button (click)="navService.openNav()" *ngIf="loggedIn">
       <mat-icon>menu</mat-icon>
     </button>
     <span>fLotte</span>
@@ -28,19 +28,19 @@
   </mat-toolbar>
 
   <mat-sidenav-container id="content">
-    <!--<mat-sidenav #appDrawer mode="over" opened="false">
+    <mat-sidenav #appDrawer mode="over" opened="false">
       <mat-nav-list>
         <app-menu-list-item *ngFor="let item of navItems" [item]="item"></app-menu-list-item>
       </mat-nav-list>
-    </mat-sidenav>-->
-    <mat-sidenav #sidenav>
+    </mat-sidenav>
+    <!--<mat-sidenav #sidenav>
       <mat-nav-list (click)="sidenav.toggle()">
         <a mat-list-item [routerLink]="'/tableOverview'"> Tabellenübersicht </a>
         <a mat-list-item [routerLink]="'/table/bikes'"> Lastenräder </a>
         <a mat-list-item [routerLink]="'/table/participants'"> Beteiligte </a>
         <a mat-list-item [routerLink]="'/table/lendingStations'"> Ausleihstationen </a>
       </mat-nav-list>
-    </mat-sidenav>
+    </mat-sidenav>-->
     <mat-sidenav-content>
         <router-outlet></router-outlet>
     </mat-sidenav-content>
