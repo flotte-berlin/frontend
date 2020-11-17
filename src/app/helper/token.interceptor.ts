@@ -8,7 +8,7 @@ import { catchError, filter, take, switchMap } from 'rxjs/operators';
 export class TokenInterceptor implements HttpInterceptor {
 
   private isRefreshing = false;
-  private refreshTokenSubject: BehaviorSubject<any> = new BehaviorSubject<any>(null);
+  private requestTokenSubject: BehaviorSubject<any> = new BehaviorSubject<any>(null);
 
   constructor(public authService: AuthService) { }
 
@@ -20,7 +20,6 @@ export class TokenInterceptor implements HttpInterceptor {
 
     return next.handle(request).pipe(catchError(error => {
       if (error instanceof HttpErrorResponse && error.status === 401) {
-        console.log("catching error");
         return this.handle401Error(request, next);
       } else {
         return throwError(error);
@@ -39,17 +38,17 @@ export class TokenInterceptor implements HttpInterceptor {
   private handle401Error(request: HttpRequest<any>, next: HttpHandler) {
     if (!this.isRefreshing) {
       this.isRefreshing = true;
-      this.refreshTokenSubject.next(null);
+      this.requestTokenSubject.next(null);
 
       return this.authService.refreshToken().pipe(
         switchMap((token: any) => {
           this.isRefreshing = false;
-          this.refreshTokenSubject.next(token.jwt);
-          return next.handle(this.addToken(request, token.jwt));
+          this.requestTokenSubject.next(token.request_token);
+          return next.handle(this.addToken(request, token.request_token));
         }));
 
     } else {
-      return this.refreshTokenSubject.pipe(
+      return this.requestTokenSubject.pipe(
         filter(token => token != null),
         take(1),
         switchMap(jwt => {
