@@ -14,9 +14,18 @@ export type Scalars = {
   Date: any;
   /** only time hh-mm-ss */
   Time: any;
+  /**
+   * is of american format [-]$[0-9]+.[0-9][0-9]
+   * commas every three digits and . for decimals with 2 digits after the .
+   * There can be a leading  -.
+   * There is a currency signe at the first position or second position if - is set.
+   * The kind of currency depends on the database.
+   */
+  Money: any;
   /** The `Upload` scalar type represents a file upload. */
   Upload: any;
 };
+
 
 
 
@@ -164,8 +173,15 @@ export type InsuranceData = {
   maintenanceAgreement?: Maybe<Scalars['String']>;
   hasFixedRate: Scalars['Boolean'];
   fixedRate?: Maybe<Scalars['Float']>;
-  /** Projektzuschuss */
-  projectAllowance?: Maybe<Scalars['Float']>;
+  /**
+   * Projektzuschuss:
+   * is of american format [-]$[0-9]+.[0-9][0-9]
+   * commas every three digits and . for decimals with 2 digits after the .
+   * There can be a leading  -.
+   * There is a currency signe at the first position or second position if - is set.
+   * The kind of currency depends on the database.
+   */
+  projectAllowance?: Maybe<Scalars['Money']>;
   notes?: Maybe<Scalars['String']>;
 };
 
@@ -181,8 +197,15 @@ export type InsuranceDataCreateInput = {
   maintenanceAgreement?: Maybe<Scalars['String']>;
   hasFixedRate: Scalars['Boolean'];
   fixedRate?: Maybe<Scalars['Float']>;
-  /** Projektzuschuss */
-  projectAllowance?: Maybe<Scalars['Float']>;
+  /**
+   * Projektzuschuss:
+   * must be of format [+|-][$][0-9]*[.[0-9]*]
+   * commas are ignored, non numeric values except , and . lead to errors
+   * There can be a leading + or -.
+   * You can pass a currency signe at the first position or second position of + or - is set.
+   * The kind of currency depends on the database.
+   */
+  projectAllowance?: Maybe<Scalars['Money']>;
   notes?: Maybe<Scalars['String']>;
 };
 
@@ -198,8 +221,15 @@ export type InsuranceDataUpdateInput = {
   maintenanceAgreement?: Maybe<Scalars['String']>;
   hasFixedRate?: Maybe<Scalars['Boolean']>;
   fixedRate?: Maybe<Scalars['Float']>;
-  /** Projektzuschuss */
-  projectAllowance?: Maybe<Scalars['Float']>;
+  /**
+   * Projektzuschuss:
+   * must be of format [+|-][$][0-9]*[.[0-9]*]
+   * commas are ignored, non numeric values except , and . lead to errors
+   * There can be a leading + or -.
+   * You can pass a currency signe at the first position or second position of + or - is set.
+   * The kind of currency depends on the database.
+   */
+  projectAllowance?: Maybe<Scalars['Money']>;
   notes?: Maybe<Scalars['String']>;
 };
 
@@ -207,6 +237,7 @@ export type InsuranceDataUpdateInput = {
 export type DimensionsAndLoad = {
   __typename?: 'DimensionsAndLoad';
   hasCoverBox: Scalars['Boolean'];
+  /** cover box can be locked */
   lockable: Scalars['Boolean'];
   boxLength: Scalars['Float'];
   boxWidth: Scalars['Float'];
@@ -1681,6 +1712,19 @@ export type GetCargoBikeByIdQuery = (
   )> }
 );
 
+export type CreateCargoBikeMutationVariables = Exact<{
+  bike: CargoBikeCreateInput;
+}>;
+
+
+export type CreateCargoBikeMutation = (
+  { __typename?: 'Mutation' }
+  & { createCargoBike: (
+    { __typename?: 'CargoBike' }
+    & CargoBikeFieldsFragment
+  ) }
+);
+
 export type UpdateCargoBikeMutationVariables = Exact<{
   bike: CargoBikeUpdateInput;
 }>;
@@ -1961,6 +2005,24 @@ export const GetCargoBikeByIdDocument = gql`
   })
   export class GetCargoBikeByIdGQL extends Apollo.Query<GetCargoBikeByIdQuery, GetCargoBikeByIdQueryVariables> {
     document = GetCargoBikeByIdDocument;
+    
+    constructor(apollo: Apollo.Apollo) {
+      super(apollo);
+    }
+  }
+export const CreateCargoBikeDocument = gql`
+    mutation CreateCargoBike($bike: CargoBikeCreateInput!) {
+  createCargoBike(cargoBike: $bike) {
+    ...CargoBikeFields
+  }
+}
+    ${CargoBikeFieldsFragmentDoc}`;
+
+  @Injectable({
+    providedIn: 'root'
+  })
+  export class CreateCargoBikeGQL extends Apollo.Mutation<CreateCargoBikeMutation, CreateCargoBikeMutationVariables> {
+    document = CreateCargoBikeDocument;
     
     constructor(apollo: Apollo.Apollo) {
       super(apollo);

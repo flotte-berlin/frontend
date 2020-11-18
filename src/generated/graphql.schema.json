@@ -29,6 +29,16 @@
         "possibleTypes": null
       },
       {
+        "kind": "SCALAR",
+        "name": "Money",
+        "description": "is of american format [-]$[0-9]+.[0-9][0-9]\ncommas every three digits and . for decimals with 2 digits after the .\nThere can be a leading  -.\nThere is a currency signe at the first position or second position if - is set.\nThe kind of currency depends on the database.",
+        "fields": null,
+        "inputFields": null,
+        "interfaces": null,
+        "enumValues": null,
+        "possibleTypes": null
+      },
+      {
         "kind": "OBJECT",
         "name": "CargoBike",
         "description": "The CargoBike type is central to the graph. You could call it the root.",
@@ -1115,11 +1125,11 @@
           },
           {
             "name": "projectAllowance",
-            "description": "Projektzuschuss",
+            "description": "Projektzuschuss:\nis of american format [-]$[0-9]+.[0-9][0-9]\ncommas every three digits and . for decimals with 2 digits after the .\nThere can be a leading  -.\nThere is a currency signe at the first position or second position if - is set.\nThe kind of currency depends on the database.",
             "args": [],
             "type": {
               "kind": "SCALAR",
-              "name": "Float",
+              "name": "Money",
               "ofType": null
             },
             "isDeprecated": false,
@@ -1279,10 +1289,10 @@
           },
           {
             "name": "projectAllowance",
-            "description": "Projektzuschuss",
+            "description": "Projektzuschuss:\nmust be of format [+|-][$][0-9]*[.[0-9]*]\ncommas are ignored, non numeric values except , and . lead to errors\nThere can be a leading + or -.\nYou can pass a currency signe at the first position or second position of + or - is set.\nThe kind of currency depends on the database.",
             "type": {
               "kind": "SCALAR",
-              "name": "Float",
+              "name": "Money",
               "ofType": null
             },
             "defaultValue": null
@@ -1400,10 +1410,10 @@
           },
           {
             "name": "projectAllowance",
-            "description": "Projektzuschuss",
+            "description": "Projektzuschuss:\nmust be of format [+|-][$][0-9]*[.[0-9]*]\ncommas are ignored, non numeric values except , and . lead to errors\nThere can be a leading + or -.\nYou can pass a currency signe at the first position or second position of + or - is set.\nThe kind of currency depends on the database.",
             "type": {
               "kind": "SCALAR",
-              "name": "Float",
+              "name": "Money",
               "ofType": null
             },
             "defaultValue": null
@@ -1446,7 +1456,7 @@
           },
           {
             "name": "lockable",
-            "description": null,
+            "description": "cover box can be locked",
             "args": [],
             "type": {
               "kind": "NON_NULL",

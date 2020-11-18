@@ -1,6 +1,6 @@
 <div class="table-page-wrapper">
   <div class="table-control">
-    <button mat-raised-button color="primary" class="table-control-button" i18n>
+    <button mat-raised-button color="primary" class="table-control-button" disabled i18n>
       Alle ausgewählten Fahrräder bearbeiten
     </button>
     <button
@@ -30,7 +30,7 @@
       />
     </mat-form-field>
     <mat-paginator
-      [pageSizeOptions]="[15, 25, 30, 50, 100, 500]"
+      [pageSizeOptions]="[15, 25, 30, 50, 100]"
       showFirstLastButtons
     ></mat-paginator>
   </div>
@@ -81,7 +81,9 @@
         <td mat-cell *matCellDef="let element">
           <app-cell
           *ngIf="column.type === 'Boolean' || (element.newObject || !column.readonly && element.isLockedByMe); else stringValue"
-            [editable]="element.newObject || !column.readonly && element.isLockedByMe"
+            [editable]="(element.newObject && column.acceptedForCreation) || !column.readonly && element.isLockedByMe"
+            [required]="(element.newObject && column.requiredForCreation)"
+            (validityChange)="validityChange(element, column.name, $event)"
             [(value)]="element[column.name]"
             [inputType]="column.type"
           ></app-cell>
@@ -142,6 +144,15 @@
               matTooltip="Dieser Eintrag wird gerade von einem anderen Bearbeiter editiert. Aktualisieren Sie die Tabelle, um den neuen Status abzurufen."
               >locked</mat-icon
             >
+          </div>
+          <div class="button-wrapper" *ngIf="element.newObject" [matTooltip]="'Nicht ausgefüllte Felder: '+countUnvalidFields(element)">
+            <button
+              mat-icon-button
+              [disabled]="countUnvalidFields(element) > 0"
+              (click)="create(element)"
+            >
+              <mat-icon>save</mat-icon>
+            </button>
           </div>
         </td>
       </ng-container>

@@ -1,5 +1,7 @@
 <div #booleanInputType *ngIf="htmlInputType === 'boolean'">
   <mat-checkbox
+    #input="ngModel"
+    [required]="required"
     class="checkbox"
     [disabled]="!editable"
     [ngModel]="value"
@@ -9,7 +11,12 @@
 
 <div #enumInputType *ngIf="htmlInputType === 'enum'">
   <mat-form-field *ngIf="editable; else nonEditableText">
-    <mat-select [(ngModel)]="value" (ngModelChange)="change($event)">
+    <mat-select
+      [(ngModel)]="value"
+      (ngModelChange)="change($event)"
+      #input="ngModel"
+      [required]="required"
+    >
       <mat-option *ngFor="let option of enumValues" [value]="option">
         {{ option }}
       </mat-option>
@@ -20,13 +27,18 @@
   </ng-template>
 </div>
 
-<div #otherInputType *ngIf="htmlInputType === 'number' || htmlInputType === 'text'">
+<div
+  #otherInputType
+  *ngIf="htmlInputType === 'number' || htmlInputType === 'text'"
+>
   <mat-form-field *ngIf="editable; else nonEditableText">
     <input
+      #input="ngModel"
       matInput
       [type]="htmlInputType"
       [ngModel]="value"
       (ngModelChange)="change($event)"
+      [required]="required"
     />
   </mat-form-field>
   <ng-template #nonEditableText>

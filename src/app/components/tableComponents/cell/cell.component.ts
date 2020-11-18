@@ -4,6 +4,8 @@ import {
   Output,
   EventEmitter,
   ChangeDetectionStrategy,
+  ViewChild,
+  ChangeDetectorRef,
 } from '@angular/core';
 
 @Component({
@@ -17,35 +19,76 @@ export class CellComponent {
   @Output() valueChange = new EventEmitter<number | string | boolean>();
   @Input()
   editable = false;
+  _inputType = 'text';
+  get inputType(): string {
+    return this._inputType;
+  }
   @Input()
-  inputType = 'text';
+  set inputType(type: string) {
+    this._inputType = type;
+    this.getHtmlInputType(type);
+  }
+  @Input()
+  required: boolean = false;
+  @Output() validityChange = new EventEmitter<boolean>();
+  isValid: boolean = true;
 
   enumValues = [];
 
   htmlInputType: string = 'string';
 
-  ngOnChanges() {
-    this.getHtmlInputType(this.inputType);
+  @ViewChild('input') input: any;
+
+  constructor(private cdr: ChangeDetectorRef) {
+  }
+
+  ngAfterViewInit() {
+    if (this.required) {
+      this.input?.control?.markAsTouched();
+      this.checkIfValid();
+      this.cdr.detectChanges();
+
+      if (
+        this.value === undefined &&
+        this.inputType === 'Boolean' &&
+        this.editable
+      ) {
+        setTimeout(()=> {
+          this.change(false);
+      }, 0);
+      }
+    }
   }
 
   getHtmlInputType(type: string) {
-    if (this.inputType.split('//')[0] === 'Enum') {
-      this.enumValues = this.inputType.split('//').slice(1);
+    if (type.split('//')[0] === 'Enum') {
+      this.enumValues = type.split('//').slice(1);
       this.htmlInputType = 'enum';
-    } else if (this.inputType === 'Int' || this.inputType === 'Float') {
+    } else if (type === 'Int' || type === 'Float') {
       this.htmlInputType = 'number';
-    } else if (this.inputType === 'ID' || this.inputType === 'String') {
+    } else if (type === 'ID' || type === 'String') {
       this.htmlInputType = 'text';
-    } else if (this.inputType === 'Boolean') {
+    } else if (type === 'Boolean') {
       this.htmlInputType = 'boolean';
     }
   }
 
   change(newValue) {
-    if (this.inputType === "Int") {
+    if (this.inputType === 'Int') {
       newValue = newValue.toString().replace('.', '');
     }
     this.value = this.htmlInputType === 'number' ? +newValue : newValue;
+    if (newValue === "") {
+      this.value = null;
+    }
     this.valueChange.emit(this.value);
+    this.checkIfValid();
+  }
+
+  checkIfValid() {
+    if (this.required && this.inputType !== 'Boolean') {
+      this.isValid = this.input?.control?.valid || false;
+      this.validityChange.emit(this.isValid);
+    }
   }
 }

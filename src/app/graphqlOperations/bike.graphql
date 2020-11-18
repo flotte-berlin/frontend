@@ -4,6 +4,12 @@ query GetCargoBikeById($id: ID!) {
   }
 }
 
+mutation CreateCargoBike($bike: CargoBikeCreateInput!) {
+  createCargoBike(cargoBike: $bike) {
+    ...CargoBikeFields
+  }
+}
+
 mutation UpdateCargoBike($bike: CargoBikeUpdateInput!) {
   updateCargoBike(cargoBike: $bike) {
     ...CargoBikeFields

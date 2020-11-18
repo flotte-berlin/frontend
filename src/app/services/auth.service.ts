@@ -67,10 +67,12 @@ export class AuthService {
       )
       .pipe(
         catchError((error: any) => {
+          console.log(error);
           if (error.status === 400) {
             this.removeTokens();
             this.checkIfUserIsLoggedIn();
             location.replace('/login');
+
           }
           return of();
         })

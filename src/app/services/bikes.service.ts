@@ -13,6 +13,8 @@ import {
   LockCargoBikeMutationVariables,
   UnlockCargoBikeGQL,
   UnlockCargoBikeMutationVariables,
+  CreateCargoBikeGQL,
+  CreateCargoBikeMutationVariables,
 } from 'src/generated/graphql';
 import { DeepExtractTypeSkipArrays } from 'ts-deep-extract-types';
 
@@ -35,7 +37,8 @@ export class BikesService {
     private getCargoBikeByIdGQL: GetCargoBikeByIdGQL,
     private updateCargoBikeGQL: UpdateCargoBikeGQL,
     private lockCargoBikeGQL: LockCargoBikeGQL,
-    private unlockCargoBikeGQL: UnlockCargoBikeGQL
+    private unlockCargoBikeGQL: UnlockCargoBikeGQL,
+    private createCargoBikeGQL: CreateCargoBikeGQL,
   ) {}
 
   addLoadingRowId(id: string) {
@@ -78,6 +81,18 @@ export class BikesService {
       .add(() => {
         this.removeLoadingRowId(variables.id);
       });
+  }
+
+  createBike(variables: CreateCargoBikeMutationVariables) {
+    console.log(variables);
+    this.createCargoBikeGQL
+      .mutate(variables)
+      .subscribe((result) => {
+        const newBike = result.data.createCargoBike;
+        this.bikes.next(
+          [newBike, ...this.bikes.value]
+        );
+      })
   }
 
   updateBike(variables: UpdateCargoBikeMutationVariables) {

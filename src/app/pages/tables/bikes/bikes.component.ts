@@ -4,12 +4,6 @@ import { CdkDragDrop, moveItemInArray } from '@angular/cdk/drag-drop';
 import { BikesService, CargoBikeResult } from 'src/app/services/bikes.service';
 import { flatten } from 'src/app/helperFunctions/flattenObject';
 import { deepen } from 'src/app/helperFunctions/deepenObject';
-import { isPartOfGraphQLDoc } from 'src/app/helperFunctions/isPartOfGraphQLFunction';
-import { filter } from 'graphql-anywhere';
-import {
-  CargoBikeFieldsMutableFragmentDoc,
-  CargoBikeUpdateInput,
-} from 'src/generated/graphql';
 import { SchemaService } from 'src/app/services/schema.service';
 
 import { logArrayInColumnInfoForm } from 'src/app/helperFunctions/logArrayInColumnInfoForm';
@@ -27,6 +21,8 @@ export class BikesComponent {
   columnInfo: {
     name: string;
     header: string;
+    acceptedForCreation?: boolean;
+    requiredForCreation?: boolean;
     sticky?: boolean;
     readonly?: boolean;
     type?: string;
@@ -41,9 +37,18 @@ export class BikesComponent {
     { name: 'insuranceData.name', header: 'Versicherer' },
     { name: 'insuranceData.benefactor', header: 'Kostenträger' },
     { name: 'insuranceData.noPnP', header: 'Nr. P&P' },
-    { name: 'insuranceData.maintenanceResponsible', header: 'Wartung zuständig' },
-    { name: 'insuranceData.maintenanceBenefactor', header: 'Wartung Kostenträger' },
-    { name: 'insuranceData.maintenanceAgreement', header: 'Wartungsvereinbarung' },
+    {
+      name: 'insuranceData.maintenanceResponsible',
+      header: 'Wartung zuständig',
+    },
+    {
+      name: 'insuranceData.maintenanceBenefactor',
+      header: 'Wartung Kostenträger',
+    },
+    {
+      name: 'insuranceData.maintenanceAgreement',
+      header: 'Wartungsvereinbarung',
+    },
     { name: 'insuranceData.projectAllowance', header: 'Projektzuschuss' },
     { name: 'insuranceData.notes', header: 'Sonstiges' },
     { name: 'dimensionsAndLoad.bikeLength', header: 'Länge' },
@@ -56,7 +61,10 @@ export class BikesComponent {
     { name: 'dimensionsAndLoad.hasCoverBox', header: 'Boxabdeckung j/n' },
     { name: 'dimensionsAndLoad.lockable', header: 'Box abschließbar' },
     { name: 'dimensionsAndLoad.maxWeightBox', header: 'max Zuladung Box' },
-    { name: 'dimensionsAndLoad.maxWeightLuggageRack', header: 'max Zuladung Gepäckträger' },
+    {
+      name: 'dimensionsAndLoad.maxWeightLuggageRack',
+      header: 'max Zuladung Gepäckträger',
+    },
     { name: 'dimensionsAndLoad.maxWeightTotal', header: 'max Gesamtgewicht' },
     { name: 'numberOfChildren', header: 'Anzahl Kinder' },
     { name: 'numberOfWheels', header: 'Anzahl Räder' },
@@ -64,8 +72,14 @@ export class BikesComponent {
     { name: 'forChildren', header: 'für Kinder j/n' },
     { name: 'security.frameNumber', header: 'Rahmennummer' },
     { name: 'security.adfcCoding', header: 'ADFC Codierung' },
-    { name: 'security.keyNumberAXAChain', header: 'Schlüsselnrummer Rahmenschloss' },
-    { name: 'security.keyNumberFrameLock', header: 'Schlüsselnrummer AXA-Kette' },
+    {
+      name: 'security.keyNumberAXAChain',
+      header: 'Schlüsselnrummer Rahmenschloss',
+    },
+    {
+      name: 'security.keyNumberFrameLock',
+      header: 'Schlüsselnrummer AXA-Kette',
+    },
     { name: 'security.policeCoding', header: 'Polizei Codierung' },
     { name: 'technicalEquipment.bicycleShift', header: 'Schaltung' },
     { name: 'technicalEquipment.isEBike', header: 'E-Bike j/n' },
@@ -92,6 +106,10 @@ export class BikesComponent {
     { name: 'lendingStation.address.zip', header: '' },
   ];
 
+  tableDataGQLType: string = 'CargoBike';
+  tableDataGQLCreateInputType: string = 'CargoBikeCreateInput';
+  tableDataGQLUpdateInputType: string = 'CargoBikeUpdateInput';
+
   @ViewChild(MatPaginator) paginator: MatPaginator;
   @ViewChild(MatSort) sort: MatSort;
 
@@ -116,9 +134,15 @@ export class BikesComponent {
   ) {}
 
   ngAfterViewInit() {
-    this.addTypesToColumnInfo();
-    this.addReadOnlyPropertiesToColumnInfo();
+    this.addColumnPropertiesFromGQLSchemaToColumnInfo();
     this.data.paginator = this.paginator;
+    this.data.sortingDataAccessor = (item, columnName) => {
+      if (typeof item[columnName] === 'string') {
+        return item[columnName].toLocaleLowerCase();
+      }
+    
+      return item[columnName];
+    }
     this.data.sort = this.sort;
 
     this.columnInfo.forEach((column) =>
@@ -162,19 +186,28 @@ export class BikesComponent {
     clearInterval(this.relockingInterval);
   }
 
-  addTypesToColumnInfo() {
+  addColumnPropertiesFromGQLSchemaToColumnInfo() {
     for (const column of this.columnInfo) {
-      if (!column.type) {
-        column.type = this.getType(column.name);
-      }
+      const typeInformation = this.schemaService.getTypeInformation(
+        this.tableDataGQLType,
+        column.name
+      );
+      column.type = column.type || typeInformation.type;
     }
-  }
-
-  addReadOnlyPropertiesToColumnInfo() {
     for (const column of this.columnInfo) {
-      if (!column.readonly) {
-        column.readonly = this.isReadonly(column.name);
-      }
+      const typeInformation = this.schemaService.getTypeInformation(
+        this.tableDataGQLUpdateInputType,
+        column.name
+      );
+      column.readonly = column.readonly || !typeInformation.isPartOfType;
+    }
+    for (const column of this.columnInfo) {
+      const typeInformation = this.schemaService.getTypeInformation(
+        this.tableDataGQLCreateInputType,
+        column.name
+      );
+      column.requiredForCreation = typeInformation.isRequired;
+      column.acceptedForCreation = typeInformation.isPartOfType;
     }
   }
 
@@ -182,20 +215,6 @@ export class BikesComponent {
     return (
       this.columnInfo.find((column) => column.name === propertyName)?.header ||
       propertyName
-    );
-  }
-
-  getType(propertyName: string) {
-    return this.schemaService.getPropertyTypeFromSchema(
-      'CargoBike',
-      propertyName
-    );
-  }
-
-  isReadonly(propertyName: string) {
-    return (
-      this.columnInfo.find((column) => column.name === propertyName).readonly ||
-      !isPartOfGraphQLDoc(propertyName, CargoBikeFieldsMutableFragmentDoc)
     );
   }
 
@@ -210,9 +229,41 @@ export class BikesComponent {
     return this.loadingRowIds.includes(id);
   }
 
+  validityChange(row: any, columnName: string, isValid: Event) {
+    if (!row.FieldsValidity) {
+      row['FieldsValidity'] = {};
+    }
+    row['FieldsValidity'][columnName] = isValid;
+  }
+
+  countUnvalidFields(row: any) {
+    let unvalidFieldsCount = 0;
+    if (!row.FieldsValidity) {
+      return 99;
+    }
+    for (const prop in row.FieldsValidity) {
+      if (!row.FieldsValidity[prop]) {
+        unvalidFieldsCount++;
+      }
+    }
+    return unvalidFieldsCount;
+  }
+
   reloadTable() {
     this.reloadingTable = true;
     this.bikesService.loadBikes();
+  }
+
+  addEmptyRow() {
+    this.data.data = [{ newObject: true }, ...this.data.data];
+  }
+
+  create(row: any) {
+    const newBike = this.schemaService.filterObject(
+      this.tableDataGQLCreateInputType,
+      deepen(row)
+    );
+    this.bikesService.createBike({ bike: newBike });
   }
 
   edit(row: CargoBikeResult) {
@@ -220,8 +271,8 @@ export class BikesComponent {
   }
 
   save(row: CargoBikeResult) {
-    const deepenRow: CargoBikeUpdateInput = filter(
-      CargoBikeFieldsMutableFragmentDoc,
+    const deepenRow = this.schemaService.filterObject(
+      this.tableDataGQLUpdateInputType,
       deepen(row)
     );
     this.bikesService.updateBike({ bike: deepenRow });
