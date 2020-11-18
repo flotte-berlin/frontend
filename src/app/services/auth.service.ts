@@ -1,8 +1,8 @@
 import { Injectable } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
-import { finalize, map, tap } from 'rxjs/operators';
+import { catchError, finalize, map, tap } from 'rxjs/operators';
 import { environment } from '../../environments/environment';
-import { BehaviorSubject } from 'rxjs';
+import { BehaviorSubject, of } from 'rxjs';
 
 @Injectable({
   providedIn: 'root',
@@ -44,23 +44,37 @@ export class AuthService {
   logout() {
     // remove token from local storage to log user out
     return this.http
-      .post<any>(`${environment.authUrl}/logout`, { request_token: this.getRequestToken() }).pipe(finalize(() => {
-        this.removeTokens();
-        this.checkIfUserIsLoggedIn();
-      }
-      ));
+      .post<any>(`${environment.authUrl}/logout`, {
+        request_token: this.getRequestToken(),
+      })
+      .pipe(
+        finalize(() => {
+          this.removeTokens();
+          this.checkIfUserIsLoggedIn();
+        })
+      );
   }
 
   refreshToken() {
-    return this.http.post<any>(`${environment.authUrl}/new-token`, {
-      'refresh_token': this.getRefreshToken()
-    }).pipe(tap((tokens: any) => {
-      this.storeTokens(tokens);
-    }));
-  }
-
-  private storeRequestToken(jwt: string) {
-    localStorage.setItem(this.REQUEST_TOKEN, jwt);
+    return this.http
+      .post<any>(`${environment.authUrl}/new-token`, {
+        refresh_token: this.getRefreshToken(),
+      })
+      .pipe(
+        tap((tokens: any) => {
+          this.storeTokens(tokens);
+        })
+      )
+      .pipe(
+        catchError((error: any) => {
+          if (error.status === 400) {
+            this.removeTokens();
+            this.checkIfUserIsLoggedIn();
+            location.replace('/login');
+          }
+          return of();
+        })
+      );
   }
 
   private storeTokens(tokens: any) {
@@ -72,6 +86,4 @@ export class AuthService {
     localStorage.removeItem(this.REQUEST_TOKEN);
     localStorage.removeItem(this.REFRESH_TOKEN);
   }
-
-
 }

@@ -9,9 +9,16 @@
       matTooltip="Tabllendaten aktualisieren. Achtung! Alle ungespeicherten Änderungen gehen verloren."
       (click)="reloadTable()"
       [disabled]="reloadingTable"
-      i18n
     >
       <mat-icon class="spin">sync</mat-icon>
+    </button>
+    <button
+      mat-raised-button
+      class="table-control-button"
+      (click)="addEmptyRow()"
+      [disabled]="reloadingTable"
+    >
+      <mat-icon class="spin">add</mat-icon>
     </button>
     <mat-form-field>
       <mat-label>Filter</mat-label>
@@ -23,7 +30,7 @@
       />
     </mat-form-field>
     <mat-paginator
-      [pageSizeOptions]="[25, 30, 50, 100, 500]"
+      [pageSizeOptions]="[15, 25, 30, 50, 100, 500]"
       showFirstLastButtons
     ></mat-paginator>
   </div>
@@ -60,6 +67,7 @@
         </td>
       </ng-container>
 
+
       <!-- Other Columns -->
       <ng-container
         *ngFor="let column of columnInfo"
@@ -72,8 +80,8 @@
         </th>
         <td mat-cell *matCellDef="let element">
           <app-cell
-            *ngIf="!column.readonly && element.isLockedByMe; else stringValue"
-            [editable]="true"
+          *ngIf="column.type === 'Boolean' || (element.newObject || !column.readonly && element.isLockedByMe); else stringValue"
+            [editable]="element.newObject || !column.readonly && element.isLockedByMe"
             [(value)]="element[column.name]"
             [inputType]="column.type"
           ></app-cell>
@@ -85,7 +93,7 @@
       <ng-container matColumnDef="buttons" stickyEnd>
         <th mat-header-cell *matHeaderCellDef></th>
         <td mat-cell *matCellDef="let element">
-          <div class="button-wrapper">
+          <div class="button-wrapper" *ngIf="!element.newObject">
             <button
               mat-icon-button
               (click)="edit(element)"
