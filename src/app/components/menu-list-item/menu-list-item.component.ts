@@ -25,7 +25,8 @@ export class MenuListItemComponent implements OnInit {
   @Input() depth: number;
 
   constructor(public navService: NavService,
-              public router: Router) {
+              public router: Router,
+              ) {
     if (this.depth === undefined) {
       this.depth = 0;
     }

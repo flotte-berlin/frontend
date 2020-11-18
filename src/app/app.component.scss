@@ -1,3 +1,5 @@
+@import '../theme';
+
 #page-wrapper {
   display: flex;
   flex-direction: column;
@@ -14,4 +16,15 @@
       margin-left: auto;
     }
   }
+}
+
+
+.nav-profile-list {
+  padding-top:0px
+}
+
+mat-nav-list .nav-profile-list-item {
+  height:200px;
+  background: mat-color($light-primary, 300);;
+  //color:white;
 }
