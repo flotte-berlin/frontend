@@ -4,6 +4,7 @@ import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { HttpClientModule, HTTP_INTERCEPTORS } from '@angular/common/http';
 
 import { DragDropModule } from '@angular/cdk/drag-drop';
+import { FlexLayoutModule } from '@angular/flex-layout';
 
 // Angular Material Components
 import { MatToolbarModule } from '@angular/material/toolbar';
@@ -58,6 +59,7 @@ import { TokenInterceptor } from './helper/token.interceptor'
     AppRoutingModule,
     BrowserAnimationsModule,
     FormsModule,
+    FlexLayoutModule,
     ReactiveFormsModule,
     MatToolbarModule,
     MatButtonModule,

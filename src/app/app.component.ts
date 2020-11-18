@@ -23,13 +23,9 @@ export class AppComponent {
 
   navItems: NavItem[] = [
     {
-      displayName: 'Tabellenübersicht  ',
-      iconName: 'recent_actors',
-      route: 'tableOverview'
-    },
-    {
       displayName: 'Tabellen',
       iconName: 'recent_actors',
+      route: 'tableOverview',
       children: [
         {
           displayName: 'Lastenräder',
