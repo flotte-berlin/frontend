@@ -42,6 +42,7 @@ export class AppComponent {
   }
 
   ngAfterViewInit() {
+    //Change 
     this.navService.appDrawer = this.appDrawer;
   }
 }
