@@ -8,6 +8,14 @@
     .table-control-button {
       margin: 0.25em;
     }
+    .filter {
+      margin-right: 0.5em;
+    }
+    .mat-paginator {
+      display: inline-block;
+      width: 50em;
+      margin-right: 0.5em;
+    }
   }
   .table-container {
     flex: 1;
