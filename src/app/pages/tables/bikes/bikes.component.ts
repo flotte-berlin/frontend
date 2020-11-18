@@ -261,11 +261,23 @@ export class BikesComponent {
     this.bikesService.loadBikes();
   }
 
-  addEmptyRow() {
+  addNewObject() {
     this.paginator.firstPage();
     this.resetFilter();
     this.resetSorting();
-    this.data.data = [{ newObject: true }, ...this.data.data];
+    this.data.data = [{ newObject: true, id: this.getNewId() }, ...this.data.data];
+  }
+
+  getNewId(): string {
+    let id = -1;
+    while(this.getRowById(id.toString())) {
+      id--;
+    }
+    return id.toString();
+  }
+
+  deleteNewObject(row: any) {
+    this.data.data = this.data.data.filter(element => row.id !== element.id);
   }
 
   create(row: any) {
