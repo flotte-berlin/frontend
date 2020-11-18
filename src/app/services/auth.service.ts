@@ -11,6 +11,7 @@ export class AuthService {
   public loggedIn: BehaviorSubject<boolean>;
   private readonly REQUEST_TOKEN = 'requestToken';
   private readonly REFRESH_TOKEN = 'refreshToken';
+  private readonly EMAIL = 'email';
 
   constructor(private http: HttpClient) {
     this.loggedIn = new BehaviorSubject<boolean>(false);
@@ -37,6 +38,7 @@ export class AuthService {
           // store request and refresh token in local storage to keep user logged in between page refreshes
           this.storeTokens(response);
           this.checkIfUserIsLoggedIn();
+          this.storeEmail(email);
         })
       );
   }
@@ -53,6 +55,14 @@ export class AuthService {
           this.checkIfUserIsLoggedIn();
         })
       );
+  }
+
+  storeEmail(email: string) {
+    localStorage.setItem(this.EMAIL, email);
+  }
+
+  getEmail() {
+    localStorage.getItem(this.EMAIL);
   }
 
   refreshToken() {
@@ -87,5 +97,6 @@ export class AuthService {
   private removeTokens() {
     localStorage.removeItem(this.REQUEST_TOKEN);
     localStorage.removeItem(this.REFRESH_TOKEN);
+    localStorage.removeItem(this.EMAIL)
   }
 }
