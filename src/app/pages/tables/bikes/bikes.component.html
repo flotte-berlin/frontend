@@ -15,7 +15,7 @@
     <button
       mat-raised-button
       class="table-control-button"
-      (click)="addEmptyRow()"
+      
       [disabled]="reloadingTable"
     >
       <mat-icon class="spin">add</mat-icon>
@@ -35,6 +35,7 @@
     ></mat-paginator>
   </div>
   <div class="table-container">
+    
     <table
       mat-table
       class="mat-elevation-z8"
@@ -146,9 +147,19 @@
         </td>
       </ng-container>
 
+      <mat-spinner
+      [diameter]="32"
+      *ngIf="!isLoaded"
+    ></mat-spinner>
+     
+
       <!-- Table Definition -->
       <tr mat-header-row *matHeaderRowDef="displayedColumns; sticky: true"></tr>
       <tr mat-row *matRowDef="let row; columns: displayedColumns"></tr>
     </table>
+
+    <mat-card *ngIf="!isLoaded" style="display: flex; justify-content: center; align-items: center">
+      <mat-spinner [diameter]="320"></mat-spinner>
+    </mat-card>
   </div>
 </div>

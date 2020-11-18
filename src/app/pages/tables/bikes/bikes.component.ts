@@ -16,6 +16,7 @@ import { logArrayInColumnInfoForm } from 'src/app/helperFunctions/logArrayInColu
 import { MatTableDataSource } from '@angular/material/table';
 import { MatPaginator } from '@angular/material/paginator';
 import { MatSort } from '@angular/material/sort';
+import { BehaviorSubject } from 'rxjs';
 
 @Component({
   selector: 'app-bikes',
@@ -109,6 +110,7 @@ export class BikesComponent {
 
   relockingInterval = null;
   relockingDuration = 1000 * 60 * 1;
+  isLoaded = false;
 
   constructor(
     private bikesService: BikesService,
@@ -135,6 +137,7 @@ export class BikesComponent {
       this.reloadingTable = false;
       const tempDataSource = [];
       for (const row of newTableDataSource) {
+        this.isLoaded = true;
         const oldRow = this.getRowById(row.id);
         /** make sure to not overwrite a row that is being edited */
         if (!oldRow) {
@@ -148,6 +151,7 @@ export class BikesComponent {
       this.data.data = tempDataSource;
     });
     this.bikesService.loadBikes();
+
 
     this.relockingInterval = setInterval(() => {
       for (const row of this.data.data) {
@@ -212,6 +216,8 @@ export class BikesComponent {
 
   reloadTable() {
     this.reloadingTable = true;
+    this.isLoaded = false;
+    this.data.data = [];
     this.bikesService.loadBikes();
   }
 
