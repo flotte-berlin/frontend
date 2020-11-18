@@ -26,13 +26,15 @@ import {MatTooltipModule} from '@angular/material/tooltip';
 import {MatSelectModule} from '@angular/material/select';
 import { MatPaginatorModule } from '@angular/material/paginator';
 import { MatSortModule } from '@angular/material/sort';
+import {MatDialogModule} from '@angular/material/dialog';
+
 
 
 import { AppRoutingModule } from './app-routing.module';
 import { AppComponent } from './app.component';
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 import { LoginComponent } from './pages/login/login.component';
-import { BikesComponent } from './pages/tables/bikes/bikes.component';
+import { BikesComponent, DeleteConfirmationDialog } from './pages/tables/bikes/bikes.component';
 import { GraphQLModule } from './graphql.module';
 import { ParticipantsComponent } from './pages/tables/participants/participants.component';
 import { LendingStationsComponent } from './pages/tables/lending-stations/lending-stations.component';
@@ -52,6 +54,7 @@ import { TokenInterceptor } from './helper/token.interceptor'
     LendingStationsComponent,
     TableOverviewComponent,
     CellComponent,
+    DeleteConfirmationDialog
   ],
   imports: [
     BrowserModule,
@@ -81,7 +84,8 @@ import { TokenInterceptor } from './helper/token.interceptor'
     MatTooltipModule,
     MatSelectModule,
     MatPaginatorModule,
-    MatSortModule
+    MatSortModule,
+    MatDialogModule
   ],
   providers: [NavService,
     { provide: HTTP_INTERCEPTORS, useClass: TokenInterceptor, multi: true }],

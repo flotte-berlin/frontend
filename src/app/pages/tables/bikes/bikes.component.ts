@@ -1,5 +1,5 @@
 import { SelectionModel } from '@angular/cdk/collections';
-import { Component, ViewChild } from '@angular/core';
+import { Component, Inject, ViewChild } from '@angular/core';
 import { CdkDragDrop, moveItemInArray } from '@angular/cdk/drag-drop';
 import { BikesService, CargoBikeResult } from 'src/app/services/bikes.service';
 import { flatten } from 'src/app/helperFunctions/flattenObject';
@@ -11,6 +11,11 @@ import { MatTableDataSource } from '@angular/material/table';
 import { MatPaginator } from '@angular/material/paginator';
 import { MatSort } from '@angular/material/sort';
 import { BehaviorSubject } from 'rxjs';
+import {
+  MatDialog,
+  MatDialogRef,
+  MAT_DIALOG_DATA,
+} from '@angular/material/dialog';
 
 @Component({
   selector: 'app-bikes',
@@ -128,12 +133,13 @@ export class BikesComponent {
 
   relockingInterval = null;
   relockingDuration = 1000 * 60 * 1;
-  filterValue: string = "";
+  filterValue: string = '';
   isLoaded = false;
 
   constructor(
     private bikesService: BikesService,
-    private schemaService: SchemaService
+    private schemaService: SchemaService,
+    public dialog: MatDialog
   ) {}
 
   ngAfterViewInit() {
@@ -143,9 +149,9 @@ export class BikesComponent {
       if (typeof item[columnName] === 'string') {
         return item[columnName].toLocaleLowerCase();
       }
-    
+
       return item[columnName];
-    }
+    };
     this.data.sort = this.sort;
 
     this.columnInfo.forEach((column) =>
@@ -176,7 +182,6 @@ export class BikesComponent {
       this.data.data = tempDataSource;
     });
     this.bikesService.loadBikes();
-
 
     this.relockingInterval = setInterval(() => {
       for (const row of this.data.data) {
@@ -265,19 +270,22 @@ export class BikesComponent {
     this.paginator.firstPage();
     this.resetFilter();
     this.resetSorting();
-    this.data.data = [{ newObject: true, id: this.getNewId() }, ...this.data.data];
+    this.data.data = [
+      { newObject: true, id: this.getNewId() },
+      ...this.data.data,
+    ];
   }
 
   getNewId(): string {
     let id = -1;
-    while(this.getRowById(id.toString())) {
+    while (this.getRowById(id.toString())) {
       id--;
     }
     return id.toString();
   }
 
   deleteNewObject(row: any) {
-    this.data.data = this.data.data.filter(element => row.id !== element.id);
+    this.data.data = this.data.data.filter((element) => row.id !== element.id);
   }
 
   create(row: any) {
@@ -302,6 +310,22 @@ export class BikesComponent {
 
   cancel(row: CargoBikeResult) {
     this.bikesService.unlockBike({ id: row.id });
+  }
+
+  delete(row: any) {
+    this.bikesService.deleteBike({ id: row.id });
+  }
+
+  openDeleteConfirmationDialog(row: any) {
+    const dialogRef = this.dialog.open(DeleteConfirmationDialog, {
+      width: '250px',
+    });
+
+    dialogRef.afterClosed().subscribe((result) => {
+      if (result === true) {
+        this.delete(row);
+      }
+    });
   }
 
   getRowById(id: string) {
@@ -335,11 +359,26 @@ export class BikesComponent {
   }
 
   resetFilter() {
-    this.filterValue = "";
+    this.filterValue = '';
     this.applyFilter();
   }
 
   resetSorting() {
-    this.sort.sort({id: null, start: 'asc', disableClear: false });
+    this.sort.sort({ id: null, start: 'asc', disableClear: false });
+  }
+}
+
+@Component({
+  selector: 'delete-confirmation-dialog',
+  templateUrl: 'delete-confirmation-dialog.html',
+})
+export class DeleteConfirmationDialog {
+  constructor(public dialogRef: MatDialogRef<DeleteConfirmationDialog>) {}
+
+  onConfirmClick(): void {
+    this.dialogRef.close(true);
+  }
+  onNoClick(): void {
+    this.dialogRef.close(false);
   }
 }

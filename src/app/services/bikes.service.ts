@@ -15,6 +15,8 @@ import {
   UnlockCargoBikeMutationVariables,
   CreateCargoBikeGQL,
   CreateCargoBikeMutationVariables,
+  DeleteCargoBikeGQL,
+  DeleteCargoBikeMutationVariables,
 } from 'src/generated/graphql';
 import { DeepExtractTypeSkipArrays } from 'ts-deep-extract-types';
 
@@ -32,13 +34,13 @@ export class BikesService {
   groupEnum: BehaviorSubject<string[]> = new BehaviorSubject<string[]>([]);
 
   constructor(
-    private schemaService: SchemaService,
     private getCargoBikesGQL: GetCargoBikesGQL,
     private getCargoBikeByIdGQL: GetCargoBikeByIdGQL,
     private updateCargoBikeGQL: UpdateCargoBikeGQL,
     private lockCargoBikeGQL: LockCargoBikeGQL,
     private unlockCargoBikeGQL: UnlockCargoBikeGQL,
     private createCargoBikeGQL: CreateCargoBikeGQL,
+    private deleteCargoBikeGQL: DeleteCargoBikeGQL,
   ) {}
 
   addLoadingRowId(id: string) {
@@ -55,12 +57,6 @@ export class BikesService {
 
   loadBikes() {
     this.getCargoBikesGQL.fetch().subscribe((result) => {
-      // comment in for performance testing
-      /*for (let i = 1; i <= 500; i++) {
-        const newBike = deepCopy(result.data.cargoBikes[0]);
-        newBike.id = (i + 100).toString();
-        result.data.cargoBikes.push(newBike);
-      }*/
       this.bikes.next(result.data.cargoBikes);
 
     });
@@ -140,6 +136,20 @@ export class BikesService {
             unlockedBike.id === bike.id ? unlockedBike : bike
           )
         );
+      })
+      .add(() => {
+        this.removeLoadingRowId(variables.id);
+      });
+  }
+
+  deleteBike(variables: DeleteCargoBikeMutationVariables) {
+    this.addLoadingRowId(variables.id);
+    this.deleteCargoBikeGQL
+      .mutate(variables)
+      .subscribe((result) => {
+        if(result.data.deleteCargoBike) {
+          this.bikes.next([...this.bikes.value].filter(bike => bike.id !== variables.id));
+        }
       })
       .add(() => {
         this.removeLoadingRowId(variables.id);

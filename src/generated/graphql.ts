@@ -1764,6 +1764,16 @@ export type UnlockCargoBikeMutation = (
   ) }
 );
 
+export type DeleteCargoBikeMutationVariables = Exact<{
+  id: Scalars['ID'];
+}>;
+
+
+export type DeleteCargoBikeMutation = (
+  { __typename?: 'Mutation' }
+  & Pick<Mutation, 'deleteCargoBike'>
+);
+
 export type GetCargoBikesQueryVariables = Exact<{ [key: string]: never; }>;
 
 
@@ -2077,6 +2087,22 @@ export const UnlockCargoBikeDocument = gql`
   })
   export class UnlockCargoBikeGQL extends Apollo.Mutation<UnlockCargoBikeMutation, UnlockCargoBikeMutationVariables> {
     document = UnlockCargoBikeDocument;
+    
+    constructor(apollo: Apollo.Apollo) {
+      super(apollo);
+    }
+  }
+export const DeleteCargoBikeDocument = gql`
+    mutation DeleteCargoBike($id: ID!) {
+  deleteCargoBike(id: $id)
+}
+    `;
+
+  @Injectable({
+    providedIn: 'root'
+  })
+  export class DeleteCargoBikeGQL extends Apollo.Mutation<DeleteCargoBikeMutation, DeleteCargoBikeMutationVariables> {
+    document = DeleteCargoBikeDocument;
     
     constructor(apollo: Apollo.Apollo) {
       super(apollo);
