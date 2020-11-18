@@ -24,9 +24,9 @@
       <mat-label>Filter</mat-label>
       <input
         matInput
-        (keyup)="applyFilter($event)"
+        [(ngModel)]="filterValue"
+        (input)="applyFilter()"
         placeholder="Suchbegriff eingeben..."
-        #input
       />
     </mat-form-field>
     <mat-paginator
@@ -157,20 +157,14 @@
           </div>
         </td>
       </ng-container>
-
-      <mat-spinner
-      [diameter]="32"
-      *ngIf="!isLoaded"
-    ></mat-spinner>
-     
-
+   
       <!-- Table Definition -->
       <tr mat-header-row *matHeaderRowDef="displayedColumns; sticky: true"></tr>
-      <tr mat-row *matRowDef="let row; columns: displayedColumns"></tr>
+      <tr mat-row *matRowDef="let row; columns: displayedColumns;"></tr>
     </table>
 
     <mat-card *ngIf="!isLoaded" style="display: flex; justify-content: center; align-items: center">
-      <mat-spinner [diameter]="320"></mat-spinner>
+      <mat-spinner [diameter]="32"></mat-spinner>
     </mat-card>
   </div>
 </div>

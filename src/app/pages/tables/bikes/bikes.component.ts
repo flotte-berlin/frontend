@@ -128,6 +128,7 @@ export class BikesComponent {
 
   relockingInterval = null;
   relockingDuration = 1000 * 60 * 1;
+  filterValue: string = "";
   isLoaded = false;
 
   constructor(
@@ -261,6 +262,9 @@ export class BikesComponent {
   }
 
   addEmptyRow() {
+    this.paginator.firstPage();
+    this.resetFilter();
+    this.resetSorting();
     this.data.data = [{ newObject: true }, ...this.data.data];
   }
 
@@ -314,8 +318,16 @@ export class BikesComponent {
       : this.data.data.forEach((row) => this.selection.select(row));
   }
 
-  applyFilter(event: Event) {
-    const filterValue = (event.target as HTMLInputElement).value;
-    this.data.filter = filterValue.trim().toLowerCase();
+  applyFilter() {
+    this.data.filter = this.filterValue.trim().toLowerCase();
+  }
+
+  resetFilter() {
+    this.filterValue = "";
+    this.applyFilter();
+  }
+
+  resetSorting() {
+    this.sort.sort({id: null, start: 'asc', disableClear: false });
   }
 }
