@@ -2,20 +2,38 @@ import { Injectable } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
 import { catchError, finalize, map, tap } from 'rxjs/operators';
 import { environment } from '../../environments/environment';
-import { BehaviorSubject, of } from 'rxjs';
+import { Observable, BehaviorSubject, of } from 'rxjs';
+import { User } from "../models/user";
 
 @Injectable({
   providedIn: 'root',
 })
 export class AuthService {
+  private currentUserSubject: BehaviorSubject<User>;
+  public currentUser: Observable<User>;
   public loggedIn: BehaviorSubject<boolean>;
   private readonly REQUEST_TOKEN = 'requestToken';
   private readonly REFRESH_TOKEN = 'refreshToken';
-  private readonly EMAIL = 'email';
+  private readonly CURRENT_USER = 'currentUser';
 
   constructor(private http: HttpClient) {
+    this.currentUserSubject = new BehaviorSubject<User>(
+      JSON.parse(localStorage.getItem(this.CURRENT_USER))
+    );
+    this.currentUser = this.currentUserSubject.asObservable();
+
     this.loggedIn = new BehaviorSubject<boolean>(false);
     this.checkIfUserIsLoggedIn();
+
+    
+  }
+
+  public get getCurrentUserValue(): User {
+    var value = this.currentUserSubject.value;
+    if (value === null){
+      value = new User();
+    }
+    return value;
   }
 
   private checkIfUserIsLoggedIn(): void {
@@ -23,11 +41,11 @@ export class AuthService {
   }
 
   public getRequestToken(): string {
-    return localStorage.getItem(this.REQUEST_TOKEN);
+    return this.getCurrentUserValue.request_token;
   }
 
   public getRefreshToken(): string {
-    return localStorage.getItem(this.REFRESH_TOKEN);
+    return this.getCurrentUserValue.refresh_token;
   }
 
   login(email: string, password: string) {
@@ -36,9 +54,11 @@ export class AuthService {
       .pipe(
         map((response) => {
           // store request and refresh token in local storage to keep user logged in between page refreshes
-          this.storeTokens(response);
+          if (response && response.request_token){
+            this.storeUser(response);
+          }
           this.checkIfUserIsLoggedIn();
-          this.storeEmail(email);
+          //this.storeTokens(response);
         })
       );
   }
@@ -55,14 +75,6 @@ export class AuthService {
           this.checkIfUserIsLoggedIn();
         })
       );
-  }
-
-  storeEmail(email: string) {
-    localStorage.setItem(this.EMAIL, email);
-  }
-
-  getEmail() {
-    localStorage.getItem(this.EMAIL);
   }
 
   refreshToken() {
@@ -90,13 +102,19 @@ export class AuthService {
   }
 
   private storeTokens(tokens: any) {
-    localStorage.setItem(this.REQUEST_TOKEN, tokens.request_token);
-    localStorage.setItem(this.REFRESH_TOKEN, tokens.refresh_token);
+    this.storeUser({...this.getCurrentUserValue, ...tokens}); //Merging objects. Properties in obj2 will overwrite those in obj1
+    //localStorage.setItem(this.REQUEST_TOKEN, tokens.request_token);
+    //localStorage.setItem(this.REFRESH_TOKEN, tokens.refresh_token);
+  }
+
+  private storeUser(usr: User){
+    localStorage.setItem(this.CURRENT_USER, JSON.stringify(usr));
+    this.currentUserSubject.next(usr);
   }
 
   private removeTokens() {
-    localStorage.removeItem(this.REQUEST_TOKEN);
-    localStorage.removeItem(this.REFRESH_TOKEN);
-    localStorage.removeItem(this.EMAIL)
+    //localStorage.removeItem(this.REQUEST_TOKEN);
+    //localStorage.removeItem(this.REFRESH_TOKEN);
+    localStorage.removeItem(this.CURRENT_USER);
   }
 }
