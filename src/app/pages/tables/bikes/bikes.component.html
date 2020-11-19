@@ -30,11 +30,25 @@
       <mat-label>Filter</mat-label>
       <input
         matInput
-        [(ngModel)]="filterValue"
+        [(ngModel)]="filter.includesString"
         (input)="applyFilter()"
         placeholder="Suchbegriff eingeben..."
       />
     </mat-form-field>
+    <button
+      *ngIf="!filter.onlyUnsaved && countUnsavedRows() > 0"
+      mat-raised-button
+      color="accent"
+      class="table-control-button"
+      (click)="showOnlyUnsavedElements(true)"
+      [disabled]="reloadingTable"
+      i18n
+    >
+      {{countUnsavedRows()}} ungespeicherte(s) Element(e) anzeigen
+    </button>
+    <mat-checkbox *ngIf="filter.onlyUnsaved" (change)="showOnlyUnsavedElements(false)" [(ngModel)]="filter.onlyUnsaved">
+      nur ungespeicherte Elemente anzeigen
+    </mat-checkbox>
     <mat-paginator
       [pageSizeOptions]="[15, 25, 30, 50, 100]"
       showFirstLastButtons

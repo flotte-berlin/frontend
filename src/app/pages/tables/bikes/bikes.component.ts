@@ -133,7 +133,8 @@ export class BikesComponent {
 
   relockingInterval = null;
   relockingDuration = 1000 * 60 * 1;
-  filterValue: string = '';
+  filter = { includesString: '', onlyUnsaved: false };
+  initialFilter = this.filter;
   isLoaded = false;
 
   constructor(
@@ -149,10 +150,25 @@ export class BikesComponent {
       if (typeof item[columnName] === 'string') {
         return item[columnName].toLocaleLowerCase();
       }
-
       return item[columnName];
     };
     this.data.sort = this.sort;
+
+    this.data.filter = (this.filter as unknown) as string;
+    this.data.filterPredicate = (data, filter: any) => {
+      const a = !filter.onlyUnsaved || data.newObject || data.isLockedByMe;
+      const b =
+        !filter.includesString ||
+        Object.keys(data).some(
+          (k) =>
+            data[k] != null &&
+            data[k]
+              .toString()
+              .toLowerCase()
+              .includes(filter.includesString.toLowerCase())
+        );
+      return a && b;
+    };
 
     this.columnInfo.forEach((column) =>
       this.displayedColumns.push(column.name)
@@ -300,6 +316,16 @@ export class BikesComponent {
     this.bikesService.lockBike({ id: row.id });
   }
 
+  countUnsavedRows():number {
+    let unsavedCount = 0;
+    for(const row of this.data.data) {
+      if (row.isLockedByMe || row.newObject) {
+        unsavedCount++;
+      }
+    }
+    return unsavedCount;
+  }
+
   save(row: CargoBikeResult) {
     const deepenRow = this.schemaService.filterObject(
       this.tableDataGQLUpdateInputType,
@@ -354,12 +380,20 @@ export class BikesComponent {
       : this.data.data.forEach((row) => this.selection.select(row));
   }
 
+  showOnlyUnsavedElements(value: boolean) {
+    this.filter.onlyUnsaved = value;
+    this.applyFilter();
+  }
+
   applyFilter() {
-    this.data.filter = this.filterValue.trim().toLowerCase();
+    this.data.filter = ({
+      ...this.filter,
+      includesString: this.filter.includesString.trim().toLowerCase(),
+    } as unknown) as string;
   }
 
   resetFilter() {
-    this.filterValue = '';
+    this.filter = this.initialFilter;
     this.applyFilter();
   }
 
