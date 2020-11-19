@@ -284,7 +284,7 @@ export class BikesComponent {
 
   addNewObject() {
     this.paginator.firstPage();
-    this.resetFilter();
+    this.setFilter({...this.filter, includesString: ""});
     this.resetSorting();
     this.data.data = [
       { newObject: true, id: this.getNewId() },
@@ -382,6 +382,7 @@ export class BikesComponent {
 
   showOnlyUnsavedElements(value: boolean) {
     this.filter.onlyUnsaved = value;
+    this.filter.includesString = "";
     this.applyFilter();
   }
 
@@ -392,8 +393,8 @@ export class BikesComponent {
     } as unknown) as string;
   }
 
-  resetFilter() {
-    this.filter = this.initialFilter;
+  setFilter(filterObject) {
+    this.filter = filterObject;
     this.applyFilter();
   }
 

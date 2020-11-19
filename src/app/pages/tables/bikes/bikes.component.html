@@ -188,7 +188,7 @@
             class="button-wrapper"
             *ngIf="element.newObject"
             [matTooltip]="
-              'Nicht ausgefüllte Felder: ' + countUnvalidFields(element)
+              'Nicht ausgefüllte Pflichtfelder (rot): ' + countUnvalidFields(element)
             "
           >
             <button
