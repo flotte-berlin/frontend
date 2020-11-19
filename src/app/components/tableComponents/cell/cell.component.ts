@@ -30,6 +30,8 @@ export class CellComponent {
   }
   @Input()
   required: boolean = false;
+  @Input()
+  link: string = null;
   @Output() validityChange = new EventEmitter<boolean>();
   isValid: boolean = true;
 
@@ -39,8 +41,7 @@ export class CellComponent {
 
   @ViewChild('input') input: any;
 
-  constructor(private cdr: ChangeDetectorRef) {
-  }
+  constructor(private cdr: ChangeDetectorRef) {}
 
   ngAfterViewInit() {
     if (this.required) {
@@ -53,9 +54,9 @@ export class CellComponent {
         this.inputType === 'Boolean' &&
         this.editable
       ) {
-        setTimeout(()=> {
+        setTimeout(() => {
           this.change(false);
-      }, 0);
+        }, 0);
       }
     }
   }
@@ -78,7 +79,7 @@ export class CellComponent {
       newValue = newValue.toString().replace('.', '');
     }
     this.value = this.htmlInputType === 'number' ? +newValue : newValue;
-    if (newValue === "") {
+    if (newValue === '') {
       this.value = null;
     }
     this.valueChange.emit(this.value);

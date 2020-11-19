@@ -1,0 +1,15 @@
+fragment EngagementFieldsForBikePage on Engagement {
+    id
+    engagementType {
+        ...EngagementTypeFields
+    }
+    from
+    to
+    participant {
+        ...ParticipantFieldsForBikePage
+    }
+    isLocked
+  isLockedByMe
+  lockedBy
+  lockedUntil
+}

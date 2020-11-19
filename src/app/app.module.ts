@@ -43,7 +43,8 @@ import { CellComponent } from './components/tableComponents/cell/cell.component'
 import { MenuListItemComponent } from './components/menu-list-item/menu-list-item.component';
 import {SidenavProfileComponent} from './components/sidenav-profile/sidenav-profile.component';
 import { NavService }from './components/menu-list-item/nav.service';
-import { TokenInterceptor } from './helper/token.interceptor'
+import { TokenInterceptor } from './helper/token.interceptor';
+import { BikeComponent } from './pages/dataPages/bike/bike.component'
 
 
 @NgModule({
@@ -57,7 +58,8 @@ import { TokenInterceptor } from './helper/token.interceptor'
     LendingStationsComponent,
     TableOverviewComponent,
     CellComponent,
-    DeleteConfirmationDialog
+    DeleteConfirmationDialog,
+    BikeComponent
   ],
   imports: [
     BrowserModule,

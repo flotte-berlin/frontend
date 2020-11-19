@@ -1,0 +1,10 @@
+fragment EquipmentFieldsForBikePage on Equipment {
+    id
+    serialNo
+    title
+    description
+    isLocked
+    isLockedByMe
+    lockedBy
+    lockedUntil
+}

@@ -1,0 +1,9 @@
+fragment EquipmentTypeFieldsForBikePage on EquipmentType {
+  id
+  name
+  description
+  isLocked
+  isLockedByMe
+  lockedBy
+  lockedUntil
+}

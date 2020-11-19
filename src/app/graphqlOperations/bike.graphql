@@ -1,30 +1,42 @@
+query GetCargoBikes {
+  cargoBikes(limit: 1000, offset: 0) {
+    ...CargoBikeFieldsForTable   
+  }
+}
+
 query GetCargoBikeById($id: ID!) {
   cargoBikeById(id: $id) {
-    ...CargoBikeFields
+    ...CargoBikeFieldsForPage
+  }
+}
+
+query ReloadCargoBikeById($id: ID!) {
+  cargoBikeById(id: $id) {
+    ...CargoBikeFieldsForTable
   }
 }
 
 mutation CreateCargoBike($bike: CargoBikeCreateInput!) {
   createCargoBike(cargoBike: $bike) {
-    ...CargoBikeFields
+    ...CargoBikeFieldsForTable
   }
 }
 
 mutation UpdateCargoBike($bike: CargoBikeUpdateInput!) {
   updateCargoBike(cargoBike: $bike) {
-    ...CargoBikeFields
+    ...CargoBikeFieldsForTable
   }
 }
 
 mutation LockCargoBike($id: ID!) {
   lockCargoBike(id: $id) {
-    ...CargoBikeFields
+    ...CargoBikeFieldsForTable
   }
 }
 
 mutation UnlockCargoBike($id: ID!) {
   unlockCargoBike(id: $id) {
-    ...CargoBikeFields
+    ...CargoBikeFieldsForTable
   }
 }
 

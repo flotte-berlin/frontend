@@ -1,0 +1,7 @@
+fragment BikeEventTypeFields on BikeEventType {
+  id
+  name
+  isLocked
+  isLockedByMe
+  lockedUntil
+}

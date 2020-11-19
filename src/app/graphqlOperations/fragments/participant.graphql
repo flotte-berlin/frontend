@@ -1,0 +1,15 @@
+fragment ParticipantFieldsForBikePage on Participant {
+    id
+    start
+    end
+    usernamefLotte
+    usernameSlack
+    contactInformation {
+        ...ContactInformationFields
+    }
+
+    isLocked
+  isLockedByMe
+  lockedBy
+  lockedUntil
+}

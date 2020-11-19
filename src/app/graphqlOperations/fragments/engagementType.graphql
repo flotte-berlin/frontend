@@ -1,0 +1,9 @@
+fragment EngagementTypeFields on EngagementType {
+    id
+    name
+    description
+    isLocked
+  isLockedByMe
+  lockedBy
+  lockedUntil
+}

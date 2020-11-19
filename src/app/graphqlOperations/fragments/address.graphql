@@ -1,0 +1,5 @@
+fragment AddressFields on Address {
+    street
+    number
+    zip
+}

@@ -44,9 +44,13 @@
       [disabled]="reloadingTable"
       i18n
     >
-      {{countUnsavedRows()}} ungespeicherte(s) Element(e) anzeigen
+      {{ countUnsavedRows() }} ungespeicherte(s) Element(e) anzeigen
     </button>
-    <mat-checkbox *ngIf="filter.onlyUnsaved" (change)="showOnlyUnsavedElements(false)" [(ngModel)]="filter.onlyUnsaved">
+    <mat-checkbox
+      *ngIf="filter.onlyUnsaved"
+      (change)="showOnlyUnsavedElements(false)"
+      [(ngModel)]="filter.onlyUnsaved"
+    >
       nur ungespeicherte Elemente anzeigen
     </mat-checkbox>
     <mat-paginator
@@ -113,8 +117,15 @@
             (validityChange)="validityChange(element, column.name, $event)"
             [(value)]="element[column.name]"
             [inputType]="column.type"
+            [link]="column.link ? column.link(element) : null"
           ></app-cell>
-          <ng-template #stringValue>{{ element[column.name] }}</ng-template>
+          <ng-template #stringValue>
+            <span *ngIf="!column.link">{{ element[column.name] }}</span>
+            <a mat-button color="primary" *ngIf="column.link" [routerLink]="column.link(element)">{{
+              element[column.name]
+            }}</a>
+          </ng-template>
+          
         </td>
       </ng-container>
 
@@ -188,7 +199,8 @@
             class="button-wrapper"
             *ngIf="element.newObject"
             [matTooltip]="
-              'Nicht ausgefüllte Pflichtfelder (rot): ' + countUnvalidFields(element)
+              'Nicht ausgefüllte Pflichtfelder (rot): ' +
+              countUnvalidFields(element)
             "
           >
             <button

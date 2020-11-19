@@ -1,12 +1,12 @@
-fragment BikeEventFields on BikeEvent {
+fragment BikeEventFieldsForBikePage on BikeEvent {
   id
-  date
   bikeEventType {
-    id
-    name
-    isLocked
-    isLockedByMe
+    ...BikeEventTypeFields
   }
+  responsible {
+    ...ParticipantFieldsForBikePage
+  }
+  date
   responsible {
     id
   }

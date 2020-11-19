@@ -1,12 +1,10 @@
 import { Injectable } from '@angular/core';
 import { BehaviorSubject } from 'rxjs';
-import { SchemaService } from './schema.service';
-import { deepCopy } from 'src/app/helperFunctions/deepCopy';
 import {
   GetCargoBikesGQL,
   GetCargoBikesQuery,
-  GetCargoBikeByIdGQL,
-  GetCargoBikeByIdQueryVariables,
+  ReloadCargoBikeByIdGQL,
+  ReloadCargoBikeByIdQueryVariables,
   UpdateCargoBikeGQL,
   UpdateCargoBikeMutationVariables,
   LockCargoBikeGQL,
@@ -17,6 +15,8 @@ import {
   CreateCargoBikeMutationVariables,
   DeleteCargoBikeGQL,
   DeleteCargoBikeMutationVariables,
+  GetCargoBikeByIdGQL,
+  GetCargoBikeByIdQueryVariables,
 } from 'src/generated/graphql';
 import { DeepExtractTypeSkipArrays } from 'ts-deep-extract-types';
 
@@ -31,11 +31,14 @@ export type CargoBikeResult = DeepExtractTypeSkipArrays<
 export class BikesService {
   bikes: BehaviorSubject<CargoBikeResult[]> = new BehaviorSubject([]);
   loadingRowIds: BehaviorSubject<string[]> = new BehaviorSubject([]);
-  groupEnum: BehaviorSubject<string[]> = new BehaviorSubject<string[]>([]);
+  bike: BehaviorSubject<any> = new BehaviorSubject([]);
+  loadingBike: BehaviorSubject<boolean> = new BehaviorSubject(false);
+  
 
   constructor(
     private getCargoBikesGQL: GetCargoBikesGQL,
     private getCargoBikeByIdGQL: GetCargoBikeByIdGQL,
+    private reloadCargoBikeByIdGQL: ReloadCargoBikeByIdGQL,
     private updateCargoBikeGQL: UpdateCargoBikeGQL,
     private lockCargoBikeGQL: LockCargoBikeGQL,
     private unlockCargoBikeGQL: UnlockCargoBikeGQL,
@@ -62,9 +65,22 @@ export class BikesService {
     });
   }
 
-  reloadBike(variables: GetCargoBikeByIdQueryVariables) {
-    this.addLoadingRowId(variables.id);
+  loadCargoBike(variables: GetCargoBikeByIdQueryVariables) {
+    this.bike.next(null);
+    this.loadingBike.next(true);
     this.getCargoBikeByIdGQL
+      .fetch(variables)
+      .subscribe((result) => {
+        this.bike.next(result.data.cargoBikeById);
+      })
+      .add(() => {
+        this.loadingBike.next(false);
+      });
+  }
+
+  reloadBike(variables: ReloadCargoBikeByIdQueryVariables) {
+    this.addLoadingRowId(variables.id);
+    this.reloadCargoBikeByIdGQL
       .fetch(variables)
       .subscribe((result) => {
         const newBike = result.data.cargoBikeById;

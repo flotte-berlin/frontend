@@ -1699,6 +1699,17 @@ export enum CacheControlScope {
 }
 
 
+export type GetCargoBikesQueryVariables = Exact<{ [key: string]: never; }>;
+
+
+export type GetCargoBikesQuery = (
+  { __typename?: 'Query' }
+  & { cargoBikes: Array<Maybe<(
+    { __typename?: 'CargoBike' }
+    & CargoBikeFieldsForTableFragment
+  )>> }
+);
+
 export type GetCargoBikeByIdQueryVariables = Exact<{
   id: Scalars['ID'];
 }>;
@@ -1708,7 +1719,20 @@ export type GetCargoBikeByIdQuery = (
   { __typename?: 'Query' }
   & { cargoBikeById?: Maybe<(
     { __typename?: 'CargoBike' }
-    & CargoBikeFieldsFragment
+    & CargoBikeFieldsForPageFragment
+  )> }
+);
+
+export type ReloadCargoBikeByIdQueryVariables = Exact<{
+  id: Scalars['ID'];
+}>;
+
+
+export type ReloadCargoBikeByIdQuery = (
+  { __typename?: 'Query' }
+  & { cargoBikeById?: Maybe<(
+    { __typename?: 'CargoBike' }
+    & CargoBikeFieldsForTableFragment
   )> }
 );
 
@@ -1721,7 +1745,7 @@ export type CreateCargoBikeMutation = (
   { __typename?: 'Mutation' }
   & { createCargoBike: (
     { __typename?: 'CargoBike' }
-    & CargoBikeFieldsFragment
+    & CargoBikeFieldsForTableFragment
   ) }
 );
 
@@ -1734,7 +1758,7 @@ export type UpdateCargoBikeMutation = (
   { __typename?: 'Mutation' }
   & { updateCargoBike: (
     { __typename?: 'CargoBike' }
-    & CargoBikeFieldsFragment
+    & CargoBikeFieldsForTableFragment
   ) }
 );
 
@@ -1747,7 +1771,7 @@ export type LockCargoBikeMutation = (
   { __typename?: 'Mutation' }
   & { lockCargoBike: (
     { __typename?: 'CargoBike' }
-    & CargoBikeFieldsFragment
+    & CargoBikeFieldsForTableFragment
   ) }
 );
 
@@ -1760,7 +1784,7 @@ export type UnlockCargoBikeMutation = (
   { __typename?: 'Mutation' }
   & { unlockCargoBike: (
     { __typename?: 'CargoBike' }
-    & CargoBikeFieldsFragment
+    & CargoBikeFieldsForTableFragment
   ) }
 );
 
@@ -1774,32 +1798,14 @@ export type DeleteCargoBikeMutation = (
   & Pick<Mutation, 'deleteCargoBike'>
 );
 
-export type GetCargoBikesQueryVariables = Exact<{ [key: string]: never; }>;
-
-
-export type GetCargoBikesQuery = (
-  { __typename?: 'Query' }
-  & { cargoBikes: Array<Maybe<(
-    { __typename?: 'CargoBike' }
-    & CargoBikeFieldsFragment
-  )>> }
+export type AddressFieldsFragment = (
+  { __typename?: 'Address' }
+  & Pick<Address, 'street' | 'number' | 'zip'>
 );
 
-export type BikeEventFieldsFragment = (
-  { __typename?: 'BikeEvent' }
-  & Pick<BikeEvent, 'id' | 'date'>
-  & { bikeEventType: (
-    { __typename?: 'BikeEventType' }
-    & Pick<BikeEventType, 'id' | 'name' | 'isLocked' | 'isLockedByMe'>
-  ), responsible?: Maybe<(
-    { __typename?: 'Participant' }
-    & Pick<Participant, 'id'>
-  )> }
-);
-
-export type CargoBikeFieldsMutableFragment = (
+export type CargoBikeFieldsForTableFragment = (
   { __typename?: 'CargoBike' }
-  & Pick<CargoBike, 'id' | 'group' | 'name' | 'modelName' | 'numberOfChildren' | 'numberOfWheels' | 'forCargo' | 'forChildren' | 'stickerBikeNameState' | 'note'>
+  & Pick<CargoBike, 'id' | 'group' | 'name' | 'modelName' | 'numberOfChildren' | 'numberOfWheels' | 'forCargo' | 'forChildren' | 'stickerBikeNameState' | 'note' | 'isLocked' | 'isLockedByMe' | 'lockedBy' | 'lockedUntil'>
   & { insuranceData: (
     { __typename?: 'InsuranceData' }
     & Pick<InsuranceData, 'billing' | 'hasFixedRate' | 'name' | 'benefactor' | 'noPnP' | 'maintenanceResponsible' | 'maintenanceBenefactor' | 'maintenanceAgreement' | 'fixedRate' | 'projectAllowance' | 'notes'>
@@ -1815,29 +1821,126 @@ export type CargoBikeFieldsMutableFragment = (
   )>, taxes?: Maybe<(
     { __typename?: 'Taxes' }
     & Pick<Taxes, 'costCenter' | 'organisationArea'>
-  )> }
-);
-
-export type CargoBikeFieldsFragment = (
-  { __typename?: 'CargoBike' }
-  & Pick<CargoBike, 'isLocked' | 'isLockedByMe' | 'lockedBy' | 'lockedUntil'>
-  & { provider?: Maybe<(
+  )>, provider?: Maybe<(
     { __typename?: 'Provider' }
     & ProviderFieldsGeneralFragment
   )>, lendingStation?: Maybe<(
     { __typename?: 'LendingStation' }
-    & LendingStationFieldsGeneralFragment
+    & LendingStationFieldsForBikePageFragment
   )> }
-  & CargoBikeFieldsMutableFragment
 );
 
-export type LendingStationFieldsGeneralFragment = (
+export type CargoBikeFieldsForPageFragment = (
+  { __typename?: 'CargoBike' }
+  & { bikeEvents?: Maybe<Array<Maybe<(
+    { __typename?: 'BikeEvent' }
+    & BikeEventFieldsForBikePageFragment
+  )>>>, equipment?: Maybe<Array<Maybe<(
+    { __typename?: 'Equipment' }
+    & EquipmentFieldsForBikePageFragment
+  )>>>, equipmentType?: Maybe<Array<Maybe<(
+    { __typename?: 'EquipmentType' }
+    & EquipmentTypeFieldsForBikePageFragment
+  )>>>, engagement?: Maybe<Array<Maybe<(
+    { __typename?: 'Engagement' }
+    & EngagementFieldsForBikePageFragment
+  )>>>, currentEngagements?: Maybe<Array<Maybe<(
+    { __typename?: 'Engagement' }
+    & EngagementFieldsForBikePageFragment
+  )>>>, timeFrames?: Maybe<Array<Maybe<(
+    { __typename?: 'TimeFrame' }
+    & TimeFrameFieldsForBikePageFragment
+  )>>> }
+  & CargoBikeFieldsForTableFragment
+);
+
+export type BikeEventFieldsForBikePageFragment = (
+  { __typename?: 'BikeEvent' }
+  & Pick<BikeEvent, 'id' | 'date'>
+  & { bikeEventType: (
+    { __typename?: 'BikeEventType' }
+    & BikeEventTypeFieldsFragment
+  ), responsible?: Maybe<(
+    { __typename?: 'Participant' }
+    & Pick<Participant, 'id'>
+    & ParticipantFieldsForBikePageFragment
+  )> }
+);
+
+export type BikeEventTypeFieldsFragment = (
+  { __typename?: 'BikeEventType' }
+  & Pick<BikeEventType, 'id' | 'name' | 'isLocked' | 'isLockedByMe' | 'lockedUntil'>
+);
+
+export type ContactInformationFieldsFragment = (
+  { __typename?: 'ContactInformation' }
+  & Pick<ContactInformation, 'id' | 'phone' | 'phone2' | 'email' | 'email2' | 'note' | 'isLocked' | 'isLockedByMe' | 'lockedBy' | 'lockedUntil'>
+  & { person: (
+    { __typename?: 'Person' }
+    & PersonFieldsFragment
+  ) }
+);
+
+export type EngagementFieldsForBikePageFragment = (
+  { __typename?: 'Engagement' }
+  & Pick<Engagement, 'id' | 'from' | 'to' | 'isLocked' | 'isLockedByMe' | 'lockedBy' | 'lockedUntil'>
+  & { engagementType: (
+    { __typename?: 'EngagementType' }
+    & EngagementTypeFieldsFragment
+  ), participant: (
+    { __typename?: 'Participant' }
+    & ParticipantFieldsForBikePageFragment
+  ) }
+);
+
+export type EngagementTypeFieldsFragment = (
+  { __typename?: 'EngagementType' }
+  & Pick<EngagementType, 'id' | 'name' | 'description' | 'isLocked' | 'isLockedByMe' | 'lockedBy' | 'lockedUntil'>
+);
+
+export type EquipmentFieldsForBikePageFragment = (
+  { __typename?: 'Equipment' }
+  & Pick<Equipment, 'id' | 'serialNo' | 'title' | 'description' | 'isLocked' | 'isLockedByMe' | 'lockedBy' | 'lockedUntil'>
+);
+
+export type EquipmentTypeFieldsForBikePageFragment = (
+  { __typename?: 'EquipmentType' }
+  & Pick<EquipmentType, 'id' | 'name' | 'description' | 'isLocked' | 'isLockedByMe' | 'lockedBy' | 'lockedUntil'>
+);
+
+export type LendingStationFieldsForBikePageFragment = (
   { __typename?: 'LendingStation' }
   & Pick<LendingStation, 'id' | 'name'>
   & { address: (
     { __typename?: 'Address' }
-    & Pick<Address, 'number' | 'street' | 'zip'>
+    & AddressFieldsFragment
+  ), organisation?: Maybe<(
+    { __typename?: 'Organisation' }
+    & OrganisationFieldsForTimeFrameFragment
+  )> }
+);
+
+export type OrganisationFieldsForTimeFrameFragment = (
+  { __typename?: 'Organisation' }
+  & Pick<Organisation, 'id' | 'name'>
+  & { address?: Maybe<(
+    { __typename?: 'Address' }
+    & AddressFieldsFragment
+  )> }
+);
+
+export type ParticipantFieldsForBikePageFragment = (
+  { __typename?: 'Participant' }
+  & Pick<Participant, 'id' | 'start' | 'end' | 'usernamefLotte' | 'usernameSlack' | 'isLocked' | 'isLockedByMe' | 'lockedBy' | 'lockedUntil'>
+  & { contactInformation: (
+    { __typename?: 'ContactInformation' }
+    & ContactInformationFieldsFragment
   ) }
+);
+
+export type PersonFieldsFragment = (
+  { __typename?: 'Person' }
+  & Pick<Person, 'id' | 'name' | 'firstName' | 'isLocked' | 'isLockedByMe' | 'lockedBy' | 'lockedUntil'>
 );
 
 export type ProviderFieldsGeneralFragment = (
@@ -1857,23 +1960,63 @@ export type ProviderFieldsGeneralFragment = (
   )> }
 );
 
-export const BikeEventFieldsFragmentDoc = gql`
-    fragment BikeEventFields on BikeEvent {
+export type TimeFrameFieldsForBikePageFragment = (
+  { __typename?: 'TimeFrame' }
+  & Pick<TimeFrame, 'id' | 'from' | 'to' | 'note' | 'isLocked' | 'isLockedByMe' | 'lockedBy' | 'lockedUntil'>
+  & { lendingStation: (
+    { __typename?: 'LendingStation' }
+    & LendingStationFieldsForBikePageFragment
+  ) }
+);
+
+export const ProviderFieldsGeneralFragmentDoc = gql`
+    fragment ProviderFieldsGeneral on Provider {
   id
-  date
-  bikeEventType {
+  formName
+  privatePerson {
     id
-    name
-    isLocked
-    isLockedByMe
-  }
-  responsible {
-    id
+    person {
+      id
+      name
+      firstName
+      contactInformation {
+        email
+      }
+    }
   }
 }
     `;
-export const CargoBikeFieldsMutableFragmentDoc = gql`
-    fragment CargoBikeFieldsMutable on CargoBike {
+export const AddressFieldsFragmentDoc = gql`
+    fragment AddressFields on Address {
+  street
+  number
+  zip
+}
+    `;
+export const OrganisationFieldsForTimeFrameFragmentDoc = gql`
+    fragment OrganisationFieldsForTimeFrame on Organisation {
+  id
+  name
+  address {
+    ...AddressFields
+  }
+}
+    ${AddressFieldsFragmentDoc}`;
+export const LendingStationFieldsForBikePageFragmentDoc = gql`
+    fragment LendingStationFieldsForBikePage on LendingStation {
+  id
+  name
+  address {
+    ...AddressFields
+  }
+  organisation {
+    ...OrganisationFieldsForTimeFrame
+  }
+}
+    ${AddressFieldsFragmentDoc}
+${OrganisationFieldsForTimeFrameFragmentDoc}`;
+export const CargoBikeFieldsForTableFragmentDoc = gql`
+    fragment CargoBikeFieldsForTable on CargoBike {
   id
   group
   name
@@ -1955,60 +2098,209 @@ export const CargoBikeFieldsMutableFragmentDoc = gql`
     costCenter
     organisationArea
   }
-}
-    `;
-export const ProviderFieldsGeneralFragmentDoc = gql`
-    fragment ProviderFieldsGeneral on Provider {
-  id
-  formName
-  privatePerson {
-    id
-    person {
-      id
-      name
-      firstName
-      contactInformation {
-        email
-      }
-    }
-  }
-}
-    `;
-export const LendingStationFieldsGeneralFragmentDoc = gql`
-    fragment LendingStationFieldsGeneral on LendingStation {
-  id
-  name
-  address {
-    number
-    street
-    zip
-  }
-}
-    `;
-export const CargoBikeFieldsFragmentDoc = gql`
-    fragment CargoBikeFields on CargoBike {
-  ...CargoBikeFieldsMutable
   provider {
     ...ProviderFieldsGeneral
   }
   lendingStation {
-    ...LendingStationFieldsGeneral
+    ...LendingStationFieldsForBikePage
   }
   isLocked
   isLockedByMe
   lockedBy
   lockedUntil
 }
-    ${CargoBikeFieldsMutableFragmentDoc}
-${ProviderFieldsGeneralFragmentDoc}
-${LendingStationFieldsGeneralFragmentDoc}`;
+    ${ProviderFieldsGeneralFragmentDoc}
+${LendingStationFieldsForBikePageFragmentDoc}`;
+export const BikeEventTypeFieldsFragmentDoc = gql`
+    fragment BikeEventTypeFields on BikeEventType {
+  id
+  name
+  isLocked
+  isLockedByMe
+  lockedUntil
+}
+    `;
+export const PersonFieldsFragmentDoc = gql`
+    fragment PersonFields on Person {
+  id
+  name
+  firstName
+  isLocked
+  isLockedByMe
+  lockedBy
+  lockedUntil
+}
+    `;
+export const ContactInformationFieldsFragmentDoc = gql`
+    fragment ContactInformationFields on ContactInformation {
+  id
+  person {
+    ...PersonFields
+  }
+  phone
+  phone2
+  email
+  email2
+  note
+  isLocked
+  isLockedByMe
+  lockedBy
+  lockedUntil
+}
+    ${PersonFieldsFragmentDoc}`;
+export const ParticipantFieldsForBikePageFragmentDoc = gql`
+    fragment ParticipantFieldsForBikePage on Participant {
+  id
+  start
+  end
+  usernamefLotte
+  usernameSlack
+  contactInformation {
+    ...ContactInformationFields
+  }
+  isLocked
+  isLockedByMe
+  lockedBy
+  lockedUntil
+}
+    ${ContactInformationFieldsFragmentDoc}`;
+export const BikeEventFieldsForBikePageFragmentDoc = gql`
+    fragment BikeEventFieldsForBikePage on BikeEvent {
+  id
+  bikeEventType {
+    ...BikeEventTypeFields
+  }
+  responsible {
+    ...ParticipantFieldsForBikePage
+    id
+  }
+  date
+  responsible {
+    id
+  }
+}
+    ${BikeEventTypeFieldsFragmentDoc}
+${ParticipantFieldsForBikePageFragmentDoc}`;
+export const EquipmentFieldsForBikePageFragmentDoc = gql`
+    fragment EquipmentFieldsForBikePage on Equipment {
+  id
+  serialNo
+  title
+  description
+  isLocked
+  isLockedByMe
+  lockedBy
+  lockedUntil
+}
+    `;
+export const EquipmentTypeFieldsForBikePageFragmentDoc = gql`
+    fragment EquipmentTypeFieldsForBikePage on EquipmentType {
+  id
+  name
+  description
+  isLocked
+  isLockedByMe
+  lockedBy
+  lockedUntil
+}
+    `;
+export const EngagementTypeFieldsFragmentDoc = gql`
+    fragment EngagementTypeFields on EngagementType {
+  id
+  name
+  description
+  isLocked
+  isLockedByMe
+  lockedBy
+  lockedUntil
+}
+    `;
+export const EngagementFieldsForBikePageFragmentDoc = gql`
+    fragment EngagementFieldsForBikePage on Engagement {
+  id
+  engagementType {
+    ...EngagementTypeFields
+  }
+  from
+  to
+  participant {
+    ...ParticipantFieldsForBikePage
+  }
+  isLocked
+  isLockedByMe
+  lockedBy
+  lockedUntil
+}
+    ${EngagementTypeFieldsFragmentDoc}
+${ParticipantFieldsForBikePageFragmentDoc}`;
+export const TimeFrameFieldsForBikePageFragmentDoc = gql`
+    fragment TimeFrameFieldsForBikePage on TimeFrame {
+  id
+  from
+  to
+  note
+  lendingStation {
+    ...LendingStationFieldsForBikePage
+  }
+  isLocked
+  isLockedByMe
+  lockedBy
+  lockedUntil
+}
+    ${LendingStationFieldsForBikePageFragmentDoc}`;
+export const CargoBikeFieldsForPageFragmentDoc = gql`
+    fragment CargoBikeFieldsForPage on CargoBike {
+  ...CargoBikeFieldsForTable
+  bikeEvents {
+    ...BikeEventFieldsForBikePage
+  }
+  equipment(offset: 0, limit: 1000) {
+    ...EquipmentFieldsForBikePage
+  }
+  equipmentType {
+    ...EquipmentTypeFieldsForBikePage
+  }
+  engagement(offset: 0, limit: 1000) {
+    ...EngagementFieldsForBikePage
+  }
+  currentEngagements {
+    ...EngagementFieldsForBikePage
+  }
+  timeFrames {
+    ...TimeFrameFieldsForBikePage
+  }
+}
+    ${CargoBikeFieldsForTableFragmentDoc}
+${BikeEventFieldsForBikePageFragmentDoc}
+${EquipmentFieldsForBikePageFragmentDoc}
+${EquipmentTypeFieldsForBikePageFragmentDoc}
+${EngagementFieldsForBikePageFragmentDoc}
+${TimeFrameFieldsForBikePageFragmentDoc}`;
+export const GetCargoBikesDocument = gql`
+    query GetCargoBikes {
+  cargoBikes(limit: 1000, offset: 0) {
+    ...CargoBikeFieldsForTable
+  }
+}
+    ${CargoBikeFieldsForTableFragmentDoc}`;
+
+  @Injectable({
+    providedIn: 'root'
+  })
+  export class GetCargoBikesGQL extends Apollo.Query<GetCargoBikesQuery, GetCargoBikesQueryVariables> {
+    document = GetCargoBikesDocument;
+    
+    constructor(apollo: Apollo.Apollo) {
+      super(apollo);
+    }
+  }
 export const GetCargoBikeByIdDocument = gql`
     query GetCargoBikeById($id: ID!) {
   cargoBikeById(id: $id) {
-    ...CargoBikeFields
+    ...CargoBikeFieldsForPage
   }
 }
-    ${CargoBikeFieldsFragmentDoc}`;
+    ${CargoBikeFieldsForPageFragmentDoc}`;
 
   @Injectable({
     providedIn: 'root'
@@ -2020,13 +2312,31 @@ export const GetCargoBikeByIdDocument = gql`
       super(apollo);
     }
   }
+export const ReloadCargoBikeByIdDocument = gql`
+    query ReloadCargoBikeById($id: ID!) {
+  cargoBikeById(id: $id) {
+    ...CargoBikeFieldsForTable
+  }
+}
+    ${CargoBikeFieldsForTableFragmentDoc}`;
+
+  @Injectable({
+    providedIn: 'root'
+  })
+  export class ReloadCargoBikeByIdGQL extends Apollo.Query<ReloadCargoBikeByIdQuery, ReloadCargoBikeByIdQueryVariables> {
+    document = ReloadCargoBikeByIdDocument;
+    
+    constructor(apollo: Apollo.Apollo) {
+      super(apollo);
+    }
+  }
 export const CreateCargoBikeDocument = gql`
     mutation CreateCargoBike($bike: CargoBikeCreateInput!) {
   createCargoBike(cargoBike: $bike) {
-    ...CargoBikeFields
+    ...CargoBikeFieldsForTable
   }
 }
-    ${CargoBikeFieldsFragmentDoc}`;
+    ${CargoBikeFieldsForTableFragmentDoc}`;
 
   @Injectable({
     providedIn: 'root'
@@ -2041,10 +2351,10 @@ export const CreateCargoBikeDocument = gql`
 export const UpdateCargoBikeDocument = gql`
     mutation UpdateCargoBike($bike: CargoBikeUpdateInput!) {
   updateCargoBike(cargoBike: $bike) {
-    ...CargoBikeFields
+    ...CargoBikeFieldsForTable
   }
 }
-    ${CargoBikeFieldsFragmentDoc}`;
+    ${CargoBikeFieldsForTableFragmentDoc}`;
 
   @Injectable({
     providedIn: 'root'
@@ -2059,10 +2369,10 @@ export const UpdateCargoBikeDocument = gql`
 export const LockCargoBikeDocument = gql`
     mutation LockCargoBike($id: ID!) {
   lockCargoBike(id: $id) {
-    ...CargoBikeFields
+    ...CargoBikeFieldsForTable
   }
 }
-    ${CargoBikeFieldsFragmentDoc}`;
+    ${CargoBikeFieldsForTableFragmentDoc}`;
 
   @Injectable({
     providedIn: 'root'
@@ -2077,10 +2387,10 @@ export const LockCargoBikeDocument = gql`
 export const UnlockCargoBikeDocument = gql`
     mutation UnlockCargoBike($id: ID!) {
   unlockCargoBike(id: $id) {
-    ...CargoBikeFields
+    ...CargoBikeFieldsForTable
   }
 }
-    ${CargoBikeFieldsFragmentDoc}`;
+    ${CargoBikeFieldsForTableFragmentDoc}`;
 
   @Injectable({
     providedIn: 'root'
@@ -2103,24 +2413,6 @@ export const DeleteCargoBikeDocument = gql`
   })
   export class DeleteCargoBikeGQL extends Apollo.Mutation<DeleteCargoBikeMutation, DeleteCargoBikeMutationVariables> {
     document = DeleteCargoBikeDocument;
-    
-    constructor(apollo: Apollo.Apollo) {
-      super(apollo);
-    }
-  }
-export const GetCargoBikesDocument = gql`
-    query GetCargoBikes {
-  cargoBikes(limit: 1000, offset: 0) {
-    ...CargoBikeFields
-  }
-}
-    ${CargoBikeFieldsFragmentDoc}`;
-
-  @Injectable({
-    providedIn: 'root'
-  })
-  export class GetCargoBikesGQL extends Apollo.Query<GetCargoBikesQuery, GetCargoBikesQueryVariables> {
-    document = GetCargoBikesDocument;
     
     constructor(apollo: Apollo.Apollo) {
       super(apollo);

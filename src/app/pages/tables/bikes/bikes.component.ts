@@ -1,5 +1,5 @@
 import { SelectionModel } from '@angular/cdk/collections';
-import { Component, Inject, ViewChild } from '@angular/core';
+import { Component, ViewChild } from '@angular/core';
 import { CdkDragDrop, moveItemInArray } from '@angular/cdk/drag-drop';
 import { BikesService, CargoBikeResult } from 'src/app/services/bikes.service';
 import { flatten } from 'src/app/helperFunctions/flattenObject';
@@ -10,11 +10,9 @@ import { logArrayInColumnInfoForm } from 'src/app/helperFunctions/logArrayInColu
 import { MatTableDataSource } from '@angular/material/table';
 import { MatPaginator } from '@angular/material/paginator';
 import { MatSort } from '@angular/material/sort';
-import { BehaviorSubject } from 'rxjs';
 import {
   MatDialog,
   MatDialogRef,
-  MAT_DIALOG_DATA,
 } from '@angular/material/dialog';
 
 @Component({
@@ -32,8 +30,9 @@ export class BikesComponent {
     sticky?: boolean;
     readonly?: boolean;
     type?: string;
+    link?: (row: any)=> string;
   }[] = [
-    { name: 'name', header: 'Name', sticky: true },
+    { name: 'name', header: 'Name', sticky: true, link: (row: any) => {return "/bike/" + row.id}},
     { name: 'id', header: 'ID', readonly: true },
     { name: 'group', header: 'Gruppe' },
     { name: 'modelName', header: 'Modell' },
@@ -141,7 +140,9 @@ export class BikesComponent {
     private bikesService: BikesService,
     private schemaService: SchemaService,
     public dialog: MatDialog
-  ) {}
+  ) {
+    console.log(this.columnInfo[0].link({id: 66}));
+  }
 
   ngAfterViewInit() {
     this.addColumnPropertiesFromGQLSchemaToColumnInfo();

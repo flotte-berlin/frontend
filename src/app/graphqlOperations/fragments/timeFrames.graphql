@@ -1,0 +1,13 @@
+fragment TimeFrameFieldsForBikePage on TimeFrame {
+    id
+    from 
+    to
+    note
+    lendingStation {
+        ...LendingStationFieldsForBikePage
+    }
+    isLocked
+  isLockedByMe
+  lockedBy
+  lockedUntil
+}

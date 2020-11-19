@@ -1,4 +1,4 @@
-fragment CargoBikeFieldsMutable on CargoBike {
+fragment CargoBikeFieldsForTable on CargoBike {
   id
   group
   name
@@ -61,18 +61,36 @@ fragment CargoBikeFieldsMutable on CargoBike {
     costCenter
     organisationArea
   }
-}
-
-fragment CargoBikeFields on CargoBike {
-  ...CargoBikeFieldsMutable
   provider {
     ...ProviderFieldsGeneral
   }
   lendingStation {
-    ...LendingStationFieldsGeneral
+    ...LendingStationFieldsForBikePage
   }
   isLocked
   isLockedByMe
   lockedBy
   lockedUntil
+}
+
+fragment CargoBikeFieldsForPage on CargoBike {
+...CargoBikeFieldsForTable
+bikeEvents {
+  ...BikeEventFieldsForBikePage
+}
+equipment(offset: 0, limit: 1000) {
+  ...EquipmentFieldsForBikePage
+}
+equipmentType {
+ ...EquipmentTypeFieldsForBikePage 
+}
+engagement(offset: 0, limit: 1000) {
+  ...EngagementFieldsForBikePage
+}
+currentEngagements {
+  ...EngagementFieldsForBikePage
+}
+timeFrames {
+  ...TimeFrameFieldsForBikePage
+}
 }

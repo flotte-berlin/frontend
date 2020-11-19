@@ -1,0 +1,7 @@
+fragment OrganisationFieldsForTimeFrame on Organisation {
+  id
+  name
+  address {
+    ...AddressFields
+  }
+}

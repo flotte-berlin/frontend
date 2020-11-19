@@ -1,0 +1,16 @@
+fragment ContactInformationFields on ContactInformation {
+    id
+    person {
+      ...PersonFields
+    }
+    phone
+    phone2
+    email
+    email2
+    note
+
+    isLocked
+  isLockedByMe
+  lockedBy
+  lockedUntil
+}

@@ -42,6 +42,7 @@
     />
   </mat-form-field>
   <ng-template #nonEditableText>
-    {{ value }}
+    <span *ngIf="!link">{{ value }}</span>
+    <a mat-button color="primary" *ngIf="link" [routerLink]="link">{{value}}</a>
   </ng-template>
 </div>

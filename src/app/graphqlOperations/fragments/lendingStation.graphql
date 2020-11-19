@@ -1,9 +1,10 @@
-fragment LendingStationFieldsGeneral on LendingStation {
+fragment LendingStationFieldsForBikePage on LendingStation {
   id
   name
   address {
-    number
-    street
-    zip
+    ...AddressFields
+  }
+  organisation {
+    ...OrganisationFieldsForTimeFrame
   }
 }
