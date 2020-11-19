@@ -32,6 +32,8 @@ export class CellComponent {
   required: boolean = false;
   @Input()
   link: string = null;
+  @Input()
+  label: string = null;
   @Output() validityChange = new EventEmitter<boolean>();
   isValid: boolean = true;
 

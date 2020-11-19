@@ -1,5 +1,6 @@
 import { Component, OnInit } from '@angular/core';
 import { ActivatedRoute } from '@angular/router';
+import { flatten } from 'src/app/helperFunctions/flattenObject';
 import { BikesService } from 'src/app/services/bikes.service';
 import { SchemaService } from 'src/app/services/schema.service';
 
@@ -117,14 +118,13 @@ export class BikeComponent implements OnInit {
     private schemaService: SchemaService
   ) {
     this.addPropertiesFromGQLSchemaToPropertiesInfo();
-    console.log(this.propertiesInfo);
   }
 
   ngOnInit(): void {
     this.id = this.route.snapshot.paramMap.get('id');
     this.bikesService.loadCargoBike({ id: this.id });
     this.bikesService.bike.subscribe((data) => {
-      this.data = data;
+      this.data = flatten(data);
     });
     this.bikesService.loadingBike.subscribe(
       (isLoading) => (this.isLoading = isLoading)

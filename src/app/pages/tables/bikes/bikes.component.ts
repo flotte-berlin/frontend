@@ -10,10 +10,7 @@ import { logArrayInColumnInfoForm } from 'src/app/helperFunctions/logArrayInColu
 import { MatTableDataSource } from '@angular/material/table';
 import { MatPaginator } from '@angular/material/paginator';
 import { MatSort } from '@angular/material/sort';
-import {
-  MatDialog,
-  MatDialogRef,
-} from '@angular/material/dialog';
+import { MatDialog, MatDialogRef } from '@angular/material/dialog';
 
 @Component({
   selector: 'app-bikes',
@@ -30,9 +27,16 @@ export class BikesComponent {
     sticky?: boolean;
     readonly?: boolean;
     type?: string;
-    link?: (row: any)=> string;
+    link?: (row: any) => string;
   }[] = [
-    { name: 'name', header: 'Name', sticky: true, link: (row: any) => {return "/bike/" + row.id}},
+    {
+      name: 'name',
+      header: 'Name',
+      sticky: true,
+      link: (row: any) => {
+        return '/bike/' + row.id;
+      },
+    },
     { name: 'id', header: 'ID', readonly: true },
     { name: 'group', header: 'Gruppe' },
     { name: 'modelName', header: 'Modell' },
@@ -140,9 +144,7 @@ export class BikesComponent {
     private bikesService: BikesService,
     private schemaService: SchemaService,
     public dialog: MatDialog
-  ) {
-    console.log(this.columnInfo[0].link({id: 66}));
-  }
+  ) {}
 
   ngAfterViewInit() {
     this.addColumnPropertiesFromGQLSchemaToColumnInfo();
@@ -285,7 +287,7 @@ export class BikesComponent {
 
   addNewObject() {
     this.paginator.firstPage();
-    this.setFilter({...this.filter, includesString: ""});
+    this.setFilter({ ...this.filter, includesString: '' });
     this.resetSorting();
     this.data.data = [
       { newObject: true, id: this.getNewId() },
@@ -317,9 +319,9 @@ export class BikesComponent {
     this.bikesService.lockBike({ id: row.id });
   }
 
-  countUnsavedRows():number {
+  countUnsavedRows(): number {
     let unsavedCount = 0;
-    for(const row of this.data.data) {
+    for (const row of this.data.data) {
       if (row.isLockedByMe || row.newObject) {
         unsavedCount++;
       }
@@ -383,7 +385,7 @@ export class BikesComponent {
 
   showOnlyUnsavedElements(value: boolean) {
     this.filter.onlyUnsaved = value;
-    this.filter.includesString = "";
+    this.filter.includesString = '';
     this.applyFilter();
   }
 

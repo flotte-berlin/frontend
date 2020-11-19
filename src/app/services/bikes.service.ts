@@ -96,7 +96,6 @@ export class BikesService {
   }
 
   createBike(variables: CreateCargoBikeMutationVariables) {
-    console.log(variables);
     this.createCargoBikeGQL
       .mutate(variables)
       .subscribe((result) => {

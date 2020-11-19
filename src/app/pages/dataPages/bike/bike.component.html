@@ -11,8 +11,9 @@
 
   <div *ngFor="let prop of propertiesInfo">
     <app-cell
-      [editable]="!prop.readonly && data.isLockedByMe"
+      [editable]="data.isLockedByMe && !prop.readonly"
       [(value)]="data[prop.name]"
+      [label]="prop.translation || prop.name"
       [inputType]="prop.type"
     ></app-cell>
   </div>
