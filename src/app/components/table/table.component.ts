@@ -7,7 +7,7 @@ import {
   ViewChild,
 } from '@angular/core';
 import { CdkDragDrop, moveItemInArray } from '@angular/cdk/drag-drop';
-import { BikesService, CargoBikeResult } from 'src/app/services/bikes.service';
+import { CargoBikeResult } from 'src/app/services/bikes.service';
 import { flatten } from 'src/app/helperFunctions/flattenObject';
 import { deepen } from 'src/app/helperFunctions/deepenObject';
 import { SchemaService } from 'src/app/services/schema.service';
@@ -65,17 +65,16 @@ export class TableComponent {
   relockingInterval = null;
 
   @Input()
-  relockingIntervalDuration = 1000 * 60 * 1;
+  relockingIntervalDuration = 1000 * 10 * 1; // TODO: set back to 60s
   filter = { includesString: '', onlyUnsaved: false };
   initialFilter = this.filter;
   isLoaded = false;
 
   @Output() createEvent = new EventEmitter();
-  @Output() editEvent = new EventEmitter();
+  @Output() lockEvent = new EventEmitter();
   @Output() saveEvent = new EventEmitter();
   @Output() cancelEvent = new EventEmitter();
   @Output() deleteEvent = new EventEmitter();
-  @Output() relockEvent = new EventEmitter();
 
   constructor(private schemaService: SchemaService, public dialog: MatDialog) {}
 
@@ -128,6 +127,7 @@ export class TableComponent {
         } else if (!(oldRow.isLockedByMe && row.isLockedByMe)) {
           tempDataSource.push(flatten(row));
         } else if (!!oldRow) {
+          //old row is getting edited
           tempDataSource.push(oldRow);
         }
       }
@@ -143,7 +143,7 @@ export class TableComponent {
     this.relockingInterval = setInterval(() => {
       for (const row of this.data.data) {
         if (row.isLockedByMe) {
-          this.relock(row);
+          this.lock(row);
         }
       }
     }, this.relockingIntervalDuration);
@@ -253,12 +253,8 @@ export class TableComponent {
     this.createEvent.emit(newRow);
   }
 
-  edit(row: any) {
-    this.editEvent.emit(row);
-  }
-
-  relock(row: any) {
-    this.relockEvent.emit(row);
+  lock(row: any) {
+    this.lockEvent.emit(deepen(row));
   }
 
   countUnsavedRows(): number {

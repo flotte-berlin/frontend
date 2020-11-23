@@ -136,7 +136,7 @@
             <div class="button-wrapper" *ngIf="!element.newObject">
               <button
                 mat-icon-button
-                (click)="edit(element)"
+                (click)="lock(element)"
                 *ngIf="
                   !element.isLockedByMe &&
                   !element.isLocked &&

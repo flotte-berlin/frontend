@@ -10,12 +10,7 @@ import { SchemaService } from 'src/app/services/schema.service';
   styleUrls: ['./bike.component.scss'],
 })
 export class BikeComponent implements OnInit {
-  propertiesInfo: {
-    name: string;
-    translation: string;
-    readonly?: boolean;
-    type?: string;
-  }[] = [
+  propertiesInfo = [
     { name: 'name', translation: 'Name' },
     { name: 'id', translation: 'ID', readonly: true },
     { name: 'group', translation: 'Gruppe' },
@@ -105,46 +100,22 @@ export class BikeComponent implements OnInit {
   ];
 
   headlineDataPath = 'name';
-  pageDataGQLType: string = "CargoBike";
-  pageDataGQLUpdateInputType: string = "CargoBikeUpdateInput"
+  pageDataGQLType: string = 'CargoBike';
+  pageDataGQLUpdateInputType: string = 'CargoBikeUpdateInput';
 
-  id: string;
-  data: any;
-  isLoading: boolean = false;
+  dataService: any;
 
-  constructor(
-    private route: ActivatedRoute,
-    private bikesService: BikesService,
-    private schemaService: SchemaService
-  ) {
-    this.addPropertiesFromGQLSchemaToPropertiesInfo();
-  }
+  constructor(private bikesService: BikesService) {}
 
   ngOnInit(): void {
-    this.id = this.route.snapshot.paramMap.get('id');
-    this.bikesService.loadPageData({ id: this.id });
-    this.bikesService.pageData.subscribe((data) => {
-      this.data = flatten(data);
-    });
-    this.bikesService.loadingBike.subscribe(
-      (isLoading) => (this.isLoading = isLoading)
-    );
+    this.dataService = this.bikesService;
   }
 
-  addPropertiesFromGQLSchemaToPropertiesInfo() {
-    for (const column of this.propertiesInfo) {
-      const typeInformation = this.schemaService.getTypeInformation(
-        this.pageDataGQLType,
-        column.name
-      );
-      column.type = column.type || typeInformation.type;
-    }
-    for (const column of this.propertiesInfo) {
-      const typeInformation = this.schemaService.getTypeInformation(
-        this.pageDataGQLUpdateInputType,
-        column.name
-      );
-      column.readonly = column.readonly || !typeInformation.isPartOfType;
-    }
+  lock(row: any) {
+    this.bikesService.lockBike({id: row.id});  
+  }
+
+  save(row: any) {
+    this.bikesService.updateBike({bike: row})
   }
 }

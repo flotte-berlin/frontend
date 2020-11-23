@@ -45,7 +45,8 @@ import {SidenavProfileComponent} from './components/sidenav-profile/sidenav-prof
 import { NavService }from './components/menu-list-item/nav.service';
 import { TokenInterceptor } from './helper/token.interceptor';
 import { BikeComponent } from './pages/dataPages/bike/bike.component';
-import { TableComponent, DeleteConfirmationDialog } from './components/table/table.component'
+import { TableComponent, DeleteConfirmationDialog } from './components/table/table.component';
+import { DataPageComponent } from './components/data-page/data-page.component'
 
 
 @NgModule({
@@ -61,7 +62,8 @@ import { TableComponent, DeleteConfirmationDialog } from './components/table/tab
     CellComponent,
     DeleteConfirmationDialog,
     BikeComponent,
-    TableComponent
+    TableComponent,
+    DataPageComponent
   ],
   imports: [
     BrowserModule,

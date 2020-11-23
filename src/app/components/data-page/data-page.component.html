@@ -1,0 +1,62 @@
+<mat-spinner
+  *ngIf="isLoading"
+  [diameter]="32"
+  class="page-loading-spinner"
+></mat-spinner>
+<div class="page-wrapper" *ngIf="!isLoading && !data">
+  <h1>Seite konnte nicht gefunden werden :(</h1>
+</div>
+
+<div class="data-page-wrapper" *ngIf="data">
+  <h1>
+    {{ data[headlineDataPath] }}
+  </h1>
+
+  <div *ngFor="let prop of propertiesInfo">
+    <app-cell
+      [editable]="data.isLockedByMe && !prop.readonly"
+      [(value)]="data[prop.name]"
+      [label]="prop.translation || prop.name"
+      [inputType]="prop.type"
+    ></app-cell>
+  </div>
+</div>
+
+<button
+  mat-mini-fab
+  (click)="reloadPageData()"
+  class="floating-fab-button-top"
+  [disabled]="isSavingOrLocking || isLoading"
+  color="primary"
+  matTooltip="Daten aktualisieren. Achtung! Alle ungespeicherten Änderungen gehen verloren."
+>
+  <mat-icon>sync</mat-icon>
+</button>
+
+<button
+  mat-fab
+  (click)="lock()"
+  *ngIf="!data.isLockedByMe && !data.isLocked"
+  class="floating-fab-button"
+  color="primary"
+  [disabled]="isSavingOrLocking || isLoading"
+>
+  <mat-icon>edit</mat-icon>
+</button>
+<button
+  mat-fab
+  (click)="save()"
+  *ngIf="data.isLockedByMe"
+  class="floating-fab-button"
+  [disabled]="isSavingOrLocking || isLoading"
+>
+  <mat-icon>save</mat-icon>
+</button>
+<button
+  mat-fab
+  *ngIf="data.isLocked"
+  matTooltip="Dieser Eintrag wird gerade von einem anderen Bearbeiter editiert. Aktualisieren Sie die Seite, um den neuen Status abzurufen."
+  class="floating-fab-button"
+>
+  <mat-icon>locked</mat-icon>
+</button>

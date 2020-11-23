@@ -1,20 +1,9 @@
-<mat-spinner
-  *ngIf="isLoading"
-  [diameter]="32"
-  class="page-loading-spinner"
-></mat-spinner>
-<div class="page-wrapper" *ngIf="!isLoading && !data">
-  <h1>Seite konnte nicht gefunden werden :(</h1>
-</div>
-<div class="page-wrapper" *ngIf="data">
-  <h1>{{ data[headlineDataPath] }}</h1>
-
-  <div *ngFor="let prop of propertiesInfo">
-    <app-cell
-      [editable]="data.isLockedByMe && !prop.readonly"
-      [(value)]="data[prop.name]"
-      [label]="prop.translation || prop.name"
-      [inputType]="prop.type"
-    ></app-cell>
-  </div>
-</div>
+<app-data-page
+  [dataService]="dataService"
+  [propertiesInfo]="propertiesInfo"
+  [headlineDataPath]="headlineDataPath"
+  [pageDataGQLType]="pageDataGQLType"
+  [pageDataGQLUpdateInputType]="pageDataGQLUpdateInputType"
+  (lockEvent)="lock($event)"
+  (saveEvent)="save($event)"
+></app-data-page>

@@ -128,12 +128,8 @@ export class BikesComponent {
     this.bikesService.createBike({ bike: row });
   }
 
-  edit(row: any) {
+  lock(row: any) {
     this.bikesService.lockBike({ id: row.id });
-  }
-
-  relock(row: any) {
-    this.bikesService.relockBike({ id: row.id });
   }
 
   save(row: any) {
