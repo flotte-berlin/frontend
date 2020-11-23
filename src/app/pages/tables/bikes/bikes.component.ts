@@ -18,10 +18,10 @@ import { MatDialog, MatDialogRef } from '@angular/material/dialog';
   styleUrls: ['./bikes.component.scss'],
 })
 export class BikesComponent {
-  /** this array defines the columns and headers of the table and the order they are displayed  */
+  /** this array defines the columns and translations of the table and the order they are displayed  */
   columnInfo: {
     name: string;
-    header: string;
+    translation: string;
     acceptedForCreation?: boolean;
     requiredForCreation?: boolean;
     sticky?: boolean;
@@ -31,88 +31,88 @@ export class BikesComponent {
   }[] = [
     {
       name: 'name',
-      header: 'Name',
+      translation: 'Name',
       sticky: true,
       link: (row: any) => {
         return '/bike/' + row.id;
       },
     },
-    { name: 'id', header: 'ID', readonly: true },
-    { name: 'group', header: 'Gruppe' },
-    { name: 'modelName', header: 'Modell' },
-    { name: 'insuranceData.billing', header: 'Versicherung Abrechnung' },
-    { name: 'insuranceData.hasFixedRate', header: 'Pauschale j/n' },
-    { name: 'insuranceData.fixedRate', header: 'Pauschale Betrag' },
-    { name: 'insuranceData.name', header: 'Versicherer' },
-    { name: 'insuranceData.benefactor', header: 'Kostenträger' },
-    { name: 'insuranceData.noPnP', header: 'Nr. P&P' },
+    { name: 'id', translation: 'ID', readonly: true },
+    { name: 'group', translation: 'Gruppe' },
+    { name: 'modelName', translation: 'Modell' },
+    { name: 'insuranceData.billing', translation: 'Versicherung Abrechnung' },
+    { name: 'insuranceData.hasFixedRate', translation: 'Pauschale j/n' },
+    { name: 'insuranceData.fixedRate', translation: 'Pauschale Betrag' },
+    { name: 'insuranceData.name', translation: 'Versicherer' },
+    { name: 'insuranceData.benefactor', translation: 'Kostenträger' },
+    { name: 'insuranceData.noPnP', translation: 'Nr. P&P' },
     {
       name: 'insuranceData.maintenanceResponsible',
-      header: 'Wartung zuständig',
+      translation: 'Wartung zuständig',
     },
     {
       name: 'insuranceData.maintenanceBenefactor',
-      header: 'Wartung Kostenträger',
+      translation: 'Wartung Kostenträger',
     },
     {
       name: 'insuranceData.maintenanceAgreement',
-      header: 'Wartungsvereinbarung',
+      translation: 'Wartungsvereinbarung',
     },
-    { name: 'insuranceData.projectAllowance', header: 'Projektzuschuss' },
-    { name: 'insuranceData.notes', header: 'Sonstiges' },
-    { name: 'dimensionsAndLoad.bikeLength', header: 'Länge' },
-    { name: 'dimensionsAndLoad.bikeWeight', header: 'Gewicht' },
-    { name: 'dimensionsAndLoad.bikeHeight', header: 'Höhe' },
-    { name: 'dimensionsAndLoad.bikeWidth', header: 'Breite' },
-    { name: 'dimensionsAndLoad.boxHeight', header: 'Boxhöhe' },
-    { name: 'dimensionsAndLoad.boxLength', header: 'Boxlänge' },
-    { name: 'dimensionsAndLoad.boxWidth', header: 'Boxbreite' },
-    { name: 'dimensionsAndLoad.hasCoverBox', header: 'Boxabdeckung j/n' },
-    { name: 'dimensionsAndLoad.lockable', header: 'Box abschließbar' },
-    { name: 'dimensionsAndLoad.maxWeightBox', header: 'max Zuladung Box' },
+    { name: 'insuranceData.projectAllowance', translation: 'Projektzuschuss' },
+    { name: 'insuranceData.notes', translation: 'Sonstiges' },
+    { name: 'dimensionsAndLoad.bikeLength', translation: 'Länge' },
+    { name: 'dimensionsAndLoad.bikeWeight', translation: 'Gewicht' },
+    { name: 'dimensionsAndLoad.bikeHeight', translation: 'Höhe' },
+    { name: 'dimensionsAndLoad.bikeWidth', translation: 'Breite' },
+    { name: 'dimensionsAndLoad.boxHeight', translation: 'Boxhöhe' },
+    { name: 'dimensionsAndLoad.boxLength', translation: 'Boxlänge' },
+    { name: 'dimensionsAndLoad.boxWidth', translation: 'Boxbreite' },
+    { name: 'dimensionsAndLoad.hasCoverBox', translation: 'Boxabdeckung j/n' },
+    { name: 'dimensionsAndLoad.lockable', translation: 'Box abschließbar' },
+    { name: 'dimensionsAndLoad.maxWeightBox', translation: 'max Zuladung Box' },
     {
       name: 'dimensionsAndLoad.maxWeightLuggageRack',
-      header: 'max Zuladung Gepäckträger',
+      translation: 'max Zuladung Gepäckträger',
     },
-    { name: 'dimensionsAndLoad.maxWeightTotal', header: 'max Gesamtgewicht' },
-    { name: 'numberOfChildren', header: 'Anzahl Kinder' },
-    { name: 'numberOfWheels', header: 'Anzahl Räder' },
-    { name: 'forCargo', header: 'für Lasten j/n' },
-    { name: 'forChildren', header: 'für Kinder j/n' },
-    { name: 'security.frameNumber', header: 'Rahmennummer' },
-    { name: 'security.adfcCoding', header: 'ADFC Codierung' },
+    { name: 'dimensionsAndLoad.maxWeightTotal', translation: 'max Gesamtgewicht' },
+    { name: 'numberOfChildren', translation: 'Anzahl Kinder' },
+    { name: 'numberOfWheels', translation: 'Anzahl Räder' },
+    { name: 'forCargo', translation: 'für Lasten j/n' },
+    { name: 'forChildren', translation: 'für Kinder j/n' },
+    { name: 'security.frameNumber', translation: 'Rahmennummer' },
+    { name: 'security.adfcCoding', translation: 'ADFC Codierung' },
     {
       name: 'security.keyNumberAXAChain',
-      header: 'Schlüsselnrummer Rahmenschloss',
+      translation: 'Schlüsselnrummer Rahmenschloss',
     },
     {
       name: 'security.keyNumberFrameLock',
-      header: 'Schlüsselnrummer AXA-Kette',
+      translation: 'Schlüsselnrummer AXA-Kette',
     },
-    { name: 'security.policeCoding', header: 'Polizei Codierung' },
-    { name: 'technicalEquipment.bicycleShift', header: 'Schaltung' },
-    { name: 'technicalEquipment.isEBike', header: 'E-Bike j/n' },
-    { name: 'technicalEquipment.hasLightSystem', header: 'Lichtanlage j/n' },
-    { name: 'technicalEquipment.specialFeatures', header: 'Besonderheiten' },
-    { name: 'stickerBikeNameState', header: 'Aufkleber Status' },
-    { name: 'note', header: 'Aufkleber Kommentar' },
-    { name: 'taxes.costCenter', header: 'Steuern Kostenstelle' },
-    { name: 'taxes.organisationArea', header: 'Steuern Vereinsbereich' },
-    { name: 'provider.id', header: '' },
-    { name: 'provider.formName', header: '' },
-    { name: 'provider.privatePerson.id', header: '' },
-    { name: 'provider.privatePerson.person.id', header: '' },
-    { name: 'provider.privatePerson.person.name', header: '' },
-    { name: 'provider.privatePerson.person.firstName', header: '' },
+    { name: 'security.policeCoding', translation: 'Polizei Codierung' },
+    { name: 'technicalEquipment.bicycleShift', translation: 'Schaltung' },
+    { name: 'technicalEquipment.isEBike', translation: 'E-Bike j/n' },
+    { name: 'technicalEquipment.hasLightSystem', translation: 'Lichtanlage j/n' },
+    { name: 'technicalEquipment.specialFeatures', translation: 'Besonderheiten' },
+    { name: 'stickerBikeNameState', translation: 'Aufkleber Status' },
+    { name: 'note', translation: 'Aufkleber Kommentar' },
+    { name: 'taxes.costCenter', translation: 'Steuern Kostenstelle' },
+    { name: 'taxes.organisationArea', translation: 'Steuern Vereinsbereich' },
+    { name: 'provider.id', translation: '' },
+    { name: 'provider.formName', translation: '' },
+    { name: 'provider.privatePerson.id', translation: '' },
+    { name: 'provider.privatePerson.person.id', translation: '' },
+    { name: 'provider.privatePerson.person.name', translation: '' },
+    { name: 'provider.privatePerson.person.firstName', translation: '' },
     {
       name: 'provider.privatePerson.person.contactInformation.email',
-      header: '',
+      translation: '',
     },
-    { name: 'lendingStation.id', header: '' },
-    { name: 'lendingStation.name', header: '' },
-    { name: 'lendingStation.address.number', header: '' },
-    { name: 'lendingStation.address.street', header: '' },
-    { name: 'lendingStation.address.zip', header: '' },
+    { name: 'lendingStation.id', translation: '' },
+    { name: 'lendingStation.name', translation: '' },
+    { name: 'lendingStation.address.number', translation: '' },
+    { name: 'lendingStation.address.street', translation: '' },
+    { name: 'lendingStation.address.zip', translation: '' },
   ];
 
   tableDataGQLType: string = 'CargoBike';
@@ -245,9 +245,9 @@ export class BikesComponent {
     }
   }
 
-  getHeader(propertyName: string) {
+  getTranslation(propertyName: string) {
     return (
-      this.columnInfo.find((column) => column.name === propertyName)?.header ||
+      this.columnInfo.find((column) => column.name === propertyName)?.translation ||
       propertyName
     );
   }

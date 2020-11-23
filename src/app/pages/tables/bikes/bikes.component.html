@@ -99,7 +99,7 @@
       >
         <!-- add cdkDrag to make columns draggable-->
         <th mat-header-cell *matHeaderCellDef mat-sort-header>
-          {{ getHeader(column.name) }}
+          {{ getTranslation(column.name) }}
         </th>
         <td mat-cell *matCellDef="let element">
           <app-cell
