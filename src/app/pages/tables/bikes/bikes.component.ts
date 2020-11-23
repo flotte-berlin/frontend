@@ -198,6 +198,11 @@ export class BikesComponent {
           tempDataSource.push(oldRow);
         }
       }
+      for (const oldRow of this.data.data) {
+        if (oldRow.newObject) {
+          tempDataSource.unshift(oldRow);
+        }
+      }
       this.data.data = tempDataSource;
     });
     this.bikesService.loadBikes();
