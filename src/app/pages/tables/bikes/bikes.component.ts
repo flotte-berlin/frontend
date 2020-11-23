@@ -109,16 +109,16 @@ export class BikesComponent implements OnInit {
   tableDataGQLCreateInputType: string = 'CargoBikeCreateInput';
   tableDataGQLUpdateInputType: string = 'CargoBikeUpdateInput';
 
+  headline = 'Lastenräder';
+
   loadingRowIds: string[] = [];
-  constructor(
-    private bikesService: BikesService
-  ) {}
+  constructor(private bikesService: BikesService) {}
 
   ngOnInit() {
     this.dataService = this.bikesService;
   }
 
-  create(object: {currentId: string, row: any}) {
+  create(object: { currentId: string; row: any }) {
     this.bikesService.createBike(object.currentId, { bike: object.row });
   }
 

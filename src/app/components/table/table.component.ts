@@ -23,6 +23,8 @@ import { MatDialog, MatDialogRef } from '@angular/material/dialog';
   styleUrls: ['./table.component.scss'],
 })
 export class TableComponent {
+  @Input()
+  headline: string = "Keine Überschrift";
   /** this array defines the columns and translations of the table and the order they are displayed  */
   @Input()
   columnInfo: {

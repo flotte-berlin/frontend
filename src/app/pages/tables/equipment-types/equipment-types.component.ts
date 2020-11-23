@@ -7,6 +7,8 @@ import {EquipmentTypeService} from 'src/app/services/equipmentType.service'
   styleUrls: ['./equipment-types.component.scss']
 })
 export class EquipmentTypesComponent implements OnInit {
+  headline = 'Ausstattungstypen';
+
   columnInfo = [
     { name: 'id', translation: 'ID', readonly: true },
     { name: 'name', translation: 'Name', requiredForCreation: true },
