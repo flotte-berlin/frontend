@@ -12,7 +12,6 @@ import { flatten } from 'src/app/helperFunctions/flattenObject';
 import { deepen } from 'src/app/helperFunctions/deepenObject';
 import { SchemaService } from 'src/app/services/schema.service';
 
-import { logArrayInColumnInfoForm } from 'src/app/helperFunctions/logArrayInColumnInfoForm';
 import { MatTableDataSource } from '@angular/material/table';
 import { MatPaginator } from '@angular/material/paginator';
 import { MatSort } from '@angular/material/sort';

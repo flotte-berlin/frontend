@@ -52,7 +52,9 @@ export type CargoBike = {
   technicalEquipment?: Maybe<TechnicalEquipment>;
   /** Does not refer to an extra table in the database. */
   dimensionsAndLoad: DimensionsAndLoad;
+  /** If offset or limit is not provided, both values are ignored */
   bikeEvents?: Maybe<Array<Maybe<BikeEvent>>>;
+  /** If offset or limit is not provided, both values are ignored */
   equipment?: Maybe<Array<Maybe<Equipment>>>;
   /** Refers to equipment that is not unique. See kommentierte info tabelle -> Fragen -> Frage 2 */
   equipmentType?: Maybe<Array<Maybe<EquipmentType>>>;
@@ -66,6 +68,7 @@ export type CargoBike = {
   lendingStation?: Maybe<LendingStation>;
   taxes?: Maybe<Taxes>;
   currentEngagements?: Maybe<Array<Maybe<Engagement>>>;
+  /** If offset or limit is not provided, both values are ignored */
   engagement?: Maybe<Array<Maybe<Engagement>>>;
   timeFrames?: Maybe<Array<Maybe<TimeFrame>>>;
   isLocked: Scalars['Boolean'];
@@ -85,15 +88,15 @@ export type CargoBikeBikeEventsArgs = {
 
 /** The CargoBike type is central to the graph. You could call it the root. */
 export type CargoBikeEquipmentArgs = {
-  offset: Scalars['Int'];
-  limit: Scalars['Int'];
+  offset?: Maybe<Scalars['Int']>;
+  limit?: Maybe<Scalars['Int']>;
 };
 
 
 /** The CargoBike type is central to the graph. You could call it the root. */
 export type CargoBikeEngagementArgs = {
-  offset: Scalars['Int'];
-  limit: Scalars['Int'];
+  offset?: Maybe<Scalars['Int']>;
+  limit?: Maybe<Scalars['Int']>;
 };
 
 /** if you want to add bike to a lending station, create a new timeFrame with to: Date = null */
@@ -358,6 +361,7 @@ export enum Group {
   Tk = 'TK'
 }
 
+/** A participant in the organization */
 export type Participant = {
   __typename?: 'Participant';
   id: Scalars['ID'];
@@ -419,6 +423,7 @@ export type ParticipantUpdateInput = {
   keepLock?: Maybe<Scalars['Boolean']>;
 };
 
+/** A workshop event */
 export type Workshop = {
   __typename?: 'Workshop';
   id: Scalars['ID'];
@@ -591,6 +596,10 @@ export type EquipmentUpdateInput = {
   keepLock?: Maybe<Scalars['Boolean']>;
 };
 
+/**
+ * A type of equipment that is not being tracked but can be assigned
+ * to any bike.
+ */
 export type EquipmentType = {
   __typename?: 'EquipmentType';
   id: Scalars['ID'];
@@ -626,7 +635,7 @@ export type BikeEvent = {
   date: Scalars['Date'];
   description?: Maybe<Scalars['String']>;
   /** Path to documents */
-  documents: Array<Maybe<Scalars['String']>>;
+  documents: Array<Scalars['String']>;
   remark?: Maybe<Scalars['String']>;
   isLocked: Scalars['Boolean'];
   isLockedByMe: Scalars['Boolean'];
@@ -667,6 +676,8 @@ export type BikeEventType = {
   name: Scalars['String'];
   isLockedByMe: Scalars['Boolean'];
   isLocked: Scalars['Boolean'];
+  /** null if not locked by other user */
+  lockedBy?: Maybe<Scalars['ID']>;
   lockedUntil?: Maybe<Scalars['Date']>;
 };
 
@@ -683,7 +694,7 @@ export type Provider = {
   formName?: Maybe<Scalars['String']>;
   privatePerson?: Maybe<ContactInformation>;
   organisation?: Maybe<Organisation>;
-  cargoBikes?: Maybe<Array<Maybe<CargoBike>>>;
+  cargoBikes?: Maybe<Array<CargoBike>>;
   isLocked: Scalars['Boolean'];
   isLockedByMe: Scalars['Boolean'];
   /** null if not locked by other user */
@@ -696,7 +707,7 @@ export type ProviderCreateInput = {
   formName: Scalars['String'];
   privatePersonId?: Maybe<Scalars['ID']>;
   organisationId?: Maybe<Scalars['ID']>;
-  cargoBikeIds?: Maybe<Array<Maybe<Scalars['ID']>>>;
+  cargoBikeIds?: Maybe<Array<Scalars['ID']>>;
 };
 
 export type ProviderUpdateInput = {
@@ -718,7 +729,7 @@ export type Person = {
   id: Scalars['ID'];
   name: Scalars['String'];
   firstName: Scalars['String'];
-  contactInformation?: Maybe<Array<Maybe<ContactInformation>>>;
+  contactInformation?: Maybe<Array<ContactInformation>>;
   isLocked: Scalars['Boolean'];
   isLockedByMe: Scalars['Boolean'];
   /** null if not locked by other user */
@@ -780,7 +791,7 @@ export type Organisation = {
   name: Scalars['String'];
   address?: Maybe<Address>;
   /** (dt. Ausleihstation) */
-  lendingStations?: Maybe<Array<Maybe<LendingStation>>>;
+  lendingStations?: Maybe<Array<LendingStation>>;
   /** registration number of association */
   associationNo?: Maybe<Scalars['String']>;
   /** If Club, at what court registered */
@@ -827,9 +838,9 @@ export type LendingStation = {
   contactInformationIntern?: Maybe<ContactInformation>;
   contactInformationExtern?: Maybe<ContactInformation>;
   address: Address;
-  timeFrames: Array<Maybe<TimeFrame>>;
+  timeFrames: Array<TimeFrame>;
   loanPeriod?: Maybe<LoanPeriod>;
-  cargoBikes?: Maybe<Array<Maybe<CargoBike>>>;
+  cargoBikes?: Maybe<Array<CargoBike>>;
   /** Total amount of cargoBikes currently assigned to the lending station */
   numCargoBikes: Scalars['Int'];
   organisation?: Maybe<Organisation>;
@@ -870,7 +881,7 @@ export type LoanPeriod = {
   notes?: Maybe<Array<Maybe<Scalars['String']>>>;
   /**
    * Loan times from and until for each day of the week.
-   * Starting with Monday from, Monday to, Tuesday from, ..., Sunday to 
+   * Starting with Monday from, Monday to, Tuesday from, ..., Sunday to
    */
   loanTimes?: Maybe<Array<Maybe<Scalars['String']>>>;
 };
@@ -879,12 +890,12 @@ export type LoanPeriod = {
 export type LoanPeriodInput = {
   generalRemark?: Maybe<Scalars['String']>;
   /** notes for each day of the week, starting on Monday */
-  notes?: Maybe<Array<Maybe<Scalars['String']>>>;
+  notes?: Maybe<Array<Scalars['String']>>;
   /**
    * Loan times from and until for each day of the week.
-   * Starting with Monday from, Monday to, Tuesday from, ..., Sunday to 
+   * Starting with Monday from, Monday to, Tuesday from, ..., Sunday to
    */
-  loanTimes?: Maybe<Array<Maybe<Scalars['String']>>>;
+  loanTimes?: Maybe<Array<Scalars['String']>>;
 };
 
 /** (dt. Zeitscheibe) When was a bike where */
@@ -959,48 +970,62 @@ export type Query = {
   __typename?: 'Query';
   /** Will (eventually) return all properties of cargo bike */
   cargoBikeById?: Maybe<CargoBike>;
-  /** returns cargoBikes ordered by name ascending, relations are not loaded, use cargoBikeById instead */
-  cargoBikes: Array<Maybe<CargoBike>>;
+  /** Returns cargoBikes ordered by name ascending. If offset or limit is not provided, both values are ignored. */
+  cargoBikes: Array<CargoBike>;
   engagementById?: Maybe<Engagement>;
-  engagements: Array<Maybe<Engagement>>;
+  /** If offset or limit is not provided, both values are ignored */
+  engagements: Array<Engagement>;
   engagementTypeById?: Maybe<EngagementType>;
-  engagementTypes: Array<Maybe<EngagementType>>;
+  /** If offset or limit is not provided, both values are ignored */
+  engagementTypes: Array<EngagementType>;
   /** equipment by id, will return null if id not found */
   equipmentById?: Maybe<Equipment>;
-  equipment: Array<Maybe<Equipment>>;
+  /** If offset or limit is not provided, both values are ignored */
+  equipment: Array<Equipment>;
   equipmentTypeById?: Maybe<EquipmentType>;
-  equipmentTypes: Array<Maybe<EquipmentType>>;
+  /** If offset or limit is not provided, both values are ignored */
+  equipmentTypes: Array<EquipmentType>;
   /** return null if id not found */
   providerById?: Maybe<Provider>;
-  /** unique equipment with pagination, contains relation to bike (with no further joins), so if you wanna know more about the bike, use cargoBikeById */
-  providers: Array<Maybe<Provider>>;
+  /** Returns providers with pagination. If offset or limit is not provided, both values are ignored */
+  providers: Array<Provider>;
   /** participant by id */
   participantById?: Maybe<Participant>;
-  participants: Array<Maybe<Participant>>;
+  /** If offset or limit is not provided, both values are ignored */
+  participants: Array<Participant>;
   workshopTypeById?: Maybe<WorkshopType>;
-  workshopTypes: Array<Maybe<WorkshopType>>;
+  /** If offset or limit is not provided, both values are ignored */
+  workshopTypes: Array<WorkshopType>;
   workshopById?: Maybe<Workshop>;
-  workshops: Array<Maybe<Workshop>>;
+  /** If offset or limit is not provided, both values are ignored */
+  workshops: Array<Workshop>;
   lendingStationById?: Maybe<LendingStation>;
-  lendingStations: Array<Maybe<LendingStation>>;
+  /** If offset or limit is not provided, both values are ignored */
+  lendingStations: Array<LendingStation>;
   organisationById?: Maybe<Organisation>;
-  organisations: Array<Maybe<Organisation>>;
+  /** If offset or limit is not provided, both values are ignored */
+  organisations: Array<Organisation>;
   timeFrameById?: Maybe<TimeFrame>;
-  timeframes: Array<Maybe<TimeFrame>>;
+  /** If offset or limit is not provided, both values are ignored */
+  timeFrames: Array<TimeFrame>;
   contactInformationById?: Maybe<ContactInformation>;
-  contactInformation: Array<Maybe<ContactInformation>>;
+  /** If offset or limit is not provided, both values are ignored */
+  contactInformation: Array<ContactInformation>;
   personById?: Maybe<Person>;
-  persons?: Maybe<Array<Maybe<Person>>>;
-  bikeEventTypes?: Maybe<Array<Maybe<BikeEventType>>>;
+  /** If offset or limit is not provided, both values are ignored */
+  persons?: Maybe<Array<Person>>;
+  /** If offset or limit is not provided, both values are ignored */
+  bikeEventTypes?: Maybe<Array<BikeEventType>>;
   bikeEventTypeByd?: Maybe<BikeEventType>;
-  bikeEvents: Array<Maybe<BikeEvent>>;
+  /** If offset or limit is not provided, both values are ignored */
+  bikeEvents: Array<BikeEvent>;
   bikeEventById?: Maybe<BikeEvent>;
   /** actionLog for current user */
-  actionLog?: Maybe<Array<Maybe<ActionLog>>>;
+  actionLog?: Maybe<Array<ActionLog>>;
   /** actionLog for specific user */
-  actionLogByUser?: Maybe<Array<Maybe<ActionLog>>>;
+  actionLogByUser?: Maybe<Array<ActionLog>>;
   /** actionLog form all users */
-  actionLogAll?: Maybe<Array<Maybe<ActionLog>>>;
+  actionLogAll?: Maybe<Array<ActionLog>>;
 };
 
 
@@ -1010,8 +1035,8 @@ export type QueryCargoBikeByIdArgs = {
 
 
 export type QueryCargoBikesArgs = {
-  offset: Scalars['Int'];
-  limit: Scalars['Int'];
+  offset?: Maybe<Scalars['Int']>;
+  limit?: Maybe<Scalars['Int']>;
 };
 
 
@@ -1021,8 +1046,8 @@ export type QueryEngagementByIdArgs = {
 
 
 export type QueryEngagementsArgs = {
-  offset: Scalars['Int'];
-  limit: Scalars['Int'];
+  offset?: Maybe<Scalars['Int']>;
+  limit?: Maybe<Scalars['Int']>;
 };
 
 
@@ -1032,8 +1057,8 @@ export type QueryEngagementTypeByIdArgs = {
 
 
 export type QueryEngagementTypesArgs = {
-  offset: Scalars['Int'];
-  limit: Scalars['Int'];
+  offset?: Maybe<Scalars['Int']>;
+  limit?: Maybe<Scalars['Int']>;
 };
 
 
@@ -1043,8 +1068,8 @@ export type QueryEquipmentByIdArgs = {
 
 
 export type QueryEquipmentArgs = {
-  offset: Scalars['Int'];
-  limit: Scalars['Int'];
+  offset?: Maybe<Scalars['Int']>;
+  limit?: Maybe<Scalars['Int']>;
 };
 
 
@@ -1054,8 +1079,8 @@ export type QueryEquipmentTypeByIdArgs = {
 
 
 export type QueryEquipmentTypesArgs = {
-  offset: Scalars['Int'];
-  limit: Scalars['Int'];
+  offset?: Maybe<Scalars['Int']>;
+  limit?: Maybe<Scalars['Int']>;
 };
 
 
@@ -1065,8 +1090,8 @@ export type QueryProviderByIdArgs = {
 
 
 export type QueryProvidersArgs = {
-  offset: Scalars['Int'];
-  limit: Scalars['Int'];
+  offset?: Maybe<Scalars['Int']>;
+  limit?: Maybe<Scalars['Int']>;
 };
 
 
@@ -1076,8 +1101,8 @@ export type QueryParticipantByIdArgs = {
 
 
 export type QueryParticipantsArgs = {
-  offset: Scalars['Int'];
-  limit: Scalars['Int'];
+  offset?: Maybe<Scalars['Int']>;
+  limit?: Maybe<Scalars['Int']>;
 };
 
 
@@ -1087,8 +1112,8 @@ export type QueryWorkshopTypeByIdArgs = {
 
 
 export type QueryWorkshopTypesArgs = {
-  offset: Scalars['Int'];
-  limit: Scalars['Int'];
+  offset?: Maybe<Scalars['Int']>;
+  limit?: Maybe<Scalars['Int']>;
 };
 
 
@@ -1098,8 +1123,8 @@ export type QueryWorkshopByIdArgs = {
 
 
 export type QueryWorkshopsArgs = {
-  offset: Scalars['Int'];
-  limit: Scalars['Int'];
+  offset?: Maybe<Scalars['Int']>;
+  limit?: Maybe<Scalars['Int']>;
 };
 
 
@@ -1109,8 +1134,8 @@ export type QueryLendingStationByIdArgs = {
 
 
 export type QueryLendingStationsArgs = {
-  offset: Scalars['Int'];
-  limit: Scalars['Int'];
+  offset?: Maybe<Scalars['Int']>;
+  limit?: Maybe<Scalars['Int']>;
 };
 
 
@@ -1120,8 +1145,8 @@ export type QueryOrganisationByIdArgs = {
 
 
 export type QueryOrganisationsArgs = {
-  offset: Scalars['Int'];
-  limit: Scalars['Int'];
+  offset?: Maybe<Scalars['Int']>;
+  limit?: Maybe<Scalars['Int']>;
 };
 
 
@@ -1130,9 +1155,9 @@ export type QueryTimeFrameByIdArgs = {
 };
 
 
-export type QueryTimeframesArgs = {
-  offset: Scalars['Int'];
-  limit: Scalars['Int'];
+export type QueryTimeFramesArgs = {
+  offset?: Maybe<Scalars['Int']>;
+  limit?: Maybe<Scalars['Int']>;
 };
 
 
@@ -1142,8 +1167,8 @@ export type QueryContactInformationByIdArgs = {
 
 
 export type QueryContactInformationArgs = {
-  offset: Scalars['Int'];
-  limit: Scalars['Int'];
+  offset?: Maybe<Scalars['Int']>;
+  limit?: Maybe<Scalars['Int']>;
 };
 
 
@@ -1153,14 +1178,14 @@ export type QueryPersonByIdArgs = {
 
 
 export type QueryPersonsArgs = {
-  offset: Scalars['Int'];
-  limit: Scalars['Int'];
+  offset?: Maybe<Scalars['Int']>;
+  limit?: Maybe<Scalars['Int']>;
 };
 
 
 export type QueryBikeEventTypesArgs = {
-  offset: Scalars['Int'];
-  limit: Scalars['Int'];
+  offset?: Maybe<Scalars['Int']>;
+  limit?: Maybe<Scalars['Int']>;
 };
 
 
@@ -1170,8 +1195,8 @@ export type QueryBikeEventTypeBydArgs = {
 
 
 export type QueryBikeEventsArgs = {
-  offset: Scalars['Int'];
-  limit: Scalars['Int'];
+  offset?: Maybe<Scalars['Int']>;
+  limit?: Maybe<Scalars['Int']>;
 };
 
 
@@ -1704,10 +1729,10 @@ export type GetCargoBikesQueryVariables = Exact<{ [key: string]: never; }>;
 
 export type GetCargoBikesQuery = (
   { __typename?: 'Query' }
-  & { cargoBikes: Array<Maybe<(
+  & { cargoBikes: Array<(
     { __typename?: 'CargoBike' }
     & CargoBikeFieldsForTableFragment
-  )>> }
+  )> }
 );
 
 export type GetCargoBikeByIdQueryVariables = Exact<{
@@ -1952,10 +1977,10 @@ export type ProviderFieldsGeneralFragment = (
     & { person: (
       { __typename?: 'Person' }
       & Pick<Person, 'id' | 'name' | 'firstName'>
-      & { contactInformation?: Maybe<Array<Maybe<(
+      & { contactInformation?: Maybe<Array<(
         { __typename?: 'ContactInformation' }
         & Pick<ContactInformation, 'email'>
-      )>>> }
+      )>> }
     ) }
   )> }
 );
@@ -2254,13 +2279,13 @@ export const CargoBikeFieldsForPageFragmentDoc = gql`
   bikeEvents {
     ...BikeEventFieldsForBikePage
   }
-  equipment(offset: 0, limit: 1000) {
+  equipment {
     ...EquipmentFieldsForBikePage
   }
   equipmentType {
     ...EquipmentTypeFieldsForBikePage
   }
-  engagement(offset: 0, limit: 1000) {
+  engagement {
     ...EngagementFieldsForBikePage
   }
   currentEngagements {
@@ -2278,7 +2303,7 @@ ${EngagementFieldsForBikePageFragmentDoc}
 ${TimeFrameFieldsForBikePageFragmentDoc}`;
 export const GetCargoBikesDocument = gql`
     query GetCargoBikes {
-  cargoBikes(limit: 1000, offset: 0) {
+  cargoBikes {
     ...CargoBikeFieldsForTable
   }
 }

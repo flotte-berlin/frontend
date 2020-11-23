@@ -78,13 +78,13 @@ fragment CargoBikeFieldsForPage on CargoBike {
 bikeEvents {
   ...BikeEventFieldsForBikePage
 }
-equipment(offset: 0, limit: 1000) {
+equipment {
   ...EquipmentFieldsForBikePage
 }
 equipmentType {
  ...EquipmentTypeFieldsForBikePage 
 }
-engagement(offset: 0, limit: 1000) {
+engagement {
   ...EngagementFieldsForBikePage
 }
 currentEngagements {

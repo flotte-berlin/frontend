@@ -11,15 +11,18 @@
   <h1>
     {{ data[headlineDataPath] }}
   </h1>
+  <ng-container *ngFor="let object of propertiesInfo">
+    <mat-card class="card" *ngIf="object.isGroup">
+      <mat-card-title>{{object.title}}</mat-card-title>
 
-  <div *ngFor="let prop of propertiesInfo">
-    <app-cell
-      [editable]="data.isLockedByMe && !prop.readonly"
-      [(value)]="data[prop.name]"
-      [label]="prop.translation || prop.name"
-      [inputType]="prop.type"
-    ></app-cell>
-  </div>
+      <app-cell *ngFor="let prop of object.properties"
+        [editable]="data.isLockedByMe && !prop.readonly"
+        [(value)]="data[prop.name]"
+        [label]="prop.translation || prop.name"
+        [inputType]="prop.type"
+      ></app-cell>
+    </mat-card>
+  </ng-container>
 </div>
 
 <button
@@ -33,6 +36,7 @@
   <mat-icon>sync</mat-icon>
 </button>
 
+<div id="floating-fab-button-box">
 <button
   mat-fab
   (click)="lock()"
@@ -42,6 +46,15 @@
   [disabled]="isSavingOrLocking || isLoading"
 >
   <mat-icon>edit</mat-icon>
+</button>
+<button
+  mat-mini-fab
+  (click)="cancel()"
+  *ngIf="data.isLockedByMe"
+  class="floating-fab-button"
+  [disabled]="isSavingOrLocking || isLoading"
+>
+  <mat-icon>cancel</mat-icon>
 </button>
 <button
   mat-fab
@@ -60,3 +73,4 @@
 >
   <mat-icon>locked</mat-icon>
 </button>
+</div>

@@ -1,17 +1,21 @@
-import {
-  AfterViewInit,
-  Component,
-  EventEmitter,
-  Input,
-  OnInit,
-  Output,
-} from '@angular/core';
+import { Component, EventEmitter, Input, OnInit, Output } from '@angular/core';
 import { ActivatedRoute } from '@angular/router';
 import { deepen } from 'src/app/helperFunctions/deepenObject';
 import { flatten } from 'src/app/helperFunctions/flattenObject';
-import { BikesService } from 'src/app/services/bikes.service';
 import { SchemaService } from 'src/app/services/schema.service';
-import { runInThisContext } from 'vm';
+
+interface PropertyInfoType {
+  name: string;
+  translation: string;
+  readonly?: boolean;
+  type?: string;
+}
+
+interface PropertyGroup {
+  isGroup: boolean;
+  title: string;
+  properties: PropertyInfoType[];
+}
 
 @Component({
   selector: 'app-data-page',
@@ -20,12 +24,7 @@ import { runInThisContext } from 'vm';
 })
 export class DataPageComponent implements OnInit {
   @Input()
-  propertiesInfo: {
-    name: string;
-    translation: string;
-    readonly?: boolean;
-    type?: string;
-  }[] = [];
+  propertiesInfo: Array<PropertyInfoType | PropertyGroup> = [];
 
   @Input()
   dataService: any;
@@ -39,6 +38,7 @@ export class DataPageComponent implements OnInit {
 
   @Output() lockEvent = new EventEmitter();
   @Output() saveEvent = new EventEmitter();
+  @Output() cancelEvent = new EventEmitter();
 
   id: string;
   data: any;
@@ -51,7 +51,7 @@ export class DataPageComponent implements OnInit {
   ) {}
 
   ngOnInit(): void {
-    this.addPropertiesFromGQLSchemaToPropertiesInfo();
+    this.addPropertiesFromGQLSchemaToObject(this.propertiesInfo);
     this.id = this.route.snapshot.paramMap.get('id');
     this.reloadPageData();
     this.dataService.pageData.subscribe((data) => {
@@ -60,26 +60,27 @@ export class DataPageComponent implements OnInit {
     this.dataService.isLoadingPageData.subscribe(
       (isLoading) => (this.isLoading = isLoading)
     );
-    this.dataService.loadingRowIds.subscribe(loadingRowIds => {
-      console.log(loadingRowIds);
+    this.dataService.loadingRowIds.subscribe((loadingRowIds) => {
       this.isSavingOrLocking = loadingRowIds.includes(this.id);
-    })
+    });
   }
 
-  addPropertiesFromGQLSchemaToPropertiesInfo() {
-    for (const column of this.propertiesInfo) {
-      const typeInformation = this.schemaService.getTypeInformation(
-        this.pageDataGQLType,
-        column.name
-      );
-      column.type = column.type || typeInformation.type;
-    }
-    for (const column of this.propertiesInfo) {
-      const typeInformation = this.schemaService.getTypeInformation(
-        this.pageDataGQLUpdateInputType,
-        column.name
-      );
-      column.readonly = column.readonly || !typeInformation.isPartOfType;
+  addPropertiesFromGQLSchemaToObject(infoObject: any) {
+    for (const prop of infoObject) {
+      if (prop.isGroup) {
+        this.addPropertiesFromGQLSchemaToObject(prop.properties);
+      } else {
+        const typeInformation = this.schemaService.getTypeInformation(
+          this.pageDataGQLType,
+          prop.name
+        );
+        prop.type = prop.type || typeInformation.type;
+        const updateTypeInformation = this.schemaService.getTypeInformation(
+          this.pageDataGQLUpdateInputType,
+          prop.name
+        );
+        prop.readonly = prop.readonly || !updateTypeInformation.isPartOfType;
+      }
     }
   }
 
@@ -94,6 +95,10 @@ export class DataPageComponent implements OnInit {
         deepen(this.data)
       )
     );
+  }
+
+  cancel() {
+    this.cancelEvent.emit(deepen(this.data))
   }
 
   reloadPageData() {
