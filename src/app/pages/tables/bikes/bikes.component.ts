@@ -1,18 +1,12 @@
-import { SelectionModel } from '@angular/cdk/collections';
-import { Component, ViewChild } from '@angular/core';
-import { CdkDragDrop, moveItemInArray } from '@angular/cdk/drag-drop';
-import { BikesService, CargoBikeResult } from 'src/app/services/bikes.service';
-import { flatten } from 'src/app/helperFunctions/flattenObject';
-import { deepen } from 'src/app/helperFunctions/deepenObject';
-import { SchemaService } from 'src/app/services/schema.service';
-import { MatDialog, MatDialogRef } from '@angular/material/dialog';
+import { Component, OnInit } from '@angular/core';
+import { BikesService } from 'src/app/services/bikes.service';
 
 @Component({
   selector: 'app-bikes',
   templateUrl: './bikes.component.html',
   styleUrls: ['./bikes.component.scss'],
 })
-export class BikesComponent {
+export class BikesComponent implements OnInit {
   columnInfo = [
     {
       name: 'name',
@@ -124,8 +118,8 @@ export class BikesComponent {
     this.dataService = this.bikesService;
   }
 
-  create(row: any) {
-    this.bikesService.createBike({ bike: row });
+  create(object: {currentId: string, row: any}) {
+    this.bikesService.createBike(object.currentId, { bike: object.row });
   }
 
   lock(row: any) {

@@ -114,11 +114,18 @@ export class TableComponent {
       this.loadingRowIds = rowIds;
     });
 
+    this.dataService.successfullyCreatedRowWithId.subscribe(id => {
+      this.data.data = this.data.data.filter(row => row.id !== id);
+    })
+
     this.dataService.tableData.subscribe((newTableDataSource) => {
       this.reloadingTable = false;
       const tempDataSource = [];
+      if (newTableDataSource === null) {
+        return;  
+      }
+      this.isLoaded = true;
       for (const row of newTableDataSource) {
-        this.isLoaded = true;
         const oldRow = this.getRowById(row.id);
         /** make sure to not overwrite a row that is being edited */
         if (!oldRow) {
@@ -172,8 +179,8 @@ export class TableComponent {
         this.tableDataGQLCreateInputType,
         column.name
       );
-      column.requiredForCreation = typeInformation.isRequired;
-      column.acceptedForCreation = typeInformation.isPartOfType;
+      column.requiredForCreation = column.requiredForCreation || typeInformation.isRequired;
+      column.acceptedForCreation = column.acceptedForCreation || typeInformation.isPartOfType;
     }
   }
 
@@ -249,7 +256,7 @@ export class TableComponent {
       this.tableDataGQLCreateInputType,
       deepen(row)
     );
-    this.createEvent.emit(newRow);
+    this.createEvent.emit({currentId: row.id, row: newRow});
   }
 
   lock(row: any) {

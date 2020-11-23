@@ -1,0 +1,33 @@
+query GetEquipmentTypes {
+  equipmentTypes {
+    ...EquipmentTypeFields
+  }
+}
+
+mutation CreateEquipmentType($equipmentType: EquipmentTypeCreateInput!) {
+  createEquipmentType(equipmentType: $equipmentType) {
+    ...EquipmentTypeFields
+  }
+}
+
+mutation UpdateEquipmentType($equipmentType: EquipmentTypeUpdateInput!) {
+  updateEquipmentType(equipmentType: $equipmentType) {
+    ...EquipmentTypeFields
+  }
+}
+
+mutation LockEquipmentType($id: ID!) {
+  lockEquipmentType(id: $id) {
+    ...EquipmentTypeFields
+  }
+}
+
+mutation UnlockEquipmentType($id: ID!) {
+  unlockEquipmentType(id: $id) {
+    ...EquipmentTypeFields
+  }
+}
+
+mutation DeleteEquipmentType($id: ID!) {
+  deleteEquipmentType(id: $id)
+}

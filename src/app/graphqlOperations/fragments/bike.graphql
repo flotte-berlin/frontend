@@ -82,7 +82,7 @@ equipment {
   ...EquipmentFieldsForBikePage
 }
 equipmentType {
- ...EquipmentTypeFieldsForBikePage 
+ ...EquipmentTypeFields
 }
 engagement {
   ...EngagementFieldsForBikePage

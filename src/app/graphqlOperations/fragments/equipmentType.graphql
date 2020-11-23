@@ -1,4 +1,4 @@
-fragment EquipmentTypeFieldsForBikePage on EquipmentType {
+fragment EquipmentTypeFields on EquipmentType {
   id
   name
   description

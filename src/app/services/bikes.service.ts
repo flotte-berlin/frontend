@@ -1,5 +1,5 @@
 import { Injectable } from '@angular/core';
-import { BehaviorSubject } from 'rxjs';
+import { BehaviorSubject, Subject } from 'rxjs';
 import {
   GetCargoBikesGQL,
   GetCargoBikesQuery,
@@ -30,9 +30,10 @@ export type CargoBikeResult = DeepExtractTypeSkipArrays<
 })
 export class BikesService {
   /** CargoBikes Array */
-  tableData: BehaviorSubject<CargoBikeResult[]> = new BehaviorSubject([]);
+  tableData: BehaviorSubject<CargoBikeResult[]> = new BehaviorSubject(null);
   loadingRowIds: BehaviorSubject<string[]> = new BehaviorSubject([]);
-  pageData: BehaviorSubject<any> = new BehaviorSubject([]);
+  successfullyCreatedRowWithId: Subject<string> = new Subject();
+  pageData: BehaviorSubject<any> = new BehaviorSubject(null);
   isLoadingPageData: BehaviorSubject<boolean> = new BehaviorSubject(false);
 
   constructor(
@@ -60,6 +61,7 @@ export class BikesService {
   }
 
   loadTableData() {
+    this.tableData.next(null);
     this.getCargoBikesGQL.fetch().subscribe((result) => {
       this.tableData.next(result.data.cargoBikes);
     });
@@ -90,10 +92,11 @@ export class BikesService {
       });
   }
 
-  createBike(variables: CreateCargoBikeMutationVariables) {
+  createBike(currentId: string, variables: CreateCargoBikeMutationVariables) {
     this.createCargoBikeGQL.mutate(variables).subscribe((result) => {
       const newBike = result.data.createCargoBike;
       this.tableData.next([newBike, ...this.tableData.value]);
+      this.successfullyCreatedRowWithId.next(currentId);
     });
   }
 

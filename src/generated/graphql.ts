@@ -1823,6 +1823,79 @@ export type DeleteCargoBikeMutation = (
   & Pick<Mutation, 'deleteCargoBike'>
 );
 
+export type GetEquipmentTypesQueryVariables = Exact<{ [key: string]: never; }>;
+
+
+export type GetEquipmentTypesQuery = (
+  { __typename?: 'Query' }
+  & { equipmentTypes: Array<(
+    { __typename?: 'EquipmentType' }
+    & EquipmentTypeFieldsFragment
+  )> }
+);
+
+export type CreateEquipmentTypeMutationVariables = Exact<{
+  equipmentType: EquipmentTypeCreateInput;
+}>;
+
+
+export type CreateEquipmentTypeMutation = (
+  { __typename?: 'Mutation' }
+  & { createEquipmentType: (
+    { __typename?: 'EquipmentType' }
+    & EquipmentTypeFieldsFragment
+  ) }
+);
+
+export type UpdateEquipmentTypeMutationVariables = Exact<{
+  equipmentType: EquipmentTypeUpdateInput;
+}>;
+
+
+export type UpdateEquipmentTypeMutation = (
+  { __typename?: 'Mutation' }
+  & { updateEquipmentType: (
+    { __typename?: 'EquipmentType' }
+    & EquipmentTypeFieldsFragment
+  ) }
+);
+
+export type LockEquipmentTypeMutationVariables = Exact<{
+  id: Scalars['ID'];
+}>;
+
+
+export type LockEquipmentTypeMutation = (
+  { __typename?: 'Mutation' }
+  & { lockEquipmentType: (
+    { __typename?: 'EquipmentType' }
+    & EquipmentTypeFieldsFragment
+  ) }
+);
+
+export type UnlockEquipmentTypeMutationVariables = Exact<{
+  id: Scalars['ID'];
+}>;
+
+
+export type UnlockEquipmentTypeMutation = (
+  { __typename?: 'Mutation' }
+  & { unlockEquipmentType: (
+    { __typename?: 'EquipmentType' }
+    & EquipmentTypeFieldsFragment
+  ) }
+);
+
+export type DeleteEquipmentTypeMutationVariables = Exact<{
+  id: Scalars['ID'];
+}>;
+
+
+export type DeleteEquipmentTypeMutation = (
+  { __typename?: 'Mutation' }
+  & Pick<Mutation, 'deleteEquipmentType'>
+);
+
 export type AddressFieldsFragment = (
   { __typename?: 'Address' }
   & Pick<Address, 'street' | 'number' | 'zip'>
@@ -1865,7 +1938,7 @@ export type CargoBikeFieldsForPageFragment = (
     & EquipmentFieldsForBikePageFragment
   )>>>, equipmentType?: Maybe<Array<Maybe<(
     { __typename?: 'EquipmentType' }
-    & EquipmentTypeFieldsForBikePageFragment
+    & EquipmentTypeFieldsFragment
   )>>>, engagement?: Maybe<Array<Maybe<(
     { __typename?: 'Engagement' }
     & EngagementFieldsForBikePageFragment
@@ -1928,7 +2001,7 @@ export type EquipmentFieldsForBikePageFragment = (
   & Pick<Equipment, 'id' | 'serialNo' | 'title' | 'description' | 'isLocked' | 'isLockedByMe' | 'lockedBy' | 'lockedUntil'>
 );
 
-export type EquipmentTypeFieldsForBikePageFragment = (
+export type EquipmentTypeFieldsFragment = (
   { __typename?: 'EquipmentType' }
   & Pick<EquipmentType, 'id' | 'name' | 'description' | 'isLocked' | 'isLockedByMe' | 'lockedBy' | 'lockedUntil'>
 );
@@ -2218,8 +2291,8 @@ export const EquipmentFieldsForBikePageFragmentDoc = gql`
   lockedUntil
 }
     `;
-export const EquipmentTypeFieldsForBikePageFragmentDoc = gql`
-    fragment EquipmentTypeFieldsForBikePage on EquipmentType {
+export const EquipmentTypeFieldsFragmentDoc = gql`
+    fragment EquipmentTypeFields on EquipmentType {
   id
   name
   description
@@ -2283,7 +2356,7 @@ export const CargoBikeFieldsForPageFragmentDoc = gql`
     ...EquipmentFieldsForBikePage
   }
   equipmentType {
-    ...EquipmentTypeFieldsForBikePage
+    ...EquipmentTypeFields
   }
   engagement {
     ...EngagementFieldsForBikePage
@@ -2298,7 +2371,7 @@ export const CargoBikeFieldsForPageFragmentDoc = gql`
     ${CargoBikeFieldsForTableFragmentDoc}
 ${BikeEventFieldsForBikePageFragmentDoc}
 ${EquipmentFieldsForBikePageFragmentDoc}
-${EquipmentTypeFieldsForBikePageFragmentDoc}
+${EquipmentTypeFieldsFragmentDoc}
 ${EngagementFieldsForBikePageFragmentDoc}
 ${TimeFrameFieldsForBikePageFragmentDoc}`;
 export const GetCargoBikesDocument = gql`
@@ -2438,6 +2511,112 @@ export const DeleteCargoBikeDocument = gql`
   })
   export class DeleteCargoBikeGQL extends Apollo.Mutation<DeleteCargoBikeMutation, DeleteCargoBikeMutationVariables> {
     document = DeleteCargoBikeDocument;
+    
+    constructor(apollo: Apollo.Apollo) {
+      super(apollo);
+    }
+  }
+export const GetEquipmentTypesDocument = gql`
+    query GetEquipmentTypes {
+  equipmentTypes {
+    ...EquipmentTypeFields
+  }
+}
+    ${EquipmentTypeFieldsFragmentDoc}`;
+
+  @Injectable({
+    providedIn: 'root'
+  })
+  export class GetEquipmentTypesGQL extends Apollo.Query<GetEquipmentTypesQuery, GetEquipmentTypesQueryVariables> {
+    document = GetEquipmentTypesDocument;
+    
+    constructor(apollo: Apollo.Apollo) {
+      super(apollo);
+    }
+  }
+export const CreateEquipmentTypeDocument = gql`
+    mutation CreateEquipmentType($equipmentType: EquipmentTypeCreateInput!) {
+  createEquipmentType(equipmentType: $equipmentType) {
+    ...EquipmentTypeFields
+  }
+}
+    ${EquipmentTypeFieldsFragmentDoc}`;
+
+  @Injectable({
+    providedIn: 'root'
+  })
+  export class CreateEquipmentTypeGQL extends Apollo.Mutation<CreateEquipmentTypeMutation, CreateEquipmentTypeMutationVariables> {
+    document = CreateEquipmentTypeDocument;
+    
+    constructor(apollo: Apollo.Apollo) {
+      super(apollo);
+    }
+  }
+export const UpdateEquipmentTypeDocument = gql`
+    mutation UpdateEquipmentType($equipmentType: EquipmentTypeUpdateInput!) {
+  updateEquipmentType(equipmentType: $equipmentType) {
+    ...EquipmentTypeFields
+  }
+}
+    ${EquipmentTypeFieldsFragmentDoc}`;
+
+  @Injectable({
+    providedIn: 'root'
+  })
+  export class UpdateEquipmentTypeGQL extends Apollo.Mutation<UpdateEquipmentTypeMutation, UpdateEquipmentTypeMutationVariables> {
+    document = UpdateEquipmentTypeDocument;
+    
+    constructor(apollo: Apollo.Apollo) {
+      super(apollo);
+    }
+  }
+export const LockEquipmentTypeDocument = gql`
+    mutation LockEquipmentType($id: ID!) {
+  lockEquipmentType(id: $id) {
+    ...EquipmentTypeFields
+  }
+}
+    ${EquipmentTypeFieldsFragmentDoc}`;
+
+  @Injectable({
+    providedIn: 'root'
+  })
+  export class LockEquipmentTypeGQL extends Apollo.Mutation<LockEquipmentTypeMutation, LockEquipmentTypeMutationVariables> {
+    document = LockEquipmentTypeDocument;
+    
+    constructor(apollo: Apollo.Apollo) {
+      super(apollo);
+    }
+  }
+export const UnlockEquipmentTypeDocument = gql`
+    mutation UnlockEquipmentType($id: ID!) {
+  unlockEquipmentType(id: $id) {
+    ...EquipmentTypeFields
+  }
+}
+    ${EquipmentTypeFieldsFragmentDoc}`;
+
+  @Injectable({
+    providedIn: 'root'
+  })
+  export class UnlockEquipmentTypeGQL extends Apollo.Mutation<UnlockEquipmentTypeMutation, UnlockEquipmentTypeMutationVariables> {
+    document = UnlockEquipmentTypeDocument;
+    
+    constructor(apollo: Apollo.Apollo) {
+      super(apollo);
+    }
+  }
+export const DeleteEquipmentTypeDocument = gql`
+    mutation DeleteEquipmentType($id: ID!) {
+  deleteEquipmentType(id: $id)
+}
+    `;
+
+  @Injectable({
+    providedIn: 'root'
+  })
+  export class DeleteEquipmentTypeGQL extends Apollo.Mutation<DeleteEquipmentTypeMutation, DeleteEquipmentTypeMutationVariables> {
+    document = DeleteEquipmentTypeDocument;
     
     constructor(apollo: Apollo.Apollo) {
       super(apollo);
