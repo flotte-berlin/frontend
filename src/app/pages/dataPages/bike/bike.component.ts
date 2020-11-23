@@ -122,8 +122,8 @@ export class BikeComponent implements OnInit {
 
   ngOnInit(): void {
     this.id = this.route.snapshot.paramMap.get('id');
-    this.bikesService.loadCargoBike({ id: this.id });
-    this.bikesService.bike.subscribe((data) => {
+    this.bikesService.loadPageData({ id: this.id });
+    this.bikesService.pageData.subscribe((data) => {
       this.data = flatten(data);
     });
     this.bikesService.loadingBike.subscribe(

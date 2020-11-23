@@ -34,7 +34,7 @@ import { AppRoutingModule } from './app-routing.module';
 import { AppComponent } from './app.component';
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 import { LoginComponent } from './pages/login/login.component';
-import { BikesComponent, DeleteConfirmationDialog } from './pages/tables/bikes/bikes.component';
+import { BikesComponent } from './pages/tables/bikes/bikes.component';
 import { GraphQLModule } from './graphql.module';
 import { ParticipantsComponent } from './pages/tables/participants/participants.component';
 import { LendingStationsComponent } from './pages/tables/lending-stations/lending-stations.component';
@@ -44,7 +44,8 @@ import { MenuListItemComponent } from './components/menu-list-item/menu-list-ite
 import {SidenavProfileComponent} from './components/sidenav-profile/sidenav-profile.component';
 import { NavService }from './components/menu-list-item/nav.service';
 import { TokenInterceptor } from './helper/token.interceptor';
-import { BikeComponent } from './pages/dataPages/bike/bike.component'
+import { BikeComponent } from './pages/dataPages/bike/bike.component';
+import { TableComponent, DeleteConfirmationDialog } from './components/table/table.component'
 
 
 @NgModule({
@@ -59,7 +60,8 @@ import { BikeComponent } from './pages/dataPages/bike/bike.component'
     TableOverviewComponent,
     CellComponent,
     DeleteConfirmationDialog,
-    BikeComponent
+    BikeComponent,
+    TableComponent
   ],
   imports: [
     BrowserModule,

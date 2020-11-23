@@ -29,9 +29,10 @@ export type CargoBikeResult = DeepExtractTypeSkipArrays<
   providedIn: 'root',
 })
 export class BikesService {
-  bikes: BehaviorSubject<CargoBikeResult[]> = new BehaviorSubject([]);
+  /** CargoBikes Array */
+  tableData: BehaviorSubject<CargoBikeResult[]> = new BehaviorSubject([]);
   loadingRowIds: BehaviorSubject<string[]> = new BehaviorSubject([]);
-  bike: BehaviorSubject<any> = new BehaviorSubject([]);
+  pageData: BehaviorSubject<any> = new BehaviorSubject([]);
   loadingBike: BehaviorSubject<boolean> = new BehaviorSubject(false);
   
 
@@ -58,20 +59,20 @@ export class BikesService {
     });
   }
 
-  loadBikes() {
+  loadTableData() {
     this.getCargoBikesGQL.fetch().subscribe((result) => {
-      this.bikes.next(result.data.cargoBikes);
+      this.tableData.next(result.data.cargoBikes);
 
     });
   }
 
-  loadCargoBike(variables: GetCargoBikeByIdQueryVariables) {
-    this.bike.next(null);
+  loadPageData(variables: GetCargoBikeByIdQueryVariables) {
+    this.pageData.next(null);
     this.loadingBike.next(true);
     this.getCargoBikeByIdGQL
       .fetch(variables)
       .subscribe((result) => {
-        this.bike.next(result.data.cargoBikeById);
+        this.pageData.next(result.data.cargoBikeById);
       })
       .add(() => {
         this.loadingBike.next(false);
@@ -84,8 +85,8 @@ export class BikesService {
       .fetch(variables)
       .subscribe((result) => {
         const newBike = result.data.cargoBikeById;
-        this.bikes.next(
-          this.bikes.value.map((bike) =>
+        this.tableData.next(
+          this.tableData.value.map((bike) =>
             newBike.id === bike.id ? newBike : bike
           )
         );
@@ -100,8 +101,8 @@ export class BikesService {
       .mutate(variables)
       .subscribe((result) => {
         const newBike = result.data.createCargoBike;
-        this.bikes.next(
-          [newBike, ...this.bikes.value]
+        this.tableData.next(
+          [newBike, ...this.tableData.value]
         );
       })
   }
@@ -112,8 +113,8 @@ export class BikesService {
       .mutate(variables)
       .subscribe((result) => {
         const newBike = result.data.updateCargoBike;
-        this.bikes.next(
-          this.bikes.value.map((bike) =>
+        this.tableData.next(
+          this.tableData.value.map((bike) =>
             newBike.id === bike.id ? newBike : bike
           )
         );
@@ -129,8 +130,8 @@ export class BikesService {
       .mutate(variables)
       .subscribe((result) => {
         const lockedBike = result.data.lockCargoBike;
-        this.bikes.next(
-          this.bikes.value.map((bike) =>
+        this.tableData.next(
+          this.tableData.value.map((bike) =>
             lockedBike.id === bike.id ? lockedBike : bike
           )
         );
@@ -146,8 +147,8 @@ export class BikesService {
       .mutate(variables)
       .subscribe((result) => {
         const unlockedBike = result.data.unlockCargoBike;
-        this.bikes.next(
-          this.bikes.value.map((bike) =>
+        this.tableData.next(
+          this.tableData.value.map((bike) =>
             unlockedBike.id === bike.id ? unlockedBike : bike
           )
         );
@@ -163,7 +164,7 @@ export class BikesService {
       .mutate(variables)
       .subscribe((result) => {
         if(result.data.deleteCargoBike) {
-          this.bikes.next([...this.bikes.value].filter(bike => bike.id !== variables.id));
+          this.tableData.next([...this.tableData.value].filter(bike => bike.id !== variables.id));
         }
       })
       .add(() => {
