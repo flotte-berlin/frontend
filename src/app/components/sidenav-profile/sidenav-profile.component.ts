@@ -19,6 +19,7 @@ export class SidenavProfileComponent implements OnInit {
       if (user !== null){
         this.name = user.user.name;
         this.email = user.user.email;
+        if (user.user.attributes !== null) return;
         this.profileURL = user.user.attributes.profile_url;
       }      
     });
