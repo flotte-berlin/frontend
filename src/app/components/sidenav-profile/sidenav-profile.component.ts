@@ -15,7 +15,6 @@ export class SidenavProfileComponent implements OnInit {
 
   ngOnInit() {
     this.auth.currentUser.subscribe(user => {
-      console.log("change " + JSON.stringify(user));
       if (user !== null){
         this.name = user.user.name;
         this.email = user.user.email;
