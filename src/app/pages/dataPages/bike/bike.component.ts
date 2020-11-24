@@ -1,5 +1,6 @@
 import { Component, OnInit } from '@angular/core';
 import { BikesService } from 'src/app/services/bikes.service';
+import { EquipmentTypeService } from 'src/app/services/equipmentType.service';
 
 @Component({
   selector: 'app-bike',
@@ -9,17 +10,17 @@ import { BikesService } from 'src/app/services/bikes.service';
 export class BikeComponent implements OnInit {
   propertiesInfo = [
     {
-      isGroup: true,
+      type: 'Group',
       title: 'Allgemein',
       properties: [
         { name: 'name', translation: 'Name' },
         { name: 'id', translation: 'ID', readonly: true },
-        { name: 'group', translation: 'Gruppe' },
+        { name: 'Group', translation: 'Gruppe' },
         { name: 'modelName', translation: 'Modell' },
       ],
     },
     {
-      isGroup: true,
+      type: 'Group',
       title: 'Versicherungsdaten',
       properties: [
         {
@@ -51,7 +52,7 @@ export class BikeComponent implements OnInit {
       ],
     },
     {
-      isGroup: true,
+      type: 'Group',
       title: 'Maße und Ladungen',
       properties: [
         { name: 'dimensionsAndLoad.bikeLength', translation: 'Länge' },
@@ -85,7 +86,7 @@ export class BikeComponent implements OnInit {
       ],
     },
     {
-      isGroup: true,
+      type: 'Group',
       title: 'Sicherheitsinformationen',
       properties: [
         { name: 'security.frameNumber', translation: 'Rahmennummer' },
@@ -102,7 +103,7 @@ export class BikeComponent implements OnInit {
       ],
     },
     {
-      isGroup: true,
+      type: 'Group',
       title: 'Ausstattung',
       properties: [
         { name: 'technicalEquipment.bicycleShift', translation: 'Schaltung' },
@@ -118,7 +119,7 @@ export class BikeComponent implements OnInit {
       ],
     },
     {
-      isGroup: true,
+      type: 'Group',
       title: 'Sonstiges',
       properties: [
         { name: 'stickerBikeNameState', translation: 'Aufkleber Status' },
@@ -131,7 +132,7 @@ export class BikeComponent implements OnInit {
       ],
     },
     {
-      isGroup: true,
+      type: 'Group',
       title: 'provider',
       properties: [
         { name: 'provider.id', translation: '' },
@@ -147,7 +148,7 @@ export class BikeComponent implements OnInit {
       ],
     },
     {
-      isGroup: true,
+      type: 'Group',
       title: 'lendingstation',
       properties: [
         { name: 'lendingStation.id', translation: '' },
@@ -157,6 +158,15 @@ export class BikeComponent implements OnInit {
         { name: 'lendingStation.address.zip', translation: '' },
       ],
     },
+    {
+      type: 'ReferenceTable',
+      title: 'Equipmenttypen',
+      name: 'equipmentType',
+      dataService: null,
+      columnInfo: [{name: 'name', translation: "Name"}, {name: 'description', translation: "Beschreibung"}],
+      nameToShowInSelection: (element) => {return element.name},
+      propertyNameOfUpdateInput: "equipmentTypeIds"
+    },
   ];
 
   headlineDataPath = 'name';
@@ -165,7 +175,14 @@ export class BikeComponent implements OnInit {
 
   dataService: any;
 
-  constructor(private bikesService: BikesService) {}
+  constructor(
+    private bikesService: BikesService,
+    private equipmentTypeService: EquipmentTypeService
+  ) {
+    this.propertiesInfo.find(
+      (prop) => prop.name === 'equipmentType'
+    ).dataService = this.equipmentTypeService;
+  }
 
   ngOnInit(): void {
     this.dataService = this.bikesService;

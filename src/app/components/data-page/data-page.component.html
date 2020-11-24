@@ -12,15 +12,29 @@
     {{ data[headlineDataPath] }}
   </h1>
   <ng-container *ngFor="let object of propertiesInfo">
-    <mat-card class="card" *ngIf="object.isGroup">
-      <mat-card-title>{{object.title}}</mat-card-title>
+    <mat-card class="inline-card" *ngIf="object.type === 'Group'">
+      <mat-card-title>{{ object.title }}</mat-card-title>
 
-      <app-cell *ngFor="let prop of object.properties"
+      <app-cell
+        *ngFor="let prop of object.properties"
         [editable]="data.isLockedByMe && !prop.readonly"
         [(value)]="data[prop.name]"
         [label]="prop.translation || prop.name"
         [inputType]="prop.type"
       ></app-cell>
+    </mat-card>
+
+    <mat-card class="inline-card" *ngIf="object.type === 'ReferenceTable'">
+      <mat-card-title>{{ object.title }}</mat-card-title>
+      <app-reference-table
+        [dataServiceThatProvidesThePossibleData]="object.dataService"
+        [nameToShowInSelection]="object.nameToShowInSelection"
+        [columnInfo]="object.columnInfo"
+        [data]="data[object.name]"
+        [editable]="data.isLockedByMe"
+        [tableDataGQLType]="object.tableDataGQLType"
+        (referenceIds)="addReferenceIdsToObject($event, object)"
+      ></app-reference-table>
     </mat-card>
   </ng-container>
 </div>
@@ -37,40 +51,40 @@
 </button>
 
 <div id="floating-fab-button-box">
-<button
-  mat-fab
-  (click)="lock()"
-  *ngIf="!data.isLockedByMe && !data.isLocked"
-  class="floating-fab-button"
-  color="primary"
-  [disabled]="isSavingOrLocking || isLoading"
->
-  <mat-icon>edit</mat-icon>
-</button>
-<button
-  mat-mini-fab
-  (click)="cancel()"
-  *ngIf="data.isLockedByMe"
-  class="floating-fab-button"
-  [disabled]="isSavingOrLocking || isLoading"
->
-  <mat-icon>cancel</mat-icon>
-</button>
-<button
-  mat-fab
-  (click)="save()"
-  *ngIf="data.isLockedByMe"
-  class="floating-fab-button"
-  [disabled]="isSavingOrLocking || isLoading"
->
-  <mat-icon>save</mat-icon>
-</button>
-<button
-  mat-fab
-  *ngIf="data.isLocked"
-  matTooltip="Dieser Eintrag wird gerade von einem anderen Bearbeiter editiert. Aktualisieren Sie die Seite, um den neuen Status abzurufen."
-  class="floating-fab-button"
->
-  <mat-icon>locked</mat-icon>
-</button>
+  <button
+    mat-fab
+    (click)="lock()"
+    *ngIf="!data.isLockedByMe && !data.isLocked"
+    class="floating-fab-button"
+    color="primary"
+    [disabled]="isSavingOrLocking || isLoading"
+  >
+    <mat-icon>edit</mat-icon>
+  </button>
+  <button
+    mat-mini-fab
+    (click)="cancel()"
+    *ngIf="data.isLockedByMe"
+    class="floating-fab-button"
+    [disabled]="isSavingOrLocking || isLoading"
+  >
+    <mat-icon>cancel</mat-icon>
+  </button>
+  <button
+    mat-fab
+    (click)="save()"
+    *ngIf="data.isLockedByMe"
+    class="floating-fab-button"
+    [disabled]="isSavingOrLocking || isLoading"
+  >
+    <mat-icon>save</mat-icon>
+  </button>
+  <button
+    mat-fab
+    *ngIf="data.isLocked"
+    matTooltip="Dieser Eintrag wird gerade von einem anderen Bearbeiter editiert. Aktualisieren Sie die Seite, um den neuen Status abzurufen."
+    class="floating-fab-button"
+  >
+    <mat-icon>locked</mat-icon>
+  </button>
 </div>

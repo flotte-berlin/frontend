@@ -24,7 +24,7 @@ import { MatDialog, MatDialogRef } from '@angular/material/dialog';
 })
 export class TableComponent {
   @Input()
-  headline: string = "Keine Überschrift";
+  headline: string = null;
   /** this array defines the columns and translations of the table and the order they are displayed  */
   @Input()
   columnInfo: {

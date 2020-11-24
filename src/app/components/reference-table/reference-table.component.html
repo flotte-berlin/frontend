@@ -1,0 +1,93 @@
+<div class="table-page-wrapper">
+  <div class="table-control">
+    <form [formGroup]="addForm">
+      <mat-form-field>
+        <input
+          type="text"
+          matInput
+          placeholder="Element hinzufügen"
+          formControlName="addGroup"
+          [matAutocomplete]="autoGroup"
+        />
+        <mat-autocomplete #autoGroup="matAutocomplete">
+          <mat-option
+            *ngFor="let element of possibleValueOptions"
+            [value]="nameToShowInSelection(element)"
+            (click)="addReference(element)"
+          >
+            {{ nameToShowInSelection(element) }}
+          </mat-option>
+        </mat-autocomplete>
+      </mat-form-field>
+    </form>
+    <mat-form-field class="filter">
+      <mat-label>Tabelle filtern</mat-label>
+      <input
+        matInput
+        (input)="applyTableFilter()"
+        [(ngModel)]="tableFilterString"
+        placeholder="Suchbegriff eingeben..."
+      />
+    </mat-form-field>
+    <mat-paginator
+      [pageSizeOptions]="[15, 25]"
+      showFirstLastButtons
+    ></mat-paginator>
+  </div>
+  <div class="table-container">
+    <table mat-table class="mat-elevation-z8" matSort [dataSource]="dataSource">
+      <!--- Note that these columns can be defined in any order.
+            The actual rendered columns are set as a property on the row definition" -->
+
+      <!-- Other Columns -->
+      <ng-container
+        *ngFor="let column of columnInfo"
+        [matColumnDef]="column.name"
+        [sticky]="isStickyColumn(column.name)"
+      >
+        <th mat-header-cell *matHeaderCellDef mat-sort-header>
+          {{ column.translation || column.name }}
+        </th>
+        <td mat-cell *matCellDef="let element">
+          <app-cell
+            *ngIf="column.type === 'Boolean'; else stringValue"
+            [editable]="false"
+            [(value)]="element[column.name]"
+            [inputType]="column.type"
+          ></app-cell>
+          <ng-template #stringValue>
+            <span *ngIf="!column.link">{{ element[column.name] }}</span>
+            <a
+              mat-button
+              color="primary"
+              *ngIf="column.link"
+              [routerLink]="column.link(element)"
+              >{{ element[column.name] }}</a
+            >
+          </ng-template>
+        </td>
+      </ng-container>
+
+      <!-- Buttons Column -->
+      <ng-container matColumnDef="buttons" stickyEnd>
+        <th mat-header-cell *matHeaderCellDef></th>
+        <td mat-cell *matCellDef="let element">
+          <div class="button-wrapper">
+            <button
+              mat-icon-button
+              matTooltip="Entfernen"
+              (click)="delete(element)"
+              [disabled]="!editable"
+            >
+              <mat-icon>delete</mat-icon>
+            </button>
+          </div>
+        </td>
+      </ng-container>
+
+      <!-- Table Definition -->
+      <tr mat-header-row *matHeaderRowDef="displayedColumns; sticky: true"></tr>
+      <tr mat-row *matRowDef="let row; columns: displayedColumns"></tr>
+    </table>
+  </div>
+</div>

@@ -27,7 +27,7 @@ import {MatSelectModule} from '@angular/material/select';
 import { MatPaginatorModule } from '@angular/material/paginator';
 import { MatSortModule } from '@angular/material/sort';
 import {MatDialogModule} from '@angular/material/dialog';
-
+import {MatAutocompleteModule} from '@angular/material/autocomplete';
 
 
 import { AppRoutingModule } from './app-routing.module';
@@ -49,7 +49,8 @@ import { TableComponent, DeleteConfirmationDialog } from './components/table/tab
 import { DataPageComponent } from './components/data-page/data-page.component';
 import { EquipmentTypesComponent } from './pages/tables/equipment-types/equipment-types.component';
 import { EngagementTypesComponent } from './pages/tables/engagement-types/engagement-types.component';
-import { WorkshopsComponent } from './pages/tables/workshops/workshops.component'
+import { WorkshopsComponent } from './pages/tables/workshops/workshops.component';
+import { ReferenceTableComponent } from './components/reference-table/reference-table.component'
 
 
 @NgModule({
@@ -69,7 +70,8 @@ import { WorkshopsComponent } from './pages/tables/workshops/workshops.component
     DataPageComponent,
     EquipmentTypesComponent,
     EngagementTypesComponent,
-    WorkshopsComponent
+    WorkshopsComponent,
+    ReferenceTableComponent
   ],
   imports: [
     BrowserModule,
@@ -100,7 +102,8 @@ import { WorkshopsComponent } from './pages/tables/workshops/workshops.component
     MatSelectModule,
     MatPaginatorModule,
     MatSortModule,
-    MatDialogModule
+    MatDialogModule,
+    MatAutocompleteModule
   ],
   providers: [NavService,
     { provide: HTTP_INTERCEPTORS, useClass: TokenInterceptor, multi: true }],

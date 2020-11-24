@@ -95,7 +95,12 @@ export class SchemaService {
   }
 
   filterObject(graphQLTypeName: string, object: object): any {
-    const filteredObject = {};
+    let filteredObject;
+    if (Array.isArray(object)) {
+      return object;
+      //TODO: check if array consists of objects?
+    } else filteredObject = new Object();
+
     for (const prop in object) {
       if (typeof object[prop] === 'object' && object[prop] !== null) {
         const info = this.getTypeInformation(graphQLTypeName, prop);

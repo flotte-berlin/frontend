@@ -4,17 +4,27 @@ import { deepen } from 'src/app/helperFunctions/deepenObject';
 import { flatten } from 'src/app/helperFunctions/flattenObject';
 import { SchemaService } from 'src/app/services/schema.service';
 
-interface PropertyInfoType {
+interface PropertyTypeInfo {
   name: string;
   translation: string;
   readonly?: boolean;
   type?: string;
 }
 
-interface PropertyGroup {
-  isGroup: boolean;
+interface PropertyGroupInfo {
+  type: string;
   title: string;
-  properties: PropertyInfoType[];
+  properties: PropertyTypeInfo[];
+}
+interface ReferenceTableInfo {
+  type: string;
+  title: string;
+  name: string;
+  dataService: any;
+  columnInfo: PropertyTypeInfo[];
+  nameToShowInSelection: any;
+  propertyNameOfUpdateInput: string;
+  referenceIds: Array<string>;
 }
 
 @Component({
@@ -24,7 +34,7 @@ interface PropertyGroup {
 })
 export class DataPageComponent implements OnInit {
   @Input()
-  propertiesInfo: Array<PropertyInfoType | PropertyGroup> = [];
+  propertiesInfo: Array<any> = [];
 
   @Input()
   dataService: any;
@@ -32,9 +42,11 @@ export class DataPageComponent implements OnInit {
   @Input()
   headlineDataPath: string;
   @Input()
-  pageDataGQLType: string = 'CargoBike';
+  pageDataGQLType: string;
   @Input()
-  pageDataGQLUpdateInputType: string = 'CargoBikeUpdateInput';
+  pageDataGQLUpdateInputType: string;
+  @Input()
+  propertyNameOfUpdateInput: string;
 
   @Output() lockEvent = new EventEmitter();
   @Output() saveEvent = new EventEmitter();
@@ -67,8 +79,14 @@ export class DataPageComponent implements OnInit {
 
   addPropertiesFromGQLSchemaToObject(infoObject: any) {
     for (const prop of infoObject) {
-      if (prop.isGroup) {
+      if (prop.type === 'Group') {
         this.addPropertiesFromGQLSchemaToObject(prop.properties);
+      } else if (prop.type === 'ReferenceTable') {
+        prop.tableDataGQLType =
+          prop.tableDataGQLType ||
+          this.schemaService.getTypeInformation(this.pageDataGQLType, prop.name)
+            .type;
+        prop.referenceIds = [];
       } else {
         const typeInformation = this.schemaService.getTypeInformation(
           this.pageDataGQLType,
@@ -98,7 +116,11 @@ export class DataPageComponent implements OnInit {
   }
 
   cancel() {
-    this.cancelEvent.emit(deepen(this.data))
+    this.cancelEvent.emit(deepen(this.data));
+  }
+
+  addReferenceIdsToObject(ids: string[], object) {
+    this.data[object.propertyNameOfUpdateInput] = ids;
   }
 
   reloadPageData() {

@@ -63,7 +63,7 @@ export class BikesService {
   loadTableData() {
     this.tableData.next(null);
     this.getCargoBikesGQL.fetch().subscribe((result) => {
-      this.tableData.next(result.data.cargoBikes);
+      this.tableData.next(result.data?.cargoBikes);
     });
   }
 
@@ -85,7 +85,7 @@ export class BikesService {
     this.reloadCargoBikeByIdGQL
       .fetch(variables)
       .subscribe((result) => {
-        this.updateDataRowFromResponse(result.data.cargoBikeById)
+        this.updateDataRowFromResponse(result.data.cargoBikeById);
       })
       .add(() => {
         this.removeLoadingRowId(variables.id);
@@ -153,11 +153,13 @@ export class BikesService {
   }
 
   private updateDataRowFromResponse(rowFromResponse: any) {
-    const newTableData = this.tableData.value.map((row) =>
-      rowFromResponse.id === row.id ? rowFromResponse : row
-    );
-    this.tableData.next(newTableData);
-    if ((rowFromResponse.id === this.pageData?.value?.id)) {
+    if (this.tableData.value) {
+      const newTableData = this.tableData.value.map((row) =>
+        rowFromResponse.id === row.id ? rowFromResponse : row
+      );
+      this.tableData.next(newTableData);
+    }
+    if (rowFromResponse.id === this.pageData?.value?.id) {
       this.pageData.next(rowFromResponse);
     }
   }

@@ -32,7 +32,7 @@ export class EquipmentTypeService {
     private updateEquipmentTypeGQL: UpdateEquipmentTypeGQL,
     private lockEquipmentTypeGQL: LockEquipmentTypeGQL,
     private unlockEquipmentTypeGQL: UnlockEquipmentTypeGQL,
-    private deleteEquipmentTypeGQL: DeleteEquipmentTypeGQL,
+    private deleteEquipmentTypeGQL: DeleteEquipmentTypeGQL
   ) {}
 
   addLoadingRowId(id: string) {
@@ -116,9 +116,11 @@ export class EquipmentTypeService {
   }
 
   private updateDataRowFromResponse(rowFromResponse: any) {
-    const newTableData = this.tableData.value.map((row) =>
-      rowFromResponse.id === row.id ? rowFromResponse : row
-    );
-    this.tableData.next(newTableData);
+    if (this.tableData.value) {
+      const newTableData = this.tableData.value.map((row) =>
+        rowFromResponse.id === row.id ? rowFromResponse : row
+      );
+      this.tableData.next(newTableData);
+    }
   }
 }
