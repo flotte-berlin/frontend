@@ -15,9 +15,12 @@ export class SidenavProfileComponent implements OnInit {
 
   ngOnInit() {
     this.auth.currentUser.subscribe(user => {
-      this.name = user.user.name;
-      this.email = user.user.email;
-      this.profileURL = user.user.attributes.profile_url;
+      console.log("change " + JSON.stringify(user));
+      if (user !== null){
+        this.name = user.user.name;
+        this.email = user.user.email;
+        this.profileURL = user.user.attributes.profile_url;
+      }      
     });
   }
 }
