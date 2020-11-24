@@ -651,7 +651,7 @@
           },
           {
             "name": "security",
-            "description": "Safety is a custom type, that stores information about security features.\nTODO: Should this be called Security?",
+            "description": "Safety is a custom type, that stores information about security features.",
             "type": {
               "kind": "NON_NULL",
               "name": null,
@@ -693,7 +693,21 @@
           },
           {
             "name": "equipmentTypeIds",
-            "description": "Refers to equipment that is not unique. See kommentierte info tabelle -> Fragen -> Frage 2",
+            "description": "Refers to equipment that is not unique. See kommentierte info tabelle -> Fragen -> Frage 2\nWhen set to null or [], no relations will be added.",
+            "type": {
+              "kind": "LIST",
+              "name": null,
+              "ofType": {
+                "kind": "SCALAR",
+                "name": "ID",
+                "ofType": null
+              }
+            },
+            "defaultValue": null
+          },
+          {
+            "name": "equipmentIds",
+            "description": "Refers to unique equipment\nWhen set to null or [], no relations will be added.",
             "type": {
               "kind": "LIST",
               "name": null,
@@ -771,7 +785,7 @@
       {
         "kind": "INPUT_OBJECT",
         "name": "CargoBikeUpdateInput",
-        "description": "if you want to add bike to a lending station, create a new timeFrame with to: Date = null",
+        "description": "If you want to add bike to a lending station, create a new timeFrame with to: Date = null",
         "fields": null,
         "inputFields": [
           {
@@ -860,7 +874,7 @@
           },
           {
             "name": "security",
-            "description": "Safety is a custom type, that stores information about security features.\nTODO: Should this be called Security?",
+            "description": "Safety is a custom type, that stores information about security features.",
             "type": {
               "kind": "INPUT_OBJECT",
               "name": "SecurityUpdateInput",
@@ -890,7 +904,21 @@
           },
           {
             "name": "equipmentTypeIds",
-            "description": "Refers to equipment that is not unique. See kommentierte info tabelle -> Fragen -> Frage 2\nIf set, ols relations will be over written. Set [] to delete all",
+            "description": "Refers to equipment that is not unique. See kommentierte info tabelle -> Fragen -> Frage 2\nWhen set to null, field will be ignored.\nWhen set to [], all relations will be deleted.\nElse all realtions will be deleted and the specified relations will be added.",
+            "type": {
+              "kind": "LIST",
+              "name": null,
+              "ofType": {
+                "kind": "SCALAR",
+                "name": "ID",
+                "ofType": null
+              }
+            },
+            "defaultValue": null
+          },
+          {
+            "name": "equipmentIds",
+            "description": "Refers to unique equipment\nWhen set to null, field will be ignored.\nWhen set to [], all relations will be deleted.\nElse all realtions will be deleted and the specified relations will be added.",
             "type": {
               "kind": "LIST",
               "name": null,
@@ -4488,9 +4516,13 @@
             "name": "name",
             "description": null,
             "type": {
-              "kind": "SCALAR",
-              "name": "String",
-              "ofType": null
+              "kind": "NON_NULL",
+              "name": null,
+              "ofType": {
+                "kind": "SCALAR",
+                "name": "String",
+                "ofType": null
+              }
             },
             "defaultValue": null
           },

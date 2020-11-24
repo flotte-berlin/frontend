@@ -24,19 +24,19 @@ mutation CreateCargoBike($bike: CargoBikeCreateInput!) {
 
 mutation UpdateCargoBike($bike: CargoBikeUpdateInput!) {
   updateCargoBike(cargoBike: $bike) {
-    ...CargoBikeFieldsForTable
+    ...CargoBikeFieldsForPage
   }
 }
 
 mutation LockCargoBike($id: ID!) {
   lockCargoBike(id: $id) {
-    ...CargoBikeFieldsForTable
+    ...CargoBikeFieldsForPage
   }
 }
 
 mutation UnlockCargoBike($id: ID!) {
   unlockCargoBike(id: $id) {
-    ...CargoBikeFieldsForTable
+    ...CargoBikeFieldsForPage
   }
 }
 

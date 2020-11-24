@@ -109,17 +109,22 @@ export type CargoBikeCreateInput = {
   forCargo: Scalars['Boolean'];
   forChildren: Scalars['Boolean'];
   numberOfChildren: Scalars['Int'];
-  /**
-   * Safety is a custom type, that stores information about security features.
-   * TODO: Should this be called Security?
-   */
+  /** Safety is a custom type, that stores information about security features. */
   security: SecurityCreateInput;
   /** Does not refer to an extra table in the database. */
   technicalEquipment: TechnicalEquipmentCreateInput;
   /** Does not refer to an extra table in the database. */
   dimensionsAndLoad: DimensionsAndLoadCreateInput;
-  /** Refers to equipment that is not unique. See kommentierte info tabelle -> Fragen -> Frage 2 */
+  /**
+   * Refers to equipment that is not unique. See kommentierte info tabelle -> Fragen -> Frage 2
+   * When set to null or [], no relations will be added.
+   */
   equipmentTypeIds?: Maybe<Array<Maybe<Scalars['ID']>>>;
+  /**
+   * Refers to unique equipment
+   * When set to null or [], no relations will be added.
+   */
+  equipmentIds?: Maybe<Array<Maybe<Scalars['ID']>>>;
   /** Sticker State */
   stickerBikeNameState?: Maybe<StickerBikeNameState>;
   note?: Maybe<Scalars['String']>;
@@ -128,7 +133,7 @@ export type CargoBikeCreateInput = {
   taxes: TaxesCreateInput;
 };
 
-/** if you want to add bike to a lending station, create a new timeFrame with to: Date = null */
+/** If you want to add bike to a lending station, create a new timeFrame with to: Date = null */
 export type CargoBikeUpdateInput = {
   id: Scalars['ID'];
   /** see column A in info tabelle */
@@ -139,10 +144,7 @@ export type CargoBikeUpdateInput = {
   forCargo?: Maybe<Scalars['Boolean']>;
   forChildren?: Maybe<Scalars['Boolean']>;
   numberOfChildren?: Maybe<Scalars['Int']>;
-  /**
-   * Safety is a custom type, that stores information about security features.
-   * TODO: Should this be called Security?
-   */
+  /** Safety is a custom type, that stores information about security features. */
   security?: Maybe<SecurityUpdateInput>;
   /** Does not refer to an extra table in the database. */
   technicalEquipment?: Maybe<TechnicalEquipmentUpdateInput>;
@@ -150,9 +152,18 @@ export type CargoBikeUpdateInput = {
   dimensionsAndLoad?: Maybe<DimensionsAndLoadUpdateInput>;
   /**
    * Refers to equipment that is not unique. See kommentierte info tabelle -> Fragen -> Frage 2
-   * If set, ols relations will be over written. Set [] to delete all
+   * When set to null, field will be ignored.
+   * When set to [], all relations will be deleted.
+   * Else all realtions will be deleted and the specified relations will be added.
    */
   equipmentTypeIds?: Maybe<Array<Maybe<Scalars['ID']>>>;
+  /**
+   * Refers to unique equipment
+   * When set to null, field will be ignored.
+   * When set to [], all relations will be deleted.
+   * Else all realtions will be deleted and the specified relations will be added.
+   */
+  equipmentIds?: Maybe<Array<Maybe<Scalars['ID']>>>;
   /** Sticker State */
   stickerBikeNameState?: Maybe<StickerBikeNameState>;
   note?: Maybe<Scalars['String']>;
@@ -613,7 +624,7 @@ export type EquipmentType = {
 };
 
 export type EquipmentTypeCreateInput = {
-  name?: Maybe<Scalars['String']>;
+  name: Scalars['String'];
   description?: Maybe<Scalars['String']>;
 };
 
@@ -1783,7 +1794,7 @@ export type UpdateCargoBikeMutation = (
   { __typename?: 'Mutation' }
   & { updateCargoBike: (
     { __typename?: 'CargoBike' }
-    & CargoBikeFieldsForTableFragment
+    & CargoBikeFieldsForPageFragment
   ) }
 );
 
@@ -1796,7 +1807,7 @@ export type LockCargoBikeMutation = (
   { __typename?: 'Mutation' }
   & { lockCargoBike: (
     { __typename?: 'CargoBike' }
-    & CargoBikeFieldsForTableFragment
+    & CargoBikeFieldsForPageFragment
   ) }
 );
 
@@ -1809,7 +1820,7 @@ export type UnlockCargoBikeMutation = (
   { __typename?: 'Mutation' }
   & { unlockCargoBike: (
     { __typename?: 'CargoBike' }
-    & CargoBikeFieldsForTableFragment
+    & CargoBikeFieldsForPageFragment
   ) }
 );
 
@@ -2449,10 +2460,10 @@ export const CreateCargoBikeDocument = gql`
 export const UpdateCargoBikeDocument = gql`
     mutation UpdateCargoBike($bike: CargoBikeUpdateInput!) {
   updateCargoBike(cargoBike: $bike) {
-    ...CargoBikeFieldsForTable
+    ...CargoBikeFieldsForPage
   }
 }
-    ${CargoBikeFieldsForTableFragmentDoc}`;
+    ${CargoBikeFieldsForPageFragmentDoc}`;
 
   @Injectable({
     providedIn: 'root'
@@ -2467,10 +2478,10 @@ export const UpdateCargoBikeDocument = gql`
 export const LockCargoBikeDocument = gql`
     mutation LockCargoBike($id: ID!) {
   lockCargoBike(id: $id) {
-    ...CargoBikeFieldsForTable
+    ...CargoBikeFieldsForPage
   }
 }
-    ${CargoBikeFieldsForTableFragmentDoc}`;
+    ${CargoBikeFieldsForPageFragmentDoc}`;
 
   @Injectable({
     providedIn: 'root'
@@ -2485,10 +2496,10 @@ export const LockCargoBikeDocument = gql`
 export const UnlockCargoBikeDocument = gql`
     mutation UnlockCargoBike($id: ID!) {
   unlockCargoBike(id: $id) {
-    ...CargoBikeFieldsForTable
+    ...CargoBikeFieldsForPage
   }
 }
-    ${CargoBikeFieldsForTableFragmentDoc}`;
+    ${CargoBikeFieldsForPageFragmentDoc}`;
 
   @Injectable({
     providedIn: 'root'
