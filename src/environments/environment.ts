@@ -4,7 +4,7 @@
 
 export const environment = {
   production: false,
-  apiUrl: "https://flotte.duckdns.org/graphql",
+  apiUrl: "https://flotte.duckdns.org", // without /graphql !!!
   authUrl: "https://flotte.duckdns.org/user-management"
 };
 
