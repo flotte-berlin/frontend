@@ -54,3 +54,9 @@ This Information has to be passed to the cell components dynamically which is on
 </app-cell>
 ```
 We can't pass it in an other form, else it would not be possible to pass a value, that is deeper in the data object than the first level (like insuranceData.billing), which is why the data has to be flattened to add it dynamically to a table or data-page.
+
+### Where to change the urls
+If the backend url changes, it has to be changed in the following files:
+- ./src/environments/
+- ./apollo.config.js for autocompletion when writing queries etc.
+- ./codegen.yml for graphQL codegen (to generate schema, types etc.)

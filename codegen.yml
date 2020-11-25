@@ -1,6 +1,6 @@
 overwrite: true
 watch: true
-schema: "http://173.212.197.169:4002/graphql"
+schema: "https://flotte.duckdns.org/graphqldev"
 documents: "src/app/graphqlOperations/**/*.graphql"
 generates:
   src/generated/graphql.ts:

@@ -1,9 +1,8 @@
 fragment PersonFields on Person {
-    id
-    name
-    firstName
-
-    isLocked
+  id
+  name
+  firstName
+  isLocked
   isLockedByMe
   lockedBy
   lockedUntil
