@@ -51,6 +51,7 @@ import { EquipmentTypesComponent } from './pages/tables/equipment-types/equipmen
 import { EngagementTypesComponent } from './pages/tables/engagement-types/engagement-types.component';
 import { WorkshopsComponent } from './pages/tables/workshops/workshops.component';
 import { ReferenceTableComponent } from './components/reference-table/reference-table.component'
+import { MatSnackBarModule } from '@angular/material/snack-bar';
 
 
 @NgModule({
@@ -96,6 +97,7 @@ import { ReferenceTableComponent } from './components/reference-table/reference-
     MatProgressSpinnerModule,
     MatProgressBarModule,
     MatCheckboxModule,
+    MatSnackBarModule,
     GraphQLModule,
     DragDropModule,
     MatTooltipModule,

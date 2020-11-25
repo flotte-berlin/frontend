@@ -1,5 +1,6 @@
 import { Component, OnInit } from '@angular/core';
 import { AuthService } from '../../services/auth.service';
+import { SnackBarService } from '../../services/snackbar.service';
 
 @Component({
   selector: 'sidenav-profile',
@@ -11,7 +12,7 @@ export class SidenavProfileComponent implements OnInit {
   email: String;
   profileURL: String;
 
-  constructor( private auth: AuthService) { }
+  constructor( private auth: AuthService, private snackBar: SnackBarService) { }
 
   ngOnInit() {
     this.auth.currentUser.subscribe(user => {
@@ -22,5 +23,9 @@ export class SidenavProfileComponent implements OnInit {
         this.profileURL = user.user.attributes.profile_url;
       }      
     });
+  }
+
+  testSnackBar(){
+    this.snackBar.openSnackBar("A user administration will be found here", "Ok");
   }
 }
