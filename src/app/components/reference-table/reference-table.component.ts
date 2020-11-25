@@ -22,7 +22,7 @@ export class ReferenceTableComponent {
   /** this array defines the columns and translations of the table and the order they are displayed  */
   @Input()
   columnInfo: {
-    name: string;
+    dataPath: string;
     translation: string;
     sticky?: boolean;
     type?: string;
@@ -85,7 +85,7 @@ export class ReferenceTableComponent {
   ngOnInit() {
     this.addColumnPropertiesFromGQLSchemaToColumnInfo();
     this.columnInfo.forEach((column) => {
-      this.displayedColumns.push(column.name);
+      this.displayedColumns.push(column.dataPath);
     });
     this.displayedColumns.push('buttons');
 
@@ -121,15 +121,15 @@ export class ReferenceTableComponent {
     for (const column of this.columnInfo) {
       const typeInformation = this.schemaService.getTypeInformation(
         this.tableDataGQLType,
-        column.name
+        column.dataPath
       );
       column.type = column.type || typeInformation.type;
     }
   }
 
-  isStickyColumn(propertyName: string) {
+  isStickyColumn(dataPath: string) {
     return (
-      this.columnInfo.find((column) => column.name === propertyName)?.sticky ||
+      this.columnInfo.find((column) => column.dataPath === dataPath)?.sticky ||
       false
     );
   }

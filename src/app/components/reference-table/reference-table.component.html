@@ -42,27 +42,27 @@
       <!-- Other Columns -->
       <ng-container
         *ngFor="let column of columnInfo"
-        [matColumnDef]="column.name"
-        [sticky]="isStickyColumn(column.name)"
+        [matColumnDef]="column.dataPath"
+        [sticky]="isStickyColumn(column.dataPath)"
       >
         <th mat-header-cell *matHeaderCellDef mat-sort-header>
-          {{ column.translation || column.name }}
+          {{ column.translation || column.dataPath }}
         </th>
         <td mat-cell *matCellDef="let element">
           <app-cell
             *ngIf="column.type === 'Boolean'; else stringValue"
             [editable]="false"
-            [(value)]="element[column.name]"
+            [(value)]="element[column.dataPath]"
             [inputType]="column.type"
           ></app-cell>
           <ng-template #stringValue>
-            <span *ngIf="!column.link">{{ element[column.name] }}</span>
+            <span *ngIf="!column.link">{{ element[column.dataPath] }}</span>
             <a
               mat-button
               color="primary"
               *ngIf="column.link"
               [routerLink]="column.link(element)"
-              >{{ element[column.name] }}</a
+              >{{ element[column.dataPath] }}</a
             >
           </ng-template>
         </td>

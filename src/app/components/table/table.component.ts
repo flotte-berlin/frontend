@@ -28,7 +28,7 @@ export class TableComponent {
   /** this array defines the columns and translations of the table and the order they are displayed  */
   @Input()
   columnInfo: {
-    name: string;
+    dataPath: string;
     translation: string;
     acceptedForCreation?: boolean;
     requiredForCreation?: boolean;
@@ -107,7 +107,7 @@ export class TableComponent {
     };
 
     this.columnInfo.forEach((column) =>
-      this.displayedColumns.push(column.name)
+      this.displayedColumns.push(column.dataPath)
     );
     this.displayedColumns.unshift(this.additionalColumnsFront[0]);
     this.displayedColumns.push(this.additionalColumnsBack[0]);
@@ -165,37 +165,37 @@ export class TableComponent {
     for (const column of this.columnInfo) {
       const typeInformation = this.schemaService.getTypeInformation(
         this.tableDataGQLType,
-        column.name
+        column.dataPath
       );
       column.type = column.type || typeInformation.type;
     }
     for (const column of this.columnInfo) {
       const typeInformation = this.schemaService.getTypeInformation(
         this.tableDataGQLUpdateInputType,
-        column.name
+        column.dataPath
       );
       column.readonly = column.readonly || !typeInformation.isPartOfType;
     }
     for (const column of this.columnInfo) {
       const typeInformation = this.schemaService.getTypeInformation(
         this.tableDataGQLCreateInputType,
-        column.name
+        column.dataPath
       );
       column.requiredForCreation = column.requiredForCreation || typeInformation.isRequired;
       column.acceptedForCreation = column.acceptedForCreation || typeInformation.isPartOfType;
     }
   }
 
-  getTranslation(propertyName: string) {
+  getTranslation(dataPath: string) {
     return (
-      this.columnInfo.find((column) => column.name === propertyName)
-        ?.translation || propertyName
+      this.columnInfo.find((column) => column.dataPath === dataPath)
+        ?.translation || dataPath
     );
   }
 
-  isStickyColumn(propertyName: string) {
+  isStickyColumn(dataPath: string) {
     return (
-      this.columnInfo.find((column) => column.name === propertyName)?.sticky ||
+      this.columnInfo.find((column) => column.dataPath === dataPath)?.sticky ||
       false
     );
   }

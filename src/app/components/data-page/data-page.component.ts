@@ -5,7 +5,7 @@ import { flatten } from 'src/app/helperFunctions/flattenObject';
 import { SchemaService } from 'src/app/services/schema.service';
 
 interface PropertyTypeInfo {
-  name: string;
+  dataPath: string;
   translation: string;
   readonly?: boolean;
   type?: string;
@@ -19,7 +19,7 @@ interface PropertyGroupInfo {
 interface ReferenceTableInfo {
   type: string;
   title: string;
-  name: string;
+  dataPath: string;
   dataService: any;
   columnInfo: PropertyTypeInfo[];
   nameToShowInSelection: any;
@@ -84,18 +84,18 @@ export class DataPageComponent implements OnInit {
       } else if (prop.type === 'ReferenceTable') {
         prop.tableDataGQLType =
           prop.tableDataGQLType ||
-          this.schemaService.getTypeInformation(this.pageDataGQLType, prop.name)
+          this.schemaService.getTypeInformation(this.pageDataGQLType, prop.dataPath)
             .type;
         prop.referenceIds = [];
       } else {
         const typeInformation = this.schemaService.getTypeInformation(
           this.pageDataGQLType,
-          prop.name
+          prop.dataPath
         );
         prop.type = prop.type || typeInformation.type;
         const updateTypeInformation = this.schemaService.getTypeInformation(
           this.pageDataGQLUpdateInputType,
-          prop.name
+          prop.dataPath
         );
         prop.readonly = prop.readonly || !updateTypeInformation.isPartOfType;
       }

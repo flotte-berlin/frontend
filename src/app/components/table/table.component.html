@@ -97,12 +97,12 @@
       <!-- Other Columns -->
       <ng-container
         *ngFor="let column of columnInfo"
-        [matColumnDef]="column.name"
-        [sticky]="isStickyColumn(column.name)"
+        [matColumnDef]="column.dataPath"
+        [sticky]="isStickyColumn(column.dataPath)"
       >
         <!-- add cdkDrag to make columns draggable-->
         <th mat-header-cell *matHeaderCellDef mat-sort-header>
-          {{ getTranslation(column.name) }}
+          {{ getTranslation(column.dataPath) }}
         </th>
         <td mat-cell *matCellDef="let element">
           <app-cell
@@ -117,19 +117,19 @@
               (!column.readonly && element.isLockedByMe)
             "
             [required]="element.newObject && column.requiredForCreation"
-            (validityChange)="validityChange(element, column.name, $event)"
-            [(value)]="element[column.name]"
+            (validityChange)="validityChange(element, column.dataPath, $event)"
+            [(value)]="element[column.dataPath]"
             [inputType]="column.type"
             [link]="column.link ? column.link(element) : null"
           ></app-cell>
           <ng-template #stringValue>
-            <span *ngIf="!column.link">{{ element[column.name] }}</span>
+            <span *ngIf="!column.link">{{ element[column.dataPath] }}</span>
             <a
               mat-button
               color="primary"
               *ngIf="column.link"
               [routerLink]="column.link(element)"
-              >{{ element[column.name] }}</a
+              >{{ element[column.dataPath] }}</a
             >
           </ng-template>
         </td>

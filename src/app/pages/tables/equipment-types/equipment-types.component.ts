@@ -10,9 +10,9 @@ export class EquipmentTypesComponent implements OnInit {
   headline = 'Ausstattungstypen';
 
   columnInfo = [
-    { name: 'id', translation: 'ID', readonly: true },
-    { name: 'name', translation: 'Name', requiredForCreation: true },
-    { name: 'description', translation: 'Beschreibung' },
+    { dataPath: 'id', translation: 'ID', readonly: true },
+    { dataPath: 'name', translation: 'Name', requiredForCreation: true },
+    { dataPath: 'description', translation: 'Beschreibung' },
   ];
 
   dataService: EquipmentTypeService;

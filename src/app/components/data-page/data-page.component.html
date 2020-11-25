@@ -18,8 +18,8 @@
       <app-cell
         *ngFor="let prop of object.properties"
         [editable]="data.isLockedByMe && !prop.readonly"
-        [(value)]="data[prop.name]"
-        [label]="prop.translation || prop.name"
+        [(value)]="data[prop.dataPath]"
+        [label]="prop.translation || prop.dataPath"
         [inputType]="prop.type"
       ></app-cell>
     </mat-card>
@@ -30,7 +30,7 @@
         [dataServiceThatProvidesThePossibleData]="object.dataService"
         [nameToShowInSelection]="object.nameToShowInSelection"
         [columnInfo]="object.columnInfo"
-        [data]="data[object.name]"
+        [data]="data[object.dataPath]"
         [editable]="data.isLockedByMe"
         [tableDataGQLType]="object.tableDataGQLType"
         (referenceIds)="addReferenceIdsToObject($event, object)"
