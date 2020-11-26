@@ -27,8 +27,14 @@ export class BikeComponent implements OnInit {
           dataPath: 'insuranceData.billing',
           translation: 'Versicherung Abrechnung',
         },
-        { dataPath: 'insuranceData.hasFixedRate', translation: 'Pauschale j/n' },
-        { dataPath: 'insuranceData.fixedRate', translation: 'Pauschale Betrag' },
+        {
+          dataPath: 'insuranceData.hasFixedRate',
+          translation: 'Pauschale j/n',
+        },
+        {
+          dataPath: 'insuranceData.fixedRate',
+          translation: 'Pauschale Betrag',
+        },
         { dataPath: 'insuranceData.name', translation: 'Versicherer' },
         { dataPath: 'insuranceData.benefactor', translation: 'Kostenträger' },
         { dataPath: 'insuranceData.noPnP', translation: 'Nr. P&P' },
@@ -59,14 +65,38 @@ export class BikeComponent implements OnInit {
         { dataPath: 'dimensionsAndLoad.bikeWeight', translation: 'Gewicht' },
         { dataPath: 'dimensionsAndLoad.bikeHeight', translation: 'Höhe' },
         { dataPath: 'dimensionsAndLoad.bikeWidth', translation: 'Breite' },
-        { dataPath: 'dimensionsAndLoad.boxHeight', translation: 'Boxhöhe' },
-        { dataPath: 'dimensionsAndLoad.boxLength', translation: 'Boxlänge' },
-        { dataPath: 'dimensionsAndLoad.boxWidth', translation: 'Boxbreite' },
+        {
+          dataPath: 'dimensionsAndLoad.minBoxHeight',
+          translation: 'Boxhöhe min',
+        },
+        {
+          dataPath: 'dimensionsAndLoad.maxBoxHeight',
+          translation: 'Boxhöhe max',
+        },
+        {
+          dataPath: 'dimensionsAndLoad.minBoxLength',
+          translation: 'Boxlänge min',
+        },
+        {
+          dataPath: 'dimensionsAndLoad.maxBoxLength',
+          translation: 'Boxlänge max',
+        },
+        {
+          dataPath: 'dimensionsAndLoad.minBoxWidth',
+          translation: 'Boxbreite min',
+        },
+        {
+          dataPath: 'dimensionsAndLoad.maxBoxWidth',
+          translation: 'Boxbreite max',
+        },
         {
           dataPath: 'dimensionsAndLoad.hasCoverBox',
           translation: 'Boxabdeckung j/n',
         },
-        { dataPath: 'dimensionsAndLoad.lockable', translation: 'Box abschließbar' },
+        {
+          dataPath: 'dimensionsAndLoad.lockable',
+          translation: 'Box abschließbar',
+        },
         {
           dataPath: 'dimensionsAndLoad.maxWeightBox',
           translation: 'max Zuladung Box',
@@ -106,7 +136,10 @@ export class BikeComponent implements OnInit {
       type: 'Group',
       title: 'Ausstattung',
       properties: [
-        { dataPath: 'technicalEquipment.bicycleShift', translation: 'Schaltung' },
+        {
+          dataPath: 'technicalEquipment.bicycleShift',
+          translation: 'Schaltung',
+        },
         { dataPath: 'technicalEquipment.isEBike', translation: 'E-Bike j/n' },
         {
           dataPath: 'technicalEquipment.hasLightSystem',
@@ -140,7 +173,10 @@ export class BikeComponent implements OnInit {
         { dataPath: 'provider.privatePerson.id', translation: '' },
         { dataPath: 'provider.privatePerson.person.id', translation: '' },
         { dataPath: 'provider.privatePerson.person.name', translation: '' },
-        { dataPath: 'provider.privatePerson.person.firstName', translation: '' },
+        {
+          dataPath: 'provider.privatePerson.person.firstName',
+          translation: '',
+        },
         {
           dataPath: 'provider.privatePerson.person.contactInformation.email',
           translation: '',
@@ -163,9 +199,14 @@ export class BikeComponent implements OnInit {
       title: 'Equipmenttypen',
       dataPath: 'equipmentType',
       dataService: null,
-      columnInfo: [{dataPath: 'name', translation: "Name"}, {dataPath: 'description', translation: "Beschreibung"}],
-      nameToShowInSelection: (element) => {return element.name},
-      propertyNameOfUpdateInput: "equipmentTypeIds"
+      columnInfo: [
+        { dataPath: 'name', translation: 'Name' },
+        { dataPath: 'description', translation: 'Beschreibung' },
+      ],
+      nameToShowInSelection: (element) => {
+        return element.name;
+      },
+      propertyNameOfUpdateInput: 'equipmentTypeIds',
     },
   ];
 

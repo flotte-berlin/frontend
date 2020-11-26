@@ -33,9 +33,12 @@ fragment CargoBikeFieldsForTable on CargoBike {
     bikeLength
     bikeWeight
     bikeWidth
-    boxHeight
-    boxLength
-    boxWidth
+    minBoxHeight
+    maxBoxHeight
+    minBoxLength
+    maxBoxLength
+    minBoxWidth
+    maxBoxWidth
     hasCoverBox
     lockable
     maxWeightBox

@@ -123,6 +123,7 @@ export type CargoBikeCreateInput = {
   /**
    * Refers to unique equipment
    * When set to null or [], no relations will be added.
+   * When specified id is in a relation with another bike, this relation will be deleted.
    */
   equipmentIds?: Maybe<Array<Maybe<Scalars['ID']>>>;
   /** Sticker State */
@@ -162,6 +163,7 @@ export type CargoBikeUpdateInput = {
    * When set to null, field will be ignored.
    * When set to [], all relations will be deleted.
    * Else all realtions will be deleted and the specified relations will be added.
+   * When specified id is in a relation with another bike, this relation will be deleted.
    */
   equipmentIds?: Maybe<Array<Maybe<Scalars['ID']>>>;
   /** Sticker State */
@@ -253,13 +255,16 @@ export type DimensionsAndLoad = {
   hasCoverBox: Scalars['Boolean'];
   /** cover box can be locked */
   lockable: Scalars['Boolean'];
-  boxLength: Scalars['Float'];
-  boxWidth: Scalars['Float'];
-  boxHeight: Scalars['Float'];
-  maxWeightBox: Scalars['Float'];
-  maxWeightLuggageRack: Scalars['Float'];
-  maxWeightTotal: Scalars['Float'];
-  bikeLength: Scalars['Float'];
+  minBoxLength?: Maybe<Scalars['Float']>;
+  maxBoxLength?: Maybe<Scalars['Float']>;
+  minBoxWidth?: Maybe<Scalars['Float']>;
+  maxBoxWidth?: Maybe<Scalars['Float']>;
+  minBoxHeight?: Maybe<Scalars['Float']>;
+  maxBoxHeight?: Maybe<Scalars['Float']>;
+  maxWeightBox?: Maybe<Scalars['Float']>;
+  maxWeightLuggageRack?: Maybe<Scalars['Float']>;
+  maxWeightTotal?: Maybe<Scalars['Float']>;
+  bikeLength?: Maybe<Scalars['Float']>;
   bikeWidth?: Maybe<Scalars['Float']>;
   bikeHeight?: Maybe<Scalars['Float']>;
   bikeWeight?: Maybe<Scalars['Float']>;
@@ -268,13 +273,16 @@ export type DimensionsAndLoad = {
 export type DimensionsAndLoadCreateInput = {
   hasCoverBox: Scalars['Boolean'];
   lockable: Scalars['Boolean'];
-  boxLength: Scalars['Float'];
-  boxWidth: Scalars['Float'];
-  boxHeight: Scalars['Float'];
-  maxWeightBox: Scalars['Float'];
-  maxWeightLuggageRack: Scalars['Float'];
-  maxWeightTotal: Scalars['Float'];
-  bikeLength: Scalars['Float'];
+  minBoxLength?: Maybe<Scalars['Float']>;
+  maxBoxLength?: Maybe<Scalars['Float']>;
+  minBoxWidth?: Maybe<Scalars['Float']>;
+  maxBoxWidth?: Maybe<Scalars['Float']>;
+  minBoxHeight?: Maybe<Scalars['Float']>;
+  maxBoxHeight?: Maybe<Scalars['Float']>;
+  maxWeightBox?: Maybe<Scalars['Float']>;
+  maxWeightLuggageRack?: Maybe<Scalars['Float']>;
+  maxWeightTotal?: Maybe<Scalars['Float']>;
+  bikeLength?: Maybe<Scalars['Float']>;
   bikeWidth?: Maybe<Scalars['Float']>;
   bikeHeight?: Maybe<Scalars['Float']>;
   bikeWeight?: Maybe<Scalars['Float']>;
@@ -283,9 +291,12 @@ export type DimensionsAndLoadCreateInput = {
 export type DimensionsAndLoadUpdateInput = {
   hasCoverBox?: Maybe<Scalars['Boolean']>;
   lockable?: Maybe<Scalars['Boolean']>;
-  boxLength?: Maybe<Scalars['Float']>;
-  boxWidth?: Maybe<Scalars['Float']>;
-  boxHeight?: Maybe<Scalars['Float']>;
+  minBoxLength?: Maybe<Scalars['Float']>;
+  maxBoxLength?: Maybe<Scalars['Float']>;
+  minBoxWidth?: Maybe<Scalars['Float']>;
+  maxBoxWidth?: Maybe<Scalars['Float']>;
+  minBoxHeight?: Maybe<Scalars['Float']>;
+  maxBoxHeight?: Maybe<Scalars['Float']>;
   maxWeightBox?: Maybe<Scalars['Float']>;
   maxWeightLuggageRack?: Maybe<Scalars['Float']>;
   maxWeightTotal?: Maybe<Scalars['Float']>;
@@ -1920,7 +1931,7 @@ export type CargoBikeFieldsForTableFragment = (
     & Pick<InsuranceData, 'billing' | 'hasFixedRate' | 'name' | 'benefactor' | 'noPnP' | 'maintenanceResponsible' | 'maintenanceBenefactor' | 'maintenanceAgreement' | 'fixedRate' | 'projectAllowance' | 'notes'>
   ), dimensionsAndLoad: (
     { __typename?: 'DimensionsAndLoad' }
-    & Pick<DimensionsAndLoad, 'bikeLength' | 'bikeWeight' | 'bikeHeight' | 'bikeWidth' | 'boxHeight' | 'boxLength' | 'boxWidth' | 'hasCoverBox' | 'lockable' | 'maxWeightBox' | 'maxWeightLuggageRack' | 'maxWeightTotal'>
+    & Pick<DimensionsAndLoad, 'bikeLength' | 'bikeWeight' | 'bikeHeight' | 'bikeWidth' | 'minBoxHeight' | 'maxBoxHeight' | 'minBoxLength' | 'maxBoxLength' | 'minBoxWidth' | 'maxBoxWidth' | 'hasCoverBox' | 'lockable' | 'maxWeightBox' | 'maxWeightLuggageRack' | 'maxWeightTotal'>
   ), security: (
     { __typename?: 'Security' }
     & Pick<Security, 'frameNumber' | 'adfcCoding' | 'keyNumberAXAChain' | 'keyNumberFrameLock' | 'policeCoding'>
@@ -2148,9 +2159,12 @@ export const CargoBikeFieldsForTableFragmentDoc = gql`
     bikeWeight
     bikeHeight
     bikeWidth
-    boxHeight
-    boxLength
-    boxWidth
+    minBoxHeight
+    maxBoxHeight
+    minBoxLength
+    maxBoxLength
+    minBoxWidth
+    maxBoxWidth
     hasCoverBox
     lockable
     maxWeightBox
@@ -2179,9 +2193,12 @@ export const CargoBikeFieldsForTableFragmentDoc = gql`
     bikeLength
     bikeWeight
     bikeWidth
-    boxHeight
-    boxLength
-    boxWidth
+    minBoxHeight
+    maxBoxHeight
+    minBoxLength
+    maxBoxLength
+    minBoxWidth
+    maxBoxWidth
     hasCoverBox
     lockable
     maxWeightBox
