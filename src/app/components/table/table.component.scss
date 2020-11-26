@@ -41,6 +41,9 @@
           min-width: 50px !important;
         }
       }
+      .mat-header-cell:first-child {
+        padding-left: 1.5em;
+      }
       ::ng-deep.mat-form-field {
         width: 100%;
       }

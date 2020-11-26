@@ -1,4 +1,4 @@
-import { Component, EventEmitter, Input, OnInit, Output } from '@angular/core';
+import { Component, EventEmitter, Input, OnDestroy, OnInit, Output } from '@angular/core';
 import { ActivatedRoute } from '@angular/router';
 import { deepen } from 'src/app/helperFunctions/deepenObject';
 import { flatten } from 'src/app/helperFunctions/flattenObject';
@@ -32,7 +32,7 @@ interface ReferenceTableInfo {
   templateUrl: './data-page.component.html',
   styleUrls: ['./data-page.component.scss'],
 })
-export class DataPageComponent implements OnInit {
+export class DataPageComponent implements OnInit, OnDestroy {
   @Input()
   propertiesInfo: Array<any> = [];
 
@@ -87,6 +87,10 @@ export class DataPageComponent implements OnInit {
         this.lock();
       }
     }, this.relockingIntervalDuration);
+  }
+
+  ngOnDestroy() {
+    clearInterval(this.relockingInterval);
   }
 
   addPropertiesFromGQLSchemaToObject(infoObject: any) {

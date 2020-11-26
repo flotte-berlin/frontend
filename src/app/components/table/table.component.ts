@@ -51,7 +51,7 @@ export class TableComponent {
   @ViewChild(MatPaginator) paginator: MatPaginator;
   @ViewChild(MatSort) sort: MatSort;
 
-  additionalColumnsFront: string[] = ['select'];
+  additionalColumnsFront: string[] = [];
   additionalColumnsBack: string[] = ['buttons'];
   displayedColumns: string[] = [];
 
@@ -109,8 +109,8 @@ export class TableComponent {
     this.columnInfo.forEach((column) =>
       this.displayedColumns.push(column.dataPath)
     );
-    this.displayedColumns.unshift(this.additionalColumnsFront[0]);
-    this.displayedColumns.push(this.additionalColumnsBack[0]);
+    this.displayedColumns.unshift(...this.additionalColumnsFront);
+    this.displayedColumns.push(...this.additionalColumnsBack);
 
     this.dataService.loadingRowIds.subscribe((rowIds) => {
       this.loadingRowIds = rowIds;
