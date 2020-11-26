@@ -48,6 +48,10 @@ export class DataPageComponent implements OnInit {
   @Input()
   propertyNameOfUpdateInput: string;
 
+  relockingInterval = null;
+  @Input()
+  relockingIntervalDuration = 1000 * 60 * 1;
+
   @Output() lockEvent = new EventEmitter();
   @Output() saveEvent = new EventEmitter();
   @Output() cancelEvent = new EventEmitter();
@@ -67,6 +71,8 @@ export class DataPageComponent implements OnInit {
     this.id = this.route.snapshot.paramMap.get('id');
     this.reloadPageData();
     this.dataService.pageData.subscribe((data) => {
+      // dont overwrite data when in edit mode and relock is performed
+      if (this.data?.isLockedByMe && data?.isLockedByMe) return;
       this.data = flatten(data);
     });
     this.dataService.isLoadingPageData.subscribe(
@@ -75,6 +81,12 @@ export class DataPageComponent implements OnInit {
     this.dataService.loadingRowIds.subscribe((loadingRowIds) => {
       this.isSavingOrLocking = loadingRowIds.includes(this.id);
     });
+
+    this.relockingInterval = setInterval(() => {
+      if (this.data.isLockedByMe) {
+        this.lock();
+      }
+    }, this.relockingIntervalDuration);
   }
 
   addPropertiesFromGQLSchemaToObject(infoObject: any) {
@@ -84,8 +96,10 @@ export class DataPageComponent implements OnInit {
       } else if (prop.type === 'ReferenceTable') {
         prop.tableDataGQLType =
           prop.tableDataGQLType ||
-          this.schemaService.getTypeInformation(this.pageDataGQLType, prop.dataPath)
-            .type;
+          this.schemaService.getTypeInformation(
+            this.pageDataGQLType,
+            prop.dataPath
+          ).type;
         prop.referenceIds = [];
       } else {
         const typeInformation = this.schemaService.getTypeInformation(
