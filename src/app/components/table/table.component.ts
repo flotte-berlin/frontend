@@ -66,7 +66,7 @@ export class TableComponent {
   relockingInterval = null;
 
   @Input()
-  relockingIntervalDuration = 1000 * 10 * 1; // TODO: set back to 60s
+  relockingIntervalDuration = 1000 * 60 * 1;
   filter = { includesString: '', onlyUnsaved: false };
   initialFilter = this.filter;
   isLoaded = false;
