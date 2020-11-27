@@ -6,6 +6,7 @@ import { TableOverviewComponent } from './pages/table-overview/table-overview.co
 import { BikesComponent} from './pages/tables/bikes/bikes.component'
 import { EngagementTypesComponent } from './pages/tables/engagement-types/engagement-types.component';
 import { EquipmentTypesComponent } from './pages/tables/equipment-types/equipment-types.component';
+import { EquipmentComponent } from './pages/tables/equipment/equipment.component';
 import { LendingStationsComponent } from './pages/tables/lending-stations/lending-stations.component';
 import { ParticipantsComponent } from './pages/tables/participants/participants.component';
 
@@ -18,6 +19,7 @@ const routes: Routes = [
   { path: 'table/lendingStations', component: LendingStationsComponent },
   { path: 'table/equipmentTypes', component: EquipmentTypesComponent },
   { path: 'table/engagementTypes', component: EngagementTypesComponent },
+  { path: 'table/equipment', component: EquipmentComponent },
   { path: '', redirectTo: 'tableOverview', pathMatch: 'full' },
   { path: 'table', redirectTo: 'tableOverview', pathMatch: 'full' },
   { path: '**', redirectTo: 'tableOverview' },

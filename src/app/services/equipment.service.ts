@@ -1,24 +1,24 @@
 import { Injectable } from '@angular/core';
 import { BehaviorSubject, Subject } from 'rxjs';
 import {
-  GetEquipmentTypesGQL,
-  CreateEquipmentTypeGQL,
-  CreateEquipmentTypeMutationVariables,
-  UpdateEquipmentTypeGQL,
-  UpdateEquipmentTypeMutationVariables,
-  LockEquipmentTypeGQL,
-  LockEquipmentTypeMutationVariables,
-  UnlockEquipmentTypeGQL,
-  UnlockEquipmentTypeMutationVariables,
-  DeleteEquipmentTypeGQL,
-  DeleteEquipmentTypeMutationVariables,
+  GetEquipmentsGQL,
+  CreateEquipmentGQL,
+  CreateEquipmentMutationVariables,
+  UpdateEquipmentGQL,
+  UpdateEquipmentMutationVariables,
+  LockEquipmentGQL,
+  LockEquipmentMutationVariables,
+  UnlockEquipmentGQL,
+  UnlockEquipmentMutationVariables,
+  DeleteEquipmentGQL,
+  DeleteEquipmentMutationVariables,
 } from '../../generated/graphql';
 
 @Injectable({
   providedIn: 'root',
 })
-export class EquipmentTypeService {
-  /** EquipmentTypes Array */
+export class EquipmentService {
+  /** Equipments Array */
   tableData: BehaviorSubject<any[]> = new BehaviorSubject(null);
   loadingRowIds: BehaviorSubject<string[]> = new BehaviorSubject([]);
   successfullyCreatedRowWithId: Subject<string> = new Subject();
@@ -26,12 +26,12 @@ export class EquipmentTypeService {
   //isLoadingPageData: BehaviorSubject<boolean> = new BehaviorSubject(false);
 
   constructor(
-    private getEquipmentTypesGQL: GetEquipmentTypesGQL,
-    private createEquipmentTypeGQL: CreateEquipmentTypeGQL,
-    private updateEquipmentTypeGQL: UpdateEquipmentTypeGQL,
-    private lockEquipmentTypeGQL: LockEquipmentTypeGQL,
-    private unlockEquipmentTypeGQL: UnlockEquipmentTypeGQL,
-    private deleteEquipmentTypeGQL: DeleteEquipmentTypeGQL
+    private getEquipmentsGQL: GetEquipmentsGQL,
+    private createEquipmentGQL: CreateEquipmentGQL,
+    private updateEquipmentGQL: UpdateEquipmentGQL,
+    private lockEquipmentGQL: LockEquipmentGQL,
+    private unlockEquipmentGQL: UnlockEquipmentGQL,
+    private deleteEquipmentGQL: DeleteEquipmentGQL
   ) {}
 
   addLoadingRowId(id: string) {
@@ -49,61 +49,61 @@ export class EquipmentTypeService {
 
   loadTableData() {
     this.tableData.next(null);
-    this.getEquipmentTypesGQL.fetch().subscribe((result) => {
-      this.tableData.next(result.data.equipmentTypes);
+    this.getEquipmentsGQL.fetch().subscribe((result) => {
+      this.tableData.next(result.data.equipment);
     });
   }
 
-  create(currentId: string, variables: CreateEquipmentTypeMutationVariables) {
-    this.createEquipmentTypeGQL.mutate(variables).subscribe((result) => {
-      const newRow = result.data.createEquipmentType;
+  create(currentId: string, variables: CreateEquipmentMutationVariables) {
+    this.createEquipmentGQL.mutate(variables).subscribe((result) => {
+      const newRow = result.data.createEquipment;
       this.tableData.next([newRow, ...this.tableData.value]);
       this.successfullyCreatedRowWithId.next(currentId);
     });
   }
 
-  update(variables: UpdateEquipmentTypeMutationVariables) {
+  update(variables: UpdateEquipmentMutationVariables) {
     this.addLoadingRowId(variables.equipmentType.id);
-    this.updateEquipmentTypeGQL
+    this.updateEquipmentGQL
       .mutate(variables)
       .subscribe((result) => {
-        this.updateDataRowFromResponse(result.data.updateEquipmentType);
+        this.updateDataRowFromResponse(result.data.updateEquipment);
       })
       .add(() => {
         this.removeLoadingRowId(variables.equipmentType.id);
       });
   }
 
-  lock(variables: LockEquipmentTypeMutationVariables) {
+  lock(variables: LockEquipmentMutationVariables) {
     this.addLoadingRowId(variables.id);
-    this.lockEquipmentTypeGQL
+    this.lockEquipmentGQL
       .mutate(variables)
       .subscribe((result) => {
-        this.updateDataRowFromResponse(result.data.lockEquipmentType);
+        this.updateDataRowFromResponse(result.data.lockEquipment);
       })
       .add(() => {
         this.removeLoadingRowId(variables.id);
       });
   }
 
-  unlock(variables: UnlockEquipmentTypeMutationVariables) {
+  unlock(variables: UnlockEquipmentMutationVariables) {
     this.addLoadingRowId(variables.id);
-    this.unlockEquipmentTypeGQL
+    this.unlockEquipmentGQL
       .mutate(variables)
       .subscribe((result) => {
-        this.updateDataRowFromResponse(result.data.unlockEquipmentType);
+        this.updateDataRowFromResponse(result.data.unlockEquipment);
       })
       .add(() => {
         this.removeLoadingRowId(variables.id);
       });
   }
 
-  delete(variables: DeleteEquipmentTypeMutationVariables) {
+  delete(variables: DeleteEquipmentMutationVariables) {
     this.addLoadingRowId(variables.id);
-    this.deleteEquipmentTypeGQL
+    this.deleteEquipmentGQL
       .mutate(variables)
       .subscribe((result) => {
-        if (result.data.deleteEquipmentType) {
+        if (result.data.deleteEquipment) {
           this.tableData.next(
             [...this.tableData.value].filter((bike) => bike.id !== variables.id)
           );

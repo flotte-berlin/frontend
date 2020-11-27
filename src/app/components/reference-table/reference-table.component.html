@@ -9,7 +9,7 @@
           formControlName="addGroup"
           [matAutocomplete]="autoGroup"
         />
-        <mat-autocomplete #autoGroup="matAutocomplete">
+        <mat-autocomplete #autoGroup="matAutocomplete" panelWidth="auto">
           <mat-option
             *ngFor="let element of possibleValueOptions"
             [value]="nameToShowInSelection(element)"

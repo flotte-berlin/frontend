@@ -52,6 +52,7 @@ import { EngagementTypesComponent } from './pages/tables/engagement-types/engage
 import { WorkshopsComponent } from './pages/tables/workshops/workshops.component';
 import { ReferenceTableComponent } from './components/reference-table/reference-table.component'
 import { MatSnackBarModule } from '@angular/material/snack-bar';
+import { EquipmentComponent } from './pages/tables/equipment/equipment.component';
 
 
 @NgModule({
@@ -72,7 +73,8 @@ import { MatSnackBarModule } from '@angular/material/snack-bar';
     EquipmentTypesComponent,
     EngagementTypesComponent,
     WorkshopsComponent,
-    ReferenceTableComponent
+    ReferenceTableComponent,
+    EquipmentComponent
   ],
   imports: [
     BrowserModule,

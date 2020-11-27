@@ -1,0 +1,33 @@
+query GetEquipments {
+  equipment {
+    ...EquipmentFieldsForTable
+  }
+}
+
+mutation CreateEquipment($equipmentType: EquipmentCreateInput!) {
+  createEquipment(equipment: $equipmentType) {
+    ...EquipmentFieldsForTable
+  }
+}
+
+mutation UpdateEquipment($equipmentType: EquipmentUpdateInput!) {
+  updateEquipment(equipment: $equipmentType) {
+    ...EquipmentFieldsForTable
+  }
+}
+
+mutation LockEquipment($id: ID!) {
+  lockEquipment(id: $id) {
+    ...EquipmentFieldsForTable
+  }
+}
+
+mutation UnlockEquipment($id: ID!) {
+  unlockEquipment(id: $id) {
+    ...EquipmentFieldsForTable
+  }
+}
+
+mutation DeleteEquipment($id: ID!) {
+  deleteEquipment(id: $id)
+}

@@ -1,5 +1,6 @@
 import { Component, OnInit } from '@angular/core';
 import { BikesService } from 'src/app/services/bikes.service';
+import { EquipmentService } from 'src/app/services/equipment.service';
 import { EquipmentTypeService } from 'src/app/services/equipmentType.service';
 
 @Component({
@@ -206,7 +207,29 @@ export class BikeComponent implements OnInit {
       nameToShowInSelection: (element) => {
         return element.name;
       },
+      linkToTable: (element) => {
+        return '/table/equipmentTypes';
+      },
       propertyNameOfUpdateInput: 'equipmentTypeIds',
+    },
+    {
+      type: 'ReferenceTable',
+      title: 'Equipment',
+      dataPath: 'equipment',
+      dataService: null,
+      columnInfo: [
+        { dataPath: 'serialNo', translation: 'Seriennummer' },
+        { dataPath: 'title', translation: 'Name' },
+        { dataPath: 'description', translation: 'Beschreibung' },
+      ],
+      nameToShowInSelection: (element) => {
+        return element.title + ' (' + element.serialNo + ')';
+      },
+      linkToTable: (element) => '/table/equipment',
+      linkToTableParams: (bike) => {
+        return {filter: bike.name};
+      },
+      propertyNameOfUpdateInput: 'equipmentIds',
     },
   ];
 
@@ -218,11 +241,16 @@ export class BikeComponent implements OnInit {
 
   constructor(
     private bikesService: BikesService,
-    private equipmentTypeService: EquipmentTypeService
+    private equipmentTypeService: EquipmentTypeService,
+    private equipmentService: EquipmentService
   ) {
     this.propertiesInfo.find(
       (prop) => prop.dataPath === 'equipmentType'
     ).dataService = this.equipmentTypeService;
+
+    this.propertiesInfo.find(
+      (prop) => prop.dataPath === 'equipment'
+    ).dataService = this.equipmentService;
   }
 
   ngOnInit(): void {

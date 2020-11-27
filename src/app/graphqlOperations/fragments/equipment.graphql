@@ -3,6 +3,17 @@ fragment EquipmentFieldsForBikePage on Equipment {
     serialNo
     title
     description
+}
+
+fragment EquipmentFieldsForTable on Equipment {
+    id
+    serialNo
+    title
+    description
+    cargoBike {
+        id 
+        name
+    }
     isLocked
     isLockedByMe
     lockedBy

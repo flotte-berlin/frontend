@@ -16,6 +16,7 @@ import { MatTableDataSource } from '@angular/material/table';
 import { MatPaginator } from '@angular/material/paginator';
 import { MatSort } from '@angular/material/sort';
 import { MatDialog, MatDialogRef } from '@angular/material/dialog';
+import { ActivatedRoute } from '@angular/router';
 
 @Component({
   selector: 'app-table',
@@ -77,7 +78,9 @@ export class TableComponent {
   @Output() cancelEvent = new EventEmitter();
   @Output() deleteEvent = new EventEmitter();
 
-  constructor(private schemaService: SchemaService, public dialog: MatDialog) {}
+  constructor(private schemaService: SchemaService, public dialog: MatDialog, private activatedroute:ActivatedRoute) {
+    this.filter.includesString = this.activatedroute.snapshot.queryParamMap.get('filter') || '';
+  }
 
   ngAfterViewInit() {
     this.addColumnPropertiesFromGQLSchemaToColumnInfo();

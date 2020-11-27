@@ -25,7 +25,20 @@
     </mat-card>
 
     <mat-card class="inline-card" *ngIf="object.type === 'ReferenceTable'">
-      <mat-card-title>{{ object.title }}</mat-card-title>
+      <mat-card-title
+        >{{ object.title }}
+        <a
+          mat-button
+          *ngIf="object.linkToTable"
+          color="primary"
+          [routerLink]="object.linkToTable(data)"
+          [queryParams]="object.linkToTableParams ? object.linkToTableParams(data) : {}"
+          matTooltip="Zur Tabelle"
+        >
+          <mat-icon>subdirectory_arrow_right</mat-icon>
+          <mat-icon>table_chart</mat-icon>
+        </a>
+      </mat-card-title>
       <app-reference-table
         [dataServiceThatProvidesThePossibleData]="object.dataService"
         [nameToShowInSelection]="object.nameToShowInSelection"
