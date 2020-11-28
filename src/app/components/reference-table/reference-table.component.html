@@ -5,6 +5,7 @@
         <input
           type="text"
           matInput
+          #trigger="matAutocompleteTrigger"
           placeholder="Element hinzufügen"
           formControlName="addGroup"
           [matAutocomplete]="autoGroup"
@@ -13,7 +14,7 @@
           <mat-option
             *ngFor="let element of possibleValueOptions"
             [value]="nameToShowInSelection(element)"
-            (click)="addReference(element)"
+            (click)="addReference(element); $event.stopPropagation(); trigger.openPanel()"
           >
             {{ nameToShowInSelection(element) }}
           </mat-option>
