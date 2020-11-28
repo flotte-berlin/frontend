@@ -103,7 +103,7 @@ export class EquipmentService {
     this.deleteEquipmentGQL
       .mutate(variables)
       .subscribe((result) => {
-        if (result.data.deleteEquipment) {
+        if (result.data) {
           this.tableData.next(
             [...this.tableData.value].filter((bike) => bike.id !== variables.id)
           );

@@ -49,7 +49,7 @@ export class ReferenceTableComponent {
 
   @Input()
   set data(newdata) {
-    if (!newdata) return;
+    if (!newdata) { return; }
     this.dataSource.data = [];
     for (const element of newdata) {
       this.dataSource.data.push(flatten(element));
@@ -145,7 +145,7 @@ export class ReferenceTableComponent {
     const index = this.dataSource.data.findIndex(
       (element) => element.id === row.id
     );
-    if (index === -1) return;
+    if (index === -1) { return; }
     this.dataSource.data.splice(index, 1);
     this.dataSource.data = this.dataSource.data; //needed to trigger update lol
     this.filterPossibleValueOptions();

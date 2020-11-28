@@ -33,12 +33,18 @@ fragment CargoBikeFieldsForTable on CargoBike {
     bikeLength
     bikeWeight
     bikeWidth
-    minBoxHeight
-    maxBoxHeight
-    minBoxLength
-    maxBoxLength
-    minBoxWidth
-    maxBoxWidth
+    boxHeightRange {
+      max
+      min
+    }
+    boxLengthRange {
+      min
+      max
+    }
+    boxWidthRange {
+      min
+      max
+    }
     hasCoverBox
     lockable
     maxWeightBox
@@ -77,23 +83,23 @@ fragment CargoBikeFieldsForTable on CargoBike {
 }
 
 fragment CargoBikeFieldsForPage on CargoBike {
-...CargoBikeFieldsForTable
-bikeEvents {
-  ...BikeEventFieldsForBikePage
-}
-equipment {
-  ...EquipmentFieldsForBikePage
-}
-equipmentType {
- ...EquipmentTypeFields
-}
-engagement {
-  ...EngagementFieldsForBikePage
-}
-currentEngagements {
-  ...EngagementFieldsForBikePage
-}
-timeFrames {
-  ...TimeFrameFieldsForBikePage
-}
+  ...CargoBikeFieldsForTable
+  bikeEvents {
+    ...BikeEventFieldsForBikePage
+  }
+  equipment {
+    ...EquipmentFieldsForBikePage
+  }
+  equipmentType {
+    ...EquipmentTypeFields
+  }
+  engagement {
+    ...EngagementFieldsForBikePage
+  }
+  currentEngagements {
+    ...EngagementFieldsForBikePage
+  }
+  timeFrames {
+    ...TimeFrameFieldsForBikePage
+  }
 }

@@ -1,0 +1,33 @@
+query GetTimeFrames {
+  timeFrames {
+    ...TimeFrameFields
+  }
+}
+
+mutation CreateTimeFrame($timeFrame: TimeFrameCreateInput!) {
+  createTimeFrame(timeFrame: $timeFrame) {
+    ...TimeFrameFields
+  }
+}
+
+mutation UpdateTimeFrame($timeFrame: TimeFrameUpdateInput!) {
+  updateTimeFrame(timeFrame: $timeFrame) {
+    ...TimeFrameFields
+  }
+}
+
+mutation LockTimeFrame($id: ID!) {
+  lockTimeFrame(id: $id) {
+    ...TimeFrameFields
+  }
+}
+
+mutation UnlockTimeFrame($id: ID!) {
+  unlockTimeFrame(id: $id) {
+    ...TimeFrameFields
+  }
+}
+
+mutation DeleteTimeFrame($id: ID!) {
+  deleteTimeFrame(id: $id)
+}

@@ -9,6 +9,7 @@ import { EquipmentTypesComponent } from './pages/tables/equipment-types/equipmen
 import { EquipmentComponent } from './pages/tables/equipment/equipment.component';
 import { LendingStationsComponent } from './pages/tables/lending-stations/lending-stations.component';
 import { ParticipantsComponent } from './pages/tables/participants/participants.component';
+import { TimeFramesComponent } from './pages/tables/time-frames/time-frames.component';
 
 const routes: Routes = [
   { path: 'login', component: LoginComponent },
@@ -20,6 +21,7 @@ const routes: Routes = [
   { path: 'table/equipmentTypes', component: EquipmentTypesComponent },
   { path: 'table/engagementTypes', component: EngagementTypesComponent },
   { path: 'table/equipment', component: EquipmentComponent },
+  { path: 'table/timeFrames', component: TimeFramesComponent },
   { path: '', redirectTo: 'tableOverview', pathMatch: 'full' },
   { path: 'table', redirectTo: 'tableOverview', pathMatch: 'full' },
   { path: '**', redirectTo: 'tableOverview' },

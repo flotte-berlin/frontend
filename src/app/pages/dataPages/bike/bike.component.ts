@@ -67,28 +67,16 @@ export class BikeComponent implements OnInit {
         { dataPath: 'dimensionsAndLoad.bikeHeight', translation: 'Höhe' },
         { dataPath: 'dimensionsAndLoad.bikeWidth', translation: 'Breite' },
         {
-          dataPath: 'dimensionsAndLoad.minBoxHeight',
-          translation: 'Boxhöhe min',
+          dataPath: 'dimensionsAndLoad.boxHeightRange',
+          translation: 'Boxhöhe',
         },
         {
-          dataPath: 'dimensionsAndLoad.maxBoxHeight',
-          translation: 'Boxhöhe max',
+          dataPath: 'dimensionsAndLoad.boxLengthRange',
+          translation: 'Boxlänge',
         },
         {
-          dataPath: 'dimensionsAndLoad.minBoxLength',
-          translation: 'Boxlänge min',
-        },
-        {
-          dataPath: 'dimensionsAndLoad.maxBoxLength',
-          translation: 'Boxlänge max',
-        },
-        {
-          dataPath: 'dimensionsAndLoad.minBoxWidth',
-          translation: 'Boxbreite min',
-        },
-        {
-          dataPath: 'dimensionsAndLoad.maxBoxWidth',
-          translation: 'Boxbreite max',
+          dataPath: 'dimensionsAndLoad.boxWidthRange',
+          translation: 'Boxbreite',
         },
         {
           dataPath: 'dimensionsAndLoad.hasCoverBox',
@@ -227,7 +215,7 @@ export class BikeComponent implements OnInit {
       },
       linkToTable: (element) => '/table/equipment',
       linkToTableParams: (bike) => {
-        return {filter: bike.name};
+        return { filter: bike.name };
       },
       propertyNameOfUpdateInput: 'equipmentIds',
     },

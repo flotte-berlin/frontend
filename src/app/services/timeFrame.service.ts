@@ -1,24 +1,24 @@
 import { Injectable } from '@angular/core';
 import { BehaviorSubject, Subject } from 'rxjs';
 import {
-  GetEquipmentTypesGQL,
-  CreateEquipmentTypeGQL,
-  CreateEquipmentTypeMutationVariables,
-  UpdateEquipmentTypeGQL,
-  UpdateEquipmentTypeMutationVariables,
-  LockEquipmentTypeGQL,
-  LockEquipmentTypeMutationVariables,
-  UnlockEquipmentTypeGQL,
-  UnlockEquipmentTypeMutationVariables,
-  DeleteEquipmentTypeGQL,
-  DeleteEquipmentTypeMutationVariables,
+  GetTimeFramesGQL,
+  CreateTimeFrameGQL,
+  CreateTimeFrameMutationVariables,
+  UpdateTimeFrameGQL,
+  UpdateTimeFrameMutationVariables,
+  LockTimeFrameGQL,
+  LockTimeFrameMutationVariables,
+  UnlockTimeFrameGQL,
+  UnlockTimeFrameMutationVariables,
+  DeleteTimeFrameGQL,
+  DeleteTimeFrameMutationVariables,
 } from '../../generated/graphql';
 
 @Injectable({
   providedIn: 'root',
 })
-export class EquipmentTypeService {
-  /** EquipmentTypes Array */
+export class TimeFrameService {
+  /** TimeFrames Array */
   tableData: BehaviorSubject<any[]> = new BehaviorSubject(null);
   loadingRowIds: BehaviorSubject<string[]> = new BehaviorSubject([]);
   successfullyCreatedRowWithId: Subject<string> = new Subject();
@@ -26,12 +26,12 @@ export class EquipmentTypeService {
   //isLoadingPageData: BehaviorSubject<boolean> = new BehaviorSubject(false);
 
   constructor(
-    private getEquipmentTypesGQL: GetEquipmentTypesGQL,
-    private createEquipmentTypeGQL: CreateEquipmentTypeGQL,
-    private updateEquipmentTypeGQL: UpdateEquipmentTypeGQL,
-    private lockEquipmentTypeGQL: LockEquipmentTypeGQL,
-    private unlockEquipmentTypeGQL: UnlockEquipmentTypeGQL,
-    private deleteEquipmentTypeGQL: DeleteEquipmentTypeGQL
+    private getTimeFramesGQL: GetTimeFramesGQL,
+    private createTimeFrameGQL: CreateTimeFrameGQL,
+    private updateTimeFrameGQL: UpdateTimeFrameGQL,
+    private lockTimeFrameGQL: LockTimeFrameGQL,
+    private unlockTimeFrameGQL: UnlockTimeFrameGQL,
+    private deleteTimeFrameGQL: DeleteTimeFrameGQL
   ) {}
 
   addLoadingRowId(id: string) {
@@ -49,58 +49,58 @@ export class EquipmentTypeService {
 
   loadTableData() {
     this.tableData.next(null);
-    this.getEquipmentTypesGQL.fetch().subscribe((result) => {
-      this.tableData.next(result.data.equipmentTypes);
+    this.getTimeFramesGQL.fetch().subscribe((result) => {
+      this.tableData.next(result.data.timeFrames);
     });
   }
 
-  create(currentId: string, variables: CreateEquipmentTypeMutationVariables) {
-    this.createEquipmentTypeGQL.mutate(variables).subscribe((result) => {
-      const newRow = result.data.createEquipmentType;
+  create(currentId: string, variables: CreateTimeFrameMutationVariables) {
+    this.createTimeFrameGQL.mutate(variables).subscribe((result) => {
+      const newRow = result.data.createTimeFrame;
       this.tableData.next([newRow, ...this.tableData.value]);
       this.successfullyCreatedRowWithId.next(currentId);
     });
   }
 
-  update(variables: UpdateEquipmentTypeMutationVariables) {
-    this.addLoadingRowId(variables.equipmentType.id);
-    this.updateEquipmentTypeGQL
+  update(variables: UpdateTimeFrameMutationVariables) {
+    this.addLoadingRowId(variables.timeFrame.id);
+    this.updateTimeFrameGQL
       .mutate(variables)
       .subscribe((result) => {
-        this.updateDataRowFromResponse(result.data.updateEquipmentType);
+        this.updateDataRowFromResponse(result.data.updateTimeFrame);
       })
       .add(() => {
-        this.removeLoadingRowId(variables.equipmentType.id);
+        this.removeLoadingRowId(variables.timeFrame.id);
       });
   }
 
-  lock(variables: LockEquipmentTypeMutationVariables) {
+  lock(variables: LockTimeFrameMutationVariables) {
     this.addLoadingRowId(variables.id);
-    this.lockEquipmentTypeGQL
+    this.lockTimeFrameGQL
       .mutate(variables)
       .subscribe((result) => {
-        this.updateDataRowFromResponse(result.data.lockEquipmentType);
-      })
-      .add(() => {
-        this.removeLoadingRowId(variables.id);
-      });
-  }
-
-  unlock(variables: UnlockEquipmentTypeMutationVariables) {
-    this.addLoadingRowId(variables.id);
-    this.unlockEquipmentTypeGQL
-      .mutate(variables)
-      .subscribe((result) => {
-        this.updateDataRowFromResponse(result.data.unlockEquipmentType);
+        this.updateDataRowFromResponse(result.data.lockTimeFrame);
       })
       .add(() => {
         this.removeLoadingRowId(variables.id);
       });
   }
 
-  delete(variables: DeleteEquipmentTypeMutationVariables) {
+  unlock(variables: UnlockTimeFrameMutationVariables) {
     this.addLoadingRowId(variables.id);
-    this.deleteEquipmentTypeGQL
+    this.unlockTimeFrameGQL
+      .mutate(variables)
+      .subscribe((result) => {
+        this.updateDataRowFromResponse(result.data.unlockTimeFrame);
+      })
+      .add(() => {
+        this.removeLoadingRowId(variables.id);
+      });
+  }
+
+  delete(variables: DeleteTimeFrameMutationVariables) {
+    this.addLoadingRowId(variables.id);
+    this.deleteTimeFrameGQL
       .mutate(variables)
       .subscribe((result) => {
         if (result.data) {

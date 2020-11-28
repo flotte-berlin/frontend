@@ -9,7 +9,6 @@ import {
   ChangeDetectorRef,
 } from '@angular/core';
 import { CdkDragDrop, moveItemInArray } from '@angular/cdk/drag-drop';
-import { CargoBikeResult } from 'src/app/services/bikes.service';
 import { flatten } from 'src/app/helperFunctions/flattenObject';
 import { deepen } from 'src/app/helperFunctions/deepenObject';
 import { SchemaService } from 'src/app/services/schema.service';
@@ -64,7 +63,7 @@ export class TableComponent implements AfterViewInit {
 
   /** data source of the table */
   data: MatTableDataSource<any> = new MatTableDataSource();
-  selection = new SelectionModel<CargoBikeResult>(true, []);
+  selection = new SelectionModel<any>(true, []);
 
   reloadingTable = false;
 
@@ -194,7 +193,7 @@ export class TableComponent implements AfterViewInit {
         this.tableDataGQLUpdateInputType,
         column.dataPath
       );
-      column.readonly = column.readonly || !typeInformation.isPartOfType;
+      column.readonly = column.readonly !== null ? column.readonly : !typeInformation.isPartOfType;
     }
     for (const column of this.columnInfo) {
       const typeInformation = this.schemaService.getTypeInformation(

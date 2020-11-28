@@ -6,12 +6,13 @@
     [disabled]="!editable"
     [ngModel]="value"
     (ngModelChange)="change($event)"
-  ><span *ngIf="label">{{label}}</span></mat-checkbox>
+    ><span *ngIf="label">{{ label }}</span></mat-checkbox
+  >
 </div>
 
 <div #enumInputType *ngIf="htmlInputType === 'enum'">
   <mat-form-field *ngIf="editable || label; else nonEditableText">
-    <mat-label *ngIf="label">{{label}}</mat-label>
+    <mat-label *ngIf="label">{{ label }}</mat-label>
     <mat-select
       [(ngModel)]="value"
       (ngModelChange)="change($event)"
@@ -29,12 +30,62 @@
   </ng-template>
 </div>
 
+<ng-container *ngIf="htmlInputType === 'dateRange'">
+  <mat-form-field>
+    <mat-label>Zeitraum auswählen</mat-label>
+    <mat-date-range-input [rangePicker]="picker" disabled>
+      <input
+        matStartDate
+        placeholder="Startdatum"
+        [value]="value?.from"
+        (dateChange)="startDateChange($event)"
+      />
+      <input
+        matEndDate
+        placeholder="Enddatum"
+        [value]="value?.to"
+        (dateChange)="endDateChange($event)"
+      />
+    </mat-date-range-input>
+    <mat-datepicker-toggle matSuffix [for]="picker"></mat-datepicker-toggle>
+    <mat-date-range-picker
+      #picker
+      [disabled]="!editable"
+    ></mat-date-range-picker>
+  </mat-form-field>
+</ng-container>
+
+<div *ngIf="htmlInputType === 'numberRange'" class="number-range-wrapper">
+  <mat-form-field class="number-range-form-field">
+    <mat-label *ngIf="label">{{ label }}</mat-label>
+    <input
+      matInput
+      type="number"
+      [disabled]="!editable"
+      [value]="value.min"
+      (input)="minValueChange($event)"
+      [required]="required"
+    />
+  </mat-form-field>
+  <span class="range-spacer">-</span>
+  <mat-form-field class="number-range-form-field">
+    <input
+      matInput
+      type="number"
+      [disabled]="!editable"
+      [value]="value.max"
+      (input)="maxValueChange($event)"
+      [required]="required"
+    />
+  </mat-form-field>
+</div>
+
 <div
   #otherInputType
   *ngIf="htmlInputType === 'number' || htmlInputType === 'text'"
 >
   <mat-form-field *ngIf="editable || label; else nonEditableText">
-    <mat-label *ngIf="label">{{label}}</mat-label>
+    <mat-label *ngIf="label">{{ label }}</mat-label>
     <input
       #input="ngModel"
       matInput
@@ -47,6 +98,8 @@
   </mat-form-field>
   <ng-template #nonEditableText>
     <span *ngIf="!link">{{ value }}</span>
-    <a mat-button color="primary" *ngIf="link" [routerLink]="link">{{value}}</a>
+    <a mat-button color="primary" *ngIf="link" [routerLink]="link">{{
+      value
+    }}</a>
   </ng-template>
 </div>

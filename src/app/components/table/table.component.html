@@ -118,6 +118,7 @@
         <td mat-cell *matCellDef="let element">
           <app-cell
             *ngIf="
+              column.type === 'DateRange' ||
               column.type === 'Boolean' ||
                 element.newObject ||
                 (!column.readonly && element.isLockedByMe);

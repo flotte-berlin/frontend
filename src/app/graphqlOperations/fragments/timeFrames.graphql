@@ -1,12 +1,35 @@
 fragment TimeFrameFieldsForBikePage on TimeFrame {
-    id
-    from 
+  id
+  dateRange {
+    from
     to
-    note
-    lendingStation {
-        ...LendingStationFieldsForBikePage
-    }
-    isLocked
+  }
+  note
+  lendingStation {
+    ...LendingStationFieldsForBikePage
+  }
+  isLocked
+  isLockedByMe
+  lockedBy
+  lockedUntil
+}
+
+fragment TimeFrameFields on TimeFrame {
+  id
+  dateRange {
+    from
+    to
+  }
+  note
+  lendingStation {
+    id
+    name
+  }
+  cargoBike {
+    id
+    name
+  }
+  isLocked
   isLockedByMe
   lockedBy
   lockedUntil

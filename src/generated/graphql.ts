@@ -37,7 +37,8 @@ export type CargoBike = {
   id: Scalars['ID'];
   /** see column A in info tabelle */
   group?: Maybe<Group>;
-  name?: Maybe<Scalars['String']>;
+  name: Scalars['String'];
+  state?: Maybe<BikeState>;
   modelName?: Maybe<Scalars['String']>;
   numberOfWheels?: Maybe<Scalars['Int']>;
   forCargo?: Maybe<Scalars['Boolean']>;
@@ -51,7 +52,7 @@ export type CargoBike = {
   /** Does not refer to an extra table in the database. */
   technicalEquipment?: Maybe<TechnicalEquipment>;
   /** Does not refer to an extra table in the database. */
-  dimensionsAndLoad: DimensionsAndLoad;
+  dimensionsAndLoad?: Maybe<DimensionsAndLoad>;
   /** If offset or limit is not provided, both values are ignored */
   bikeEvents?: Maybe<Array<Maybe<BikeEvent>>>;
   /** If offset or limit is not provided, both values are ignored */
@@ -64,7 +65,7 @@ export type CargoBike = {
   provider?: Maybe<Provider>;
   /** all participants currently engaged with the cargoBike */
   participants?: Maybe<Array<Maybe<Participant>>>;
-  insuranceData: InsuranceData;
+  insuranceData?: Maybe<InsuranceData>;
   lendingStation?: Maybe<LendingStation>;
   taxes?: Maybe<Taxes>;
   currentEngagements?: Maybe<Array<Maybe<Engagement>>>;
@@ -99,11 +100,19 @@ export type CargoBikeEngagementArgs = {
   limit?: Maybe<Scalars['Int']>;
 };
 
+/** Status of the CargoBike. More fields will be added, or removed. */
+export enum BikeState {
+  Active = 'ACTIVE',
+  Inactive = 'INACTIVE',
+  Inpreparation = 'INPREPARATION'
+}
+
 /** if you want to add bike to a lending station, create a new timeFrame with to: Date = null */
 export type CargoBikeCreateInput = {
   /** see column A in info tabelle */
   group: Group;
   name: Scalars['String'];
+  state?: Maybe<BikeState>;
   modelName: Scalars['String'];
   numberOfWheels: Scalars['Int'];
   forCargo: Scalars['Boolean'];
@@ -112,9 +121,9 @@ export type CargoBikeCreateInput = {
   /** Safety is a custom type, that stores information about security features. */
   security: SecurityCreateInput;
   /** Does not refer to an extra table in the database. */
-  technicalEquipment: TechnicalEquipmentCreateInput;
+  technicalEquipment?: Maybe<TechnicalEquipmentCreateInput>;
   /** Does not refer to an extra table in the database. */
-  dimensionsAndLoad: DimensionsAndLoadCreateInput;
+  dimensionsAndLoad?: Maybe<DimensionsAndLoadCreateInput>;
   /**
    * Refers to equipment that is not unique. See kommentierte info tabelle -> Fragen -> Frage 2
    * When set to null or [], no relations will be added.
@@ -130,8 +139,8 @@ export type CargoBikeCreateInput = {
   stickerBikeNameState?: Maybe<StickerBikeNameState>;
   note?: Maybe<Scalars['String']>;
   providerId?: Maybe<Scalars['ID']>;
-  insuranceData: InsuranceDataCreateInput;
-  taxes: TaxesCreateInput;
+  insuranceData?: Maybe<InsuranceDataCreateInput>;
+  taxes?: Maybe<TaxesCreateInput>;
 };
 
 /** If you want to add bike to a lending station, create a new timeFrame with to: Date = null */
@@ -140,6 +149,7 @@ export type CargoBikeUpdateInput = {
   /** see column A in info tabelle */
   group?: Maybe<Group>;
   name?: Maybe<Scalars['String']>;
+  state?: Maybe<BikeState>;
   modelName?: Maybe<Scalars['String']>;
   numberOfWheels?: Maybe<Scalars['Int']>;
   forCargo?: Maybe<Scalars['Boolean']>;
@@ -179,15 +189,15 @@ export type CargoBikeUpdateInput = {
 export type InsuranceData = {
   __typename?: 'InsuranceData';
   /** Eventually, this field will become an enum or a separate data table and user can choose from a pool of insurance companies. */
-  name: Scalars['String'];
-  benefactor: Scalars['String'];
-  billing: Scalars['String'];
-  noPnP: Scalars['String'];
+  name?: Maybe<Scalars['String']>;
+  benefactor?: Maybe<Scalars['String']>;
+  billing?: Maybe<Scalars['String']>;
+  noPnP?: Maybe<Scalars['String']>;
   /** eg. Anbieter, flotte, eigenleistung */
-  maintenanceResponsible: Scalars['String'];
-  maintenanceBenefactor: Scalars['String'];
+  maintenanceResponsible?: Maybe<Scalars['String']>;
+  maintenanceBenefactor?: Maybe<Scalars['String']>;
   maintenanceAgreement?: Maybe<Scalars['String']>;
-  hasFixedRate: Scalars['Boolean'];
+  hasFixedRate?: Maybe<Scalars['Boolean']>;
   fixedRate?: Maybe<Scalars['Float']>;
   /**
    * Projektzuschuss:
@@ -203,15 +213,15 @@ export type InsuranceData = {
 
 export type InsuranceDataCreateInput = {
   /** Eventually, this field will become an enum or a separate data table and user can choose from a pool of insurance companies. */
-  name: Scalars['String'];
-  benefactor: Scalars['String'];
-  billing: Scalars['String'];
-  noPnP: Scalars['String'];
+  name?: Maybe<Scalars['String']>;
+  benefactor?: Maybe<Scalars['String']>;
+  billing?: Maybe<Scalars['String']>;
+  noPnP?: Maybe<Scalars['String']>;
   /** eg. Anbieter, flotte, eigenleistung */
-  maintenanceResponsible: Scalars['String'];
-  maintenanceBenefactor: Scalars['String'];
+  maintenanceResponsible?: Maybe<Scalars['String']>;
+  maintenanceBenefactor?: Maybe<Scalars['String']>;
   maintenanceAgreement?: Maybe<Scalars['String']>;
-  hasFixedRate: Scalars['Boolean'];
+  hasFixedRate?: Maybe<Scalars['Boolean']>;
   fixedRate?: Maybe<Scalars['Float']>;
   /**
    * Projektzuschuss:
@@ -249,18 +259,30 @@ export type InsuranceDataUpdateInput = {
   notes?: Maybe<Scalars['String']>;
 };
 
+export type NumRange = {
+  __typename?: 'NumRange';
+  min?: Maybe<Scalars['Float']>;
+  max?: Maybe<Scalars['Float']>;
+};
+
+/**
+ * If min or max is omitted, the omitted value will be the same as the other given value
+ * So if you pass one as null, both values with be over written with null.
+ */
+export type NumRangeInput = {
+  min?: Maybe<Scalars['Float']>;
+  max?: Maybe<Scalars['Float']>;
+};
+
 /** How are the dimensions and how much weight can handle a bike. This data is merged in the CargoBike table and the BikeModel table. */
 export type DimensionsAndLoad = {
   __typename?: 'DimensionsAndLoad';
-  hasCoverBox: Scalars['Boolean'];
+  hasCoverBox?: Maybe<Scalars['Boolean']>;
   /** cover box can be locked */
-  lockable: Scalars['Boolean'];
-  minBoxLength?: Maybe<Scalars['Float']>;
-  maxBoxLength?: Maybe<Scalars['Float']>;
-  minBoxWidth?: Maybe<Scalars['Float']>;
-  maxBoxWidth?: Maybe<Scalars['Float']>;
-  minBoxHeight?: Maybe<Scalars['Float']>;
-  maxBoxHeight?: Maybe<Scalars['Float']>;
+  lockable?: Maybe<Scalars['Boolean']>;
+  boxLengthRange?: Maybe<NumRange>;
+  boxWidthRange?: Maybe<NumRange>;
+  boxHeightRange?: Maybe<NumRange>;
   maxWeightBox?: Maybe<Scalars['Float']>;
   maxWeightLuggageRack?: Maybe<Scalars['Float']>;
   maxWeightTotal?: Maybe<Scalars['Float']>;
@@ -271,14 +293,11 @@ export type DimensionsAndLoad = {
 };
 
 export type DimensionsAndLoadCreateInput = {
-  hasCoverBox: Scalars['Boolean'];
-  lockable: Scalars['Boolean'];
-  minBoxLength?: Maybe<Scalars['Float']>;
-  maxBoxLength?: Maybe<Scalars['Float']>;
-  minBoxWidth?: Maybe<Scalars['Float']>;
-  maxBoxWidth?: Maybe<Scalars['Float']>;
-  minBoxHeight?: Maybe<Scalars['Float']>;
-  maxBoxHeight?: Maybe<Scalars['Float']>;
+  hasCoverBox?: Maybe<Scalars['Boolean']>;
+  lockable?: Maybe<Scalars['Boolean']>;
+  boxLengthRange?: Maybe<NumRangeInput>;
+  boxWidthRange?: Maybe<NumRangeInput>;
+  boxHeightRange?: Maybe<NumRangeInput>;
   maxWeightBox?: Maybe<Scalars['Float']>;
   maxWeightLuggageRack?: Maybe<Scalars['Float']>;
   maxWeightTotal?: Maybe<Scalars['Float']>;
@@ -291,12 +310,9 @@ export type DimensionsAndLoadCreateInput = {
 export type DimensionsAndLoadUpdateInput = {
   hasCoverBox?: Maybe<Scalars['Boolean']>;
   lockable?: Maybe<Scalars['Boolean']>;
-  minBoxLength?: Maybe<Scalars['Float']>;
-  maxBoxLength?: Maybe<Scalars['Float']>;
-  minBoxWidth?: Maybe<Scalars['Float']>;
-  maxBoxWidth?: Maybe<Scalars['Float']>;
-  minBoxHeight?: Maybe<Scalars['Float']>;
-  maxBoxHeight?: Maybe<Scalars['Float']>;
+  boxLengthRange?: Maybe<NumRangeInput>;
+  boxWidthRange?: Maybe<NumRangeInput>;
+  boxHeightRange?: Maybe<NumRangeInput>;
   maxWeightBox?: Maybe<Scalars['Float']>;
   maxWeightLuggageRack?: Maybe<Scalars['Float']>;
   maxWeightTotal?: Maybe<Scalars['Float']>;
@@ -313,16 +329,16 @@ export type DimensionsAndLoadUpdateInput = {
  */
 export type TechnicalEquipment = {
   __typename?: 'TechnicalEquipment';
-  bicycleShift: Scalars['String'];
-  isEBike: Scalars['Boolean'];
-  hasLightSystem: Scalars['Boolean'];
+  bicycleShift?: Maybe<Scalars['String']>;
+  isEBike?: Maybe<Scalars['Boolean']>;
+  hasLightSystem?: Maybe<Scalars['Boolean']>;
   specialFeatures?: Maybe<Scalars['String']>;
 };
 
 export type TechnicalEquipmentCreateInput = {
-  bicycleShift: Scalars['String'];
-  isEBike: Scalars['Boolean'];
-  hasLightSystem: Scalars['Boolean'];
+  bicycleShift?: Maybe<Scalars['String']>;
+  isEBike?: Maybe<Scalars['Boolean']>;
+  hasLightSystem?: Maybe<Scalars['Boolean']>;
   specialFeatures?: Maybe<Scalars['String']>;
 };
 
@@ -564,12 +580,12 @@ export type EngagementUpdateInput = {
 
 export type Taxes = {
   __typename?: 'Taxes';
-  costCenter: Scalars['String'];
+  costCenter?: Maybe<Scalars['String']>;
   organisationArea?: Maybe<OrganisationArea>;
 };
 
 export type TaxesCreateInput = {
-  costCenter: Scalars['String'];
+  costCenter?: Maybe<Scalars['String']>;
   organisationArea?: Maybe<OrganisationArea>;
 };
 
@@ -646,7 +662,7 @@ export type EquipmentTypeUpdateInput = {
   keepLock?: Maybe<Scalars['Boolean']>;
 };
 
-/** An Event is a point in time, when the state of the bike somehow changed. */
+/** An Event is a point in time concerning one cargo bike of an event type. For example a chain swap. */
 export type BikeEvent = {
   __typename?: 'BikeEvent';
   id: Scalars['ID'];
@@ -920,14 +936,28 @@ export type LoanPeriodInput = {
   loanTimes?: Maybe<Array<Scalars['String']>>;
 };
 
+export type DateRange = {
+  __typename?: 'DateRange';
+  from: Scalars['Date'];
+  /** will be infinity of not omitted */
+  to?: Maybe<Scalars['Date']>;
+};
+
+export type DateRangeInput = {
+  /** format YYYY-MM-dd */
+  from: Scalars['Date'];
+  /**
+   * format YYYY-MM-dd
+   * will be infinity of not omitted
+   */
+  to?: Maybe<Scalars['Date']>;
+};
+
 /** (dt. Zeitscheibe) When was a bike where */
 export type TimeFrame = {
   __typename?: 'TimeFrame';
   id: Scalars['ID'];
-  /** format YYYY-MM-dd */
-  from: Scalars['Date'];
-  /** format YYYY-MM-dd */
-  to?: Maybe<Scalars['Date']>;
+  dateRange: DateRange;
   note?: Maybe<Scalars['String']>;
   lendingStation: LendingStation;
   cargoBike: CargoBike;
@@ -939,8 +969,7 @@ export type TimeFrame = {
 };
 
 export type TimeFrameCreateInput = {
-  from: Scalars['Date'];
-  to?: Maybe<Scalars['Date']>;
+  dateRange: DateRangeInput;
   note?: Maybe<Scalars['String']>;
   lendingStationId: Scalars['ID'];
   cargoBikeId: Scalars['ID'];
@@ -948,8 +977,7 @@ export type TimeFrameCreateInput = {
 
 export type TimeFrameUpdateInput = {
   id: Scalars['ID'];
-  from?: Maybe<Scalars['Date']>;
-  to?: Maybe<Scalars['Date']>;
+  dateRange?: Maybe<DateRangeInput>;
   note?: Maybe<Scalars['String']>;
   lendingStationId?: Maybe<Scalars['ID']>;
   cargoBikeId?: Maybe<Scalars['ID']>;
@@ -1749,283 +1777,200 @@ export enum CacheControlScope {
 export type GetCargoBikesQueryVariables = Exact<{ [key: string]: never; }>;
 
 
-export type GetCargoBikesQuery = (
-  { __typename?: 'Query' }
-  & { cargoBikes: Array<(
+export type GetCargoBikesQuery = { __typename?: 'Query', cargoBikes: Array<(
     { __typename?: 'CargoBike' }
     & CargoBikeFieldsForTableFragment
-  )> }
-);
+  )> };
 
 export type GetCargoBikeByIdQueryVariables = Exact<{
   id: Scalars['ID'];
 }>;
 
 
-export type GetCargoBikeByIdQuery = (
-  { __typename?: 'Query' }
-  & { cargoBikeById?: Maybe<(
+export type GetCargoBikeByIdQuery = { __typename?: 'Query', cargoBikeById?: Maybe<(
     { __typename?: 'CargoBike' }
     & CargoBikeFieldsForPageFragment
-  )> }
-);
+  )> };
 
 export type ReloadCargoBikeByIdQueryVariables = Exact<{
   id: Scalars['ID'];
 }>;
 
 
-export type ReloadCargoBikeByIdQuery = (
-  { __typename?: 'Query' }
-  & { cargoBikeById?: Maybe<(
+export type ReloadCargoBikeByIdQuery = { __typename?: 'Query', cargoBikeById?: Maybe<(
     { __typename?: 'CargoBike' }
     & CargoBikeFieldsForTableFragment
-  )> }
-);
+  )> };
 
 export type CreateCargoBikeMutationVariables = Exact<{
   bike: CargoBikeCreateInput;
 }>;
 
 
-export type CreateCargoBikeMutation = (
-  { __typename?: 'Mutation' }
-  & { createCargoBike: (
+export type CreateCargoBikeMutation = { __typename?: 'Mutation', createCargoBike: (
     { __typename?: 'CargoBike' }
     & CargoBikeFieldsForTableFragment
-  ) }
-);
+  ) };
 
 export type UpdateCargoBikeMutationVariables = Exact<{
   bike: CargoBikeUpdateInput;
 }>;
 
 
-export type UpdateCargoBikeMutation = (
-  { __typename?: 'Mutation' }
-  & { updateCargoBike: (
+export type UpdateCargoBikeMutation = { __typename?: 'Mutation', updateCargoBike: (
     { __typename?: 'CargoBike' }
     & CargoBikeFieldsForPageFragment
-  ) }
-);
+  ) };
 
 export type LockCargoBikeMutationVariables = Exact<{
   id: Scalars['ID'];
 }>;
 
 
-export type LockCargoBikeMutation = (
-  { __typename?: 'Mutation' }
-  & { lockCargoBike: (
+export type LockCargoBikeMutation = { __typename?: 'Mutation', lockCargoBike: (
     { __typename?: 'CargoBike' }
     & CargoBikeFieldsForPageFragment
-  ) }
-);
+  ) };
 
 export type UnlockCargoBikeMutationVariables = Exact<{
   id: Scalars['ID'];
 }>;
 
 
-export type UnlockCargoBikeMutation = (
-  { __typename?: 'Mutation' }
-  & { unlockCargoBike: (
+export type UnlockCargoBikeMutation = { __typename?: 'Mutation', unlockCargoBike: (
     { __typename?: 'CargoBike' }
     & CargoBikeFieldsForPageFragment
-  ) }
-);
+  ) };
 
 export type DeleteCargoBikeMutationVariables = Exact<{
   id: Scalars['ID'];
 }>;
 
 
-export type DeleteCargoBikeMutation = (
-  { __typename?: 'Mutation' }
-  & Pick<Mutation, 'deleteCargoBike'>
-);
+export type DeleteCargoBikeMutation = { __typename?: 'Mutation', deleteCargoBike: boolean };
 
 export type GetEquipmentsQueryVariables = Exact<{ [key: string]: never; }>;
 
 
-export type GetEquipmentsQuery = (
-  { __typename?: 'Query' }
-  & { equipment: Array<(
+export type GetEquipmentsQuery = { __typename?: 'Query', equipment: Array<(
     { __typename?: 'Equipment' }
     & EquipmentFieldsForTableFragment
-  )> }
-);
+  )> };
 
 export type CreateEquipmentMutationVariables = Exact<{
   equipmentType: EquipmentCreateInput;
 }>;
 
 
-export type CreateEquipmentMutation = (
-  { __typename?: 'Mutation' }
-  & { createEquipment: (
+export type CreateEquipmentMutation = { __typename?: 'Mutation', createEquipment: (
     { __typename?: 'Equipment' }
     & EquipmentFieldsForTableFragment
-  ) }
-);
+  ) };
 
 export type UpdateEquipmentMutationVariables = Exact<{
   equipmentType: EquipmentUpdateInput;
 }>;
 
 
-export type UpdateEquipmentMutation = (
-  { __typename?: 'Mutation' }
-  & { updateEquipment: (
+export type UpdateEquipmentMutation = { __typename?: 'Mutation', updateEquipment: (
     { __typename?: 'Equipment' }
     & EquipmentFieldsForTableFragment
-  ) }
-);
+  ) };
 
 export type LockEquipmentMutationVariables = Exact<{
   id: Scalars['ID'];
 }>;
 
 
-export type LockEquipmentMutation = (
-  { __typename?: 'Mutation' }
-  & { lockEquipment: (
+export type LockEquipmentMutation = { __typename?: 'Mutation', lockEquipment: (
     { __typename?: 'Equipment' }
     & EquipmentFieldsForTableFragment
-  ) }
-);
+  ) };
 
 export type UnlockEquipmentMutationVariables = Exact<{
   id: Scalars['ID'];
 }>;
 
 
-export type UnlockEquipmentMutation = (
-  { __typename?: 'Mutation' }
-  & { unlockEquipment: (
+export type UnlockEquipmentMutation = { __typename?: 'Mutation', unlockEquipment: (
     { __typename?: 'Equipment' }
     & EquipmentFieldsForTableFragment
-  ) }
-);
+  ) };
 
 export type DeleteEquipmentMutationVariables = Exact<{
   id: Scalars['ID'];
 }>;
 
 
-export type DeleteEquipmentMutation = (
-  { __typename?: 'Mutation' }
-  & Pick<Mutation, 'deleteEquipment'>
-);
+export type DeleteEquipmentMutation = { __typename?: 'Mutation', deleteEquipment: boolean };
 
 export type GetEquipmentTypesQueryVariables = Exact<{ [key: string]: never; }>;
 
 
-export type GetEquipmentTypesQuery = (
-  { __typename?: 'Query' }
-  & { equipmentTypes: Array<(
+export type GetEquipmentTypesQuery = { __typename?: 'Query', equipmentTypes: Array<(
     { __typename?: 'EquipmentType' }
     & EquipmentTypeFieldsFragment
-  )> }
-);
+  )> };
 
 export type CreateEquipmentTypeMutationVariables = Exact<{
   equipmentType: EquipmentTypeCreateInput;
 }>;
 
 
-export type CreateEquipmentTypeMutation = (
-  { __typename?: 'Mutation' }
-  & { createEquipmentType: (
+export type CreateEquipmentTypeMutation = { __typename?: 'Mutation', createEquipmentType: (
     { __typename?: 'EquipmentType' }
     & EquipmentTypeFieldsFragment
-  ) }
-);
+  ) };
 
 export type UpdateEquipmentTypeMutationVariables = Exact<{
   equipmentType: EquipmentTypeUpdateInput;
 }>;
 
 
-export type UpdateEquipmentTypeMutation = (
-  { __typename?: 'Mutation' }
-  & { updateEquipmentType: (
+export type UpdateEquipmentTypeMutation = { __typename?: 'Mutation', updateEquipmentType: (
     { __typename?: 'EquipmentType' }
     & EquipmentTypeFieldsFragment
-  ) }
-);
+  ) };
 
 export type LockEquipmentTypeMutationVariables = Exact<{
   id: Scalars['ID'];
 }>;
 
 
-export type LockEquipmentTypeMutation = (
-  { __typename?: 'Mutation' }
-  & { lockEquipmentType: (
+export type LockEquipmentTypeMutation = { __typename?: 'Mutation', lockEquipmentType: (
     { __typename?: 'EquipmentType' }
     & EquipmentTypeFieldsFragment
-  ) }
-);
+  ) };
 
 export type UnlockEquipmentTypeMutationVariables = Exact<{
   id: Scalars['ID'];
 }>;
 
 
-export type UnlockEquipmentTypeMutation = (
-  { __typename?: 'Mutation' }
-  & { unlockEquipmentType: (
+export type UnlockEquipmentTypeMutation = { __typename?: 'Mutation', unlockEquipmentType: (
     { __typename?: 'EquipmentType' }
     & EquipmentTypeFieldsFragment
-  ) }
-);
+  ) };
 
 export type DeleteEquipmentTypeMutationVariables = Exact<{
   id: Scalars['ID'];
 }>;
 
 
-export type DeleteEquipmentTypeMutation = (
-  { __typename?: 'Mutation' }
-  & Pick<Mutation, 'deleteEquipmentType'>
-);
+export type DeleteEquipmentTypeMutation = { __typename?: 'Mutation', deleteEquipmentType: boolean };
 
-export type AddressFieldsFragment = (
-  { __typename?: 'Address' }
-  & Pick<Address, 'street' | 'number' | 'zip'>
-);
+export type AddressFieldsFragment = { __typename?: 'Address', street: string, number: string, zip: string };
 
-export type CargoBikeFieldsForTableFragment = (
-  { __typename?: 'CargoBike' }
-  & Pick<CargoBike, 'id' | 'group' | 'name' | 'modelName' | 'numberOfChildren' | 'numberOfWheels' | 'forCargo' | 'forChildren' | 'stickerBikeNameState' | 'note' | 'isLocked' | 'isLockedByMe' | 'lockedBy' | 'lockedUntil'>
-  & { insuranceData: (
-    { __typename?: 'InsuranceData' }
-    & Pick<InsuranceData, 'billing' | 'hasFixedRate' | 'name' | 'benefactor' | 'noPnP' | 'maintenanceResponsible' | 'maintenanceBenefactor' | 'maintenanceAgreement' | 'fixedRate' | 'projectAllowance' | 'notes'>
-  ), dimensionsAndLoad: (
-    { __typename?: 'DimensionsAndLoad' }
-    & Pick<DimensionsAndLoad, 'bikeLength' | 'bikeWeight' | 'bikeHeight' | 'bikeWidth' | 'minBoxHeight' | 'maxBoxHeight' | 'minBoxLength' | 'maxBoxLength' | 'minBoxWidth' | 'maxBoxWidth' | 'hasCoverBox' | 'lockable' | 'maxWeightBox' | 'maxWeightLuggageRack' | 'maxWeightTotal'>
-  ), security: (
-    { __typename?: 'Security' }
-    & Pick<Security, 'frameNumber' | 'adfcCoding' | 'keyNumberAXAChain' | 'keyNumberFrameLock' | 'policeCoding'>
-  ), technicalEquipment?: Maybe<(
-    { __typename?: 'TechnicalEquipment' }
-    & Pick<TechnicalEquipment, 'bicycleShift' | 'isEBike' | 'hasLightSystem' | 'specialFeatures'>
-  )>, taxes?: Maybe<(
-    { __typename?: 'Taxes' }
-    & Pick<Taxes, 'costCenter' | 'organisationArea'>
-  )>, provider?: Maybe<(
+export type CargoBikeFieldsForTableFragment = { __typename?: 'CargoBike', id: string, group?: Maybe<Group>, name: string, modelName?: Maybe<string>, numberOfChildren: number, numberOfWheels?: Maybe<number>, forCargo?: Maybe<boolean>, forChildren?: Maybe<boolean>, stickerBikeNameState?: Maybe<StickerBikeNameState>, note?: Maybe<string>, isLocked: boolean, isLockedByMe: boolean, lockedBy?: Maybe<string>, lockedUntil?: Maybe<any>, insuranceData?: Maybe<{ __typename?: 'InsuranceData', billing?: Maybe<string>, hasFixedRate?: Maybe<boolean>, name?: Maybe<string>, benefactor?: Maybe<string>, noPnP?: Maybe<string>, maintenanceResponsible?: Maybe<string>, maintenanceBenefactor?: Maybe<string>, maintenanceAgreement?: Maybe<string>, fixedRate?: Maybe<number>, projectAllowance?: Maybe<any>, notes?: Maybe<string> }>, dimensionsAndLoad?: Maybe<{ __typename?: 'DimensionsAndLoad', bikeLength?: Maybe<number>, bikeWeight?: Maybe<number>, bikeHeight?: Maybe<number>, bikeWidth?: Maybe<number>, hasCoverBox?: Maybe<boolean>, lockable?: Maybe<boolean>, maxWeightBox?: Maybe<number>, maxWeightLuggageRack?: Maybe<number>, maxWeightTotal?: Maybe<number>, boxHeightRange?: Maybe<{ __typename?: 'NumRange', max?: Maybe<number>, min?: Maybe<number> }>, boxLengthRange?: Maybe<{ __typename?: 'NumRange', min?: Maybe<number>, max?: Maybe<number> }>, boxWidthRange?: Maybe<{ __typename?: 'NumRange', min?: Maybe<number>, max?: Maybe<number> }> }>, security: { __typename?: 'Security', frameNumber: string, adfcCoding?: Maybe<string>, keyNumberAXAChain?: Maybe<string>, keyNumberFrameLock?: Maybe<string>, policeCoding?: Maybe<string> }, technicalEquipment?: Maybe<{ __typename?: 'TechnicalEquipment', bicycleShift?: Maybe<string>, isEBike?: Maybe<boolean>, hasLightSystem?: Maybe<boolean>, specialFeatures?: Maybe<string> }>, taxes?: Maybe<{ __typename?: 'Taxes', costCenter?: Maybe<string>, organisationArea?: Maybe<OrganisationArea> }>, provider?: Maybe<(
     { __typename?: 'Provider' }
     & ProviderFieldsGeneralFragment
   )>, lendingStation?: Maybe<(
     { __typename?: 'LendingStation' }
     & LendingStationFieldsForBikePageFragment
-  )> }
-);
+  )> };
 
 export type CargoBikeFieldsForPageFragment = (
-  { __typename?: 'CargoBike' }
-  & { bikeEvents?: Maybe<Array<Maybe<(
+  { __typename?: 'CargoBike', bikeEvents?: Maybe<Array<Maybe<(
     { __typename?: 'BikeEvent' }
     & BikeEventFieldsForBikePageFragment
   )>>>, equipment?: Maybe<Array<Maybe<(
@@ -2047,129 +1992,120 @@ export type CargoBikeFieldsForPageFragment = (
   & CargoBikeFieldsForTableFragment
 );
 
-export type BikeEventFieldsForBikePageFragment = (
-  { __typename?: 'BikeEvent' }
-  & Pick<BikeEvent, 'id' | 'date'>
-  & { bikeEventType: (
+export type BikeEventFieldsForBikePageFragment = { __typename?: 'BikeEvent', id: string, date: any, bikeEventType: (
     { __typename?: 'BikeEventType' }
     & BikeEventTypeFieldsFragment
   ), responsible?: Maybe<(
-    { __typename?: 'Participant' }
-    & Pick<Participant, 'id'>
+    { __typename?: 'Participant', id: string }
     & ParticipantFieldsForBikePageFragment
-  )> }
-);
+  )> };
 
-export type BikeEventTypeFieldsFragment = (
-  { __typename?: 'BikeEventType' }
-  & Pick<BikeEventType, 'id' | 'name' | 'isLocked' | 'isLockedByMe' | 'lockedUntil'>
-);
+export type BikeEventTypeFieldsFragment = { __typename?: 'BikeEventType', id: string, name: string, isLocked: boolean, isLockedByMe: boolean, lockedUntil?: Maybe<any> };
 
-export type ContactInformationFieldsFragment = (
-  { __typename?: 'ContactInformation' }
-  & Pick<ContactInformation, 'id' | 'phone' | 'phone2' | 'email' | 'email2' | 'note' | 'isLocked' | 'isLockedByMe' | 'lockedBy' | 'lockedUntil'>
-  & { person: (
+export type ContactInformationFieldsFragment = { __typename?: 'ContactInformation', id: string, phone?: Maybe<string>, phone2?: Maybe<string>, email?: Maybe<string>, email2?: Maybe<string>, note?: Maybe<string>, isLocked: boolean, isLockedByMe: boolean, lockedBy?: Maybe<string>, lockedUntil?: Maybe<any>, person: (
     { __typename?: 'Person' }
     & PersonFieldsFragment
-  ) }
-);
+  ) };
 
-export type EngagementFieldsForBikePageFragment = (
-  { __typename?: 'Engagement' }
-  & Pick<Engagement, 'id' | 'from' | 'to' | 'isLocked' | 'isLockedByMe' | 'lockedBy' | 'lockedUntil'>
-  & { engagementType: (
+export type EngagementFieldsForBikePageFragment = { __typename?: 'Engagement', id: string, from: any, to?: Maybe<any>, isLocked: boolean, isLockedByMe: boolean, lockedBy?: Maybe<string>, lockedUntil?: Maybe<any>, engagementType: (
     { __typename?: 'EngagementType' }
     & EngagementTypeFieldsFragment
   ), participant: (
     { __typename?: 'Participant' }
     & ParticipantFieldsForBikePageFragment
-  ) }
-);
+  ) };
 
-export type EngagementTypeFieldsFragment = (
-  { __typename?: 'EngagementType' }
-  & Pick<EngagementType, 'id' | 'name' | 'description' | 'isLocked' | 'isLockedByMe' | 'lockedBy' | 'lockedUntil'>
-);
+export type EngagementTypeFieldsFragment = { __typename?: 'EngagementType', id: string, name: string, description: string, isLocked: boolean, isLockedByMe: boolean, lockedBy?: Maybe<string>, lockedUntil?: Maybe<any> };
 
-export type EquipmentFieldsForBikePageFragment = (
-  { __typename?: 'Equipment' }
-  & Pick<Equipment, 'id' | 'serialNo' | 'title' | 'description'>
-);
+export type EquipmentFieldsForBikePageFragment = { __typename?: 'Equipment', id: string, serialNo: string, title: string, description?: Maybe<string> };
 
-export type EquipmentFieldsForTableFragment = (
-  { __typename?: 'Equipment' }
-  & Pick<Equipment, 'id' | 'serialNo' | 'title' | 'description' | 'isLocked' | 'isLockedByMe' | 'lockedBy' | 'lockedUntil'>
-  & { cargoBike?: Maybe<(
-    { __typename?: 'CargoBike' }
-    & Pick<CargoBike, 'id' | 'name'>
-  )> }
-);
+export type EquipmentFieldsForTableFragment = { __typename?: 'Equipment', id: string, serialNo: string, title: string, description?: Maybe<string>, isLocked: boolean, isLockedByMe: boolean, lockedBy?: Maybe<string>, lockedUntil?: Maybe<any>, cargoBike?: Maybe<{ __typename?: 'CargoBike', id: string, name: string }> };
 
-export type EquipmentTypeFieldsFragment = (
-  { __typename?: 'EquipmentType' }
-  & Pick<EquipmentType, 'id' | 'name' | 'description' | 'isLocked' | 'isLockedByMe' | 'lockedBy' | 'lockedUntil'>
-);
+export type EquipmentTypeFieldsFragment = { __typename?: 'EquipmentType', id: string, name: string, description: string, isLocked: boolean, isLockedByMe: boolean, lockedBy?: Maybe<string>, lockedUntil?: Maybe<any> };
 
-export type LendingStationFieldsForBikePageFragment = (
-  { __typename?: 'LendingStation' }
-  & Pick<LendingStation, 'id' | 'name'>
-  & { address: (
+export type LendingStationFieldsForBikePageFragment = { __typename?: 'LendingStation', id: string, name: string, address: (
     { __typename?: 'Address' }
     & AddressFieldsFragment
   ), organisation?: Maybe<(
     { __typename?: 'Organisation' }
     & OrganisationFieldsForTimeFrameFragment
-  )> }
-);
+  )> };
 
-export type OrganisationFieldsForTimeFrameFragment = (
-  { __typename?: 'Organisation' }
-  & Pick<Organisation, 'id' | 'name'>
-  & { address?: Maybe<(
+export type OrganisationFieldsForTimeFrameFragment = { __typename?: 'Organisation', id: string, name: string, address?: Maybe<(
     { __typename?: 'Address' }
     & AddressFieldsFragment
-  )> }
-);
+  )> };
 
-export type ParticipantFieldsForBikePageFragment = (
-  { __typename?: 'Participant' }
-  & Pick<Participant, 'id' | 'start' | 'end' | 'usernamefLotte' | 'usernameSlack' | 'isLocked' | 'isLockedByMe' | 'lockedBy' | 'lockedUntil'>
-  & { contactInformation: (
+export type ParticipantFieldsForBikePageFragment = { __typename?: 'Participant', id: string, start: any, end?: Maybe<any>, usernamefLotte?: Maybe<string>, usernameSlack?: Maybe<string>, isLocked: boolean, isLockedByMe: boolean, lockedBy?: Maybe<string>, lockedUntil?: Maybe<any>, contactInformation: (
     { __typename?: 'ContactInformation' }
     & ContactInformationFieldsFragment
-  ) }
-);
+  ) };
 
-export type PersonFieldsFragment = (
-  { __typename?: 'Person' }
-  & Pick<Person, 'id' | 'name' | 'firstName' | 'isLocked' | 'isLockedByMe' | 'lockedBy' | 'lockedUntil'>
-);
+export type PersonFieldsFragment = { __typename?: 'Person', id: string, name: string, firstName: string, isLocked: boolean, isLockedByMe: boolean, lockedBy?: Maybe<string>, lockedUntil?: Maybe<any> };
 
-export type ProviderFieldsGeneralFragment = (
-  { __typename?: 'Provider' }
-  & Pick<Provider, 'id' | 'formName'>
-  & { privatePerson?: Maybe<(
-    { __typename?: 'ContactInformation' }
-    & Pick<ContactInformation, 'id'>
-    & { person: (
-      { __typename?: 'Person' }
-      & Pick<Person, 'id' | 'name' | 'firstName'>
-      & { contactInformation?: Maybe<Array<(
-        { __typename?: 'ContactInformation' }
-        & Pick<ContactInformation, 'email'>
-      )>> }
-    ) }
-  )> }
-);
+export type ProviderFieldsGeneralFragment = { __typename?: 'Provider', id: string, formName?: Maybe<string>, privatePerson?: Maybe<{ __typename?: 'ContactInformation', id: string, person: { __typename?: 'Person', id: string, name: string, firstName: string, contactInformation?: Maybe<Array<{ __typename?: 'ContactInformation', email?: Maybe<string> }>> } }> };
 
-export type TimeFrameFieldsForBikePageFragment = (
-  { __typename?: 'TimeFrame' }
-  & Pick<TimeFrame, 'id' | 'from' | 'to' | 'note' | 'isLocked' | 'isLockedByMe' | 'lockedBy' | 'lockedUntil'>
-  & { lendingStation: (
+export type TimeFrameFieldsForBikePageFragment = { __typename?: 'TimeFrame', id: string, note?: Maybe<string>, isLocked: boolean, isLockedByMe: boolean, lockedBy?: Maybe<string>, lockedUntil?: Maybe<any>, dateRange: { __typename?: 'DateRange', from: any, to?: Maybe<any> }, lendingStation: (
     { __typename?: 'LendingStation' }
     & LendingStationFieldsForBikePageFragment
-  ) }
-);
+  ) };
+
+export type TimeFrameFieldsFragment = { __typename?: 'TimeFrame', id: string, note?: Maybe<string>, isLocked: boolean, isLockedByMe: boolean, lockedBy?: Maybe<string>, lockedUntil?: Maybe<any>, dateRange: { __typename?: 'DateRange', from: any, to?: Maybe<any> }, lendingStation: { __typename?: 'LendingStation', id: string, name: string }, cargoBike: { __typename?: 'CargoBike', id: string, name: string } };
+
+export type GetTimeFramesQueryVariables = Exact<{ [key: string]: never; }>;
+
+
+export type GetTimeFramesQuery = { __typename?: 'Query', timeFrames: Array<(
+    { __typename?: 'TimeFrame' }
+    & TimeFrameFieldsFragment
+  )> };
+
+export type CreateTimeFrameMutationVariables = Exact<{
+  timeFrame: TimeFrameCreateInput;
+}>;
+
+
+export type CreateTimeFrameMutation = { __typename?: 'Mutation', createTimeFrame: (
+    { __typename?: 'TimeFrame' }
+    & TimeFrameFieldsFragment
+  ) };
+
+export type UpdateTimeFrameMutationVariables = Exact<{
+  timeFrame: TimeFrameUpdateInput;
+}>;
+
+
+export type UpdateTimeFrameMutation = { __typename?: 'Mutation', updateTimeFrame: (
+    { __typename?: 'TimeFrame' }
+    & TimeFrameFieldsFragment
+  ) };
+
+export type LockTimeFrameMutationVariables = Exact<{
+  id: Scalars['ID'];
+}>;
+
+
+export type LockTimeFrameMutation = { __typename?: 'Mutation', lockTimeFrame: (
+    { __typename?: 'TimeFrame' }
+    & TimeFrameFieldsFragment
+  ) };
+
+export type UnlockTimeFrameMutationVariables = Exact<{
+  id: Scalars['ID'];
+}>;
+
+
+export type UnlockTimeFrameMutation = { __typename?: 'Mutation', unlockTimeFrame: (
+    { __typename?: 'TimeFrame' }
+    & TimeFrameFieldsFragment
+  ) };
+
+export type DeleteTimeFrameMutationVariables = Exact<{
+  id: Scalars['ID'];
+}>;
+
+
+export type DeleteTimeFrameMutation = { __typename?: 'Mutation', deleteTimeFrame: boolean };
 
 export const ProviderFieldsGeneralFragmentDoc = gql`
     fragment ProviderFieldsGeneral on Provider {
@@ -2241,12 +2177,18 @@ export const CargoBikeFieldsForTableFragmentDoc = gql`
     bikeWeight
     bikeHeight
     bikeWidth
-    minBoxHeight
-    maxBoxHeight
-    minBoxLength
-    maxBoxLength
-    minBoxWidth
-    maxBoxWidth
+    boxHeightRange {
+      max
+      min
+    }
+    boxLengthRange {
+      min
+      max
+    }
+    boxWidthRange {
+      min
+      max
+    }
     hasCoverBox
     lockable
     maxWeightBox
@@ -2275,12 +2217,18 @@ export const CargoBikeFieldsForTableFragmentDoc = gql`
     bikeLength
     bikeWeight
     bikeWidth
-    minBoxHeight
-    maxBoxHeight
-    minBoxLength
-    maxBoxLength
-    minBoxWidth
-    maxBoxWidth
+    boxHeightRange {
+      max
+      min
+    }
+    boxLengthRange {
+      min
+      max
+    }
+    boxWidthRange {
+      min
+      max
+    }
     hasCoverBox
     lockable
     maxWeightBox
@@ -2440,8 +2388,10 @@ ${ParticipantFieldsForBikePageFragmentDoc}`;
 export const TimeFrameFieldsForBikePageFragmentDoc = gql`
     fragment TimeFrameFieldsForBikePage on TimeFrame {
   id
-  from
-  to
+  dateRange {
+    from
+    to
+  }
   note
   lendingStation {
     ...LendingStationFieldsForBikePage
@@ -2486,6 +2436,28 @@ export const EquipmentFieldsForTableFragmentDoc = gql`
   serialNo
   title
   description
+  cargoBike {
+    id
+    name
+  }
+  isLocked
+  isLockedByMe
+  lockedBy
+  lockedUntil
+}
+    `;
+export const TimeFrameFieldsFragmentDoc = gql`
+    fragment TimeFrameFields on TimeFrame {
+  id
+  dateRange {
+    from
+    to
+  }
+  note
+  lendingStation {
+    id
+    name
+  }
   cargoBike {
     id
     name
@@ -2845,6 +2817,112 @@ export const DeleteEquipmentTypeDocument = gql`
   })
   export class DeleteEquipmentTypeGQL extends Apollo.Mutation<DeleteEquipmentTypeMutation, DeleteEquipmentTypeMutationVariables> {
     document = DeleteEquipmentTypeDocument;
+    
+    constructor(apollo: Apollo.Apollo) {
+      super(apollo);
+    }
+  }
+export const GetTimeFramesDocument = gql`
+    query GetTimeFrames {
+  timeFrames {
+    ...TimeFrameFields
+  }
+}
+    ${TimeFrameFieldsFragmentDoc}`;
+
+  @Injectable({
+    providedIn: 'root'
+  })
+  export class GetTimeFramesGQL extends Apollo.Query<GetTimeFramesQuery, GetTimeFramesQueryVariables> {
+    document = GetTimeFramesDocument;
+    
+    constructor(apollo: Apollo.Apollo) {
+      super(apollo);
+    }
+  }
+export const CreateTimeFrameDocument = gql`
+    mutation CreateTimeFrame($timeFrame: TimeFrameCreateInput!) {
+  createTimeFrame(timeFrame: $timeFrame) {
+    ...TimeFrameFields
+  }
+}
+    ${TimeFrameFieldsFragmentDoc}`;
+
+  @Injectable({
+    providedIn: 'root'
+  })
+  export class CreateTimeFrameGQL extends Apollo.Mutation<CreateTimeFrameMutation, CreateTimeFrameMutationVariables> {
+    document = CreateTimeFrameDocument;
+    
+    constructor(apollo: Apollo.Apollo) {
+      super(apollo);
+    }
+  }
+export const UpdateTimeFrameDocument = gql`
+    mutation UpdateTimeFrame($timeFrame: TimeFrameUpdateInput!) {
+  updateTimeFrame(timeFrame: $timeFrame) {
+    ...TimeFrameFields
+  }
+}
+    ${TimeFrameFieldsFragmentDoc}`;
+
+  @Injectable({
+    providedIn: 'root'
+  })
+  export class UpdateTimeFrameGQL extends Apollo.Mutation<UpdateTimeFrameMutation, UpdateTimeFrameMutationVariables> {
+    document = UpdateTimeFrameDocument;
+    
+    constructor(apollo: Apollo.Apollo) {
+      super(apollo);
+    }
+  }
+export const LockTimeFrameDocument = gql`
+    mutation LockTimeFrame($id: ID!) {
+  lockTimeFrame(id: $id) {
+    ...TimeFrameFields
+  }
+}
+    ${TimeFrameFieldsFragmentDoc}`;
+
+  @Injectable({
+    providedIn: 'root'
+  })
+  export class LockTimeFrameGQL extends Apollo.Mutation<LockTimeFrameMutation, LockTimeFrameMutationVariables> {
+    document = LockTimeFrameDocument;
+    
+    constructor(apollo: Apollo.Apollo) {
+      super(apollo);
+    }
+  }
+export const UnlockTimeFrameDocument = gql`
+    mutation UnlockTimeFrame($id: ID!) {
+  unlockTimeFrame(id: $id) {
+    ...TimeFrameFields
+  }
+}
+    ${TimeFrameFieldsFragmentDoc}`;
+
+  @Injectable({
+    providedIn: 'root'
+  })
+  export class UnlockTimeFrameGQL extends Apollo.Mutation<UnlockTimeFrameMutation, UnlockTimeFrameMutationVariables> {
+    document = UnlockTimeFrameDocument;
+    
+    constructor(apollo: Apollo.Apollo) {
+      super(apollo);
+    }
+  }
+export const DeleteTimeFrameDocument = gql`
+    mutation DeleteTimeFrame($id: ID!) {
+  deleteTimeFrame(id: $id)
+}
+    `;
+
+  @Injectable({
+    providedIn: 'root'
+  })
+  export class DeleteTimeFrameGQL extends Apollo.Mutation<DeleteTimeFrameMutation, DeleteTimeFrameMutationVariables> {
+    document = DeleteTimeFrameDocument;
     
     constructor(apollo: Apollo.Apollo) {
       super(apollo);

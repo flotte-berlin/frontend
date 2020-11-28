@@ -2,7 +2,6 @@ import { Injectable } from '@angular/core';
 import { BehaviorSubject, Subject } from 'rxjs';
 import {
   GetCargoBikesGQL,
-  GetCargoBikesQuery,
   ReloadCargoBikeByIdGQL,
   ReloadCargoBikeByIdQueryVariables,
   UpdateCargoBikeGQL,
@@ -18,19 +17,13 @@ import {
   GetCargoBikeByIdGQL,
   GetCargoBikeByIdQueryVariables,
 } from 'src/generated/graphql';
-import { DeepExtractTypeSkipArrays } from 'ts-deep-extract-types';
-
-export type CargoBikeResult = DeepExtractTypeSkipArrays<
-  GetCargoBikesQuery,
-  ['cargoBikes']
->;
 
 @Injectable({
   providedIn: 'root',
 })
 export class BikesService {
   /** CargoBikes Array */
-  tableData: BehaviorSubject<CargoBikeResult[]> = new BehaviorSubject(null);
+  tableData: BehaviorSubject<any[]> = new BehaviorSubject(null);
   loadingRowIds: BehaviorSubject<string[]> = new BehaviorSubject([]);
   successfullyCreatedRowWithId: Subject<string> = new Subject();
   pageData: BehaviorSubject<any> = new BehaviorSubject(null);
@@ -141,7 +134,7 @@ export class BikesService {
     this.deleteCargoBikeGQL
       .mutate(variables)
       .subscribe((result) => {
-        if (result.data.deleteCargoBike) {
+        if (result.data) {
           this.tableData.next(
             [...this.tableData.value].filter((bike) => bike.id !== variables.id)
           );

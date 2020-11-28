@@ -1,3 +1,4 @@
+import { DatePipe } from '@angular/common';
 import {
   Component,
   Input,
@@ -6,6 +7,7 @@ import {
   ChangeDetectionStrategy,
   ViewChild,
   ChangeDetectorRef,
+  AfterViewInit,
 } from '@angular/core';
 
 @Component({
@@ -13,10 +15,15 @@ import {
   templateUrl: './cell.component.html',
   styleUrls: ['./cell.component.scss'],
 })
-export class CellComponent {
+export class CellComponent implements AfterViewInit {
   @Input()
-  value: number | string | boolean;
-  @Output() valueChange = new EventEmitter<number | string | boolean>();
+  value: any; // number | string | boolean | { start: string; end: string; };
+  minValue: number;
+  maxValue: number;
+
+  @Output() valueChange = new EventEmitter<
+    number | string | boolean | { start: string; end: string }
+  >();
   @Input()
   editable = false;
   _inputType = 'text';
@@ -29,23 +36,23 @@ export class CellComponent {
     this.getHtmlInputType(type);
   }
   @Input()
-  required: boolean = false;
+  required = false;
   @Input()
   link: string = null;
   @Input()
   label: string = null;
   @Output() validityChange = new EventEmitter<boolean>();
-  isValid: boolean = true;
+  isValid = true;
 
   enumValues = [];
 
-  htmlInputType: string = 'string';
+  htmlInputType = 'string';
 
   @ViewChild('input') input: any;
 
-  constructor(private cdr: ChangeDetectorRef) {}
+  constructor(private cdr: ChangeDetectorRef, public datepipe: DatePipe) {}
 
-  ngAfterViewInit() {
+  ngAfterViewInit(): void {
     if (this.required) {
       this.input?.control?.markAsTouched();
       this.checkIfValid();
@@ -63,7 +70,7 @@ export class CellComponent {
     }
   }
 
-  getHtmlInputType(type: string) {
+  getHtmlInputType(type: string): void {
     if (type.split('//')[0] === 'Enum') {
       this.enumValues = type.split('//').slice(1);
       this.htmlInputType = 'enum';
@@ -73,10 +80,23 @@ export class CellComponent {
       this.htmlInputType = 'text';
     } else if (type === 'Boolean') {
       this.htmlInputType = 'boolean';
+    } else if (type === 'Date') {
+      this.htmlInputType = 'date';
+    } else if (type === 'DateRange') {
+      this.htmlInputType = 'dateRange';
+    } else if (type === 'NumRange') {
+      this.htmlInputType = 'numberRange';
+      if (
+        !this.value ||
+        this.value.min === undefined ||
+        this.value.max === undefined
+      ) {
+        this.value = { min: null, max: null };
+      }
     }
   }
 
-  change(newValue) {
+  change(newValue): void {
     if (this.inputType === 'Int') {
       newValue = newValue.toString().replace('.', '');
     }
@@ -88,10 +108,50 @@ export class CellComponent {
     this.checkIfValid();
   }
 
+  startDateChange(event): void {
+    console.log('start');
+    console.log(event.value);
+    console.log(this.transformDate(event.value));
+    this.value.start = this.transformDate(event.value);
+    this.valueChange.emit(this.value);
+  }
+
+  endDateChange(event) {
+    console.log('end');
+    console.log(event.value);
+    console.log(this.transformDate(event.value));
+    this.value.end = this.transformDate(event.value);
+    this.valueChange.emit(this.value);
+  }
+
+  minValueChange(event) {
+    this.value.min = this.toNumber(event.target.value);
+    this.valueChange.emit(this.value);
+    console.log(this.value);
+  }
+
+  maxValueChange(event) {
+    this.value.max = this.toNumber(event.target.value);
+    this.valueChange.emit(this.value);
+    console.log(this.value);
+
+  }
+
+  transformDate(date) {
+    return this.datepipe.transform(date, 'yyyy-MM-dd');
+  }
+
   checkIfValid() {
     if (this.required && this.inputType !== 'Boolean') {
       this.isValid = this.input?.control?.valid || false;
       this.validityChange.emit(this.isValid);
     }
+  }
+
+  toNumber(str: string): number {
+    if (str === '') {
+      return null;
+    }
+    return +str;
   }
 }
