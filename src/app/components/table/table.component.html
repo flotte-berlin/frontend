@@ -34,9 +34,20 @@
       <input
         matInput
         [(ngModel)]="filter.includesString"
-        (input)="applyFilter()"
+        (ngModelChange)="newFilterStringValue()"
         placeholder="Suchbegriff eingeben..."
       />
+      <button
+        mat-button
+        *ngIf="filter.includesString"
+        matSuffix
+        mat-icon-button
+        aria-label="Clear"
+        (click)="filter.includesString = ''; applyFilter()"
+        color="accent"
+      >
+        <mat-icon>close</mat-icon>
+      </button>
     </mat-form-field>
     <button
       *ngIf="!filter.onlyUnsaved && countUnsavedRows() > 0"

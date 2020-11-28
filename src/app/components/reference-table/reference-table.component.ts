@@ -12,6 +12,8 @@ import { MatTableDataSource } from '@angular/material/table';
 import { MatPaginator } from '@angular/material/paginator';
 import { MatSort } from '@angular/material/sort';
 import { FormControl, FormGroup } from '@angular/forms';
+import { Subject } from 'rxjs/internal/Subject';
+import { debounceTime } from 'rxjs/internal/operators/debounceTime';
 
 @Component({
   selector: 'app-reference-table',
@@ -78,7 +80,8 @@ export class ReferenceTableComponent {
 
   addForm: FormGroup = new FormGroup({ addGroup: new FormControl() });
 
-  tableFilterString: string = '';
+  tableFilterString = '';
+  filterStringChanged: Subject<string> = new Subject<string>();
 
   constructor(private schemaService: SchemaService) {}
 
@@ -92,6 +95,10 @@ export class ReferenceTableComponent {
     this.addForm
       .get('addGroup')
       .valueChanges.subscribe(() => this.filterPossibleValueOptions());
+
+    this.filterStringChanged
+      .pipe(debounceTime(400))
+      .subscribe(() => this.applyTableFilter());
   }
 
   ngAfterViewInit() {
@@ -173,6 +180,10 @@ export class ReferenceTableComponent {
         .toLocaleLowerCase()
         .includes(searchString)
     );
+  }
+
+  newFilterStringValue(): void {
+    this.filterStringChanged.next(this.tableFilterString);
   }
 
   applyTableFilter() {

@@ -5,6 +5,7 @@ import {
   Input,
   Output,
   ViewChild,
+  AfterViewInit,
 } from '@angular/core';
 import { CdkDragDrop, moveItemInArray } from '@angular/cdk/drag-drop';
 import { CargoBikeResult } from 'src/app/services/bikes.service';
@@ -17,13 +18,15 @@ import { MatPaginator } from '@angular/material/paginator';
 import { MatSort } from '@angular/material/sort';
 import { MatDialog, MatDialogRef } from '@angular/material/dialog';
 import { ActivatedRoute } from '@angular/router';
+import { Subject } from 'rxjs';
+import { debounceTime } from 'rxjs/internal/operators/debounceTime';
 
 @Component({
   selector: 'app-table',
   templateUrl: './table.component.html',
   styleUrls: ['./table.component.scss'],
 })
-export class TableComponent {
+export class TableComponent implements AfterViewInit {
   @Input()
   headline: string = null;
   /** this array defines the columns and translations of the table and the order they are displayed  */
@@ -69,6 +72,8 @@ export class TableComponent {
   @Input()
   relockingIntervalDuration = 1000 * 60 * 1;
   filter = { includesString: '', onlyUnsaved: false };
+  filterStringChanged: Subject<string> = new Subject<string>();
+
   initialFilter = this.filter;
   isLoaded = false;
 
@@ -78,8 +83,13 @@ export class TableComponent {
   @Output() cancelEvent = new EventEmitter();
   @Output() deleteEvent = new EventEmitter();
 
-  constructor(private schemaService: SchemaService, public dialog: MatDialog, private activatedroute:ActivatedRoute) {
-    this.filter.includesString = this.activatedroute.snapshot.queryParamMap.get('filter') || '';
+  constructor(
+    private schemaService: SchemaService,
+    public dialog: MatDialog,
+    private activatedroute: ActivatedRoute
+  ) {
+    this.filter.includesString =
+      this.activatedroute.snapshot.queryParamMap.get('filter') || '';
   }
 
   ngAfterViewInit() {
@@ -109,6 +119,10 @@ export class TableComponent {
       return a && b;
     };
 
+    this.filterStringChanged
+      .pipe(debounceTime(400))
+      .subscribe(() => this.applyFilter());
+
     this.columnInfo.forEach((column) =>
       this.displayedColumns.push(column.dataPath)
     );
@@ -119,15 +133,15 @@ export class TableComponent {
       this.loadingRowIds = rowIds;
     });
 
-    this.dataService.successfullyCreatedRowWithId.subscribe(id => {
-      this.data.data = this.data.data.filter(row => row.id !== id);
-    })
+    this.dataService.successfullyCreatedRowWithId.subscribe((id) => {
+      this.data.data = this.data.data.filter((row) => row.id !== id);
+    });
 
     this.dataService.tableData.subscribe((newTableDataSource) => {
       this.reloadingTable = false;
       const tempDataSource = [];
       if (newTableDataSource === null) {
-        return;  
+        return;
       }
       this.isLoaded = true;
       for (const row of newTableDataSource) {
@@ -184,8 +198,10 @@ export class TableComponent {
         this.tableDataGQLCreateInputType,
         column.dataPath
       );
-      column.requiredForCreation = column.requiredForCreation || typeInformation.isRequired;
-      column.acceptedForCreation = column.acceptedForCreation || typeInformation.isPartOfType;
+      column.requiredForCreation =
+        column.requiredForCreation || typeInformation.isRequired;
+      column.acceptedForCreation =
+        column.acceptedForCreation || typeInformation.isPartOfType;
     }
   }
 
@@ -261,7 +277,7 @@ export class TableComponent {
       this.tableDataGQLCreateInputType,
       deepen(row)
     );
-    this.createEvent.emit({currentId: row.id, row: newRow});
+    this.createEvent.emit({ currentId: row.id, row: newRow });
   }
 
   lock(row: any) {
@@ -338,7 +354,11 @@ export class TableComponent {
     this.applyFilter();
   }
 
-  applyFilter() {
+  newFilterStringValue(): void {
+    this.filterStringChanged.next(this.filter.includesString);
+  }
+
+  applyFilter(): void {
     this.data.filter = ({
       ...this.filter,
       includesString: this.filter.includesString.trim().toLowerCase(),
