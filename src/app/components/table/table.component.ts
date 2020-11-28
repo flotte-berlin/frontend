@@ -6,6 +6,7 @@ import {
   Output,
   ViewChild,
   AfterViewInit,
+  ChangeDetectorRef,
 } from '@angular/core';
 import { CdkDragDrop, moveItemInArray } from '@angular/cdk/drag-drop';
 import { CargoBikeResult } from 'src/app/services/bikes.service';
@@ -86,13 +87,14 @@ export class TableComponent implements AfterViewInit {
   constructor(
     private schemaService: SchemaService,
     public dialog: MatDialog,
-    private activatedroute: ActivatedRoute
+    private activatedroute: ActivatedRoute,
+    private cdRef: ChangeDetectorRef
   ) {
     this.filter.includesString =
       this.activatedroute.snapshot.queryParamMap.get('filter') || '';
   }
 
-  ngAfterViewInit() {
+  ngAfterViewInit(): void {
     this.addColumnPropertiesFromGQLSchemaToColumnInfo();
     this.data.paginator = this.paginator;
     this.data.sortingDataAccessor = (item, columnName) => {
@@ -172,6 +174,7 @@ export class TableComponent implements AfterViewInit {
         }
       }
     }, this.relockingIntervalDuration);
+    this.cdRef.detectChanges();
   }
 
   ngOnDestroy() {
