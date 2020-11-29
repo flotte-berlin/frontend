@@ -116,34 +116,59 @@
           {{ getTranslation(column.dataPath) }}
         </th>
         <td mat-cell *matCellDef="let element">
-          <app-cell
-            *ngIf="
-              column.type === 'DateRange' ||
-              column.type === 'Boolean' ||
-                element.newObject ||
-                (!column.readonly && element.isLockedByMe);
-              else stringValue
-            "
-            [editable]="
-              (element.newObject && column.acceptedForCreation) ||
-              (!column.readonly && element.isLockedByMe)
-            "
-            [required]="element.newObject && column.requiredForCreation"
-            (validityChange)="validityChange(element, column.dataPath, $event)"
-            [(value)]="element[column.dataPath]"
-            [inputType]="column.type"
-            [link]="column.link ? column.link(element) : null"
-          ></app-cell>
-          <ng-template #stringValue>
-            <span *ngIf="!column.link">{{ element[column.dataPath] }}</span>
-            <a
-              mat-button
-              color="primary"
-              *ngIf="column.link"
-              [routerLink]="column.link(element)"
-              >{{ element[column.dataPath] }}</a
-            >
-          </ng-template>
+          <ng-container
+            *ngIf="column.type !== 'DateRange' && column.type !== 'NumRange'"
+          >
+            <app-cell
+              *ngIf="
+                column.type === 'Boolean' ||
+                  (element.newObject && column.acceptedForCreation) ||
+                  (column.acceptedForUpdating && element.isLockedByMe);
+                else stringValue
+              "
+              [editable]="
+                (element.newObject && column.acceptedForCreation) ||
+                (column.acceptedForUpdating && element.isLockedByMe)
+              "
+              [required]="
+                (element.newObject && column.requiredForCreation) ||
+                (element.isLockedByMe && column.requiredForCreation)
+              "
+              (validityChange)="
+                validityChange(element, column.dataPath, $event)
+              "
+              [(value)]="element[column.dataPath]"
+              [inputType]="column.type"
+              [link]="column.link ? column.link(element) : null"
+            ></app-cell>
+            <ng-template #stringValue>
+              <span *ngIf="!column.link">{{ element[column.dataPath] }}</span>
+              <a
+                mat-button
+                color="primary"
+                *ngIf="column.link"
+                [routerLink]="column.link(element)"
+                >{{ element[column.dataPath] }}</a
+              >
+            </ng-template>
+          </ng-container>
+          <ng-container *ngIf="column.type === 'NumRange'">
+            <app-number-range-cell
+              [editable]="
+                (element.newObject && column.acceptedForCreation) ||
+                (column.acceptedForUpdating && element.isLockedByMe)
+              "
+              [required]="
+                (element.newObject && column.requiredForCreation) ||
+                (element.isLockedByMe && column.requiredForCreation)
+              "
+              (validityChange)="
+                validityChange(element, column.dataPath, $event)
+              "
+              [(min)]="element[column.dataPath + '.min']"
+              [(max)]="element[column.dataPath + '.max']"
+            ></app-number-range-cell>
+          </ng-container>
         </td>
       </ng-container>
 
@@ -190,14 +215,23 @@
               [diameter]="32"
               *ngIf="isLoading(element.id)"
             ></mat-spinner>
-
-            <button
-              mat-icon-button
+            <div
               *ngIf="element.isLockedByMe && !isLoading(element.id)"
-              (click)="save(element)"
+              [matTooltip]="
+                countUnvalidFields(element) > 0
+                  ? 'Ungültige oder nicht ausgefüllte Pflichtfelder (rot): ' +
+                    countUnvalidFields(element)
+                  : 'Abspeichern'
+              "
             >
-              <mat-icon>save</mat-icon>
-            </button>
+              <button
+                mat-icon-button
+                [disabled]="countUnvalidFields(element) > 0"
+                (click)="save(element)"
+              >
+                <mat-icon>save</mat-icon>
+              </button>
+            </div>
             <button
               mat-icon-button
               matTooltip="Alle ungespeicherten Änderungen verwerfen."
@@ -218,7 +252,7 @@
             *ngIf="element.newObject"
             [matTooltip]="
               countUnvalidFields(element) > 0
-                ? 'Nicht ausgefüllte Pflichtfelder (rot): ' +
+                ? 'Ungültige oder nicht ausgefüllte Pflichtfelder (rot): ' +
                   countUnvalidFields(element)
                 : 'Erstellen'
             "

@@ -60,7 +60,7 @@ export class BikeComponent implements OnInit {
     },
     {
       type: 'Group',
-      title: 'Maße und Ladungen',
+      title: 'Maße und Ladung',
       properties: [
         { dataPath: 'dimensionsAndLoad.bikeLength', translation: 'Länge' },
         { dataPath: 'dimensionsAndLoad.bikeWeight', translation: 'Gewicht' },

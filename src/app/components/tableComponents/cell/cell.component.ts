@@ -9,6 +9,7 @@ import {
   ChangeDetectorRef,
   AfterViewInit,
 } from '@angular/core';
+import { FormControl, FormGroup, Validators } from '@angular/forms';
 
 @Component({
   selector: 'app-cell',
@@ -17,7 +18,18 @@ import {
 })
 export class CellComponent implements AfterViewInit {
   @Input()
-  value: any; // number | string | boolean | { start: string; end: string; };
+  set value(value: any) {
+    this._value = value;
+    setTimeout(() => {
+      this.checkIfValid();
+    });
+  } // number | string | boolean | { start: string; end: string; };
+  get value(): any {
+    return this._value;
+  }
+  _value: any;
+
+  rangeForm: FormGroup;
   minValue: number;
   maxValue: number;
 
@@ -51,6 +63,8 @@ export class CellComponent implements AfterViewInit {
   @ViewChild('input') input: any;
 
   constructor(private cdr: ChangeDetectorRef, public datepipe: DatePipe) {}
+
+  ngOnInit() {}
 
   ngAfterViewInit(): void {
     if (this.required) {
@@ -93,6 +107,12 @@ export class CellComponent implements AfterViewInit {
       ) {
         this.value = { min: null, max: null };
       }
+      this.rangeForm = new FormGroup({
+        minValue: new FormControl(),
+        maxValue: new FormControl(),
+      });
+      this.rangeForm.controls['minValue'].markAsTouched();
+      this.rangeForm.controls['maxValue'].markAsTouched();
     }
   }
 
@@ -125,16 +145,38 @@ export class CellComponent implements AfterViewInit {
   }
 
   minValueChange(event) {
-    this.value.min = this.toNumber(event.target.value);
+    this.value.min = Math.abs(this.toNumber(event.target.value));
     this.valueChange.emit(this.value);
-    console.log(this.value);
+    this.checkIfRangeIsValid();
   }
 
   maxValueChange(event) {
-    this.value.max = this.toNumber(event.target.value);
+    this.value.max = Math.abs(this.toNumber(event.target.value));
     this.valueChange.emit(this.value);
-    console.log(this.value);
+    this.checkIfRangeIsValid();
+  }
 
+  checkIfRangeIsValid() {
+    if (this.value.min === null || this.value.max === null) {
+      this.setRangeError(false);
+      return;
+    }
+    if (this.value.min <= this.value.max) {
+      this.setRangeError(false);
+      return;
+    }
+    this.setRangeError(true);
+  }
+
+  setRangeError(error: boolean): void {
+    this.validityChange.emit(!error);
+    if (error) {
+      this.rangeForm.controls['minValue'].setErrors({ rangeError: true });
+      this.rangeForm.controls['maxValue'].setErrors({ rangeError: true });
+    } else {
+      this.rangeForm.controls['minValue'].setErrors(null);
+      this.rangeForm.controls['maxValue'].setErrors(null);
+    }
   }
 
   transformDate(date) {

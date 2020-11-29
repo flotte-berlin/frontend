@@ -60,6 +60,8 @@ import { ReferenceTableComponent } from './components/reference-table/reference-
 import { MatSnackBarModule } from '@angular/material/snack-bar';
 import { EquipmentComponent } from './pages/tables/equipment/equipment.component';
 import { TimeFramesComponent } from './pages/tables/time-frames/time-frames.component';
+import { NumberRangeCellComponent } from './components/tableComponents/number-range-cell/number-range-cell.component';
+import { DateRangeCellComponent } from './components/tableComponents/date-range-cell/date-range-cell.component';
 
 
 
@@ -84,6 +86,8 @@ import { TimeFramesComponent } from './pages/tables/time-frames/time-frames.comp
     ReferenceTableComponent,
     EquipmentComponent,
     TimeFramesComponent,
+    NumberRangeCellComponent,
+    DateRangeCellComponent,
   ],
   imports: [
     BrowserModule,

@@ -1,4 +1,11 @@
-import { Component, EventEmitter, Input, OnDestroy, OnInit, Output } from '@angular/core';
+import {
+  Component,
+  EventEmitter,
+  Input,
+  OnDestroy,
+  OnInit,
+  Output,
+} from '@angular/core';
 import { ActivatedRoute } from '@angular/router';
 import { deepen } from 'src/app/helperFunctions/deepenObject';
 import { flatten } from 'src/app/helperFunctions/flattenObject';
@@ -7,7 +14,8 @@ import { SchemaService } from 'src/app/services/schema.service';
 interface PropertyTypeInfo {
   dataPath: string;
   translation: string;
-  readonly?: boolean;
+  acceptedForUpdating?: boolean;
+  requiredForUpdating?: boolean;
   type?: string;
 }
 
@@ -60,6 +68,8 @@ export class DataPageComponent implements OnInit, OnDestroy {
   data: any;
   isLoading: boolean = false;
   isSavingOrLocking: boolean = false;
+
+  propertyValidity = {};
 
   constructor(
     private route: ActivatedRoute,
@@ -115,13 +125,34 @@ export class DataPageComponent implements OnInit, OnDestroy {
           this.pageDataGQLUpdateInputType,
           prop.dataPath
         );
-        prop.readonly = prop.readonly || !updateTypeInformation.isPartOfType;
+        prop.acceptedForUpdating =
+          prop.acceptedForUpdating != null
+            ? prop.acceptedForUpdating
+            : updateTypeInformation.isPartOfType;
+        prop.requiredForUpdating =
+          prop.requiredForUpdating != null
+            ? prop.requiredForUpdating
+            : updateTypeInformation.isRequired;
       }
     }
   }
 
   lock() {
     this.lockEvent.emit(deepen(this.data));
+  }
+
+  validityChange(columnName: string, isValid: Event) {
+    this.propertyValidity[columnName] = isValid;
+  }
+
+  countUnvalidProperties() {
+    let unvalidFieldsCount = 0;
+    for (const prop in this.propertyValidity) {
+      if (!this.propertyValidity[prop]) {
+        unvalidFieldsCount++;
+      }
+    }
+    return unvalidFieldsCount;
   }
 
   save() {

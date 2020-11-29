@@ -1,0 +1,28 @@
+<div
+  *ngIf="editable || label"
+  class="number-range-wrapper"
+  [formGroup]="rangeForm"
+>
+  <mat-form-field class="number-range-form-field">
+    <mat-label *ngIf="label">{{ label }} min</mat-label>
+    <input
+      matInput
+      type="number"
+      formControlName="minValue"
+      (input)="minValueChange($event)"
+    />
+  </mat-form-field>
+  <span class="range-spacer">-</span>
+  <mat-form-field class="number-range-form-field">
+    <mat-label *ngIf="label">{{ label }} max</mat-label>
+    <input
+      matInput
+      formControlName="maxValue"
+      type="number"
+      (input)="maxValueChange($event)"
+    />
+  </mat-form-field>
+</div>
+<div *ngIf="!editable && !label">
+  {{ min }} - {{ max }}
+</div>

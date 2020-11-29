@@ -55,31 +55,6 @@
   </mat-form-field>
 </ng-container>
 
-<div *ngIf="htmlInputType === 'numberRange'" class="number-range-wrapper">
-  <mat-form-field class="number-range-form-field">
-    <mat-label *ngIf="label">{{ label }}</mat-label>
-    <input
-      matInput
-      type="number"
-      [disabled]="!editable"
-      [value]="value.min"
-      (input)="minValueChange($event)"
-      [required]="required"
-    />
-  </mat-form-field>
-  <span class="range-spacer">-</span>
-  <mat-form-field class="number-range-form-field">
-    <input
-      matInput
-      type="number"
-      [disabled]="!editable"
-      [value]="value.max"
-      (input)="maxValueChange($event)"
-      [required]="required"
-    />
-  </mat-form-field>
-</div>
-
 <div
   #otherInputType
   *ngIf="htmlInputType === 'number' || htmlInputType === 'text'"

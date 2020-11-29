@@ -4,8 +4,8 @@
 
 export const environment = {
   production: false,
-  apiUrl: "https://flotte.duckdns.org", // without /graphql !!!
-  authUrl: "https://flotte.duckdns.org/user-management"
+  apiUrl: "http://173.212.197.169:4000", // without /graphql !!!
+  authUrl: "http://173.212.197.169:8080"
 };
 
 /*

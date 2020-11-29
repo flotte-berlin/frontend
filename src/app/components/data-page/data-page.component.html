@@ -14,14 +14,25 @@
   <ng-container *ngFor="let object of propertiesInfo">
     <mat-card class="inline-card" *ngIf="object.type === 'Group'">
       <mat-card-title>{{ object.title }}</mat-card-title>
-
-      <app-cell
-        *ngFor="let prop of object.properties"
-        [editable]="data.isLockedByMe && !prop.readonly"
-        [(value)]="data[prop.dataPath]"
-        [label]="prop.translation || prop.dataPath"
-        [inputType]="prop.type"
-      ></app-cell>
+      <ng-container *ngFor="let prop of object.properties">
+        <app-cell
+          *ngIf="prop.type !== 'NumRange'"
+          [editable]="data.isLockedByMe && prop.acceptedForUpdating"
+          [required]="prop.requiredForUpdating"
+          (validityChange)="validityChange(prop.dataPath, $event)"
+          [(value)]="data[prop.dataPath]"
+          [label]="prop.translation || prop.dataPath"
+          [inputType]="prop.type"
+        ></app-cell>
+        <app-number-range-cell
+          *ngIf="prop.type === 'NumRange'"
+          [editable]="data.isLockedByMe && prop.acceptedForUpdating"
+          (validityChange)="validityChange(prop.dataPath, $event)"
+          [(min)]="data[prop.dataPath + '.min']"
+          [(max)]="data[prop.dataPath + '.max']"
+          [label]="prop.translation || prop.dataPath"
+        ></app-number-range-cell
+      ></ng-container>
     </mat-card>
 
     <mat-card class="inline-card" *ngIf="object.type === 'ReferenceTable'">
@@ -32,7 +43,9 @@
           *ngIf="object.linkToTable"
           color="primary"
           [routerLink]="object.linkToTable(data)"
-          [queryParams]="object.linkToTableParams ? object.linkToTableParams(data) : {}"
+          [queryParams]="
+            object.linkToTableParams ? object.linkToTableParams(data) : {}
+          "
           matTooltip="Zur Tabelle"
         >
           <mat-icon>subdirectory_arrow_right</mat-icon>
@@ -83,15 +96,26 @@
   >
     <mat-icon>cancel</mat-icon>
   </button>
-  <button
-    mat-fab
-    (click)="save()"
+  <div
     *ngIf="data.isLockedByMe"
-    class="floating-fab-button"
-    [disabled]="isSavingOrLocking || isLoading"
+    [matTooltip]="
+      countUnvalidProperties() > 0
+        ? 'Ungültige oder nicht ausgefüllte Pflichtfelder (rot): ' +
+          countUnvalidProperties()
+        : 'Abspeichern'
+    "
   >
-    <mat-icon>save</mat-icon>
-  </button>
+    <button
+      mat-fab
+      (click)="save()"
+      class="floating-fab-button"
+      [disabled]="
+        isSavingOrLocking || isLoading || countUnvalidProperties() > 0
+      "
+    >
+      <mat-icon>save</mat-icon>
+    </button>
+  </div>
   <button
     mat-fab
     *ngIf="data.isLocked"

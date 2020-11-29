@@ -20,6 +20,7 @@ import { MatDialog, MatDialogRef } from '@angular/material/dialog';
 import { ActivatedRoute } from '@angular/router';
 import { Subject } from 'rxjs';
 import { debounceTime } from 'rxjs/internal/operators/debounceTime';
+import { type } from 'os';
 
 @Component({
   selector: 'app-table',
@@ -37,7 +38,8 @@ export class TableComponent implements AfterViewInit {
     acceptedForCreation?: boolean;
     requiredForCreation?: boolean;
     sticky?: boolean;
-    readonly?: boolean;
+    acceptedForUpdating?: boolean;
+    requiredForUpdating?: boolean;
     type?: string;
     link?: (row: any) => string;
   }[] = [];
@@ -193,7 +195,14 @@ export class TableComponent implements AfterViewInit {
         this.tableDataGQLUpdateInputType,
         column.dataPath
       );
-      column.readonly = column.readonly !== null ? column.readonly : !typeInformation.isPartOfType;
+      column.acceptedForUpdating =
+        column.acceptedForUpdating != null
+          ? column.acceptedForUpdating
+          : typeInformation.isPartOfType;
+      column.requiredForUpdating =
+        column.requiredForUpdating != null
+          ? column.requiredForUpdating
+          : typeInformation.isRequired;
     }
     for (const column of this.columnInfo) {
       const typeInformation = this.schemaService.getTypeInformation(
@@ -201,9 +210,13 @@ export class TableComponent implements AfterViewInit {
         column.dataPath
       );
       column.requiredForCreation =
-        column.requiredForCreation || typeInformation.isRequired;
+        column.requiredForCreation != null
+          ? column.requiredForCreation
+          : typeInformation.isRequired;
       column.acceptedForCreation =
-        column.acceptedForCreation || typeInformation.isPartOfType;
+        column.acceptedForCreation != null
+          ? column.acceptedForCreation
+          : typeInformation.isPartOfType;
     }
   }
 
@@ -235,7 +248,7 @@ export class TableComponent implements AfterViewInit {
   countUnvalidFields(row: any) {
     let unvalidFieldsCount = 0;
     if (!row.FieldsValidity) {
-      return 99;
+      return 0;
     }
     for (const prop in row.FieldsValidity) {
       if (!row.FieldsValidity[prop]) {
