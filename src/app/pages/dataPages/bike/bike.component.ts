@@ -193,7 +193,7 @@ export class BikeComponent implements OnInit {
         { dataPath: 'description', translation: 'Beschreibung' },
       ],
       nameToShowInSelection: (element) => {
-        return element.name;
+        return element?.name;
       },
       linkToTable: (element) => {
         return '/table/equipmentTypes';

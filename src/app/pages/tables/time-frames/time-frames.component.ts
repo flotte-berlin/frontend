@@ -1,4 +1,5 @@
 import { Component, OnInit } from '@angular/core';
+import { BikesService } from 'src/app/services/bikes.service';
 import { TimeFrameService } from 'src/app/services/timeFrame.service';
 @Component({
   selector: 'app-time-frames',
@@ -9,13 +10,28 @@ export class TimeFramesComponent implements OnInit {
   headline = 'Zeitscheiben';
 
   columnInfo = [
-    { dataPath: 'dateRange', translation: 'Zeitraum', type: 'DateRange', readonly: false },
+    {
+      dataPath: 'dateRange',
+      translation: 'Zeitraum',
+      type: 'DateRange',
+      readonly: false,
+    },
     {
       dataPath: 'cargoBike.name',
       translation: 'Lastenrad',
       link: (element) => {
         return '/bike/' + element['cargoBike.id'];
       },
+      possibleObjects: [
+        { id: 1, name: 'test' },
+        { id: 2, name: 'bike2' },
+      ],
+      nameToShowInSelection: (bike) => bike.name,
+      valueToOverwriteDataPath: (bike) => bike.name,
+      currentlySelectedObjectId: (timeFrame) => {
+        return timeFrame['cargoBike.id'];
+      },
+      propertyNameOfReferenceId: 'cargoBikeId'
     },
     {
       dataPath: 'lendingStation.name',
@@ -33,7 +49,18 @@ export class TimeFramesComponent implements OnInit {
   tableDataGQLUpdateInputType: string = 'TimeFrameUpdateInput';
 
   loadingRowIds: string[] = [];
-  constructor(private service: TimeFrameService) {}
+  constructor(
+    private service: TimeFrameService,
+    private bikesService: BikesService
+  ) {
+    this.bikesService.loadTableData();
+    this.bikesService.tableData.subscribe((data) => {
+      this.columnInfo.find(
+        (column) => column.dataPath === 'cargoBike.name'
+      ).possibleObjects = data;
+    });
+    // TODO: add LendingStationService
+  }
 
   ngOnInit() {
     this.dataService = this.service;

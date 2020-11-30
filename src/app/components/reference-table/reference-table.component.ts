@@ -36,16 +36,7 @@ export class ReferenceTableComponent {
   @Input()
   nameToShowInSelection: any;
   @Input()
-  set editable(value: boolean) {
-    this._editable = value;
-    value
-      ? this.addForm.get('addGroup').enable()
-      : this.addForm.get('addGroup').disable();
-  }
-  get editable() {
-    return this._editable;
-  }
-  _editable: boolean = false;
+  editable: boolean = false;
 
   @Input()
   set editableReferences(value: boolean) {
@@ -66,8 +57,10 @@ export class ReferenceTableComponent {
       return;
     }
     this.dataSource.data = [];
+    this.idsOfObjectsToHide = [];
     for (const element of newdata) {
       this.dataSource.data.push(flatten(element));
+      this.idsOfObjectsToHide.push(element.id);
     }
     this.dataSource.data = this.dataSource.data;
     this.onReferenceChange();
@@ -89,11 +82,9 @@ export class ReferenceTableComponent {
   /** data source of the table */
   dataSource: MatTableDataSource<any> = new MatTableDataSource([]);
   possibleValues: Array<any> = [];
-  possibleValueOptions: Array<any> = [];
+  idsOfObjectsToHide = [];
 
   reloadingTable = false;
-
-  addForm: FormGroup = new FormGroup({ addGroup: new FormControl() });
 
   tableFilterString = '';
   filterStringChanged: Subject<string> = new Subject<string>();
@@ -108,9 +99,6 @@ export class ReferenceTableComponent {
     if (this.editableReferences) {
       this.displayedColumns.push('buttons');
     }
-    this.addForm
-      .get('addGroup')
-      .valueChanges.subscribe(() => this.filterPossibleValueOptions());
 
     this.filterStringChanged
       .pipe(debounceTime(400))
@@ -133,10 +121,9 @@ export class ReferenceTableComponent {
           this.possibleValues = [];
           if (data) {
             for (const row of data) {
-              this.possibleValues.push(flatten(row));
+              this.possibleValues.push(row);
             }
           }
-          this.filterPossibleValueOptions();
         }
       );
       this.dataServiceThatProvidesThePossibleData.loadTableData();
@@ -161,46 +148,31 @@ export class ReferenceTableComponent {
   }
 
   delete(row: any) {
-    const index = this.dataSource.data.findIndex(
+    let index = this.dataSource.data.findIndex(
       (element) => element.id === row.id
     );
-    if (index === -1) {
-      return;
-    }
+    if (index !== -1) {
     this.dataSource.data.splice(index, 1);
     this.dataSource.data = this.dataSource.data; //needed to trigger update lol
-    this.filterPossibleValueOptions();
     this.onReferenceChange();
+    }
+
+    // show it again in the selection
+    this.idsOfObjectsToHide = this.idsOfObjectsToHide.filter(
+      (id) => id !== row.id
+    );
   }
 
   addReference(row: any) {
-    this.addForm.get('addGroup').reset();
-    this.dataSource.data = [row, ...this.dataSource.data];
-
+    this.dataSource.data = [flatten(row), ...this.dataSource.data];
+    this.idsOfObjectsToHide = [row.id, ...this.idsOfObjectsToHide];
     this.tableFilterString = '';
     this.applyTableFilter();
-    this.filterPossibleValueOptions();
     this.onReferenceChange();
   }
 
   getRowById(id: string) {
     return this.dataSource.data.find((row) => row.id === id);
-  }
-
-  filterPossibleValueOptions() {
-    this.possibleValueOptions = this.possibleValues.filter(
-      (element) => !this.dataSource.data.find((row) => row.id === element.id)
-    );
-    let searchString = this.addForm.get('addGroup').value;
-    if (!searchString) {
-      return;
-    }
-    searchString = searchString.toLocaleLowerCase();
-    this.possibleValueOptions = this.possibleValueOptions.filter((element) =>
-      this.nameToShowInSelection(element)
-        .toLocaleLowerCase()
-        .includes(searchString)
-    );
   }
 
   newFilterStringValue(): void {

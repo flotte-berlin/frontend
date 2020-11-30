@@ -1,0 +1,21 @@
+<form [formGroup]="addForm">
+  <mat-form-field>
+    <input
+      type="text"
+      matInput
+      #trigger="matAutocompleteTrigger"
+      placeholder="Objekt suchen"
+      formControlName="addGroup"
+      [matAutocomplete]="autoGroup"
+    />
+    <mat-autocomplete #autoGroup="matAutocomplete" panelWidth="auto">
+      <mat-option
+        *ngFor="let object of filteredPossibleObjects"
+        [value]="nameToShowInSelection(object)"
+        (click)="onOptionClicked($event, object, trigger)"
+      >
+        {{ nameToShowInSelection(object) }}
+      </mat-option>
+    </mat-autocomplete>
+  </mat-form-field>
+</form>

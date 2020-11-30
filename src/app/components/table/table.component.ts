@@ -21,6 +21,7 @@ import { ActivatedRoute } from '@angular/router';
 import { Subject } from 'rxjs';
 import { debounceTime } from 'rxjs/internal/operators/debounceTime';
 import { type } from 'os';
+import { SelectObjectDialogComponent } from '../tableComponents/select-object-dialog/select-object-dialog.component';
 
 @Component({
   selector: 'app-table',
@@ -327,6 +328,26 @@ export class TableComponent implements AfterViewInit {
     dialogRef.afterClosed().subscribe((result) => {
       if (result === true) {
         this.delete(row);
+      }
+    });
+  }
+
+  openSelectObjectDialog(row: any, column: any) {
+    console.log(row);
+    console.log(column);
+    const dialogRef = this.dialog.open(SelectObjectDialogComponent, {
+      width: 'auto',
+      autoFocus: false,
+      data: {
+        nameToShowInSelection: column.nameToShowInSelection,
+        currentlySelectedObjectId: column.currentlySelectedObjectId(row),
+        possibleObjects: column.possibleObjects,
+      },
+    });
+    dialogRef.afterClosed().subscribe((selectedObject) => {
+      if (selectedObject) {
+        row[column.propertyNameOfReferenceId] = selectedObject.id;
+        row[column.dataPath] = column.valueToOverwriteDataPath(selectedObject);
       }
     });
   }

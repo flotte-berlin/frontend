@@ -117,7 +117,11 @@
         </th>
         <td mat-cell *matCellDef="let element">
           <ng-container
-            *ngIf="column.type !== 'DateRange' && column.type !== 'NumRange'"
+            *ngIf="
+              column.type !== 'DateRange' &&
+              column.type !== 'NumRange' &&
+              column.possibleObjects === undefined
+            "
           >
             <app-cell
               *ngIf="
@@ -182,6 +186,29 @@
               [(from)]="element[column.dataPath + '.from']"
               [(to)]="element[column.dataPath + '.to']"
             ></app-date-range-cell>
+          </ng-container>
+          <ng-container *ngIf="column.possibleObjects">
+            <ng-container
+              *ngIf="
+                element.newObject || element.isLockedByMe;
+                else stringValue
+              "
+            >
+              <button mat-button (click)="openSelectObjectDialog(element, column)">
+                {{ element[column.dataPath] }}
+                <mat-icon>expand_more</mat-icon>
+              </button>
+            </ng-container>
+            <ng-template #stringValue>
+              <span *ngIf="!column.link">{{ element[column.dataPath] }}</span>
+              <a
+                mat-button
+                color="primary"
+                *ngIf="column.link"
+                [routerLink]="column.link(element)"
+                >{{ element[column.dataPath] }}</a
+              >
+            </ng-template>
           </ng-container>
         </td>
       </ng-container>

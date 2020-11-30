@@ -1,0 +1,21 @@
+<div mat-dialog-content>
+  <h1 mat-dialog-title>Neues Objekt auswählen</h1>
+</div>
+
+<div mat-dialog-content>
+  <app-autocomplete-select
+    [editable]="true"
+    [possibleObjects]="data.possibleObjects"
+    [nameToShowInSelection]="data.nameToShowInSelection"
+    (selectedElementChange)="onObjectClicked($event)"
+  ></app-autocomplete-select>
+
+  <span>aktuell ausgewählt: <b>{{getSelectedObjectName()}}</b></span>
+</div>
+
+<div mat-dialog-actions>
+  <button mat-button (click)="onCancelClick()" i18n>Abbrechen</button>
+  <button mat-button (click)="onConfirmClick()" color="primary">
+    Übernehmen
+  </button>
+</div>
