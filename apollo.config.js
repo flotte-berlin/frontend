@@ -3,7 +3,7 @@ module.exports = {
       excludes: ['src/generated/*'], // ignore the generated files
       service: {
         name: "flotte_project",
-        url: "https://flotte.duckdns.org/graphqldev"
+        url: "http://173.212.197.169:4002/graphql"
       }
     }
   };
