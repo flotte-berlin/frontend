@@ -23,21 +23,21 @@ export class CellComponent implements AfterViewInit {
     setTimeout(() => {
       this.checkIfValid();
     });
-  } // number | string | boolean | { start: string; end: string; };
+  }
   get value(): any {
     return this._value;
   }
-  _value: any;
+  _value: number | string | boolean;
 
-  rangeForm: FormGroup;
-  minValue: number;
-  maxValue: number;
-
-  @Output() valueChange = new EventEmitter<
-    number | string | boolean | { start: string; end: string }
-  >();
+  @Output() valueChange = new EventEmitter<number | string | boolean>();
   @Input()
-  editable = false;
+  set editable(value: boolean) {
+    this._editable = value;
+  }
+  get editable(): boolean {
+    return this._editable;
+  }
+  _editable = false;
   _inputType = 'text';
   get inputType(): string {
     return this._inputType;
@@ -48,7 +48,17 @@ export class CellComponent implements AfterViewInit {
     this.getHtmlInputType(type);
   }
   @Input()
-  required = false;
+  set required(value) {
+    this._required = value;
+    if (value) {
+      this.input?.control?.markAsTouched();
+      this.checkIfValid();
+    }
+  }
+  get required(): boolean {
+    return this._required;
+  }
+  _required = false;
   @Input()
   link: string = null;
   @Input()
@@ -73,13 +83,12 @@ export class CellComponent implements AfterViewInit {
       this.cdr.detectChanges();
 
       if (
-        this.value === undefined &&
         this.inputType === 'Boolean' &&
         this.editable
       ) {
         setTimeout(() => {
           this.change(false);
-        }, 0);
+        });
       }
     }
   }
@@ -98,21 +107,6 @@ export class CellComponent implements AfterViewInit {
       this.htmlInputType = 'date';
     } else if (type === 'DateRange') {
       this.htmlInputType = 'dateRange';
-    } else if (type === 'NumRange') {
-      this.htmlInputType = 'numberRange';
-      if (
-        !this.value ||
-        this.value.min === undefined ||
-        this.value.max === undefined
-      ) {
-        this.value = { min: null, max: null };
-      }
-      this.rangeForm = new FormGroup({
-        minValue: new FormControl(),
-        maxValue: new FormControl(),
-      });
-      this.rangeForm.controls['minValue'].markAsTouched();
-      this.rangeForm.controls['maxValue'].markAsTouched();
     }
   }
 
@@ -144,41 +138,6 @@ export class CellComponent implements AfterViewInit {
     this.valueChange.emit(this.value);
   }
 
-  minValueChange(event) {
-    this.value.min = Math.abs(this.toNumber(event.target.value));
-    this.valueChange.emit(this.value);
-    this.checkIfRangeIsValid();
-  }
-
-  maxValueChange(event) {
-    this.value.max = Math.abs(this.toNumber(event.target.value));
-    this.valueChange.emit(this.value);
-    this.checkIfRangeIsValid();
-  }
-
-  checkIfRangeIsValid() {
-    if (this.value.min === null || this.value.max === null) {
-      this.setRangeError(false);
-      return;
-    }
-    if (this.value.min <= this.value.max) {
-      this.setRangeError(false);
-      return;
-    }
-    this.setRangeError(true);
-  }
-
-  setRangeError(error: boolean): void {
-    this.validityChange.emit(!error);
-    if (error) {
-      this.rangeForm.controls['minValue'].setErrors({ rangeError: true });
-      this.rangeForm.controls['maxValue'].setErrors({ rangeError: true });
-    } else {
-      this.rangeForm.controls['minValue'].setErrors(null);
-      this.rangeForm.controls['maxValue'].setErrors(null);
-    }
-  }
-
   transformDate(date) {
     return this.datepipe.transform(date, 'yyyy-MM-dd');
   }
@@ -188,12 +147,5 @@ export class CellComponent implements AfterViewInit {
       this.isValid = this.input?.control?.valid || false;
       this.validityChange.emit(this.isValid);
     }
-  }
-
-  toNumber(str: string): number {
-    if (str === '') {
-      return null;
-    }
-    return +str;
   }
 }

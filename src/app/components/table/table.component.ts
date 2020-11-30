@@ -36,10 +36,9 @@ export class TableComponent implements AfterViewInit {
     dataPath: string;
     translation: string;
     acceptedForCreation?: boolean;
-    requiredForCreation?: boolean;
     sticky?: boolean;
     acceptedForUpdating?: boolean;
-    requiredForUpdating?: boolean;
+    required?: boolean;
     type?: string;
     link?: (row: any) => string;
   }[] = [];
@@ -189,6 +188,8 @@ export class TableComponent implements AfterViewInit {
         column.dataPath
       );
       column.type = column.type || typeInformation.type;
+      column.required =
+        column.required != null ? column.required : typeInformation.isRequired;
     }
     for (const column of this.columnInfo) {
       const typeInformation = this.schemaService.getTypeInformation(
@@ -199,20 +200,12 @@ export class TableComponent implements AfterViewInit {
         column.acceptedForUpdating != null
           ? column.acceptedForUpdating
           : typeInformation.isPartOfType;
-      column.requiredForUpdating =
-        column.requiredForUpdating != null
-          ? column.requiredForUpdating
-          : typeInformation.isRequired;
     }
     for (const column of this.columnInfo) {
       const typeInformation = this.schemaService.getTypeInformation(
         this.tableDataGQLCreateInputType,
         column.dataPath
       );
-      column.requiredForCreation =
-        column.requiredForCreation != null
-          ? column.requiredForCreation
-          : typeInformation.isRequired;
       column.acceptedForCreation =
         column.acceptedForCreation != null
           ? column.acceptedForCreation

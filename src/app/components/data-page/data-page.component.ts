@@ -15,7 +15,7 @@ interface PropertyTypeInfo {
   dataPath: string;
   translation: string;
   acceptedForUpdating?: boolean;
-  requiredForUpdating?: boolean;
+  required?: boolean;
   type?: string;
 }
 
@@ -121,6 +121,9 @@ export class DataPageComponent implements OnInit, OnDestroy {
           prop.dataPath
         );
         prop.type = prop.type || typeInformation.type;
+        prop.required =
+          prop.required != null ? prop.required : typeInformation.isRequired;
+
         const updateTypeInformation = this.schemaService.getTypeInformation(
           this.pageDataGQLUpdateInputType,
           prop.dataPath
@@ -129,10 +132,6 @@ export class DataPageComponent implements OnInit, OnDestroy {
           prop.acceptedForUpdating != null
             ? prop.acceptedForUpdating
             : updateTypeInformation.isPartOfType;
-        prop.requiredForUpdating =
-          prop.requiredForUpdating != null
-            ? prop.requiredForUpdating
-            : updateTypeInformation.isRequired;
       }
     }
   }
@@ -141,8 +140,8 @@ export class DataPageComponent implements OnInit, OnDestroy {
     this.lockEvent.emit(deepen(this.data));
   }
 
-  validityChange(columnName: string, isValid: Event) {
-    this.propertyValidity[columnName] = isValid;
+  validityChange(propName: string, isValid: Event) {
+    this.propertyValidity[propName] = isValid;
   }
 
   countUnvalidProperties() {

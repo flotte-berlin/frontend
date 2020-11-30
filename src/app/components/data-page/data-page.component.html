@@ -18,7 +18,7 @@
         <app-cell
           *ngIf="prop.type !== 'NumRange'"
           [editable]="data.isLockedByMe && prop.acceptedForUpdating"
-          [required]="prop.requiredForUpdating"
+          [required]="prop.required && data.isLockedByMe"
           (validityChange)="validityChange(prop.dataPath, $event)"
           [(value)]="data[prop.dataPath]"
           [label]="prop.translation || prop.dataPath"

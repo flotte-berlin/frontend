@@ -131,8 +131,8 @@
                 (column.acceptedForUpdating && element.isLockedByMe)
               "
               [required]="
-                (element.newObject && column.requiredForCreation) ||
-                (element.isLockedByMe && column.requiredForCreation)
+                (element.newObject && column.required) ||
+                (element.isLockedByMe && column.required)
               "
               (validityChange)="
                 validityChange(element, column.dataPath, $event)
@@ -159,8 +159,8 @@
                 (column.acceptedForUpdating && element.isLockedByMe)
               "
               [required]="
-                (element.newObject && column.requiredForCreation) ||
-                (element.isLockedByMe && column.requiredForCreation)
+                (element.newObject && column.required) ||
+                (element.isLockedByMe && column.required)
               "
               (validityChange)="
                 validityChange(element, column.dataPath, $event)
