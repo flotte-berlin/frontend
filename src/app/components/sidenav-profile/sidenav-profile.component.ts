@@ -10,7 +10,7 @@ import { SnackBarService } from '../../services/snackbar.service';
 export class SidenavProfileComponent implements OnInit {
   name: String;
   email: String;
-  profileURL: String;
+  profileURL: String = '/assets/flotte_logo.png';
 
   constructor( private auth: AuthService, private snackBar: SnackBarService) { }
 
