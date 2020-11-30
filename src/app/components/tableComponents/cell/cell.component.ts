@@ -4,12 +4,10 @@ import {
   Input,
   Output,
   EventEmitter,
-  ChangeDetectionStrategy,
   ViewChild,
   ChangeDetectorRef,
   AfterViewInit,
 } from '@angular/core';
-import { FormControl, FormGroup, Validators } from '@angular/forms';
 
 @Component({
   selector: 'app-cell',
@@ -33,6 +31,10 @@ export class CellComponent implements AfterViewInit {
   @Input()
   set editable(value: boolean) {
     this._editable = value;
+    if (value) {
+      this.input?.control?.markAsTouched();
+      this.checkIfValid();
+    }
   }
   get editable(): boolean {
     return this._editable;
@@ -82,10 +84,7 @@ export class CellComponent implements AfterViewInit {
       this.checkIfValid();
       this.cdr.detectChanges();
 
-      if (
-        this.inputType === 'Boolean' &&
-        this.editable
-      ) {
+      if (this.inputType === 'Boolean' && this.editable) {
         setTimeout(() => {
           this.change(false);
         });
@@ -143,9 +142,11 @@ export class CellComponent implements AfterViewInit {
   }
 
   checkIfValid() {
-    if (this.required && this.inputType !== 'Boolean') {
-      this.isValid = this.input?.control?.valid || false;
-      this.validityChange.emit(this.isValid);
-    }
+    setTimeout(() => {
+      if (this.editable && this.required && this.inputType !== 'Boolean') {
+        this.isValid = this.input?.control?.valid || false;
+        this.validityChange.emit(this.isValid);
+      }
+    });
   }
 }
