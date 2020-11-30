@@ -1,5 +1,5 @@
 export const environment = {
   production: true,
-  apiUrl: "http://173.212.197.169:4000", // graphql api url without /graphql!
-  authUrl: "http://173.212.197.169:8080" // user server url 
+  apiUrl: "https://api.flotte-berlin.duckdns.org", // graphql api url without /graphql!
+  authUrl: "https://userserver.flotte-berlin.duckdns.org" // user server url 
 };
