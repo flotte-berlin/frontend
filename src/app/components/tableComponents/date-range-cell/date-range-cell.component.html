@@ -1,1 +1,25 @@
-<p>date-range-cell works!</p>
+    <mat-form-field *ngIf="editable || label; else stringValue">
+      <mat-label *ngIf="label">{{label}}</mat-label>
+      <mat-date-range-input [rangePicker]="picker" disabled class="date-range-input">
+        <input
+          matStartDate
+          placeholder="Startdatum"
+          [value]="from"
+          (dateChange)="startDateChange($event)"
+        />
+        <input
+          matEndDate
+          placeholder="Enddatum"
+          [value]="to"
+          (dateChange)="endDateChange($event)"
+        />
+      </mat-date-range-input>
+      <mat-datepicker-toggle matSuffix [for]="picker"></mat-datepicker-toggle>
+      <mat-date-range-picker
+        #picker
+        [disabled]="!editable"
+      ></mat-date-range-picker>
+    </mat-form-field>
+    <ng-template #stringValue>
+        <div class="date-string">{{toLocaleDate(from)}} <i>bis</i> {{toLocaleDate(to)}}</div>
+    </ng-template>

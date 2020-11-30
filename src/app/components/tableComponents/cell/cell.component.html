@@ -30,31 +30,6 @@
   </ng-template>
 </div>
 
-<ng-container *ngIf="htmlInputType === 'dateRange'">
-  <mat-form-field>
-    <mat-label>Zeitraum auswählen</mat-label>
-    <mat-date-range-input [rangePicker]="picker" disabled>
-      <input
-        matStartDate
-        placeholder="Startdatum"
-        [value]="value?.from"
-        (dateChange)="startDateChange($event)"
-      />
-      <input
-        matEndDate
-        placeholder="Enddatum"
-        [value]="value?.to"
-        (dateChange)="endDateChange($event)"
-      />
-    </mat-date-range-input>
-    <mat-datepicker-toggle matSuffix [for]="picker"></mat-datepicker-toggle>
-    <mat-date-range-picker
-      #picker
-      [disabled]="!editable"
-    ></mat-date-range-picker>
-  </mat-form-field>
-</ng-container>
-
 <div
   #otherInputType
   *ngIf="htmlInputType === 'number' || htmlInputType === 'text'"

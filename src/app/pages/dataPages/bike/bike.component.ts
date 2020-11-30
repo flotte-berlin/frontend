@@ -219,6 +219,21 @@ export class BikeComponent implements OnInit {
       },
       propertyNameOfUpdateInput: 'equipmentIds',
     },
+    {
+      type: 'ReferenceTable',
+      title: 'Zeitscheiben',
+      dataPath: 'timeFrames',
+      dataService: null,
+      columnInfo: [
+        { dataPath: 'dateRange', translation: 'Zeitraum' },
+        { dataPath: 'lendingStation.name', translation: 'Standort' },
+      ],
+      editableReferences: false,
+      linkToTable: (element) => '/table/timeFrames',
+      linkToTableParams: (bike) => {
+        return { filter: bike.name };
+      },
+    },
   ];
 
   headlineDataPath = 'name';

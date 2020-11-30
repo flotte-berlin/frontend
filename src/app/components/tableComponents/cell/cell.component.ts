@@ -120,27 +120,7 @@ export class CellComponent implements AfterViewInit {
     this.valueChange.emit(this.value);
     this.checkIfValid();
   }
-
-  startDateChange(event): void {
-    console.log('start');
-    console.log(event.value);
-    console.log(this.transformDate(event.value));
-    this.value.start = this.transformDate(event.value);
-    this.valueChange.emit(this.value);
-  }
-
-  endDateChange(event) {
-    console.log('end');
-    console.log(event.value);
-    console.log(this.transformDate(event.value));
-    this.value.end = this.transformDate(event.value);
-    this.valueChange.emit(this.value);
-  }
-
-  transformDate(date) {
-    return this.datepipe.transform(date, 'yyyy-MM-dd');
-  }
-
+  
   checkIfValid() {
     setTimeout(() => {
       if (this.editable && this.required && this.inputType !== 'Boolean') {

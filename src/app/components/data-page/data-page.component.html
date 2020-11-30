@@ -60,6 +60,7 @@
         [editable]="data.isLockedByMe"
         [tableDataGQLType]="object.tableDataGQLType"
         (referenceIds)="addReferenceIdsToObject($event, object)"
+        [editableReferences]="object.editableReferences"
       ></app-reference-table>
     </mat-card>
   </ng-container>

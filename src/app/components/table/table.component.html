@@ -169,6 +169,20 @@
               [(max)]="element[column.dataPath + '.max']"
             ></app-number-range-cell>
           </ng-container>
+          <ng-container *ngIf="column.type === 'DateRange'">
+            <app-date-range-cell
+              [editable]="
+                (element.newObject && column.acceptedForCreation) ||
+                (column.acceptedForUpdating && element.isLockedByMe)
+              "
+              [required]="
+                (element.newObject && column.required) ||
+                (element.isLockedByMe && column.required)
+              "
+              [(from)]="element[column.dataPath + '.from']"
+              [(to)]="element[column.dataPath + '.to']"
+            ></app-date-range-cell>
+          </ng-container>
         </td>
       </ng-container>
 

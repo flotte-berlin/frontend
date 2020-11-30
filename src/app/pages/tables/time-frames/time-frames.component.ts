@@ -9,7 +9,7 @@ export class TimeFramesComponent implements OnInit {
   headline = 'Zeitscheiben';
 
   columnInfo = [
-    { dataPath: 'dataRange', translation: 'Zeitraum', type: 'DateRange', readonly: false },
+    { dataPath: 'dateRange', translation: 'Zeitraum', type: 'DateRange', readonly: false },
     {
       dataPath: 'cargoBike.name',
       translation: 'Lastenrad',
@@ -19,7 +19,7 @@ export class TimeFramesComponent implements OnInit {
     },
     {
       dataPath: 'lendingStation.name',
-      translation: 'Ausleihstation',
+      translation: 'Standort',
       link: (element) => {
         return '/lendingStation/' + element['lendingStation.id'];
       },

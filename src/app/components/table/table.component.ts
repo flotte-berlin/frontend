@@ -211,6 +211,7 @@ export class TableComponent implements AfterViewInit {
           ? column.acceptedForCreation
           : typeInformation.isPartOfType;
     }
+    console.log(this.columnInfo);
   }
 
   getTranslation(dataPath: string) {

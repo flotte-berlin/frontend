@@ -48,8 +48,23 @@ export class ReferenceTableComponent {
   _editable: boolean = false;
 
   @Input()
+  set editableReferences(value: boolean) {
+    if (value === false) {
+      this._editableReferences = false;
+    } else {
+      this._editableReferences = true;
+    }
+  }
+  get editableReferences(): boolean {
+    return this._editableReferences;
+  }
+  _editableReferences: boolean = true;
+
+  @Input()
   set data(newdata) {
-    if (!newdata) { return; }
+    if (!newdata) {
+      return;
+    }
     this.dataSource.data = [];
     for (const element of newdata) {
       this.dataSource.data.push(flatten(element));
@@ -90,8 +105,9 @@ export class ReferenceTableComponent {
     this.columnInfo.forEach((column) => {
       this.displayedColumns.push(column.dataPath);
     });
-    this.displayedColumns.push('buttons');
-
+    if (this.editableReferences) {
+      this.displayedColumns.push('buttons');
+    }
     this.addForm
       .get('addGroup')
       .valueChanges.subscribe(() => this.filterPossibleValueOptions());
@@ -111,17 +127,20 @@ export class ReferenceTableComponent {
       }
       return item[columnName];
     };
-
-    this.dataServiceThatProvidesThePossibleData.tableData.subscribe((data) => {
-      this.possibleValues = [];
-      if (data) {
-        for (const row of data) {
-          this.possibleValues.push(flatten(row));
+    if (this.dataServiceThatProvidesThePossibleData) {
+      this.dataServiceThatProvidesThePossibleData.tableData.subscribe(
+        (data) => {
+          this.possibleValues = [];
+          if (data) {
+            for (const row of data) {
+              this.possibleValues.push(flatten(row));
+            }
+          }
+          this.filterPossibleValueOptions();
         }
-      }
-      this.filterPossibleValueOptions();
-    });
-    this.dataServiceThatProvidesThePossibleData.loadTableData();
+      );
+      this.dataServiceThatProvidesThePossibleData.loadTableData();
+    }
   }
 
   addColumnPropertiesFromGQLSchemaToColumnInfo() {
@@ -145,7 +164,9 @@ export class ReferenceTableComponent {
     const index = this.dataSource.data.findIndex(
       (element) => element.id === row.id
     );
-    if (index === -1) { return; }
+    if (index === -1) {
+      return;
+    }
     this.dataSource.data.splice(index, 1);
     this.dataSource.data = this.dataSource.data; //needed to trigger update lol
     this.filterPossibleValueOptions();
