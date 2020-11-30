@@ -3,8 +3,10 @@ fragment EngagementFieldsForBikePage on Engagement {
     engagementType {
         ...EngagementTypeFields
     }
-    from
-    to
+    dateRange {
+        from
+        to
+    }
     participant {
         ...ParticipantFieldsForBikePage
     }

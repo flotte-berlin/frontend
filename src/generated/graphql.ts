@@ -43,12 +43,12 @@ export type CargoBike = {
   numberOfWheels?: Maybe<Scalars['Int']>;
   forCargo?: Maybe<Scalars['Boolean']>;
   forChildren?: Maybe<Scalars['Boolean']>;
-  numberOfChildren: Scalars['Int'];
+  numberOfChildren?: Maybe<Scalars['Int']>;
   /**
    * Safety is a custom type, that stores information about security features.
    * TODO: Should this be called Security?
    */
-  security: Security;
+  security?: Maybe<Security>;
   /** Does not refer to an extra table in the database. */
   technicalEquipment?: Maybe<TechnicalEquipment>;
   /** Does not refer to an extra table in the database. */
@@ -113,13 +113,13 @@ export type CargoBikeCreateInput = {
   group: Group;
   name: Scalars['String'];
   state?: Maybe<BikeState>;
-  modelName: Scalars['String'];
-  numberOfWheels: Scalars['Int'];
-  forCargo: Scalars['Boolean'];
-  forChildren: Scalars['Boolean'];
-  numberOfChildren: Scalars['Int'];
+  modelName?: Maybe<Scalars['String']>;
+  numberOfWheels?: Maybe<Scalars['Int']>;
+  forCargo?: Maybe<Scalars['Boolean']>;
+  forChildren?: Maybe<Scalars['Boolean']>;
+  numberOfChildren?: Maybe<Scalars['Int']>;
   /** Safety is a custom type, that stores information about security features. */
-  security: SecurityCreateInput;
+  security?: Maybe<SecurityCreateInput>;
   /** Does not refer to an extra table in the database. */
   technicalEquipment?: Maybe<TechnicalEquipmentCreateInput>;
   /** Does not refer to an extra table in the database. */
@@ -356,7 +356,7 @@ export type TechnicalEquipmentUpdateInput = {
  */
 export type Security = {
   __typename?: 'Security';
-  frameNumber: Scalars['String'];
+  frameNumber?: Maybe<Scalars['String']>;
   keyNumberFrameLock?: Maybe<Scalars['String']>;
   keyNumberAXAChain?: Maybe<Scalars['String']>;
   policeCoding?: Maybe<Scalars['String']>;
@@ -364,7 +364,7 @@ export type Security = {
 };
 
 export type SecurityCreateInput = {
-  frameNumber: Scalars['String'];
+  frameNumber?: Maybe<Scalars['String']>;
   keyNumberFrameLock?: Maybe<Scalars['String']>;
   keyNumberAXAChain?: Maybe<Scalars['String']>;
   policeCoding?: Maybe<Scalars['String']>;
@@ -547,8 +547,7 @@ export type Engagement = {
   __typename?: 'Engagement';
   id: Scalars['ID'];
   engagementType: EngagementType;
-  from: Scalars['Date'];
-  to?: Maybe<Scalars['Date']>;
+  dateRange: DateRange;
   participant: Participant;
   cargoBike: CargoBike;
   isLocked: Scalars['Boolean'];
@@ -560,10 +559,7 @@ export type Engagement = {
 
 export type EngagementCreateInput = {
   engagementTypeId: Scalars['ID'];
-  /** will use CURRENT_DATE if not set */
-  from?: Maybe<Scalars['Date']>;
-  /** will use infinit if not set */
-  to?: Maybe<Scalars['Date']>;
+  dateRange?: Maybe<DateRangeInput>;
   participantId: Scalars['ID'];
   cargoBikeId: Scalars['ID'];
 };
@@ -571,8 +567,7 @@ export type EngagementCreateInput = {
 export type EngagementUpdateInput = {
   id: Scalars['ID'];
   engagementTypeId?: Maybe<Scalars['ID']>;
-  from?: Maybe<Scalars['Date']>;
-  to?: Maybe<Scalars['Date']>;
+  dateRange?: Maybe<DateRangeInput>;
   participantId?: Maybe<Scalars['ID']>;
   cargoBikeId?: Maybe<Scalars['ID']>;
   keepLock?: Maybe<Scalars['Boolean']>;
@@ -1961,7 +1956,7 @@ export type DeleteEquipmentTypeMutation = { __typename?: 'Mutation', deleteEquip
 
 export type AddressFieldsFragment = { __typename?: 'Address', street: string, number: string, zip: string };
 
-export type CargoBikeFieldsForTableFragment = { __typename?: 'CargoBike', id: string, group?: Maybe<Group>, name: string, modelName?: Maybe<string>, numberOfChildren: number, numberOfWheels?: Maybe<number>, forCargo?: Maybe<boolean>, forChildren?: Maybe<boolean>, stickerBikeNameState?: Maybe<StickerBikeNameState>, note?: Maybe<string>, isLocked: boolean, isLockedByMe: boolean, lockedBy?: Maybe<string>, lockedUntil?: Maybe<any>, insuranceData?: Maybe<{ __typename?: 'InsuranceData', billing?: Maybe<string>, hasFixedRate?: Maybe<boolean>, name?: Maybe<string>, benefactor?: Maybe<string>, noPnP?: Maybe<string>, maintenanceResponsible?: Maybe<string>, maintenanceBenefactor?: Maybe<string>, maintenanceAgreement?: Maybe<string>, fixedRate?: Maybe<number>, projectAllowance?: Maybe<any>, notes?: Maybe<string> }>, dimensionsAndLoad?: Maybe<{ __typename?: 'DimensionsAndLoad', bikeLength?: Maybe<number>, bikeWeight?: Maybe<number>, bikeHeight?: Maybe<number>, bikeWidth?: Maybe<number>, hasCoverBox?: Maybe<boolean>, lockable?: Maybe<boolean>, maxWeightBox?: Maybe<number>, maxWeightLuggageRack?: Maybe<number>, maxWeightTotal?: Maybe<number>, boxHeightRange?: Maybe<{ __typename?: 'NumRange', max?: Maybe<number>, min?: Maybe<number> }>, boxLengthRange?: Maybe<{ __typename?: 'NumRange', min?: Maybe<number>, max?: Maybe<number> }>, boxWidthRange?: Maybe<{ __typename?: 'NumRange', min?: Maybe<number>, max?: Maybe<number> }> }>, security: { __typename?: 'Security', frameNumber: string, adfcCoding?: Maybe<string>, keyNumberAXAChain?: Maybe<string>, keyNumberFrameLock?: Maybe<string>, policeCoding?: Maybe<string> }, technicalEquipment?: Maybe<{ __typename?: 'TechnicalEquipment', bicycleShift?: Maybe<string>, isEBike?: Maybe<boolean>, hasLightSystem?: Maybe<boolean>, specialFeatures?: Maybe<string> }>, taxes?: Maybe<{ __typename?: 'Taxes', costCenter?: Maybe<string>, organisationArea?: Maybe<OrganisationArea> }>, provider?: Maybe<(
+export type CargoBikeFieldsForTableFragment = { __typename?: 'CargoBike', id: string, group?: Maybe<Group>, name: string, modelName?: Maybe<string>, numberOfChildren?: Maybe<number>, numberOfWheels?: Maybe<number>, forCargo?: Maybe<boolean>, forChildren?: Maybe<boolean>, stickerBikeNameState?: Maybe<StickerBikeNameState>, note?: Maybe<string>, isLocked: boolean, isLockedByMe: boolean, lockedBy?: Maybe<string>, lockedUntil?: Maybe<any>, insuranceData?: Maybe<{ __typename?: 'InsuranceData', billing?: Maybe<string>, hasFixedRate?: Maybe<boolean>, name?: Maybe<string>, benefactor?: Maybe<string>, noPnP?: Maybe<string>, maintenanceResponsible?: Maybe<string>, maintenanceBenefactor?: Maybe<string>, maintenanceAgreement?: Maybe<string>, fixedRate?: Maybe<number>, projectAllowance?: Maybe<any>, notes?: Maybe<string> }>, dimensionsAndLoad?: Maybe<{ __typename?: 'DimensionsAndLoad', bikeLength?: Maybe<number>, bikeWeight?: Maybe<number>, bikeHeight?: Maybe<number>, bikeWidth?: Maybe<number>, hasCoverBox?: Maybe<boolean>, lockable?: Maybe<boolean>, maxWeightBox?: Maybe<number>, maxWeightLuggageRack?: Maybe<number>, maxWeightTotal?: Maybe<number>, boxHeightRange?: Maybe<{ __typename?: 'NumRange', max?: Maybe<number>, min?: Maybe<number> }>, boxLengthRange?: Maybe<{ __typename?: 'NumRange', min?: Maybe<number>, max?: Maybe<number> }>, boxWidthRange?: Maybe<{ __typename?: 'NumRange', min?: Maybe<number>, max?: Maybe<number> }> }>, security?: Maybe<{ __typename?: 'Security', frameNumber?: Maybe<string>, adfcCoding?: Maybe<string>, keyNumberAXAChain?: Maybe<string>, keyNumberFrameLock?: Maybe<string>, policeCoding?: Maybe<string> }>, technicalEquipment?: Maybe<{ __typename?: 'TechnicalEquipment', bicycleShift?: Maybe<string>, isEBike?: Maybe<boolean>, hasLightSystem?: Maybe<boolean>, specialFeatures?: Maybe<string> }>, taxes?: Maybe<{ __typename?: 'Taxes', costCenter?: Maybe<string>, organisationArea?: Maybe<OrganisationArea> }>, provider?: Maybe<(
     { __typename?: 'Provider' }
     & ProviderFieldsGeneralFragment
   )>, lendingStation?: Maybe<(
@@ -2007,10 +2002,10 @@ export type ContactInformationFieldsFragment = { __typename?: 'ContactInformatio
     & PersonFieldsFragment
   ) };
 
-export type EngagementFieldsForBikePageFragment = { __typename?: 'Engagement', id: string, from: any, to?: Maybe<any>, isLocked: boolean, isLockedByMe: boolean, lockedBy?: Maybe<string>, lockedUntil?: Maybe<any>, engagementType: (
+export type EngagementFieldsForBikePageFragment = { __typename?: 'Engagement', id: string, isLocked: boolean, isLockedByMe: boolean, lockedBy?: Maybe<string>, lockedUntil?: Maybe<any>, engagementType: (
     { __typename?: 'EngagementType' }
     & EngagementTypeFieldsFragment
-  ), participant: (
+  ), dateRange: { __typename?: 'DateRange', from: any, to?: Maybe<any> }, participant: (
     { __typename?: 'Participant' }
     & ParticipantFieldsForBikePageFragment
   ) };
@@ -2373,8 +2368,10 @@ export const EngagementFieldsForBikePageFragmentDoc = gql`
   engagementType {
     ...EngagementTypeFields
   }
-  from
-  to
+  dateRange {
+    from
+    to
+  }
   participant {
     ...ParticipantFieldsForBikePage
   }
