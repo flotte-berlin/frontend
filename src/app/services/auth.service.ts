@@ -3,22 +3,22 @@ import { HttpClient } from '@angular/common/http';
 import { catchError, finalize, map, tap } from 'rxjs/operators';
 import { environment } from '../../environments/environment';
 import { Observable, BehaviorSubject, of } from 'rxjs';
-import { User } from "../models/user";
+import { AuthUser } from "../models/user";
 
 
 @Injectable({
   providedIn: 'root',
 })
 export class AuthService {
-  private currentUserSubject: BehaviorSubject<User>;
-  public currentUser: Observable<User>;
+  private currentUserSubject: BehaviorSubject<AuthUser>;
+  public currentUser: Observable<AuthUser>;
   public loggedIn: BehaviorSubject<boolean>;
   private readonly REQUEST_TOKEN = 'requestToken';
   private readonly REFRESH_TOKEN = 'refreshToken';
   private readonly CURRENT_USER = 'currentUser';
 
   constructor(private http: HttpClient) {
-    this.currentUserSubject = new BehaviorSubject<User>(
+    this.currentUserSubject = new BehaviorSubject<AuthUser>(
       JSON.parse(localStorage.getItem(this.CURRENT_USER))
     );
     this.currentUser = this.currentUserSubject.asObservable();
@@ -29,10 +29,10 @@ export class AuthService {
     
   }
 
-  public get getCurrentUserValue(): User {
+  public get getCurrentUserValue(): AuthUser {
     var value = this.currentUserSubject.value;
     if (value === null){
-      value = new User();
+      value = new AuthUser();
     }
     return value;
   }
@@ -108,7 +108,7 @@ export class AuthService {
     //localStorage.setItem(this.REFRESH_TOKEN, tokens.refresh_token);
   }
 
-  private storeUser(usr: User){
+  private storeUser(usr: AuthUser){
     localStorage.setItem(this.CURRENT_USER, JSON.stringify(usr));
     this.currentUserSubject.next(usr);
   }

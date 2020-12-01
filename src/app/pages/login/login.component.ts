@@ -1,6 +1,6 @@
 import { Component, OnInit } from '@angular/core';
 import { FormControl, Validators } from '@angular/forms';
-import { Router } from '@angular/router';
+import { ActivatedRoute, Router } from '@angular/router';
 import { AuthService } from '../../services/auth.service';
 
 @Component({
@@ -15,9 +15,14 @@ export class LoginComponent implements OnInit {
   loading = false;
   errorOccurred = false;
   errorMessage = '';
-  constructor(private authService: AuthService, private router: Router) {}
 
-  ngOnInit(): void {}
+  returnUrl : string;
+
+  constructor(private authService: AuthService, private router: Router, private route: ActivatedRoute) {}
+
+  ngOnInit(): void {
+    this.returnUrl = this.route.snapshot.queryParams['returnUrl'] || '/tableOverview';
+  }
 
   login() {
     this.errorMessage = '';
@@ -29,7 +34,7 @@ export class LoginComponent implements OnInit {
     this.authService
       .login(this.email.value, this.password.value)
       .subscribe(
-        () => this.router.navigate(['tableOverview']),
+        () => this.router.navigateByUrl(this.returnUrl),
         (error) => {
           this.errorOccurred = true;
           this.errorMessage =
