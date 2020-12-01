@@ -10,18 +10,19 @@ import { EquipmentComponent } from './pages/tables/equipment/equipment.component
 import { LendingStationsComponent } from './pages/tables/lending-stations/lending-stations.component';
 import { ParticipantsComponent } from './pages/tables/participants/participants.component';
 import { TimeFramesComponent } from './pages/tables/time-frames/time-frames.component';
+import {AuthGuard} from './helper/auth.guard';
 
 const routes: Routes = [
   { path: 'login', component: LoginComponent },
-  { path: 'tableOverview', component: TableOverviewComponent },
-  { path: 'table/bikes', component: BikesComponent },
-  { path: 'bike/:id', component: BikeComponent },
-  { path: 'table/participants', component: ParticipantsComponent },
-  { path: 'table/lendingStations', component: LendingStationsComponent },
-  { path: 'table/equipmentTypes', component: EquipmentTypesComponent },
-  { path: 'table/engagementTypes', component: EngagementTypesComponent },
-  { path: 'table/equipment', component: EquipmentComponent },
-  { path: 'table/timeFrames', component: TimeFramesComponent },
+  { path: 'tableOverview', component: TableOverviewComponent, canActivate: [AuthGuard]},
+  { path: 'table/bikes', component: BikesComponent, canActivate: [AuthGuard] },
+  { path: 'bike/:id', component: BikeComponent, canActivate: [AuthGuard] },
+  { path: 'table/participants', component: ParticipantsComponent, canActivate: [AuthGuard] },
+  { path: 'table/lendingStations', component: LendingStationsComponent, canActivate: [AuthGuard] },
+  { path: 'table/equipmentTypes', component: EquipmentTypesComponent, canActivate: [AuthGuard] },
+  { path: 'table/engagementTypes', component: EngagementTypesComponent, canActivate: [AuthGuard] },
+  { path: 'table/equipment', component: EquipmentComponent, canActivate: [AuthGuard] },
+  { path: 'table/timeFrames', component: TimeFramesComponent, canActivate: [AuthGuard] },
   { path: '', redirectTo: 'tableOverview', pathMatch: 'full' },
   { path: 'table', redirectTo: 'tableOverview', pathMatch: 'full' },
   { path: '**', redirectTo: 'tableOverview' },
