@@ -1,5 +1,6 @@
 import { Component, OnInit } from '@angular/core';
 import { BikesService } from 'src/app/services/bikes.service';
+import { LendingStationsService } from 'src/app/services/lending-stations.service';
 import { TimeFrameService } from 'src/app/services/timeFrame.service';
 @Component({
   selector: 'app-time-frames',
@@ -22,10 +23,7 @@ export class TimeFramesComponent implements OnInit {
       link: (element) => {
         return '/bike/' + element['cargoBike.id'];
       },
-      possibleObjects: [
-        { id: 1, name: 'test' },
-        { id: 2, name: 'bike2' },
-      ],
+      possibleObjects: [],
       nameToShowInSelection: (bike) => bike.name,
       valueToOverwriteDataPath: (bike) => bike.name,
       currentlySelectedObjectId: (timeFrame) => {
@@ -39,6 +37,13 @@ export class TimeFramesComponent implements OnInit {
       link: (element) => {
         return '/lendingStation/' + element['lendingStation.id'];
       },
+      possibleObjects: [],
+      nameToShowInSelection: (station) => station.name,
+      valueToOverwriteDataPath: (station) => station.name,
+      currentlySelectedObjectId: (timeFrame) => {
+        return timeFrame['lendingStation.id'];
+      },
+      propertyNameOfReferenceId: 'lendingStationId'
     },
   ];
 
@@ -51,7 +56,8 @@ export class TimeFramesComponent implements OnInit {
   loadingRowIds: string[] = [];
   constructor(
     private service: TimeFrameService,
-    private bikesService: BikesService
+    private bikesService: BikesService,
+    private lendingStationsService: LendingStationsService
   ) {
     this.bikesService.loadTableData();
     this.bikesService.tableData.subscribe((data) => {
@@ -59,7 +65,13 @@ export class TimeFramesComponent implements OnInit {
         (column) => column.dataPath === 'cargoBike.name'
       ).possibleObjects = data;
     });
-    // TODO: add LendingStationService
+
+    this.lendingStationsService.loadTableData();
+    this.lendingStationsService.tableData.subscribe((data) => {
+      this.columnInfo.find(
+        (column) => column.dataPath === 'lendingStation.name'
+      ).possibleObjects = data;
+    });
   }
 
   ngOnInit() {
