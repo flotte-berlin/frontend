@@ -47,8 +47,11 @@ export class DataPageComponent implements OnInit, OnDestroy {
   @Input()
   dataService: any;
 
+  /** specifies which property should be shown in the headline */
   @Input()
   headlineDataPath: string;
+  @Input()
+  headlineIconName: string = "help_outline";
   @Input()
   pageDataGQLType: string;
   @Input()

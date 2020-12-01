@@ -111,7 +111,13 @@ export class BikesComponent implements OnInit {
       translation: '',
     },
     { dataPath: 'lendingStation.id', translation: '' },
-    { dataPath: 'lendingStation.name', translation: '' },
+    {
+      dataPath: 'lendingStation.name',
+      translation: '',
+      link: (row: any) => {
+        return '/lendingStation/' + row['lendingStation.id'];
+      },
+    },
     { dataPath: 'lendingStation.address.number', translation: '' },
     { dataPath: 'lendingStation.address.street', translation: '' },
     { dataPath: 'lendingStation.address.zip', translation: '' },
@@ -124,6 +130,7 @@ export class BikesComponent implements OnInit {
   tableDataGQLUpdateInputType: string = 'CargoBikeUpdateInput';
 
   headline = 'Lastenräder';
+  headlineIconName = 'directions_bike';
 
   loadingRowIds: string[] = [];
   constructor(private bikesService: BikesService) {}

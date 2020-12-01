@@ -8,8 +8,9 @@
 </div>
 
 <div class="data-page-wrapper" *ngIf="data">
-  <h1>
+  <h1 class="headline">
     {{ data[headlineDataPath] }}
+    <mat-icon>{{headlineIconName}}</mat-icon>
   </h1>
   <ng-container *ngFor="let object of propertiesInfo">
     <mat-card class="inline-card" *ngIf="object.type === 'Group'">

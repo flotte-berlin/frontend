@@ -29,8 +29,12 @@ import { SelectObjectDialogComponent } from '../tableComponents/select-object-di
   styleUrls: ['./table.component.scss'],
 })
 export class TableComponent implements AfterViewInit {
+  /** specifies the headline */
   @Input()
   headline: string = null;
+  @Input()
+  headlineIconName: string = "help_outline";
+  
   /** this array defines the columns and translations of the table and the order they are displayed  */
   @Input()
   columnInfo: {

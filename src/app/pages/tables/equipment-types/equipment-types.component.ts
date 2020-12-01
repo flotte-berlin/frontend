@@ -8,6 +8,7 @@ import {EquipmentTypeService} from 'src/app/services/equipmentType.service'
 })
 export class EquipmentTypesComponent implements OnInit {
   headline = 'Equipmenttypen';
+  headlineIconName = 'toys';
 
   columnInfo = [
     { dataPath: 'id', translation: 'ID', readonly: true },

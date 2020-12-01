@@ -28,9 +28,7 @@ export class LendingStationComponent implements OnInit {
     {
       type: 'Group',
       title: 'Öffnungszeiten',
-      properties: [
-        
-      ],
+      properties: [],
     },
     {
       type: 'Group',
@@ -54,6 +52,7 @@ export class LendingStationComponent implements OnInit {
         },
         { dataPath: 'contactInformationIntern.email', translation: 'Email' },
         { dataPath: 'contactInformationIntern.email2', translation: 'Email 2' },
+        { dataPath: 'contactInformationIntern.note', translation: 'Anmerkung' },
       ],
     },
     {
@@ -78,6 +77,7 @@ export class LendingStationComponent implements OnInit {
         },
         { dataPath: 'contactInformationExtern.email', translation: 'Email' },
         { dataPath: 'contactInformationExtern.email2', translation: 'Email 2' },
+        { dataPath: 'contactInformationExtern.note', translation: 'Anmerkung' },
       ],
     },
     /*
@@ -118,6 +118,7 @@ export class LendingStationComponent implements OnInit {
   ];
 
   headlineDataPath = 'name';
+  headlineIconName = 'location_on';
   pageDataGQLType: string = 'LendingStation';
   pageDataGQLUpdateInputType: string = 'LendingStationUpdateInput';
 

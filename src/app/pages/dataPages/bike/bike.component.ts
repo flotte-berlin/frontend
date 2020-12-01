@@ -236,6 +236,7 @@ export class BikeComponent implements OnInit {
   ];
 
   headlineDataPath = 'name';
+  headlineIconName = 'directions_bike'
   pageDataGQLType: string = 'CargoBike';
   pageDataGQLUpdateInputType: string = 'CargoBikeUpdateInput';
 

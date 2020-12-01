@@ -9,6 +9,7 @@ import { TimeFrameService } from 'src/app/services/timeFrame.service';
 })
 export class TimeFramesComponent implements OnInit {
   headline = 'Zeitscheiben';
+  headlineIconName = 'access_time';
 
   columnInfo = [
     {

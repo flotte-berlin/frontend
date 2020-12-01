@@ -68,6 +68,7 @@ export class LendingStationsComponent implements OnInit {
   tableDataGQLUpdateInputType: string = 'LendingStationUpdateInput';
 
   headline = 'Standorte';
+  headlineIconName = 'location_on';
 
   loadingRowIds: string[] = [];
   constructor(private lendingStationsService: LendingStationsService) {}

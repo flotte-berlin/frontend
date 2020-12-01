@@ -29,7 +29,7 @@ export class AppComponent {
       children: [
         {
           displayName: 'Lastenräder',
-          iconName: 'group',
+          iconName: 'directions_bike',
           route: 'table/bikes'
         },
         {
@@ -39,7 +39,7 @@ export class AppComponent {
         },
         {
           displayName: 'Standorte',
-          iconName: 'group',
+          iconName: 'place',
           route: 'table/lendingStations'
         }]
       }];
