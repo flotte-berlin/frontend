@@ -20,8 +20,7 @@ import { MatDialog, MatDialogRef } from '@angular/material/dialog';
 import { ActivatedRoute } from '@angular/router';
 import { Subject } from 'rxjs';
 import { debounceTime } from 'rxjs/internal/operators/debounceTime';
-import { type } from 'os';
-import { SelectObjectDialogComponent } from '../tableComponents/select-object-dialog/select-object-dialog.component';
+import { SelectObjectDialogComponent } from '../select-object-dialog/select-object-dialog.component';
 
 @Component({
   selector: 'app-table',

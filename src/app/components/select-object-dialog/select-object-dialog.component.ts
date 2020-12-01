@@ -1,6 +1,5 @@
 import { Component, Inject, OnInit } from '@angular/core';
 import { MatDialogRef, MAT_DIALOG_DATA } from '@angular/material/dialog';
-import { DeleteConfirmationDialog } from '../../table/table.component';
 
 @Component({
   selector: 'app-select-object-dialog',
@@ -9,11 +8,9 @@ import { DeleteConfirmationDialog } from '../../table/table.component';
 })
 export class SelectObjectDialogComponent implements OnInit {
   constructor(
-    public dialogRef: MatDialogRef<DeleteConfirmationDialog>,
+    public dialogRef: MatDialogRef<any>,
     @Inject(MAT_DIALOG_DATA) public data: any
-  ) {
-    console.log(this.data);
-  }
+  ) {}
 
   ngOnInit(): void {}
 
@@ -24,13 +21,13 @@ export class SelectObjectDialogComponent implements OnInit {
   getSelectedObject() {
     return this.data.possibleObjects.find(
       (object) => object.id === this.data.currentlySelectedObjectId
-    )
+    );
   }
 
   getSelectedObjectName() {
     const selectedObject = this.getSelectedObject();
     if (!selectedObject) {
-      return "";
+      return '';
     }
     return this.data.nameToShowInSelection(selectedObject);
   }

@@ -6,10 +6,12 @@ import {
   OnInit,
   Output,
 } from '@angular/core';
+import { MatDialog } from '@angular/material/dialog';
 import { ActivatedRoute } from '@angular/router';
 import { deepen } from 'src/app/helperFunctions/deepenObject';
 import { flatten } from 'src/app/helperFunctions/flattenObject';
 import { SchemaService } from 'src/app/services/schema.service';
+import { SelectObjectDialogComponent } from '../select-object-dialog/select-object-dialog.component';
 
 interface PropertyTypeInfo {
   dataPath: string;
@@ -76,7 +78,8 @@ export class DataPageComponent implements OnInit, OnDestroy {
 
   constructor(
     private route: ActivatedRoute,
-    private schemaService: SchemaService
+    private schemaService: SchemaService,
+    public dialog: MatDialog,
   ) {}
 
   ngOnInit(): void {
@@ -168,6 +171,27 @@ export class DataPageComponent implements OnInit, OnDestroy {
 
   cancel() {
     this.cancelEvent.emit(deepen(this.data));
+  }
+
+  openSelectObjectDialog(object: any) {
+    const dialogRef = this.dialog.open(SelectObjectDialogComponent, {
+      width: 'auto',
+      autoFocus: false,
+      data: {
+        nameToShowInSelection: object.nameToShowInSelection,
+        currentlySelectedObjectId: object.currentlySelectedObjectId(this.data),
+        possibleObjects: object.possibleObjects,
+      },
+    });
+    dialogRef.afterClosed().subscribe((selectedObject) => {
+      if (selectedObject) {
+        this.data[object.propertyNameOfReferenceId] = selectedObject.id
+        const newObjectFlattened = flatten(selectedObject);
+        for(const newProperty in newObjectFlattened) {
+          this.data[object.propertyPrefixToOverwrite + '.' + newProperty ] = newObjectFlattened[newProperty];
+        }
+      }
+    });
   }
 
   addReferenceIdsToObject(ids: string[], object) {

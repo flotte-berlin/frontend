@@ -1,5 +1,6 @@
 import { Component, OnInit } from '@angular/core';
 import { LendingStationsService } from 'src/app/services/lending-stations.service';
+import { ContactInformationService } from 'src/app/services/contactInformation.service';
 
 @Component({
   selector: 'app-lending-station',
@@ -33,6 +34,23 @@ export class LendingStationComponent implements OnInit {
     {
       type: 'Group',
       title: 'Kontaktinformationen intern',
+      possibleObjects: [],
+      nameToShowInSelection: (contact) => {
+        return (
+          contact.person.firstName +
+          ' ' +
+          contact.person.name +
+          ' ' +
+          contact.email +
+          ' ' +
+          contact.phone
+        );
+      },
+      propertyPrefixToOverwrite: 'contactInformationIntern',
+      currentlySelectedObjectId: (station) => {
+        return station['contactInformationIntern.id'];
+      },
+      propertyNameOfReferenceId: 'contactInformationInternId',
       properties: [
         {
           dataPath: 'contactInformationIntern.person.firstName',
@@ -58,6 +76,23 @@ export class LendingStationComponent implements OnInit {
     {
       type: 'Group',
       title: 'Kontaktinformationen extern',
+      possibleObjects: [],
+      nameToShowInSelection: (contact) => {
+        return (
+          contact.person.firstName +
+          ' ' +
+          contact.person.name +
+          ' ' +
+          contact.email +
+          ' ' +
+          contact.phone
+        );
+      },
+      propertyPrefixToOverwrite: 'contactInformationExtern',
+      currentlySelectedObjectId: (station) => {
+        return station['contactInformationExtern.id'];
+      },
+      propertyNameOfReferenceId: 'contactInformationExternId',
       properties: [
         {
           dataPath: 'contactInformationExtern.person.firstName',
@@ -124,10 +159,23 @@ export class LendingStationComponent implements OnInit {
 
   dataService: any;
 
-  constructor(private lendingStationsService: LendingStationsService) {
+  constructor(
+    private lendingStationsService: LendingStationsService,
+    private contactInformationService: ContactInformationService
+  ) {
     /*this.propertiesInfo.find(
       (prop) => prop.dataPath === 'equipmentType'
     ).dataService = this.equipmentTypeService;*/
+    this.contactInformationService.loadTableData();
+    this.contactInformationService.tableData.subscribe((data) => {
+      this.propertiesInfo.find(
+        (prop) => prop.propertyPrefixToOverwrite === 'contactInformationIntern'
+      ).possibleObjects = data;
+
+      this.propertiesInfo.find(
+        (prop) => prop.propertyPrefixToOverwrite === 'contactInformationExtern'
+      ).possibleObjects = data;
+    });
   }
 
   ngOnInit(): void {

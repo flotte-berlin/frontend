@@ -9,3 +9,11 @@ fragment ContactInformationFieldsGeneral on ContactInformation {
     email2
     note
 }
+
+fragment ContactInformationFields on ContactInformation {
+    ...ContactInformationFieldsGeneral
+    isLocked
+    isLockedByMe
+    isLockedByMe
+    lockedUntil
+}

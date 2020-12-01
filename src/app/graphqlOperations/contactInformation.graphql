@@ -1,0 +1,33 @@
+query GetContactInformation {
+  contactInformation {
+    ...ContactInformationFields
+  }
+}
+
+mutation CreateContactInformation($contactInformation: ContactInformationCreateInput!) {
+  createContactInformation(contactInformation: $contactInformation) {
+    ...ContactInformationFields
+  }
+}
+
+mutation UpdateContactInformation($contactInformation: ContactInformationUpdateInput!) {
+  updateContactInformation(contactInformation: $contactInformation) {
+    ...ContactInformationFields
+  }
+}
+
+mutation LockContactInformation($id: ID!) {
+  lockContactInformation(id: $id) {
+    ...ContactInformationFields
+  }
+}
+
+mutation UnlockContactInformation($id: ID!) {
+  unlockContactInformation(id: $id) #{
+    #add this:  ...ContactInformationFields
+ # }
+}
+
+mutation DeleteContactInformation($id: ID!) {
+  deleteContactInformation(id: $id)
+}

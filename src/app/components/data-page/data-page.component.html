@@ -10,11 +10,20 @@
 <div class="data-page-wrapper" *ngIf="data">
   <h1 class="headline">
     {{ data[headlineDataPath] }}
-    <mat-icon>{{headlineIconName}}</mat-icon>
+    <mat-icon>{{ headlineIconName }}</mat-icon>
   </h1>
   <ng-container *ngFor="let object of propertiesInfo">
     <mat-card class="inline-card" *ngIf="object.type === 'Group'">
-      <mat-card-title>{{ object.title }}</mat-card-title>
+      <mat-card-title
+        >{{ object.title }}
+        <button
+          mat-button
+          *ngIf="data.isLockedByMe && object.possibleObjects"
+          (click)="openSelectObjectDialog(object)"
+        >
+          <mat-icon>expand_more</mat-icon>
+        </button>
+      </mat-card-title>
       <ng-container *ngFor="let prop of object.properties">
         <app-cell
           *ngIf="prop.type !== 'NumRange'"

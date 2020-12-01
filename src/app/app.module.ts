@@ -62,7 +62,7 @@ import { EquipmentComponent } from './pages/tables/equipment/equipment.component
 import { TimeFramesComponent } from './pages/tables/time-frames/time-frames.component';
 import { NumberRangeCellComponent } from './components/tableComponents/number-range-cell/number-range-cell.component';
 import { DateRangeCellComponent } from './components/tableComponents/date-range-cell/date-range-cell.component';
-import { SelectObjectDialogComponent } from './components/tableComponents/select-object-dialog/select-object-dialog.component';
+import { SelectObjectDialogComponent } from './components/select-object-dialog/select-object-dialog.component';
 import { AutocompleteSelectComponent } from './components/autocomplete-select/autocomplete-select.component';
 import { LendingStationComponent } from './pages/dataPages/lending-station/lending-station.component';
 

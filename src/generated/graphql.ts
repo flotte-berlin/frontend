@@ -1844,6 +1844,58 @@ export type DeleteCargoBikeMutationVariables = Exact<{
 
 export type DeleteCargoBikeMutation = { __typename?: 'Mutation', deleteCargoBike: boolean };
 
+export type GetContactInformationQueryVariables = Exact<{ [key: string]: never; }>;
+
+
+export type GetContactInformationQuery = { __typename?: 'Query', contactInformation: Array<(
+    { __typename?: 'ContactInformation' }
+    & ContactInformationFieldsFragment
+  )> };
+
+export type CreateContactInformationMutationVariables = Exact<{
+  contactInformation: ContactInformationCreateInput;
+}>;
+
+
+export type CreateContactInformationMutation = { __typename?: 'Mutation', createContactInformation: (
+    { __typename?: 'ContactInformation' }
+    & ContactInformationFieldsFragment
+  ) };
+
+export type UpdateContactInformationMutationVariables = Exact<{
+  contactInformation: ContactInformationUpdateInput;
+}>;
+
+
+export type UpdateContactInformationMutation = { __typename?: 'Mutation', updateContactInformation: (
+    { __typename?: 'ContactInformation' }
+    & ContactInformationFieldsFragment
+  ) };
+
+export type LockContactInformationMutationVariables = Exact<{
+  id: Scalars['ID'];
+}>;
+
+
+export type LockContactInformationMutation = { __typename?: 'Mutation', lockContactInformation: (
+    { __typename?: 'ContactInformation' }
+    & ContactInformationFieldsFragment
+  ) };
+
+export type UnlockContactInformationMutationVariables = Exact<{
+  id: Scalars['ID'];
+}>;
+
+
+export type UnlockContactInformationMutation = { __typename?: 'Mutation', unlockContactInformation: boolean };
+
+export type DeleteContactInformationMutationVariables = Exact<{
+  id: Scalars['ID'];
+}>;
+
+
+export type DeleteContactInformationMutation = { __typename?: 'Mutation', deleteContactInformation: boolean };
+
 export type GetEquipmentsQueryVariables = Exact<{ [key: string]: never; }>;
 
 
@@ -2001,6 +2053,11 @@ export type ContactInformationFieldsGeneralFragment = { __typename?: 'ContactInf
     { __typename?: 'Person' }
     & PersonFieldsGeneralFragment
   ) };
+
+export type ContactInformationFieldsFragment = (
+  { __typename?: 'ContactInformation', isLocked: boolean, isLockedByMe: boolean, lockedUntil?: Maybe<any> }
+  & ContactInformationFieldsGeneralFragment
+);
 
 export type EngagementFieldsForBikePageFragment = { __typename?: 'Engagement', id: string, isLocked: boolean, isLockedByMe: boolean, lockedBy?: Maybe<string>, lockedUntil?: Maybe<any>, engagementType: (
     { __typename?: 'EngagementType' }
@@ -2514,6 +2571,15 @@ ${EquipmentFieldsForBikePageFragmentDoc}
 ${EquipmentTypeFieldsFragmentDoc}
 ${EngagementFieldsForBikePageFragmentDoc}
 ${TimeFrameFieldsForBikePageFragmentDoc}`;
+export const ContactInformationFieldsFragmentDoc = gql`
+    fragment ContactInformationFields on ContactInformation {
+  ...ContactInformationFieldsGeneral
+  isLocked
+  isLockedByMe
+  isLockedByMe
+  lockedUntil
+}
+    ${ContactInformationFieldsGeneralFragmentDoc}`;
 export const EquipmentFieldsForTableFragmentDoc = gql`
     fragment EquipmentFieldsForTable on Equipment {
   id
@@ -2740,6 +2806,110 @@ export const DeleteCargoBikeDocument = gql`
   })
   export class DeleteCargoBikeGQL extends Apollo.Mutation<DeleteCargoBikeMutation, DeleteCargoBikeMutationVariables> {
     document = DeleteCargoBikeDocument;
+    
+    constructor(apollo: Apollo.Apollo) {
+      super(apollo);
+    }
+  }
+export const GetContactInformationDocument = gql`
+    query GetContactInformation {
+  contactInformation {
+    ...ContactInformationFields
+  }
+}
+    ${ContactInformationFieldsFragmentDoc}`;
+
+  @Injectable({
+    providedIn: 'root'
+  })
+  export class GetContactInformationGQL extends Apollo.Query<GetContactInformationQuery, GetContactInformationQueryVariables> {
+    document = GetContactInformationDocument;
+    
+    constructor(apollo: Apollo.Apollo) {
+      super(apollo);
+    }
+  }
+export const CreateContactInformationDocument = gql`
+    mutation CreateContactInformation($contactInformation: ContactInformationCreateInput!) {
+  createContactInformation(contactInformation: $contactInformation) {
+    ...ContactInformationFields
+  }
+}
+    ${ContactInformationFieldsFragmentDoc}`;
+
+  @Injectable({
+    providedIn: 'root'
+  })
+  export class CreateContactInformationGQL extends Apollo.Mutation<CreateContactInformationMutation, CreateContactInformationMutationVariables> {
+    document = CreateContactInformationDocument;
+    
+    constructor(apollo: Apollo.Apollo) {
+      super(apollo);
+    }
+  }
+export const UpdateContactInformationDocument = gql`
+    mutation UpdateContactInformation($contactInformation: ContactInformationUpdateInput!) {
+  updateContactInformation(contactInformation: $contactInformation) {
+    ...ContactInformationFields
+  }
+}
+    ${ContactInformationFieldsFragmentDoc}`;
+
+  @Injectable({
+    providedIn: 'root'
+  })
+  export class UpdateContactInformationGQL extends Apollo.Mutation<UpdateContactInformationMutation, UpdateContactInformationMutationVariables> {
+    document = UpdateContactInformationDocument;
+    
+    constructor(apollo: Apollo.Apollo) {
+      super(apollo);
+    }
+  }
+export const LockContactInformationDocument = gql`
+    mutation LockContactInformation($id: ID!) {
+  lockContactInformation(id: $id) {
+    ...ContactInformationFields
+  }
+}
+    ${ContactInformationFieldsFragmentDoc}`;
+
+  @Injectable({
+    providedIn: 'root'
+  })
+  export class LockContactInformationGQL extends Apollo.Mutation<LockContactInformationMutation, LockContactInformationMutationVariables> {
+    document = LockContactInformationDocument;
+    
+    constructor(apollo: Apollo.Apollo) {
+      super(apollo);
+    }
+  }
+export const UnlockContactInformationDocument = gql`
+    mutation UnlockContactInformation($id: ID!) {
+  unlockContactInformation(id: $id)
+}
+    `;
+
+  @Injectable({
+    providedIn: 'root'
+  })
+  export class UnlockContactInformationGQL extends Apollo.Mutation<UnlockContactInformationMutation, UnlockContactInformationMutationVariables> {
+    document = UnlockContactInformationDocument;
+    
+    constructor(apollo: Apollo.Apollo) {
+      super(apollo);
+    }
+  }
+export const DeleteContactInformationDocument = gql`
+    mutation DeleteContactInformation($id: ID!) {
+  deleteContactInformation(id: $id)
+}
+    `;
+
+  @Injectable({
+    providedIn: 'root'
+  })
+  export class DeleteContactInformationGQL extends Apollo.Mutation<DeleteContactInformationMutation, DeleteContactInformationMutationVariables> {
+    document = DeleteContactInformationDocument;
     
     constructor(apollo: Apollo.Apollo) {
       super(apollo);
