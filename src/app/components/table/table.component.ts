@@ -212,7 +212,6 @@ export class TableComponent implements AfterViewInit {
           ? column.acceptedForCreation
           : typeInformation.isPartOfType;
     }
-    console.log(this.columnInfo);
   }
 
   getTranslation(dataPath: string) {
@@ -333,8 +332,6 @@ export class TableComponent implements AfterViewInit {
   }
 
   openSelectObjectDialog(row: any, column: any) {
-    console.log(row);
-    console.log(column);
     const dialogRef = this.dialog.open(SelectObjectDialogComponent, {
       width: 'auto',
       autoFocus: false,

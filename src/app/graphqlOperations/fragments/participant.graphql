@@ -5,7 +5,7 @@ fragment ParticipantFieldsForBikePage on Participant {
     usernamefLotte
     usernameSlack
     contactInformation {
-        ...ContactInformationFields
+        ...ContactInformationFieldsGeneral
     }
 
     isLocked

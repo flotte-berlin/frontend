@@ -15,7 +15,6 @@ export class BikeComponent implements OnInit {
       title: 'Allgemein',
       properties: [
         { dataPath: 'name', translation: 'Name' },
-        { dataPath: 'id', translation: 'ID', readonly: true },
         { dataPath: 'Group', translation: 'Gruppe' },
         { dataPath: 'modelName', translation: 'Modell' },
       ],

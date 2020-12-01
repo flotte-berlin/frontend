@@ -5,6 +5,43 @@ fragment LendingStationFieldsForBikePage on LendingStation {
     ...AddressFields
   }
   organisation {
-    ...OrganisationFieldsForTimeFrame
+    ...OrganisationFieldsGeneral
   }
+}
+
+fragment LendingStationFieldsForTable on LendingStation {
+  id
+  name
+  contactInformationIntern {
+    ...ContactInformationFieldsGeneral
+  }
+  contactInformationExtern {
+    ...ContactInformationFieldsGeneral
+  }
+  address {
+    ...AddressFields
+  }
+  organisation {
+    ...OrganisationFieldsGeneral
+  }
+  isLocked
+  isLockedByMe
+  lockedBy
+  lockedUntil
+}
+
+fragment LendingStationFieldsForPage on LendingStation {
+  ...LendingStationFieldsForTable
+  cargoBikes {
+    id
+    name
+  }
+  timeFrames {
+    ...TimeFrameFieldsForLendingStation
+  }
+  # loanPeriod {
+  #  generalRemark
+  #  notes
+  #  loanTimes
+  #}
 }

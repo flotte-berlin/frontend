@@ -1,16 +1,11 @@
-fragment ContactInformationFields on ContactInformation {
+fragment ContactInformationFieldsGeneral on ContactInformation {
     id
     person {
-      ...PersonFields
+      ...PersonFieldsGeneral
     }
     phone
     phone2
     email
     email2
     note
-
-    isLocked
-  isLockedByMe
-  lockedBy
-  lockedUntil
 }

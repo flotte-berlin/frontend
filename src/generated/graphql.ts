@@ -1997,9 +1997,9 @@ export type BikeEventFieldsForBikePageFragment = { __typename?: 'BikeEvent', id:
 
 export type BikeEventTypeFieldsFragment = { __typename?: 'BikeEventType', id: string, name: string, isLocked: boolean, isLockedByMe: boolean, lockedUntil?: Maybe<any> };
 
-export type ContactInformationFieldsFragment = { __typename?: 'ContactInformation', id: string, phone?: Maybe<string>, phone2?: Maybe<string>, email?: Maybe<string>, email2?: Maybe<string>, note?: Maybe<string>, isLocked: boolean, isLockedByMe: boolean, lockedBy?: Maybe<string>, lockedUntil?: Maybe<any>, person: (
+export type ContactInformationFieldsGeneralFragment = { __typename?: 'ContactInformation', id: string, phone?: Maybe<string>, phone2?: Maybe<string>, email?: Maybe<string>, email2?: Maybe<string>, note?: Maybe<string>, person: (
     { __typename?: 'Person' }
-    & PersonFieldsFragment
+    & PersonFieldsGeneralFragment
   ) };
 
 export type EngagementFieldsForBikePageFragment = { __typename?: 'Engagement', id: string, isLocked: boolean, isLockedByMe: boolean, lockedBy?: Maybe<string>, lockedUntil?: Maybe<any>, engagementType: (
@@ -2023,29 +2023,128 @@ export type LendingStationFieldsForBikePageFragment = { __typename?: 'LendingSta
     & AddressFieldsFragment
   ), organisation?: Maybe<(
     { __typename?: 'Organisation' }
-    & OrganisationFieldsForTimeFrameFragment
+    & OrganisationFieldsGeneralFragment
   )> };
 
-export type OrganisationFieldsForTimeFrameFragment = { __typename?: 'Organisation', id: string, name: string, address?: Maybe<(
+export type LendingStationFieldsForTableFragment = { __typename?: 'LendingStation', id: string, name: string, isLocked: boolean, isLockedByMe: boolean, lockedBy?: Maybe<string>, lockedUntil?: Maybe<any>, contactInformationIntern?: Maybe<(
+    { __typename?: 'ContactInformation' }
+    & ContactInformationFieldsGeneralFragment
+  )>, contactInformationExtern?: Maybe<(
+    { __typename?: 'ContactInformation' }
+    & ContactInformationFieldsGeneralFragment
+  )>, address: (
+    { __typename?: 'Address' }
+    & AddressFieldsFragment
+  ), organisation?: Maybe<(
+    { __typename?: 'Organisation' }
+    & OrganisationFieldsGeneralFragment
+  )> };
+
+export type LendingStationFieldsForPageFragment = (
+  { __typename?: 'LendingStation', cargoBikes?: Maybe<Array<{ __typename?: 'CargoBike', id: string, name: string }>>, timeFrames: Array<(
+    { __typename?: 'TimeFrame' }
+    & TimeFrameFieldsForLendingStationFragment
+  )> }
+  & LendingStationFieldsForTableFragment
+);
+
+export type OrganisationFieldsGeneralFragment = { __typename?: 'Organisation', id: string, name: string, address?: Maybe<(
     { __typename?: 'Address' }
     & AddressFieldsFragment
   )> };
 
 export type ParticipantFieldsForBikePageFragment = { __typename?: 'Participant', id: string, start: any, end?: Maybe<any>, usernamefLotte?: Maybe<string>, usernameSlack?: Maybe<string>, isLocked: boolean, isLockedByMe: boolean, lockedBy?: Maybe<string>, lockedUntil?: Maybe<any>, contactInformation: (
     { __typename?: 'ContactInformation' }
-    & ContactInformationFieldsFragment
+    & ContactInformationFieldsGeneralFragment
   ) };
 
-export type PersonFieldsFragment = { __typename?: 'Person', id: string, name: string, firstName: string, isLocked: boolean, isLockedByMe: boolean, lockedBy?: Maybe<string>, lockedUntil?: Maybe<any> };
+export type PersonFieldsGeneralFragment = { __typename?: 'Person', id: string, name: string, firstName: string };
 
 export type ProviderFieldsGeneralFragment = { __typename?: 'Provider', id: string, formName?: Maybe<string>, privatePerson?: Maybe<{ __typename?: 'ContactInformation', id: string, person: { __typename?: 'Person', id: string, name: string, firstName: string, contactInformation?: Maybe<Array<{ __typename?: 'ContactInformation', email?: Maybe<string> }>> } }> };
 
-export type TimeFrameFieldsForBikePageFragment = { __typename?: 'TimeFrame', id: string, note?: Maybe<string>, isLocked: boolean, isLockedByMe: boolean, lockedBy?: Maybe<string>, lockedUntil?: Maybe<any>, dateRange: { __typename?: 'DateRange', from: any, to?: Maybe<any> }, lendingStation: (
+export type TimeFrameFieldsForBikePageFragment = { __typename?: 'TimeFrame', id: string, note?: Maybe<string>, dateRange: { __typename?: 'DateRange', from: any, to?: Maybe<any> }, lendingStation: (
     { __typename?: 'LendingStation' }
     & LendingStationFieldsForBikePageFragment
   ) };
 
+export type TimeFrameFieldsForLendingStationFragment = { __typename?: 'TimeFrame', id: string, note?: Maybe<string>, dateRange: { __typename?: 'DateRange', from: any, to?: Maybe<any> }, cargoBike: { __typename?: 'CargoBike', id: string, name: string } };
+
 export type TimeFrameFieldsFragment = { __typename?: 'TimeFrame', id: string, note?: Maybe<string>, isLocked: boolean, isLockedByMe: boolean, lockedBy?: Maybe<string>, lockedUntil?: Maybe<any>, dateRange: { __typename?: 'DateRange', from: any, to?: Maybe<any> }, lendingStation: { __typename?: 'LendingStation', id: string, name: string }, cargoBike: { __typename?: 'CargoBike', id: string, name: string } };
+
+export type GetLendingStationsQueryVariables = Exact<{ [key: string]: never; }>;
+
+
+export type GetLendingStationsQuery = { __typename?: 'Query', lendingStations: Array<(
+    { __typename?: 'LendingStation' }
+    & LendingStationFieldsForTableFragment
+  )> };
+
+export type GetLendingStationByIdQueryVariables = Exact<{
+  id: Scalars['ID'];
+}>;
+
+
+export type GetLendingStationByIdQuery = { __typename?: 'Query', lendingStationById?: Maybe<(
+    { __typename?: 'LendingStation' }
+    & LendingStationFieldsForPageFragment
+  )> };
+
+export type ReloadLendingStationByIdQueryVariables = Exact<{
+  id: Scalars['ID'];
+}>;
+
+
+export type ReloadLendingStationByIdQuery = { __typename?: 'Query', lendingStationById?: Maybe<(
+    { __typename?: 'LendingStation' }
+    & LendingStationFieldsForTableFragment
+  )> };
+
+export type CreateLendingStationMutationVariables = Exact<{
+  lendingStation: LendingStationCreateInput;
+}>;
+
+
+export type CreateLendingStationMutation = { __typename?: 'Mutation', createLendingStation: (
+    { __typename?: 'LendingStation' }
+    & LendingStationFieldsForTableFragment
+  ) };
+
+export type UpdateLendingStationMutationVariables = Exact<{
+  lendingStation: LendingStationUpdateInput;
+}>;
+
+
+export type UpdateLendingStationMutation = { __typename?: 'Mutation', updateLendingStation: (
+    { __typename?: 'LendingStation' }
+    & LendingStationFieldsForPageFragment
+  ) };
+
+export type LockLendingStationMutationVariables = Exact<{
+  id: Scalars['ID'];
+}>;
+
+
+export type LockLendingStationMutation = { __typename?: 'Mutation', lockLendingStation: (
+    { __typename?: 'LendingStation' }
+    & LendingStationFieldsForPageFragment
+  ) };
+
+export type UnlockLendingStationMutationVariables = Exact<{
+  id: Scalars['ID'];
+}>;
+
+
+export type UnlockLendingStationMutation = { __typename?: 'Mutation', unlockLendingStation: (
+    { __typename?: 'LendingStation' }
+    & LendingStationFieldsForPageFragment
+  ) };
+
+export type DeleteLendingStationMutationVariables = Exact<{
+  id: Scalars['ID'];
+}>;
+
+
+export type DeleteLendingStationMutation = { __typename?: 'Mutation', deleteLendingStation: boolean };
 
 export type GetTimeFramesQueryVariables = Exact<{ [key: string]: never; }>;
 
@@ -2126,8 +2225,8 @@ export const AddressFieldsFragmentDoc = gql`
   zip
 }
     `;
-export const OrganisationFieldsForTimeFrameFragmentDoc = gql`
-    fragment OrganisationFieldsForTimeFrame on Organisation {
+export const OrganisationFieldsGeneralFragmentDoc = gql`
+    fragment OrganisationFieldsGeneral on Organisation {
   id
   name
   address {
@@ -2143,11 +2242,11 @@ export const LendingStationFieldsForBikePageFragmentDoc = gql`
     ...AddressFields
   }
   organisation {
-    ...OrganisationFieldsForTimeFrame
+    ...OrganisationFieldsGeneral
   }
 }
     ${AddressFieldsFragmentDoc}
-${OrganisationFieldsForTimeFrameFragmentDoc}`;
+${OrganisationFieldsGeneralFragmentDoc}`;
 export const CargoBikeFieldsForTableFragmentDoc = gql`
     fragment CargoBikeFieldsForTable on CargoBike {
   id
@@ -2271,34 +2370,26 @@ export const BikeEventTypeFieldsFragmentDoc = gql`
   lockedUntil
 }
     `;
-export const PersonFieldsFragmentDoc = gql`
-    fragment PersonFields on Person {
+export const PersonFieldsGeneralFragmentDoc = gql`
+    fragment PersonFieldsGeneral on Person {
   id
   name
   firstName
-  isLocked
-  isLockedByMe
-  lockedBy
-  lockedUntil
 }
     `;
-export const ContactInformationFieldsFragmentDoc = gql`
-    fragment ContactInformationFields on ContactInformation {
+export const ContactInformationFieldsGeneralFragmentDoc = gql`
+    fragment ContactInformationFieldsGeneral on ContactInformation {
   id
   person {
-    ...PersonFields
+    ...PersonFieldsGeneral
   }
   phone
   phone2
   email
   email2
   note
-  isLocked
-  isLockedByMe
-  lockedBy
-  lockedUntil
 }
-    ${PersonFieldsFragmentDoc}`;
+    ${PersonFieldsGeneralFragmentDoc}`;
 export const ParticipantFieldsForBikePageFragmentDoc = gql`
     fragment ParticipantFieldsForBikePage on Participant {
   id
@@ -2307,14 +2398,14 @@ export const ParticipantFieldsForBikePageFragmentDoc = gql`
   usernamefLotte
   usernameSlack
   contactInformation {
-    ...ContactInformationFields
+    ...ContactInformationFieldsGeneral
   }
   isLocked
   isLockedByMe
   lockedBy
   lockedUntil
 }
-    ${ContactInformationFieldsFragmentDoc}`;
+    ${ContactInformationFieldsGeneralFragmentDoc}`;
 export const BikeEventFieldsForBikePageFragmentDoc = gql`
     fragment BikeEventFieldsForBikePage on BikeEvent {
   id
@@ -2393,10 +2484,6 @@ export const TimeFrameFieldsForBikePageFragmentDoc = gql`
   lendingStation {
     ...LendingStationFieldsForBikePage
   }
-  isLocked
-  isLockedByMe
-  lockedBy
-  lockedUntil
 }
     ${LendingStationFieldsForBikePageFragmentDoc}`;
 export const CargoBikeFieldsForPageFragmentDoc = gql`
@@ -2443,6 +2530,57 @@ export const EquipmentFieldsForTableFragmentDoc = gql`
   lockedUntil
 }
     `;
+export const LendingStationFieldsForTableFragmentDoc = gql`
+    fragment LendingStationFieldsForTable on LendingStation {
+  id
+  name
+  contactInformationIntern {
+    ...ContactInformationFieldsGeneral
+  }
+  contactInformationExtern {
+    ...ContactInformationFieldsGeneral
+  }
+  address {
+    ...AddressFields
+  }
+  organisation {
+    ...OrganisationFieldsGeneral
+  }
+  isLocked
+  isLockedByMe
+  lockedBy
+  lockedUntil
+}
+    ${ContactInformationFieldsGeneralFragmentDoc}
+${AddressFieldsFragmentDoc}
+${OrganisationFieldsGeneralFragmentDoc}`;
+export const TimeFrameFieldsForLendingStationFragmentDoc = gql`
+    fragment TimeFrameFieldsForLendingStation on TimeFrame {
+  id
+  dateRange {
+    from
+    to
+  }
+  note
+  cargoBike {
+    id
+    name
+  }
+}
+    `;
+export const LendingStationFieldsForPageFragmentDoc = gql`
+    fragment LendingStationFieldsForPage on LendingStation {
+  ...LendingStationFieldsForTable
+  cargoBikes {
+    id
+    name
+  }
+  timeFrames {
+    ...TimeFrameFieldsForLendingStation
+  }
+}
+    ${LendingStationFieldsForTableFragmentDoc}
+${TimeFrameFieldsForLendingStationFragmentDoc}`;
 export const TimeFrameFieldsFragmentDoc = gql`
     fragment TimeFrameFields on TimeFrame {
   id
@@ -2814,6 +2952,148 @@ export const DeleteEquipmentTypeDocument = gql`
   })
   export class DeleteEquipmentTypeGQL extends Apollo.Mutation<DeleteEquipmentTypeMutation, DeleteEquipmentTypeMutationVariables> {
     document = DeleteEquipmentTypeDocument;
+    
+    constructor(apollo: Apollo.Apollo) {
+      super(apollo);
+    }
+  }
+export const GetLendingStationsDocument = gql`
+    query GetLendingStations {
+  lendingStations {
+    ...LendingStationFieldsForTable
+  }
+}
+    ${LendingStationFieldsForTableFragmentDoc}`;
+
+  @Injectable({
+    providedIn: 'root'
+  })
+  export class GetLendingStationsGQL extends Apollo.Query<GetLendingStationsQuery, GetLendingStationsQueryVariables> {
+    document = GetLendingStationsDocument;
+    
+    constructor(apollo: Apollo.Apollo) {
+      super(apollo);
+    }
+  }
+export const GetLendingStationByIdDocument = gql`
+    query GetLendingStationById($id: ID!) {
+  lendingStationById(id: $id) {
+    ...LendingStationFieldsForPage
+  }
+}
+    ${LendingStationFieldsForPageFragmentDoc}`;
+
+  @Injectable({
+    providedIn: 'root'
+  })
+  export class GetLendingStationByIdGQL extends Apollo.Query<GetLendingStationByIdQuery, GetLendingStationByIdQueryVariables> {
+    document = GetLendingStationByIdDocument;
+    
+    constructor(apollo: Apollo.Apollo) {
+      super(apollo);
+    }
+  }
+export const ReloadLendingStationByIdDocument = gql`
+    query ReloadLendingStationById($id: ID!) {
+  lendingStationById(id: $id) {
+    ...LendingStationFieldsForTable
+  }
+}
+    ${LendingStationFieldsForTableFragmentDoc}`;
+
+  @Injectable({
+    providedIn: 'root'
+  })
+  export class ReloadLendingStationByIdGQL extends Apollo.Query<ReloadLendingStationByIdQuery, ReloadLendingStationByIdQueryVariables> {
+    document = ReloadLendingStationByIdDocument;
+    
+    constructor(apollo: Apollo.Apollo) {
+      super(apollo);
+    }
+  }
+export const CreateLendingStationDocument = gql`
+    mutation CreateLendingStation($lendingStation: LendingStationCreateInput!) {
+  createLendingStation(lendingStation: $lendingStation) {
+    ...LendingStationFieldsForTable
+  }
+}
+    ${LendingStationFieldsForTableFragmentDoc}`;
+
+  @Injectable({
+    providedIn: 'root'
+  })
+  export class CreateLendingStationGQL extends Apollo.Mutation<CreateLendingStationMutation, CreateLendingStationMutationVariables> {
+    document = CreateLendingStationDocument;
+    
+    constructor(apollo: Apollo.Apollo) {
+      super(apollo);
+    }
+  }
+export const UpdateLendingStationDocument = gql`
+    mutation UpdateLendingStation($lendingStation: LendingStationUpdateInput!) {
+  updateLendingStation(lendingStation: $lendingStation) {
+    ...LendingStationFieldsForPage
+  }
+}
+    ${LendingStationFieldsForPageFragmentDoc}`;
+
+  @Injectable({
+    providedIn: 'root'
+  })
+  export class UpdateLendingStationGQL extends Apollo.Mutation<UpdateLendingStationMutation, UpdateLendingStationMutationVariables> {
+    document = UpdateLendingStationDocument;
+    
+    constructor(apollo: Apollo.Apollo) {
+      super(apollo);
+    }
+  }
+export const LockLendingStationDocument = gql`
+    mutation LockLendingStation($id: ID!) {
+  lockLendingStation(id: $id) {
+    ...LendingStationFieldsForPage
+  }
+}
+    ${LendingStationFieldsForPageFragmentDoc}`;
+
+  @Injectable({
+    providedIn: 'root'
+  })
+  export class LockLendingStationGQL extends Apollo.Mutation<LockLendingStationMutation, LockLendingStationMutationVariables> {
+    document = LockLendingStationDocument;
+    
+    constructor(apollo: Apollo.Apollo) {
+      super(apollo);
+    }
+  }
+export const UnlockLendingStationDocument = gql`
+    mutation UnlockLendingStation($id: ID!) {
+  unlockLendingStation(id: $id) {
+    ...LendingStationFieldsForPage
+  }
+}
+    ${LendingStationFieldsForPageFragmentDoc}`;
+
+  @Injectable({
+    providedIn: 'root'
+  })
+  export class UnlockLendingStationGQL extends Apollo.Mutation<UnlockLendingStationMutation, UnlockLendingStationMutationVariables> {
+    document = UnlockLendingStationDocument;
+    
+    constructor(apollo: Apollo.Apollo) {
+      super(apollo);
+    }
+  }
+export const DeleteLendingStationDocument = gql`
+    mutation DeleteLendingStation($id: ID!) {
+  deleteLendingStation(id: $id)
+}
+    `;
+
+  @Injectable({
+    providedIn: 'root'
+  })
+  export class DeleteLendingStationGQL extends Apollo.Mutation<DeleteLendingStationMutation, DeleteLendingStationMutationVariables> {
+    document = DeleteLendingStationDocument;
     
     constructor(apollo: Apollo.Apollo) {
       super(apollo);

@@ -1,0 +1,45 @@
+query GetLendingStations {
+  lendingStations {
+    ...LendingStationFieldsForTable   
+  }
+}
+
+query GetLendingStationById($id: ID!) {
+  lendingStationById(id: $id) {
+    ...LendingStationFieldsForPage
+  }
+}
+
+query ReloadLendingStationById($id: ID!) {
+  lendingStationById(id: $id) {
+    ...LendingStationFieldsForTable
+  }
+}
+
+mutation CreateLendingStation($lendingStation: LendingStationCreateInput!) {
+  createLendingStation(lendingStation: $lendingStation) {
+    ...LendingStationFieldsForTable
+  }
+}
+
+mutation UpdateLendingStation($lendingStation: LendingStationUpdateInput!) {
+  updateLendingStation(lendingStation: $lendingStation) {
+    ...LendingStationFieldsForPage
+  }
+}
+
+mutation LockLendingStation($id: ID!) {
+  lockLendingStation(id: $id) {
+    ...LendingStationFieldsForPage
+  }
+}
+
+mutation UnlockLendingStation($id: ID!) {
+  unlockLendingStation(id: $id) {
+    ...LendingStationFieldsForPage
+  }
+}
+
+mutation DeleteLendingStation($id: ID!) {
+  deleteLendingStation(id: $id)
+}

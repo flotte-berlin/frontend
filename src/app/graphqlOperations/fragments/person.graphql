@@ -1,9 +1,5 @@
-fragment PersonFields on Person {
+fragment PersonFieldsGeneral on Person {
   id
   name
   firstName
-  isLocked
-  isLockedByMe
-  lockedBy
-  lockedUntil
 }

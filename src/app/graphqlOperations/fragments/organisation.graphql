@@ -1,4 +1,4 @@
-fragment OrganisationFieldsForTimeFrame on Organisation {
+fragment OrganisationFieldsGeneral on Organisation {
   id
   name
   address {

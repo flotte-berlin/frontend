@@ -16,7 +16,6 @@ export class BikesComponent implements OnInit {
         return '/bike/' + row.id;
       },
     },
-    { dataPath: 'id', translation: 'ID', readonly: true },
     { dataPath: 'group', translation: 'Gruppe' },
     { dataPath: 'modelName', translation: 'Modell' },
     {

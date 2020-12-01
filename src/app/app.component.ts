@@ -38,7 +38,7 @@ export class AppComponent {
           route: 'table/participants'
         },
         {
-          displayName: 'Ausleihstationen',
+          displayName: 'Standorte',
           iconName: 'group',
           route: 'table/lendingStations'
         }]

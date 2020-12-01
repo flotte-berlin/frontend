@@ -1,6 +1,7 @@
 import { NgModule } from '@angular/core';
 import { Routes, RouterModule } from '@angular/router';
 import { BikeComponent } from './pages/dataPages/bike/bike.component';
+import { LendingStationComponent } from './pages/dataPages/lending-station/lending-station.component';
 import { LoginComponent} from './pages/login/login.component'
 import { TableOverviewComponent } from './pages/table-overview/table-overview.component';
 import { BikesComponent} from './pages/tables/bikes/bikes.component'
@@ -16,6 +17,7 @@ const routes: Routes = [
   { path: 'tableOverview', component: TableOverviewComponent },
   { path: 'table/bikes', component: BikesComponent },
   { path: 'bike/:id', component: BikeComponent },
+  { path: 'lendingStation/:id', component: LendingStationComponent },
   { path: 'table/participants', component: ParticipantsComponent },
   { path: 'table/lendingStations', component: LendingStationsComponent },
   { path: 'table/equipmentTypes', component: EquipmentTypesComponent },
