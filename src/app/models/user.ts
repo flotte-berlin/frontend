@@ -1,4 +1,4 @@
-export class User {
+export class AuthUser {
     request_token: string;
     refresh_token: string;
     user: {
@@ -10,4 +10,13 @@ export class User {
         }
     }
     
+}
+
+export class User {
+    id: number;
+    name: string;
+    email: string;
+    attributes : {
+        profile_url: string;
+    }
 }
