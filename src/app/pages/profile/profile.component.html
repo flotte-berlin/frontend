@@ -1,4 +1,96 @@
-<app-table
+<div id="login-form">
+  <h1>Profil aktualisieren</h1>
+
+  <mat-form-field class="currentPW" (keyup.enter)="login()">
+    <mat-label>Aktuelles Passwort</mat-label>
+    <input
+      matInput
+      [type]="hide ? 'password' : 'text'"
+      [formControl]="password"
+    />
+    <mat-error *ngIf="password.hasError('required')">
+      Bitte geben Sie Ihr Passwort ein.
+    </mat-error>
+    <button
+      mat-icon-button
+      matSuffix
+      (click)="hide = !hide"
+      [attr.aria-label]="'Hide password'"
+      [attr.aria-pressed]="hide"
+    >
+      <mat-icon>{{ hide ? "visibility_off" : "visibility" }}</mat-icon>
+    </button>
+  </mat-form-field>
+
+  <!--<mat-form-field (keyup.enter)="login()">
+    <mat-label>E-Mail-Adresse eingeben</mat-label>
+    <input matInput placeholder="fLotte@beispiel.de" [formControl]="email" />
+    <mat-error *ngIf="email.hasError('required')">
+      Bitte geben Sie eine E-Mail-Adresse ein.
+    </mat-error>
+    <mat-error *ngIf="email.hasError('email')">
+      Bitte geben Sie eine valide E-Mail-Adresse ein.
+    </mat-error>
+  </mat-form-field>-->
+
+  <mat-form-field (keyup.enter)="login()" (input)="onPasswordInput()">
+    <mat-label>Neues Passwort</mat-label>
+    <input
+      matInput
+      [type]="hide ? 'password' : 'text'"
+      [formControl]="passwordNew"
+    />
+    <mat-error *ngIf="passwordNew.hasError('required')">
+      Bitte geben Sie Ihr neues Passwort ein.
+    </mat-error>
+    <mat-error *ngIf="passwordNew.hasError('minlength')">
+      Das Passwort muss mindestens aus {{minPw}} Zeichen bestehen
+    </mat-error>
+    <button
+      mat-icon-button
+      matSuffix
+      (click)="hide = !hide"
+      [attr.aria-label]="'Hide password'"
+      [attr.aria-pressed]="hide"
+    >
+      <mat-icon>{{ hide ? "visibility_off" : "visibility" }}</mat-icon>
+    </button>
+  </mat-form-field>
+  <mat-form-field (keyup.enter)="login()" (input)="onPasswordInput()">
+    <mat-label>Passwort wiederholen</mat-label>
+    <input
+      matInput
+      [type]="hide ? 'password' : 'text'"
+      [formControl]="passwordNew2"
+    />
+    <mat-error *ngIf="passwordNew2.hasError('required')">
+      Bitte wiederholen sie ihr Passwort
+    </mat-error>
+    <mat-error *ngIf="passwordNew2.invalid && !passwordNew2.hasError('required')">
+      Das Passwort stimmt nicht überein
+    </mat-error>
+    <button
+      mat-icon-button
+      matSuffix
+      (click)="hide = !hide"
+      [attr.aria-label]="'Hide password'"
+      [attr.aria-pressed]="hide"
+    >
+      <mat-icon>{{ hide ? "visibility_off" : "visibility" }}</mat-icon>
+    </button>
+  </mat-form-field>
+  <mat-progress-bar mode="indeterminate" id="loading-bar" *ngIf="loading"></mat-progress-bar>
+  <button mat-stroked-button color="primary" (click)="login()">
+    Profil aktualisieren
+  </button>
+  <mat-error class="login-error-message" *ngIf="errorOccurred">
+    {{errorMessage}}
+  </mat-error>
+</div>
+
+
+
+<!--<app-table
   [headline]="headline"
   [columnInfo]="columnInfo"
   [dataService]="dataService"
@@ -10,4 +102,4 @@
   (saveEvent)="save($event)"
   (cancelEvent)="cancel($event)"
   (deleteEvent)="delete($event)"
-></app-table>
+></app-table>-->
