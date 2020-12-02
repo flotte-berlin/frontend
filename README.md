@@ -1,6 +1,6 @@
 # FlotteFrontend
 
-[![Build Status](https://travis-ci.com/fLotte-meets-HWR-DB/frontend.svg?token=YfRmpHAXqyUafCgSEexw&branch=master)](https://travis-ci.com/fLotte-meets-HWR-DB/frontend)
+![Build Docker Image](https://github.com/fLotte-meets-HWR-DB/frontend/workflows/Build%20Docker%20Image/badge.svg)
 
 This project was generated with [Angular CLI](https://github.com/angular/angular-cli) version 10.0.8.
 
