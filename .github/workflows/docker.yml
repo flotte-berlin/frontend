@@ -15,9 +15,9 @@ jobs:
       -
         name: Set up Python
         uses: actions/setup-python@v2
-          with:
-            python-version: '3.x'
-            architecture: 'x64'
+        with:
+          python-version: '3.x'
+          architecture: 'x64'
 
       - name: Set up QEMU
         uses: docker/setup-qemu-action@v1
