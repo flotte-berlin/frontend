@@ -139,7 +139,7 @@ import { ProfileComponent } from './pages/profile/profile.component';
     MatDatepickerModule,
     DatePipe,
     { provide: HTTP_INTERCEPTORS, useClass: TokenInterceptor, multi: true },
-    { provide: HTTP_INTERCEPTORS, useClass: HttpErrorInterceptor, multi: true },
+    
     {provide: MAT_DATE_LOCALE, useValue: 'de-DE'},
   ],
 

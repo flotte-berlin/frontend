@@ -3,6 +3,7 @@ import { HttpRequest, HttpHandler, HttpEvent, HttpInterceptor, HttpErrorResponse
 import { AuthService } from '../services/auth.service';
 import { Observable, throwError, BehaviorSubject } from 'rxjs';
 import { catchError, filter, take, switchMap } from 'rxjs/operators';
+import { SnackBarService } from '../services/snackbar.service';
 
 @Injectable()
 export class TokenInterceptor implements HttpInterceptor {
@@ -10,7 +11,7 @@ export class TokenInterceptor implements HttpInterceptor {
   private isRefreshing = false;
   private requestTokenSubject: BehaviorSubject<any> = new BehaviorSubject<any>(null);
 
-  constructor(public authService: AuthService) { }
+  constructor(private authService: AuthService, private snackBar : SnackBarService) { }
 
   intercept(request: HttpRequest<any>, next: HttpHandler): Observable<HttpEvent<any>> {
 
@@ -18,12 +19,22 @@ export class TokenInterceptor implements HttpInterceptor {
       request = this.addToken(request, this.authService.getRequestToken());
     }
 
-    return next.handle(request).pipe(catchError(error => {
-      if (error instanceof HttpErrorResponse && error.status === 401) {
-        return this.handle401Error(request, next);
-      } else {
-        //return throwError(error);
-      }
+    return next.handle(request).pipe(catchError((error: HttpErrorResponse) => {
+      let errorMessage = '';
+        if (error.error instanceof ErrorEvent) {
+          //client error;
+          errorMessage = `Error: ${error.error.message}`;
+        } else {
+          //server error;
+          if (error.status === 401) {
+            
+            return this.handle401Error(request, next);
+          } else {
+            errorMessage = `Error Code: ${error.status}\nMessage: ${error.message}`;
+          }
+        }
+      this.snackBar.openSnackBar(errorMessage, "Ok", true);
+      //return throwError(errorMessage);
     }));
   }
 
