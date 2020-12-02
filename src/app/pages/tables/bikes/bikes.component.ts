@@ -18,6 +18,7 @@ export class BikesComponent implements OnInit {
     },
     { dataPath: 'group', translation: 'Gruppe' },
     { dataPath: 'modelName', translation: 'Modell' },
+    { dataPath: 'state', translation: 'Status' },
     {
       dataPath: 'insuranceData.billing',
       translation: 'Versicherung Abrechnung',

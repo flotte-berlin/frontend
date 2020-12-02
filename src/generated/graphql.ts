@@ -10,8 +10,10 @@ export type Scalars = {
   Boolean: boolean;
   Int: number;
   Float: number;
-  /** timestamp object YYYY-MM-ddThh:mm:ss.sssZ */
+  /** date object YYYY-MM-dd */
   Date: any;
+  /** timestamp object YYYY-MM-ddThh:mm:ss.sssZ */
+  DateTime: any;
   /** only time hh-mm-ss */
   Time: any;
   /**
@@ -25,6 +27,7 @@ export type Scalars = {
   /** The `Upload` scalar type represents a file upload. */
   Upload: any;
 };
+
 
 
 
@@ -76,7 +79,7 @@ export type CargoBike = {
   isLockedByMe: Scalars['Boolean'];
   /** null if not locked by other user */
   lockedBy?: Maybe<Scalars['ID']>;
-  lockedUntil?: Maybe<Scalars['Date']>;
+  lockedUntil?: Maybe<Scalars['DateTime']>;
 };
 
 
@@ -424,7 +427,7 @@ export type Participant = {
   isLockedByMe: Scalars['Boolean'];
   /** null if not locked by other user */
   lockedBy?: Maybe<Scalars['ID']>;
-  lockedUntil?: Maybe<Scalars['Date']>;
+  lockedUntil?: Maybe<Scalars['DateTime']>;
 };
 
 export type ParticipantCreateInput = {
@@ -476,7 +479,7 @@ export type Workshop = {
   isLockedByMe: Scalars['Boolean'];
   /** null if not locked by other user */
   lockedBy?: Maybe<Scalars['ID']>;
-  lockedUntil?: Maybe<Scalars['Date']>;
+  lockedUntil?: Maybe<Scalars['DateTime']>;
 };
 
 export type WorkshopCreateInput = {
@@ -507,7 +510,7 @@ export type WorkshopType = {
   isLockedByMe: Scalars['Boolean'];
   /** null if not locked by other user */
   lockedBy?: Maybe<Scalars['ID']>;
-  lockedUntil?: Maybe<Scalars['Date']>;
+  lockedUntil?: Maybe<Scalars['DateTime']>;
 };
 
 export type WorkshopTypeCreateInput = {
@@ -528,7 +531,7 @@ export type EngagementType = {
   isLockedByMe: Scalars['Boolean'];
   /** null if not locked by other user */
   lockedBy?: Maybe<Scalars['ID']>;
-  lockedUntil?: Maybe<Scalars['Date']>;
+  lockedUntil?: Maybe<Scalars['DateTime']>;
 };
 
 export type EngagementTypeCreateInput = {
@@ -554,7 +557,7 @@ export type Engagement = {
   isLockedByMe: Scalars['Boolean'];
   /** null if not locked by other user */
   lockedBy?: Maybe<Scalars['ID']>;
-  lockedUntil?: Maybe<Scalars['Date']>;
+  lockedUntil?: Maybe<Scalars['DateTime']>;
 };
 
 export type EngagementCreateInput = {
@@ -609,7 +612,7 @@ export type Equipment = {
   isLockedByMe: Scalars['Boolean'];
   /** null if not locked by other user */
   lockedBy?: Maybe<Scalars['ID']>;
-  lockedUntil?: Maybe<Scalars['Date']>;
+  lockedUntil?: Maybe<Scalars['DateTime']>;
 };
 
 export type EquipmentCreateInput = {
@@ -642,7 +645,7 @@ export type EquipmentType = {
   isLockedByMe: Scalars['Boolean'];
   /** null if not locked by other user */
   lockedBy?: Maybe<Scalars['ID']>;
-  lockedUntil?: Maybe<Scalars['Date']>;
+  lockedUntil?: Maybe<Scalars['DateTime']>;
 };
 
 export type EquipmentTypeCreateInput = {
@@ -674,7 +677,7 @@ export type BikeEvent = {
   isLockedByMe: Scalars['Boolean'];
   /** null if not locked by other user */
   lockedBy?: Maybe<Scalars['ID']>;
-  lockedUntil?: Maybe<Scalars['Date']>;
+  lockedUntil?: Maybe<Scalars['DateTime']>;
 };
 
 export type BikeEventCreateInput = {
@@ -711,7 +714,7 @@ export type BikeEventType = {
   isLocked: Scalars['Boolean'];
   /** null if not locked by other user */
   lockedBy?: Maybe<Scalars['ID']>;
-  lockedUntil?: Maybe<Scalars['Date']>;
+  lockedUntil?: Maybe<Scalars['DateTime']>;
 };
 
 export type BikeEventTypeUpdateInput = {
@@ -732,7 +735,7 @@ export type Provider = {
   isLockedByMe: Scalars['Boolean'];
   /** null if not locked by other user */
   lockedBy?: Maybe<Scalars['ID']>;
-  lockedUntil?: Maybe<Scalars['Date']>;
+  lockedUntil?: Maybe<Scalars['DateTime']>;
 };
 
 /** (dt. Anbieter) */
@@ -767,7 +770,7 @@ export type Person = {
   isLockedByMe: Scalars['Boolean'];
   /** null if not locked by other user */
   lockedBy?: Maybe<Scalars['ID']>;
-  lockedUntil?: Maybe<Scalars['Date']>;
+  lockedUntil?: Maybe<Scalars['DateTime']>;
 };
 
 export type PersonCreateInput = {
@@ -795,7 +798,7 @@ export type ContactInformation = {
   isLockedByMe: Scalars['Boolean'];
   /** null if not locked by other user */
   lockedBy?: Maybe<Scalars['ID']>;
-  lockedUntil?: Maybe<Scalars['Date']>;
+  lockedUntil?: Maybe<Scalars['DateTime']>;
 };
 
 export type ContactInformationCreateInput = {
@@ -836,7 +839,7 @@ export type Organisation = {
   isLockedByMe: Scalars['Boolean'];
   /** null if not locked by other user */
   lockedBy?: Maybe<Scalars['ID']>;
-  lockedUntil?: Maybe<Scalars['Date']>;
+  lockedUntil?: Maybe<Scalars['DateTime']>;
 };
 
 export type OrganisationCreateInput = {
@@ -881,7 +884,7 @@ export type LendingStation = {
   isLockedByMe: Scalars['Boolean'];
   /** null if not locked by other user */
   lockedBy?: Maybe<Scalars['ID']>;
-  lockedUntil?: Maybe<Scalars['Date']>;
+  lockedUntil?: Maybe<Scalars['DateTime']>;
 };
 
 /** If you want to create LendingStation with cargoBikes, use createTimeFrame and set to: Date = null */
@@ -910,25 +913,25 @@ export type LendingStationUpdateInput = {
 export type LoanPeriod = {
   __typename?: 'LoanPeriod';
   generalRemark?: Maybe<Scalars['String']>;
-  /** notes for each day of the week, starting on Monday */
-  notes?: Maybe<Array<Maybe<Scalars['String']>>>;
-  /**
-   * Loan times from and until for each day of the week.
-   * Starting with Monday from, Monday to, Tuesday from, ..., Sunday to
-   */
-  loanTimes?: Maybe<Array<Maybe<Scalars['String']>>>;
+  mo?: Maybe<Scalars['String']>;
+  tu?: Maybe<Scalars['String']>;
+  we?: Maybe<Scalars['String']>;
+  th?: Maybe<Scalars['String']>;
+  fr?: Maybe<Scalars['String']>;
+  sa?: Maybe<Scalars['String']>;
+  su?: Maybe<Scalars['String']>;
 };
 
 /** (dt. Ausleihzeiten) */
 export type LoanPeriodInput = {
   generalRemark?: Maybe<Scalars['String']>;
-  /** notes for each day of the week, starting on Monday */
-  notes?: Maybe<Array<Scalars['String']>>;
-  /**
-   * Loan times from and until for each day of the week.
-   * Starting with Monday from, Monday to, Tuesday from, ..., Sunday to
-   */
-  loanTimes?: Maybe<Array<Scalars['String']>>;
+  mo?: Maybe<Scalars['String']>;
+  tu?: Maybe<Scalars['String']>;
+  we?: Maybe<Scalars['String']>;
+  th?: Maybe<Scalars['String']>;
+  fr?: Maybe<Scalars['String']>;
+  sa?: Maybe<Scalars['String']>;
+  su?: Maybe<Scalars['String']>;
 };
 
 export type DateRange = {
@@ -960,7 +963,7 @@ export type TimeFrame = {
   isLockedByMe: Scalars['Boolean'];
   /** null if not locked by other user */
   lockedBy?: Maybe<Scalars['ID']>;
-  lockedUntil?: Maybe<Scalars['Date']>;
+  lockedUntil?: Maybe<Scalars['DateTime']>;
 };
 
 export type TimeFrameCreateInput = {
@@ -1316,23 +1319,23 @@ export type Mutation = {
   /** PARTICIPANTS */
   createParticipant: Participant;
   lockParticipant: Participant;
-  unlockParticipant?: Maybe<Scalars['Boolean']>;
+  unlockParticipant?: Maybe<Participant>;
   updateParticipant: Participant;
   deleteParticipant: Scalars['Boolean'];
   createWorkshopType: WorkshopType;
   lockWorkshopType: WorkshopType;
-  unlockWorkshopType: Scalars['Boolean'];
+  unlockWorkshopType: WorkshopType;
   updateWorkshopType: WorkshopType;
   deleteWorkshopType: Scalars['Boolean'];
   createWorkshop: Workshop;
   lockWorkshop: Workshop;
-  unlockWorkshop: Scalars['Boolean'];
+  unlockWorkshop: Workshop;
   updateWorkshop: Workshop;
   deleteWorkshop: Scalars['Boolean'];
   /** create new contactInfo */
   createContactInformation: ContactInformation;
   lockContactInformation: ContactInformation;
-  unlockContactInformation: Scalars['Boolean'];
+  unlockContactInformation: ContactInformation;
   updateContactInformation: ContactInformation;
   deleteContactInformation: Scalars['Boolean'];
   createPerson: Person;
@@ -1343,22 +1346,22 @@ export type Mutation = {
   /** create Engagement */
   createEngagement: Engagement;
   lockEngagement: Engagement;
-  unlockEngagement: Scalars['Boolean'];
+  unlockEngagement: Engagement;
   updateEngagement: Engagement;
   deleteEngagement: Scalars['Boolean'];
   createEngagementType: EngagementType;
   lockEngagementType: EngagementType;
-  unlockEngagementType: Scalars['Boolean'];
+  unlockEngagementType: EngagementType;
   updateEngagementType: EngagementType;
   deleteEngagementType: Scalars['Boolean'];
   createProvider: Provider;
   lockProvider: Provider;
-  unlockProvider: Scalars['Boolean'];
+  unlockProvider: Provider;
   updateProvider: Provider;
   deleteProvider: Scalars['Boolean'];
   createOrganisation: Organisation;
   lockOrganisation: Organisation;
-  unlockOrganisation: Scalars['Boolean'];
+  unlockOrganisation: Organisation;
   updateOrganisation: Organisation;
   deleteOrganisation: Scalars['Boolean'];
 };
@@ -1887,7 +1890,10 @@ export type UnlockContactInformationMutationVariables = Exact<{
 }>;
 
 
-export type UnlockContactInformationMutation = { __typename?: 'Mutation', unlockContactInformation: boolean };
+export type UnlockContactInformationMutation = { __typename?: 'Mutation', unlockContactInformation: (
+    { __typename?: 'ContactInformation' }
+    & ContactInformationFieldsFragment
+  ) };
 
 export type DeleteContactInformationMutationVariables = Exact<{
   id: Scalars['ID'];
@@ -2008,7 +2014,7 @@ export type DeleteEquipmentTypeMutation = { __typename?: 'Mutation', deleteEquip
 
 export type AddressFieldsFragment = { __typename?: 'Address', street: string, number: string, zip: string };
 
-export type CargoBikeFieldsForTableFragment = { __typename?: 'CargoBike', id: string, group?: Maybe<Group>, name: string, modelName?: Maybe<string>, numberOfChildren?: Maybe<number>, numberOfWheels?: Maybe<number>, forCargo?: Maybe<boolean>, forChildren?: Maybe<boolean>, stickerBikeNameState?: Maybe<StickerBikeNameState>, note?: Maybe<string>, isLocked: boolean, isLockedByMe: boolean, lockedBy?: Maybe<string>, lockedUntil?: Maybe<any>, insuranceData?: Maybe<{ __typename?: 'InsuranceData', billing?: Maybe<string>, hasFixedRate?: Maybe<boolean>, name?: Maybe<string>, benefactor?: Maybe<string>, noPnP?: Maybe<string>, maintenanceResponsible?: Maybe<string>, maintenanceBenefactor?: Maybe<string>, maintenanceAgreement?: Maybe<string>, fixedRate?: Maybe<number>, projectAllowance?: Maybe<any>, notes?: Maybe<string> }>, dimensionsAndLoad?: Maybe<{ __typename?: 'DimensionsAndLoad', bikeLength?: Maybe<number>, bikeWeight?: Maybe<number>, bikeHeight?: Maybe<number>, bikeWidth?: Maybe<number>, hasCoverBox?: Maybe<boolean>, lockable?: Maybe<boolean>, maxWeightBox?: Maybe<number>, maxWeightLuggageRack?: Maybe<number>, maxWeightTotal?: Maybe<number>, boxHeightRange?: Maybe<{ __typename?: 'NumRange', max?: Maybe<number>, min?: Maybe<number> }>, boxLengthRange?: Maybe<{ __typename?: 'NumRange', min?: Maybe<number>, max?: Maybe<number> }>, boxWidthRange?: Maybe<{ __typename?: 'NumRange', min?: Maybe<number>, max?: Maybe<number> }> }>, security?: Maybe<{ __typename?: 'Security', frameNumber?: Maybe<string>, adfcCoding?: Maybe<string>, keyNumberAXAChain?: Maybe<string>, keyNumberFrameLock?: Maybe<string>, policeCoding?: Maybe<string> }>, technicalEquipment?: Maybe<{ __typename?: 'TechnicalEquipment', bicycleShift?: Maybe<string>, isEBike?: Maybe<boolean>, hasLightSystem?: Maybe<boolean>, specialFeatures?: Maybe<string> }>, taxes?: Maybe<{ __typename?: 'Taxes', costCenter?: Maybe<string>, organisationArea?: Maybe<OrganisationArea> }>, provider?: Maybe<(
+export type CargoBikeFieldsForTableFragment = { __typename?: 'CargoBike', id: string, group?: Maybe<Group>, name: string, modelName?: Maybe<string>, state?: Maybe<BikeState>, numberOfChildren?: Maybe<number>, numberOfWheels?: Maybe<number>, forCargo?: Maybe<boolean>, forChildren?: Maybe<boolean>, stickerBikeNameState?: Maybe<StickerBikeNameState>, note?: Maybe<string>, isLocked: boolean, isLockedByMe: boolean, lockedBy?: Maybe<string>, lockedUntil?: Maybe<any>, insuranceData?: Maybe<{ __typename?: 'InsuranceData', billing?: Maybe<string>, hasFixedRate?: Maybe<boolean>, name?: Maybe<string>, benefactor?: Maybe<string>, noPnP?: Maybe<string>, maintenanceResponsible?: Maybe<string>, maintenanceBenefactor?: Maybe<string>, maintenanceAgreement?: Maybe<string>, fixedRate?: Maybe<number>, projectAllowance?: Maybe<any>, notes?: Maybe<string> }>, dimensionsAndLoad?: Maybe<{ __typename?: 'DimensionsAndLoad', bikeLength?: Maybe<number>, bikeWeight?: Maybe<number>, bikeHeight?: Maybe<number>, bikeWidth?: Maybe<number>, hasCoverBox?: Maybe<boolean>, lockable?: Maybe<boolean>, maxWeightBox?: Maybe<number>, maxWeightLuggageRack?: Maybe<number>, maxWeightTotal?: Maybe<number>, boxHeightRange?: Maybe<{ __typename?: 'NumRange', max?: Maybe<number>, min?: Maybe<number> }>, boxLengthRange?: Maybe<{ __typename?: 'NumRange', min?: Maybe<number>, max?: Maybe<number> }>, boxWidthRange?: Maybe<{ __typename?: 'NumRange', min?: Maybe<number>, max?: Maybe<number> }> }>, security?: Maybe<{ __typename?: 'Security', frameNumber?: Maybe<string>, adfcCoding?: Maybe<string>, keyNumberAXAChain?: Maybe<string>, keyNumberFrameLock?: Maybe<string>, policeCoding?: Maybe<string> }>, technicalEquipment?: Maybe<{ __typename?: 'TechnicalEquipment', bicycleShift?: Maybe<string>, isEBike?: Maybe<boolean>, hasLightSystem?: Maybe<boolean>, specialFeatures?: Maybe<string> }>, taxes?: Maybe<{ __typename?: 'Taxes', costCenter?: Maybe<string>, organisationArea?: Maybe<OrganisationArea> }>, provider?: Maybe<(
     { __typename?: 'Provider' }
     & ProviderFieldsGeneralFragment
   )>, lendingStation?: Maybe<(
@@ -2310,6 +2316,7 @@ export const CargoBikeFieldsForTableFragmentDoc = gql`
   group
   name
   modelName
+  state
   insuranceData {
     billing
     hasFixedRate
@@ -2885,9 +2892,11 @@ export const LockContactInformationDocument = gql`
   }
 export const UnlockContactInformationDocument = gql`
     mutation UnlockContactInformation($id: ID!) {
-  unlockContactInformation(id: $id)
+  unlockContactInformation(id: $id) {
+    ...ContactInformationFields
+  }
 }
-    `;
+    ${ContactInformationFieldsFragmentDoc}`;
 
   @Injectable({
     providedIn: 'root'

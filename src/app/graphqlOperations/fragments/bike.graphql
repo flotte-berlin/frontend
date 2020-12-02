@@ -3,6 +3,7 @@ fragment CargoBikeFieldsForTable on CargoBike {
   group
   name
   modelName
+  state
   insuranceData {
     billing
     hasFixedRate

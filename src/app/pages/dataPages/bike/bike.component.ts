@@ -17,6 +17,7 @@ export class BikeComponent implements OnInit {
         { dataPath: 'name', translation: 'Name' },
         { dataPath: 'Group', translation: 'Gruppe' },
         { dataPath: 'modelName', translation: 'Modell' },
+        { dataPath: 'state', translation: 'Status' },
       ],
     },
     {
