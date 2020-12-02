@@ -47,6 +47,7 @@ import { MenuListItemComponent } from './components/menu-list-item/menu-list-ite
 import { SidenavProfileComponent } from './components/sidenav-profile/sidenav-profile.component';
 import { NavService } from './components/menu-list-item/nav.service';
 import { TokenInterceptor } from './helper/token.interceptor';
+import { HttpErrorInterceptor } from './helper/http-error.interceptor';
 import { BikeComponent } from './pages/dataPages/bike/bike.component';
 import {
   TableComponent,
@@ -138,6 +139,7 @@ import { ProfileComponent } from './pages/profile/profile.component';
     MatDatepickerModule,
     DatePipe,
     { provide: HTTP_INTERCEPTORS, useClass: TokenInterceptor, multi: true },
+    { provide: HTTP_INTERCEPTORS, useClass: HttpErrorInterceptor, multi: true },
     {provide: MAT_DATE_LOCALE, useValue: 'de-DE'},
   ],
 
