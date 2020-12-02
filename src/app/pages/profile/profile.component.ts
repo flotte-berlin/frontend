@@ -1,8 +1,11 @@
 import { Component, OnInit } from '@angular/core';
 import { FormBuilder, FormControl, FormGroup, ValidationErrors, ValidatorFn, Validators } from '@angular/forms';
 import { ActivatedRoute, Router } from '@angular/router';
+import { User } from 'src/app/models/user';
 import { AuthService } from 'src/app/services/auth.service';
+import { SnackBarService } from 'src/app/services/snackbar.service';
 import { BikesService } from '../../services/bikes.service';
+import {UserService} from '../../services/user.service';
 
 @Component({
   selector: 'app-profile',
@@ -13,7 +16,7 @@ export class ProfileComponent implements OnInit {
 
   minPw: number = 8;
   email = new FormControl('', [Validators.required, Validators.email]);
-  password = new FormControl('', [Validators.required]);
+  password = new FormControl('', [Validators.required, Validators.minLength(this.minPw)]);
   passwordNew = new FormControl('', [Validators.required,Validators.minLength(this.minPw)]);
   passwordNew2 = new FormControl('', [Validators.required]);
   pwGroup: FormGroup;
@@ -24,7 +27,9 @@ export class ProfileComponent implements OnInit {
 
   returnUrl : string;
 
-  constructor(private authService: AuthService, private router: Router, private route: ActivatedRoute, private formBuilder : FormBuilder) {}
+  constructor(private authService: AuthService, private snackBar: SnackBarService, 
+              private userService: UserService, private router: Router, 
+              private route: ActivatedRoute, private formBuilder : FormBuilder) {}
 
   ngOnInit(): void {
     this.pwGroup = this.formBuilder.group({
@@ -40,22 +45,34 @@ export class ProfileComponent implements OnInit {
       this.passwordNew2.setErrors(null);
   }
 
-  login() {
+  show() : boolean {
+    return !this.password.hasError('required') && !this.password.hasError('minlength');
+  }
+
+  updatePassword() {
     this.errorMessage = '';
     this.errorOccurred = false;
-    if (this.email.invalid || this.password.invalid) {
+    if (this.password.invalid || this.pwGroup.invalid) {
       return;
     }
+
+    let user : User = this.authService.getCurrentUserValue.user;
+    user.own_password = this.password.value;
+    user.password = this.passwordNew.value;
+
     this.loading = true;
-    this.authService
-      .login(this.email.value, this.password.value)
+    this.userService
+      .updateUser(user)
       .subscribe(
-        () => this.router.navigateByUrl(this.returnUrl),
+        data => {
+          this.snackBar.openSnackBar("Das Passwort wurde erfolgreich aktualisiert");
+          console.log(JSON.stringify(data));
+        },
         (error) => {
           this.errorOccurred = true;
           this.errorMessage =
             error.error.message ||
-            'Ein Fehler bei Einloggen ist aufgetreten. Überprüfen Sie Ihre Internetverbindung oder versuchen Sie es später erneut.';
+            'Ein Fehler ist aufgetreten. Bitte melden sie dies ihrem Administrator.';
         }
       )
       .add(() => {
@@ -63,6 +80,7 @@ export class ProfileComponent implements OnInit {
       });
   }
 }
+
 
 export const passwordMatchValidator: ValidatorFn = (formGroup: FormGroup): ValidationErrors | null => {
   if (formGroup.get('passwordNew').value === formGroup.get('passwordNew2').value)

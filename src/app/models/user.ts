@@ -1,21 +1,15 @@
 export class AuthUser {
     request_token: string;
     refresh_token: string;
-    user: {
-        id: number;
-        name: string;
-        email: string;
-        attributes : {
-            profile_url: string;
-        }
-    }
-    
+    user: User;
 }
 
 export class User {
     id: number;
     name: string;
     email: string;
+    own_password: string;
+    password: string;
     attributes : {
         profile_url: string;
     }

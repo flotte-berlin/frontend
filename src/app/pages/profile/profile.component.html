@@ -1,7 +1,7 @@
 <div id="login-form">
   <h1>Profil aktualisieren</h1>
 
-  <mat-form-field class="currentPW" (keyup.enter)="login()">
+  <mat-form-field class="currentPW" >
     <mat-label>Aktuelles Passwort</mat-label>
     <input
       matInput
@@ -32,8 +32,7 @@
       Bitte geben Sie eine valide E-Mail-Adresse ein.
     </mat-error>
   </mat-form-field>-->
-
-  <mat-form-field (keyup.enter)="login()" (input)="onPasswordInput()">
+  <mat-form-field *ngIf="show()" (input)="onPasswordInput()">
     <mat-label>Neues Passwort</mat-label>
     <input
       matInput
@@ -56,7 +55,7 @@
       <mat-icon>{{ hide ? "visibility_off" : "visibility" }}</mat-icon>
     </button>
   </mat-form-field>
-  <mat-form-field (keyup.enter)="login()" (input)="onPasswordInput()">
+  <mat-form-field *ngIf="show()" (input)="onPasswordInput()">
     <mat-label>Passwort wiederholen</mat-label>
     <input
       matInput
@@ -80,8 +79,8 @@
     </button>
   </mat-form-field>
   <mat-progress-bar mode="indeterminate" id="loading-bar" *ngIf="loading"></mat-progress-bar>
-  <button mat-stroked-button color="primary" (click)="login()">
-    Profil aktualisieren
+  <button *ngIf="show()" mat-stroked-button color="primary" (click)="updatePassword()">
+    Passwort aktualisieren
   </button>
   <mat-error class="login-error-message" *ngIf="errorOccurred">
     {{errorMessage}}
