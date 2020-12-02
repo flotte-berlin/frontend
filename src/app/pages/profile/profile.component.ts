@@ -65,7 +65,7 @@ export class ProfileComponent implements OnInit {
       .updateUser(user)
       .subscribe(
         data => {
-          this.snackBar.openSnackBar("Das Passwort wurde erfolgreich aktualisiert");
+          this.snackBar.openSnackBar("Das Passwort wurde erfolgreich aktualisiert", "Ok");
           console.log(JSON.stringify(data));
         },
         (error) => {

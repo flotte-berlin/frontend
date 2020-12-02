@@ -12,7 +12,7 @@ export class SnackBarService {
     openSnackBar(message: string, action: string = "") { 
         this.snackBar.open(message, action, { 
             duration: 5000, 
-            panelClass: ['mat-toolbar', 'mat-primary']
+            panelClass: ['mat-toolbar', 'mat-primary', 'simple-snack-bar']
         });
     } 
 }
