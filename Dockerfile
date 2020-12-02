@@ -1,7 +1,7 @@
 FROM node:14.14.0-alpine3.10 AS builder
 WORKDIR /
 COPY package.json package-lock.json ./
-RUN apk add --no-cache python3
+RUN apk add --no-cache python3 build-base
 RUN npm install && npm install -g @angular/cli && mkdir frontend
 RUN mv node_modules ./frontend
 WORKDIR /frontend
