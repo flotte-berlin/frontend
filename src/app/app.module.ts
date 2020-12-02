@@ -65,6 +65,7 @@ import { DateRangeCellComponent } from './components/tableComponents/date-range-
 import { SelectObjectDialogComponent } from './components/select-object-dialog/select-object-dialog.component';
 import { AutocompleteSelectComponent } from './components/autocomplete-select/autocomplete-select.component';
 import { LendingStationComponent } from './pages/dataPages/lending-station/lending-station.component';
+import { ProfileComponent } from './pages/profile/profile.component';
 
 
 
@@ -94,6 +95,7 @@ import { LendingStationComponent } from './pages/dataPages/lending-station/lendi
     SelectObjectDialogComponent,
     AutocompleteSelectComponent,
     LendingStationComponent,
+    ProfileComponent,
   ],
   imports: [
     BrowserModule,

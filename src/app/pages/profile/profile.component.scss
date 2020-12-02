@@ -1,0 +1,18 @@
+#login-form {
+    display: flex;
+    flex-direction: column;
+    max-width: 32em;
+    min-width: 5em;
+    margin: auto;
+    margin-top: 3em;
+    padding: 1em;
+    .mat-form-field {
+        margin: 0.5em 0;
+    }
+    #loading-bar {
+        margin-bottom: 1em;
+    }
+    .login-error-message {
+        margin-top: 0.5em;
+    }
+}

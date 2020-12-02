@@ -12,10 +12,12 @@ import { LendingStationsComponent } from './pages/tables/lending-stations/lendin
 import { ParticipantsComponent } from './pages/tables/participants/participants.component';
 import { TimeFramesComponent } from './pages/tables/time-frames/time-frames.component';
 import {AuthGuard} from './helper/auth.guard';
+import { ProfileComponent } from './pages/profile/profile.component';
 
 const routes: Routes = [
   { path: 'login', component: LoginComponent },
   { path: 'tableOverview', component: TableOverviewComponent, canActivate: [AuthGuard]},
+  { path: 'profile', component: ProfileComponent, canActivate: [AuthGuard]},
   { path: 'table/bikes', component: BikesComponent, canActivate: [AuthGuard] },
   { path: 'bike/:id', component: BikeComponent, canActivate: [AuthGuard] },
   { path: 'table/participants', component: ParticipantsComponent, canActivate: [AuthGuard] },
