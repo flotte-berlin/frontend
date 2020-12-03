@@ -4,6 +4,7 @@ import { AuthService } from '../services/auth.service';
 import { Observable, throwError, BehaviorSubject } from 'rxjs';
 import { catchError, filter, take, switchMap } from 'rxjs/operators';
 import { SnackBarService } from '../services/snackbar.service';
+import { Router, RouterStateSnapshot } from '@angular/router';
 
 @Injectable()
 export class TokenInterceptor implements HttpInterceptor {
@@ -11,7 +12,7 @@ export class TokenInterceptor implements HttpInterceptor {
   private isRefreshing = false;
   private requestTokenSubject: BehaviorSubject<any> = new BehaviorSubject<any>(null);
 
-  constructor(private authService: AuthService, private snackBar : SnackBarService) { }
+  constructor(private authService: AuthService, private snackBar : SnackBarService, private router: Router) { }
 
   intercept(request: HttpRequest<any>, next: HttpHandler): Observable<HttpEvent<any>> {
 
@@ -27,8 +28,11 @@ export class TokenInterceptor implements HttpInterceptor {
           errorMessage = `Error: ${error.error.message}`;
         } else {
           //server error
-
-          if (error.status === 401) {
+          if (error.status === 400){
+            this.authService.logout();
+            errorMessage = "Die aktuelle Sitzung ist abgelaufen. Bitte loggen sie sich erneut ein."
+            this.router.navigate(["/login"], { queryParams: { returnUrl: this.router.routerState.snapshot.url } });
+          } else  if (error.status === 401) {
             var urlSplit : string[] = error.url.split("/");  
             if (urlSplit[3] === "users" && urlSplit[5] === "update"){ // Allow user pw updates to be processed correctly
               errorMessage = "Das aktuelle Passwort ist inkorrekt.";
