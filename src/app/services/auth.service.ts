@@ -113,7 +113,7 @@ export class AuthService {
     this.currentUserSubject.next(usr);
   }
 
-  private removeTokens() {
+  public removeTokens() {
     //localStorage.removeItem(this.REQUEST_TOKEN);
     //localStorage.removeItem(this.REFRESH_TOKEN);
     localStorage.removeItem(this.CURRENT_USER);

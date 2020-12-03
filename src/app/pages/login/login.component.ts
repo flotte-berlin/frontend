@@ -36,6 +36,7 @@ export class LoginComponent implements OnInit {
       .subscribe(
         () => this.router.navigateByUrl(this.returnUrl),
         (error) => {
+          console.log(JSON.stringify(error));
           this.errorOccurred = true;
           this.errorMessage =
             error.error.message ||
