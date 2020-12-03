@@ -28,11 +28,12 @@ export class TokenInterceptor implements HttpInterceptor {
           errorMessage = `Error: ${error.error.message}`;
         } else {
           //server error
-          if (error.status === 400){
+          /*if (error.status === 400){
             this.authService.logout();
             errorMessage = "Die aktuelle Sitzung ist abgelaufen. Bitte loggen sie sich erneut ein."
             this.router.navigate(["/login"], { queryParams: { returnUrl: this.router.routerState.snapshot.url } });
-          } else  if (error.status === 401) {
+          } else*/  
+          if (error.status === 401) {
             var urlSplit : string[] = error.url.split("/");  
             if (urlSplit[3] === "users" && urlSplit[5] === "update"){ // Allow user pw updates to be processed correctly
               errorMessage = "Das aktuelle Passwort ist inkorrekt.";
