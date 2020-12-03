@@ -39,9 +39,13 @@ fragment LendingStationFieldsForPage on LendingStation {
   timeFrames {
     ...TimeFrameFieldsForLendingStation
   }
-  # loanPeriod {
-  #  generalRemark
-  #  notes
-  #  loanTimes
-  #}
+  loanPeriod {
+    mo
+    tu
+    we
+    th
+    fr
+    sa
+    su
+  }
 }

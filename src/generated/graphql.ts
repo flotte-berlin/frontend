@@ -2103,11 +2103,11 @@ export type LendingStationFieldsForPageFragment = (
   { __typename?: 'LendingStation', cargoBikes?: Maybe<Array<{ __typename?: 'CargoBike', id: string, name: string }>>, timeFrames: Array<(
     { __typename?: 'TimeFrame' }
     & TimeFrameFieldsForLendingStationFragment
-  )> }
+  )>, loanPeriod?: Maybe<{ __typename?: 'LoanPeriod', mo?: Maybe<string>, tu?: Maybe<string>, we?: Maybe<string>, th?: Maybe<string>, fr?: Maybe<string>, sa?: Maybe<string>, su?: Maybe<string> }> }
   & LendingStationFieldsForTableFragment
 );
 
-export type OrganisationFieldsGeneralFragment = { __typename?: 'Organisation', id: string, name: string, address?: Maybe<(
+export type OrganisationFieldsGeneralFragment = { __typename?: 'Organisation', id: string, name: string, associationNo?: Maybe<string>, address?: Maybe<(
     { __typename?: 'Address' }
     & AddressFieldsFragment
   )> };
@@ -2291,6 +2291,7 @@ export const OrganisationFieldsGeneralFragmentDoc = gql`
   address {
     ...AddressFields
   }
+  associationNo
 }
     ${AddressFieldsFragmentDoc}`;
 export const LendingStationFieldsForBikePageFragmentDoc = gql`
@@ -2651,6 +2652,15 @@ export const LendingStationFieldsForPageFragmentDoc = gql`
   }
   timeFrames {
     ...TimeFrameFieldsForLendingStation
+  }
+  loanPeriod {
+    mo
+    tu
+    we
+    th
+    fr
+    sa
+    su
   }
 }
     ${LendingStationFieldsForTableFragmentDoc}

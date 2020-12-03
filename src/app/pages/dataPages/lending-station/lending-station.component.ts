@@ -28,8 +28,27 @@ export class LendingStationComponent implements OnInit {
     },
     {
       type: 'Group',
-      title: 'Öffnungszeiten',
-      properties: [],
+      title: 'Ausleihzeiten',
+      properties: [
+        { dataPath: 'loanPeriod.mo', translation: 'Montag' },
+        { dataPath: 'loanPeriod.tu', translation: 'Dienstag' },
+        { dataPath: 'loanPeriod.we', translation: 'Mittwoch' },
+        { dataPath: 'loanPeriod.th', translation: 'Donnerstag' },
+        { dataPath: 'loanPeriod.fr', translation: 'Freitag' },
+        { dataPath: 'loanPeriod.sa', translation: 'Samstag' },
+        { dataPath: 'loanPeriod.su', translation: 'Sonntag' },
+      ],
+    },
+    {
+      type: 'Group',
+      title: 'Organisation',
+      properties: [
+        { dataPath: 'organisation.name', translation: 'Name', link: (data)=> "/organisation/" + data["organisation.id"] },
+        { dataPath: 'organisation.address.street', translation: 'Straße'},
+        { dataPath: 'organisation.address.number', translation: 'Hausnummer'},
+        { dataPath: 'organisation.address.zip', translation: 'Postleitzahl'},
+        { dataPath: 'organisation.associationNo', translation: 'Nummer'},
+      ],
     },
     {
       type: 'Group',
@@ -118,6 +137,21 @@ export class LendingStationComponent implements OnInit {
         { dataPath: 'contactInformationExtern.email2', translation: 'Email 2' },
         { dataPath: 'contactInformationExtern.note', translation: 'Anmerkung' },
       ],
+    },
+    {
+      type: 'ReferenceTable',
+      title: 'Lastenräder',
+      dataPath: 'cargoBikes',
+      dataService: null,
+      columnInfo: [
+        {
+          dataPath: 'name',
+          translation: 'Lastenrad',
+          link: (row) => '/bike/' + row['cargoBike.id'],
+        },
+      ],
+      editableReferences: false,
+      linkToTable: () => '/table/bikes',
     },
     {
       type: 'ReferenceTable',
