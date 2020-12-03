@@ -75,9 +75,13 @@
             "description": "see column A in info tabelle",
             "args": [],
             "type": {
-              "kind": "ENUM",
-              "name": "Group",
-              "ofType": null
+              "kind": "NON_NULL",
+              "name": null,
+              "ofType": {
+                "kind": "ENUM",
+                "name": "Group",
+                "ofType": null
+              }
             },
             "isDeprecated": false,
             "deprecationReason": null
@@ -2374,29 +2378,17 @@
             "deprecationReason": null
           },
           {
-            "name": "start",
+            "name": "dateRange",
             "description": null,
             "args": [],
             "type": {
               "kind": "NON_NULL",
               "name": null,
               "ofType": {
-                "kind": "SCALAR",
-                "name": "Date",
+                "kind": "OBJECT",
+                "name": "DateRange",
                 "ofType": null
               }
-            },
-            "isDeprecated": false,
-            "deprecationReason": null
-          },
-          {
-            "name": "end",
-            "description": null,
-            "args": [],
-            "type": {
-              "kind": "SCALAR",
-              "name": "Date",
-              "ofType": null
             },
             "isDeprecated": false,
             "deprecationReason": null
@@ -2610,22 +2602,16 @@
         "fields": null,
         "inputFields": [
           {
-            "name": "start",
+            "name": "dateRange",
             "description": "if not set, CURRENT_DATE will be used",
             "type": {
-              "kind": "SCALAR",
-              "name": "Date",
-              "ofType": null
-            },
-            "defaultValue": null
-          },
-          {
-            "name": "end",
-            "description": null,
-            "type": {
-              "kind": "SCALAR",
-              "name": "Date",
-              "ofType": null
+              "kind": "NON_NULL",
+              "name": null,
+              "ofType": {
+                "kind": "INPUT_OBJECT",
+                "name": "DateRangeInput",
+                "ofType": null
+              }
             },
             "defaultValue": null
           },
@@ -2745,21 +2731,11 @@
             "defaultValue": null
           },
           {
-            "name": "start",
-            "description": "if not set, CURRENT_DATE will be used",
-            "type": {
-              "kind": "SCALAR",
-              "name": "Date",
-              "ofType": null
-            },
-            "defaultValue": null
-          },
-          {
-            "name": "end",
+            "name": "dateRange",
             "description": null,
             "type": {
-              "kind": "SCALAR",
-              "name": "Date",
+              "kind": "INPUT_OBJECT",
+              "name": "DateRangeInput",
               "ofType": null
             },
             "defaultValue": null
@@ -3769,9 +3745,13 @@
             "name": "dateRange",
             "description": null,
             "type": {
-              "kind": "INPUT_OBJECT",
-              "name": "DateRangeInput",
-              "ofType": null
+              "kind": "NON_NULL",
+              "name": null,
+              "ofType": {
+                "kind": "INPUT_OBJECT",
+                "name": "DateRangeInput",
+                "ofType": null
+              }
             },
             "defaultValue": null
           },
