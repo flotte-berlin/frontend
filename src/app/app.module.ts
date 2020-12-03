@@ -47,7 +47,6 @@ import { MenuListItemComponent } from './components/menu-list-item/menu-list-ite
 import { SidenavProfileComponent } from './components/sidenav-profile/sidenav-profile.component';
 import { NavService } from './components/menu-list-item/nav.service';
 import { TokenInterceptor } from './helper/token.interceptor';
-import { HttpErrorInterceptor } from './helper/http-error.interceptor';
 import { BikeComponent } from './pages/dataPages/bike/bike.component';
 import {
   TableComponent,

@@ -67,12 +67,6 @@ export class ProfileComponent implements OnInit {
         data => {
           this.snackBar.openSnackBar("Das Passwort wurde erfolgreich aktualisiert", "Ok");
           console.log(JSON.stringify(data));
-        },
-        (error) => {
-          this.errorOccurred = true;
-          this.errorMessage =
-            error.error.message ||
-            'Ein Fehler ist aufgetreten. Bitte melden sie dies ihrem Administrator.';
         }
       )
       .add(() => {

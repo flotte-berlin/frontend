@@ -27,14 +27,18 @@ export class TokenInterceptor implements HttpInterceptor {
         } else {
           //server error;
           if (error.status === 401) {
-            
-            return this.handle401Error(request, next);
+            var urlSplit : string[] =  error.url.split("/");
+            if (urlSplit[3] === "users" && urlSplit[5] === "update"){
+              errorMessage = "Das aktuelle Passwort ist inkorrekt.";
+            } else {
+              return this.handle401Error(request, next);
+            }
           } else {
-            errorMessage = `Error Code: ${error.status}\nMessage: ${error.message}`;
+            errorMessage = `Error Code: ${error.status}\nMessage: ${error.message}.`;
           }
         }
       this.snackBar.openSnackBar(errorMessage, "Ok", true);
-      //return throwError(errorMessage);
+      return throwError(errorMessage);
     }));
   }
 
