@@ -184,6 +184,9 @@
                 (element.newObject && column.required) ||
                 (element.isLockedByMe && column.required)
               "
+              (validityChange)="
+                validityChange(element, column.dataPath, $event)
+              "
               [(from)]="element[column.dataPath + '.from']"
               [(to)]="element[column.dataPath + '.to']"
             ></app-date-range-cell>
