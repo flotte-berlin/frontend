@@ -14,8 +14,8 @@
   </h1>
   <ng-container *ngFor="let object of propertiesInfo">
     <mat-card class="inline-card" *ngIf="object.type === 'Group'">
-      <mat-card-title
-        >{{ object.title }}
+      <mat-card-title class="card-header">
+        <h2>{{ object.title }}</h2>
         <button
           mat-button
           *ngIf="data.isLockedByMe && object.possibleObjects"
@@ -47,7 +47,7 @@
 
     <mat-card class="inline-card" *ngIf="object.type === 'ReferenceTable'">
       <mat-card-title
-        >{{ object.title }}
+        ><h2>{{ object.title }}</h2>
         <a
           mat-button
           *ngIf="object.linkToTable"

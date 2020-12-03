@@ -17,6 +17,19 @@ h1:before {
     bottom: 0;
     border-bottom: 3px solid #7fc600;
 }
+h2 {
+    display: block;
+    padding-bottom: 0;
+    position: relative;
+}
+h2:before {
+    content: "";
+    position: absolute;
+    width: 5rem;
+    height: 1px;
+    bottom: 0;
+    border-bottom: 2px solid #7fc600;
+}
 
 .mat-list-item-content {
     width: 100%;
