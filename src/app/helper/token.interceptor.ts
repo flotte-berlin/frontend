@@ -29,6 +29,7 @@ export class TokenInterceptor implements HttpInterceptor {
           errorMessage = `Error: ${error.error.message}`;
         } else {
           //server error
+          console.log("Error: " + JSON.stringify(error));
           if (error.status === 400){
             switch (error.error.message) {
               case "Invalid refresh token!":
@@ -38,6 +39,7 @@ export class TokenInterceptor implements HttpInterceptor {
                 break;
             
               default:
+                errorMessage = `${error.error.message}. Error Code: ${error.status}.`;
                 break;
             }
             
@@ -50,7 +52,7 @@ export class TokenInterceptor implements HttpInterceptor {
               return this.handle401Error(request, next);
             }
           } else {
-            errorMessage = `${error.error.message}.   Error Code: ${error.status}.`;
+            errorMessage = `${error.error.message}. Error Code: ${error.status}.`;
           }
         }
       this.snackBar.openSnackBar(errorMessage, "Ok", true);
