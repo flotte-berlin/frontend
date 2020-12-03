@@ -39,12 +39,11 @@ export class TokenInterceptor implements HttpInterceptor {
                 break;
             
               default:
-                errorMessage = `${error.error.message}. Error Code: ${error.status}.`;
+                errorMessage = this.serverErrorMessageGenerator(error);
                 break;
             }
             
-          } else  
-          if (error.status === 401) {
+          } else if (error.status === 401) {
             var urlSplit : string[] = error.url.split("/");  
             if (urlSplit[3] === "users" && urlSplit[5] === "update"){ // Allow user pw updates to be processed correctly
               errorMessage = "Das aktuelle Passwort ist inkorrekt.";
@@ -52,13 +51,28 @@ export class TokenInterceptor implements HttpInterceptor {
               return this.handle401Error(request, next);
             }
           } else {
-            errorMessage = `${error.error.message}. Error Code: ${error.status}.`;
+            errorMessage = this.serverErrorMessageGenerator(error);
           }
         }
-      this.snackBar.openSnackBar(errorMessage, "Ok", true);
+      if (errorMessage === "Viele Fehler sind aufgetreten.") {
+        this.snackBar.openSnackBar(errorMessage, "Erweitert", true, error.error.errors);
+      } else {
+        this.snackBar.openSnackBar(errorMessage, "Ok", true);
+      }
+      
       return throwError(errorMessage);
     }));
   }
+
+  private serverErrorMessageGenerator (error: HttpErrorResponse): string  {
+    if (error.error.message === undefined){
+      return "Viele Fehler sind aufgetreten."  // If you change this you have to change it over this aswell
+    } else {
+      `${error.error.message}. Fehlercode: ${error.status}.`;
+    }
+
+  }
+
 
   private addToken(request: HttpRequest<any>, token: string) {
     return request.clone({

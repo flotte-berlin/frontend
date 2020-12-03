@@ -66,6 +66,7 @@ import { SelectObjectDialogComponent } from './components/select-object-dialog/s
 import { AutocompleteSelectComponent } from './components/autocomplete-select/autocomplete-select.component';
 import { LendingStationComponent } from './pages/dataPages/lending-station/lending-station.component';
 import { ProfileComponent } from './pages/profile/profile.component';
+import { ErrorSnackbarComponent, SnackbarDialog } from './helper/snackbar-ref.component';
 
 
 
@@ -96,6 +97,8 @@ import { ProfileComponent } from './pages/profile/profile.component';
     AutocompleteSelectComponent,
     LendingStationComponent,
     ProfileComponent,
+    ErrorSnackbarComponent,
+    SnackbarDialog
   ],
   imports: [
     BrowserModule,
