@@ -1,5 +1,9 @@
-.date-range-input {
-    min-width: 11em;
+.dateRange-wrapper {
+    display: flex;
+    align-items: center;
+    .spacer-string {
+        margin: 0 0.5em;
+    }
 }
 .date-string {
     min-width: 10em;

@@ -1,25 +1,38 @@
-    <mat-form-field *ngIf="editable || label; else stringValue">
-      <mat-label *ngIf="label">{{label}}</mat-label>
-      <mat-date-range-input [rangePicker]="picker" disabled class="date-range-input">
-        <input
-          matStartDate
-          placeholder="Startdatum"
-          [value]="from"
-          (dateChange)="startDateChange($event)"
-        />
-        <input
-          matEndDate
-          placeholder="Enddatum"
-          [value]="to"
-          (dateChange)="endDateChange($event)"
-        />
-      </mat-date-range-input>
-      <mat-datepicker-toggle matSuffix [for]="picker"></mat-datepicker-toggle>
-      <mat-date-range-picker
-        #picker
-        [disabled]="!editable"
-      ></mat-date-range-picker>
-    </mat-form-field>
-    <ng-template #stringValue>
-        <div class="date-string">{{toLocaleDate(from)}} <i>bis</i> {{toLocaleDate(to)}}</div>
-    </ng-template>
+<div class="dateRange-wrapper" *ngIf="editable || label; else stringValue" [formGroup]="dateRangeGroup">
+  <mat-label *ngIf="label">{{ label }}</mat-label>
+  <mat-form-field class="date-range-input">
+    <input
+      matInput
+      placeholder="Startdatum"
+      [matDatepicker]="fromPicker"
+      [value]="from"
+      disabled
+      formControlName="from"
+      (dateChange)="startDateChange($event)"
+    />
+    <mat-datepicker-toggle matSuffix [for]="fromPicker"></mat-datepicker-toggle>
+    <mat-datepicker #fromPicker [disabled]="!editable"></mat-datepicker>
+  </mat-form-field>
+  <i class="spacer-string">bis</i>
+  <mat-form-field class="date-range-input">
+    <input
+      matInput
+      placeholder="Enddatum"
+      [matDatepicker]="toPicker"
+      [value]="to"
+      disabled
+      formControlName="to"
+      (dateChange)="endDateChange($event)"
+    />
+    <button mat-button *ngIf="editable && to" matSuffix mat-icon-button aria-label="Clear" (click)="endDateChange({value: null})">
+      <mat-icon>close</mat-icon>
+    </button>
+    <mat-datepicker-toggle matSuffix [for]="toPicker"></mat-datepicker-toggle>
+    <mat-datepicker #toPicker [disabled]="!editable"></mat-datepicker>
+  </mat-form-field>
+</div>
+<ng-template #stringValue>
+  <div class="date-string">
+    {{ toLocaleDate(from) }} <i>bis</i> {{ toLocaleDate(to) }}
+  </div>
+</ng-template>
