@@ -13,8 +13,6 @@ export class AuthService {
   private currentUserSubject: BehaviorSubject<AuthUser>;
   public currentUser: Observable<AuthUser>;
   public loggedIn: BehaviorSubject<boolean>;
-  private readonly REQUEST_TOKEN = 'requestToken';
-  private readonly REFRESH_TOKEN = 'refreshToken';
   private readonly CURRENT_USER = 'currentUser';
 
   constructor(private http: HttpClient) {
@@ -38,7 +36,7 @@ export class AuthService {
   }
 
   private checkIfUserIsLoggedIn(): void {
-    this.loggedIn.next(!!this.getRequestToken());
+    this.loggedIn.next(!!localStorage.getItem(this.CURRENT_USER));
   }
 
   public getRequestToken(): string {
@@ -74,6 +72,7 @@ export class AuthService {
         finalize(() => {
           this.removeTokens();
           this.checkIfUserIsLoggedIn();
+          
         })
       );
   }
