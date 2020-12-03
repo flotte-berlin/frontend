@@ -1,7 +1,9 @@
 fragment ParticipantFieldsForBikePage on Participant {
     id
-    start
-    end
+    dateRange {
+      from
+      to
+    }
     usernamefLotte
     usernameSlack
     contactInformation {
