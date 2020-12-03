@@ -5,6 +5,7 @@ import { Observable, throwError, BehaviorSubject } from 'rxjs';
 import { catchError, filter, take, switchMap } from 'rxjs/operators';
 import { SnackBarService } from '../services/snackbar.service';
 import { Router, RouterStateSnapshot } from '@angular/router';
+import { JsonPipe } from '@angular/common';
 
 @Injectable()
 export class TokenInterceptor implements HttpInterceptor {
@@ -33,6 +34,7 @@ export class TokenInterceptor implements HttpInterceptor {
             errorMessage = "Die aktuelle Sitzung ist abgelaufen. Bitte loggen sie sich erneut ein."
             this.router.navigate(["/login"], { queryParams: { returnUrl: this.router.routerState.snapshot.url } });
           } else*/  
+          console.log(JSON.stringify(error.message) + JSON.stringify(error.error));
           if (error.status === 401) {
             var urlSplit : string[] = error.url.split("/");  
             if (urlSplit[3] === "users" && urlSplit[5] === "update"){ // Allow user pw updates to be processed correctly
@@ -41,7 +43,7 @@ export class TokenInterceptor implements HttpInterceptor {
               return this.handle401Error(request, next);
             }
           } else {
-            errorMessage = `Error Code: ${error.status}\nMessage: ${error.message}.`;
+            errorMessage = `${error.error.message}.   Error Code: ${error.status}.`;
           }
         }
       this.snackBar.openSnackBar(errorMessage, "Ok", true);
