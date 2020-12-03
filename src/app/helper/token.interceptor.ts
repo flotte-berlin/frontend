@@ -22,13 +22,15 @@ export class TokenInterceptor implements HttpInterceptor {
     return next.handle(request).pipe(catchError((error: HttpErrorResponse) => {
       let errorMessage = '';
         if (error.error instanceof ErrorEvent) {
-          //client error;
+          //client error
+
           errorMessage = `Error: ${error.error.message}`;
         } else {
-          //server error;
+          //server error
+
           if (error.status === 401) {
-            var urlSplit : string[] =  error.url.split("/");
-            if (urlSplit[3] === "users" && urlSplit[5] === "update"){
+            var urlSplit : string[] = error.url.split("/");  
+            if (urlSplit[3] === "users" && urlSplit[5] === "update"){ // Allow user pw updates to be processed correctly
               errorMessage = "Das aktuelle Passwort ist inkorrekt.";
             } else {
               return this.handle401Error(request, next);
