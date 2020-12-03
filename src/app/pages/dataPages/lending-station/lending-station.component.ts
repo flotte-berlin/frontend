@@ -43,7 +43,9 @@ export class LendingStationComponent implements OnInit {
           ' ' +
           contact.email +
           ' ' +
-          contact.phone
+          contact.phone +
+          ' ' +
+          contact.note
         );
       },
       propertyPrefixToOverwrite: 'contactInformationIntern',
@@ -85,7 +87,9 @@ export class LendingStationComponent implements OnInit {
           ' ' +
           contact.email +
           ' ' +
-          contact.phone
+          contact.phone +
+          ' ' +
+          contact.note
         );
       },
       propertyPrefixToOverwrite: 'contactInformationExtern',
@@ -115,26 +119,6 @@ export class LendingStationComponent implements OnInit {
         { dataPath: 'contactInformationExtern.note', translation: 'Anmerkung' },
       ],
     },
-    /*
-    {
-      type: 'ReferenceTable',
-      title: 'Equipment',
-      dataPath: 'equipment',
-      dataService: null,
-      columnInfo: [
-        { dataPath: 'serialNo', translation: 'Seriennummer' },
-        { dataPath: 'title', translation: 'Name' },
-        { dataPath: 'description', translation: 'Beschreibung' },
-      ],
-      nameToShowInSelection: (element) => {
-        return element.title + ' (' + element.serialNo + ')';
-      },
-      linkToTable: (element) => '/table/equipment',
-      linkToTableParams: (lendingStation) => {
-        return { filter: lendingStation.name };
-      },
-      propertyNameOfUpdateInput: 'equipmentIds',
-    },
     {
       type: 'ReferenceTable',
       title: 'Zeitscheiben',
@@ -142,14 +126,18 @@ export class LendingStationComponent implements OnInit {
       dataService: null,
       columnInfo: [
         { dataPath: 'dateRange', translation: 'Zeitraum' },
-        { dataPath: 'lendingStation.name', translation: 'Standort' },
+        {
+          dataPath: 'cargoBike.name',
+          translation: 'Lastenrad',
+          link: (row) => '/bike/' + row['cargoBike.id'],
+        },
       ],
       editableReferences: false,
-      linkToTable: (element) => '/table/timeFrames',
+      linkToTable: () => '/table/timeFrames',
       linkToTableParams: (lendingStation) => {
         return { filter: lendingStation.name };
       },
-    },*/
+    },
   ];
 
   headlineDataPath = 'name';
@@ -163,9 +151,6 @@ export class LendingStationComponent implements OnInit {
     private lendingStationsService: LendingStationsService,
     private contactInformationService: ContactInformationService
   ) {
-    /*this.propertiesInfo.find(
-      (prop) => prop.dataPath === 'equipmentType'
-    ).dataService = this.equipmentTypeService;*/
     this.contactInformationService.loadTableData();
     this.contactInformationService.tableData.subscribe((data) => {
       this.propertiesInfo.find(

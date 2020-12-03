@@ -226,10 +226,14 @@ export class BikeComponent implements OnInit {
       dataService: null,
       columnInfo: [
         { dataPath: 'dateRange', translation: 'Zeitraum' },
-        { dataPath: 'lendingStation.name', translation: 'Standort' },
+        {
+          dataPath: 'lendingStation.name',
+          translation: 'Standort',
+          link: (row) => '/lendingStation/' + row["lendingStation.id"],
+        },
       ],
       editableReferences: false,
-      linkToTable: (element) => '/table/timeFrames',
+      linkToTable: () => '/table/timeFrames',
       linkToTableParams: (bike) => {
         return { filter: bike.name };
       },
@@ -237,7 +241,7 @@ export class BikeComponent implements OnInit {
   ];
 
   headlineDataPath = 'name';
-  headlineIconName = 'directions_bike'
+  headlineIconName = 'directions_bike';
   pageDataGQLType: string = 'CargoBike';
   pageDataGQLUpdateInputType: string = 'CargoBikeUpdateInput';
 

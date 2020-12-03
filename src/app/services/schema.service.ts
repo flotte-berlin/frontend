@@ -6,7 +6,7 @@ import jsonSchema from 'src/generated/graphql.schema.json';
 })
 export class SchemaService {
   /** expects startingObject and variablePath and returns its type e.g. cargoBike, security.name -> returns the type of the name variable */
-  getPropertyTypeFromSchema(
+  /*getPropertyTypeFromSchema(
     startingObjectName: string,
     variable: string
   ): string {
@@ -38,7 +38,7 @@ export class SchemaService {
         variablePath.slice(1).join('.')
       );
     }
-  }
+  }*/
 
   getEnumValuesFromSchema(typeName: string): string[] {
     const types = jsonSchema.__schema.types;
@@ -67,7 +67,7 @@ export class SchemaService {
     if (!field) {
       return { isPartOfType: false, type: '', isRequired: false };
     }
-    const type = field.type.name || field.type.ofType.name;
+    const type = this.getTypeNameFromTypeObject(field.type);
     if (variablePath.length === 1) {
       const isRequired = field.type.kind === 'NON_NULL';
       if (
@@ -93,6 +93,14 @@ export class SchemaService {
       return this.getTypeInformation(type, variablePath.slice(1).join('.'));
     }
   }
+
+  private getTypeNameFromTypeObject(typeObject: any) {
+    let object =typeObject;
+    while (object.name == null && object.ofType != null) {
+      object = object.ofType;
+    }
+    return object.name;
+  } 
 
   filterObject(graphQLTypeName: string, object: object): any {
     let filteredObject;

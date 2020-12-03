@@ -39,7 +39,7 @@ export type CargoBike = {
   __typename?: 'CargoBike';
   id: Scalars['ID'];
   /** see column A in info tabelle */
-  group?: Maybe<Group>;
+  group: Group;
   name: Scalars['String'];
   state?: Maybe<BikeState>;
   modelName?: Maybe<Scalars['String']>;
@@ -406,8 +406,7 @@ export enum Group {
 export type Participant = {
   __typename?: 'Participant';
   id: Scalars['ID'];
-  start: Scalars['Date'];
-  end?: Maybe<Scalars['Date']>;
+  dateRange: DateRange;
   contactInformation: ContactInformation;
   usernamefLotte?: Maybe<Scalars['String']>;
   usernameSlack?: Maybe<Scalars['String']>;
@@ -432,8 +431,7 @@ export type Participant = {
 
 export type ParticipantCreateInput = {
   /** if not set, CURRENT_DATE will be used */
-  start?: Maybe<Scalars['Date']>;
-  end?: Maybe<Scalars['Date']>;
+  dateRange: DateRangeInput;
   /** must create contactinformation first, if you want to use new */
   contactInformationId: Scalars['ID'];
   usernamefLotte?: Maybe<Scalars['String']>;
@@ -448,9 +446,7 @@ export type ParticipantCreateInput = {
 
 export type ParticipantUpdateInput = {
   id: Scalars['ID'];
-  /** if not set, CURRENT_DATE will be used */
-  start?: Maybe<Scalars['Date']>;
-  end?: Maybe<Scalars['Date']>;
+  dateRange?: Maybe<DateRangeInput>;
   /** must create contactinformation first, if you want to use new */
   contactInformationId?: Maybe<Scalars['ID']>;
   usernamefLotte?: Maybe<Scalars['String']>;
@@ -562,7 +558,7 @@ export type Engagement = {
 
 export type EngagementCreateInput = {
   engagementTypeId: Scalars['ID'];
-  dateRange?: Maybe<DateRangeInput>;
+  dateRange: DateRangeInput;
   participantId: Scalars['ID'];
   cargoBikeId: Scalars['ID'];
 };
@@ -2014,7 +2010,7 @@ export type DeleteEquipmentTypeMutation = { __typename?: 'Mutation', deleteEquip
 
 export type AddressFieldsFragment = { __typename?: 'Address', street: string, number: string, zip: string };
 
-export type CargoBikeFieldsForTableFragment = { __typename?: 'CargoBike', id: string, group?: Maybe<Group>, name: string, modelName?: Maybe<string>, state?: Maybe<BikeState>, numberOfChildren?: Maybe<number>, numberOfWheels?: Maybe<number>, forCargo?: Maybe<boolean>, forChildren?: Maybe<boolean>, stickerBikeNameState?: Maybe<StickerBikeNameState>, note?: Maybe<string>, isLocked: boolean, isLockedByMe: boolean, lockedBy?: Maybe<string>, lockedUntil?: Maybe<any>, insuranceData?: Maybe<{ __typename?: 'InsuranceData', billing?: Maybe<string>, hasFixedRate?: Maybe<boolean>, name?: Maybe<string>, benefactor?: Maybe<string>, noPnP?: Maybe<string>, maintenanceResponsible?: Maybe<string>, maintenanceBenefactor?: Maybe<string>, maintenanceAgreement?: Maybe<string>, fixedRate?: Maybe<number>, projectAllowance?: Maybe<any>, notes?: Maybe<string> }>, dimensionsAndLoad?: Maybe<{ __typename?: 'DimensionsAndLoad', bikeLength?: Maybe<number>, bikeWeight?: Maybe<number>, bikeHeight?: Maybe<number>, bikeWidth?: Maybe<number>, hasCoverBox?: Maybe<boolean>, lockable?: Maybe<boolean>, maxWeightBox?: Maybe<number>, maxWeightLuggageRack?: Maybe<number>, maxWeightTotal?: Maybe<number>, boxHeightRange?: Maybe<{ __typename?: 'NumRange', max?: Maybe<number>, min?: Maybe<number> }>, boxLengthRange?: Maybe<{ __typename?: 'NumRange', min?: Maybe<number>, max?: Maybe<number> }>, boxWidthRange?: Maybe<{ __typename?: 'NumRange', min?: Maybe<number>, max?: Maybe<number> }> }>, security?: Maybe<{ __typename?: 'Security', frameNumber?: Maybe<string>, adfcCoding?: Maybe<string>, keyNumberAXAChain?: Maybe<string>, keyNumberFrameLock?: Maybe<string>, policeCoding?: Maybe<string> }>, technicalEquipment?: Maybe<{ __typename?: 'TechnicalEquipment', bicycleShift?: Maybe<string>, isEBike?: Maybe<boolean>, hasLightSystem?: Maybe<boolean>, specialFeatures?: Maybe<string> }>, taxes?: Maybe<{ __typename?: 'Taxes', costCenter?: Maybe<string>, organisationArea?: Maybe<OrganisationArea> }>, provider?: Maybe<(
+export type CargoBikeFieldsForTableFragment = { __typename?: 'CargoBike', id: string, group: Group, name: string, modelName?: Maybe<string>, state?: Maybe<BikeState>, numberOfChildren?: Maybe<number>, numberOfWheels?: Maybe<number>, forCargo?: Maybe<boolean>, forChildren?: Maybe<boolean>, stickerBikeNameState?: Maybe<StickerBikeNameState>, note?: Maybe<string>, isLocked: boolean, isLockedByMe: boolean, lockedBy?: Maybe<string>, lockedUntil?: Maybe<any>, insuranceData?: Maybe<{ __typename?: 'InsuranceData', billing?: Maybe<string>, hasFixedRate?: Maybe<boolean>, name?: Maybe<string>, benefactor?: Maybe<string>, noPnP?: Maybe<string>, maintenanceResponsible?: Maybe<string>, maintenanceBenefactor?: Maybe<string>, maintenanceAgreement?: Maybe<string>, fixedRate?: Maybe<number>, projectAllowance?: Maybe<any>, notes?: Maybe<string> }>, dimensionsAndLoad?: Maybe<{ __typename?: 'DimensionsAndLoad', bikeLength?: Maybe<number>, bikeWeight?: Maybe<number>, bikeHeight?: Maybe<number>, bikeWidth?: Maybe<number>, hasCoverBox?: Maybe<boolean>, lockable?: Maybe<boolean>, maxWeightBox?: Maybe<number>, maxWeightLuggageRack?: Maybe<number>, maxWeightTotal?: Maybe<number>, boxHeightRange?: Maybe<{ __typename?: 'NumRange', max?: Maybe<number>, min?: Maybe<number> }>, boxLengthRange?: Maybe<{ __typename?: 'NumRange', min?: Maybe<number>, max?: Maybe<number> }>, boxWidthRange?: Maybe<{ __typename?: 'NumRange', min?: Maybe<number>, max?: Maybe<number> }> }>, security?: Maybe<{ __typename?: 'Security', frameNumber?: Maybe<string>, adfcCoding?: Maybe<string>, keyNumberAXAChain?: Maybe<string>, keyNumberFrameLock?: Maybe<string>, policeCoding?: Maybe<string> }>, technicalEquipment?: Maybe<{ __typename?: 'TechnicalEquipment', bicycleShift?: Maybe<string>, isEBike?: Maybe<boolean>, hasLightSystem?: Maybe<boolean>, specialFeatures?: Maybe<string> }>, taxes?: Maybe<{ __typename?: 'Taxes', costCenter?: Maybe<string>, organisationArea?: Maybe<OrganisationArea> }>, provider?: Maybe<(
     { __typename?: 'Provider' }
     & ProviderFieldsGeneralFragment
   )>, lendingStation?: Maybe<(
@@ -2116,7 +2112,7 @@ export type OrganisationFieldsGeneralFragment = { __typename?: 'Organisation', i
     & AddressFieldsFragment
   )> };
 
-export type ParticipantFieldsForBikePageFragment = { __typename?: 'Participant', id: string, start: any, end?: Maybe<any>, usernamefLotte?: Maybe<string>, usernameSlack?: Maybe<string>, isLocked: boolean, isLockedByMe: boolean, lockedBy?: Maybe<string>, lockedUntil?: Maybe<any>, contactInformation: (
+export type ParticipantFieldsForBikePageFragment = { __typename?: 'Participant', id: string, usernamefLotte?: Maybe<string>, usernameSlack?: Maybe<string>, isLocked: boolean, isLockedByMe: boolean, lockedBy?: Maybe<string>, lockedUntil?: Maybe<any>, dateRange: { __typename?: 'DateRange', from: any, to?: Maybe<any> }, contactInformation: (
     { __typename?: 'ContactInformation' }
     & ContactInformationFieldsGeneralFragment
   ) };
@@ -2457,8 +2453,10 @@ export const ContactInformationFieldsGeneralFragmentDoc = gql`
 export const ParticipantFieldsForBikePageFragmentDoc = gql`
     fragment ParticipantFieldsForBikePage on Participant {
   id
-  start
-  end
+  dateRange {
+    from
+    to
+  }
   usernamefLotte
   usernameSlack
   contactInformation {
