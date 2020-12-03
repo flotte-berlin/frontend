@@ -2071,7 +2071,7 @@ export type EngagementFieldsForBikePageFragment = { __typename?: 'Engagement', i
 
 export type EngagementTypeFieldsFragment = { __typename?: 'EngagementType', id: string, name: string, description: string, isLocked: boolean, isLockedByMe: boolean, lockedBy?: Maybe<string>, lockedUntil?: Maybe<any> };
 
-export type EquipmentFieldsForBikePageFragment = { __typename?: 'Equipment', id: string, serialNo: string, title: string, description?: Maybe<string> };
+export type EquipmentFieldsForBikePageFragment = { __typename?: 'Equipment', id: string, serialNo: string, title: string, description?: Maybe<string>, cargoBike?: Maybe<{ __typename?: 'CargoBike', name: string }> };
 
 export type EquipmentFieldsForTableFragment = { __typename?: 'Equipment', id: string, serialNo: string, title: string, description?: Maybe<string>, isLocked: boolean, isLockedByMe: boolean, lockedBy?: Maybe<string>, lockedUntil?: Maybe<any>, cargoBike?: Maybe<{ __typename?: 'CargoBike', id: string, name: string }> };
 
@@ -2491,6 +2491,9 @@ export const EquipmentFieldsForBikePageFragmentDoc = gql`
   serialNo
   title
   description
+  cargoBike {
+    name
+  }
 }
     `;
 export const EquipmentTypeFieldsFragmentDoc = gql`

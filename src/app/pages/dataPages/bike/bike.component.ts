@@ -211,7 +211,7 @@ export class BikeComponent implements OnInit {
         { dataPath: 'description', translation: 'Beschreibung' },
       ],
       nameToShowInSelection: (element) => {
-        return element.title + ' (' + element.serialNo + ')';
+        return element.title + ' (' + element.serialNo + ')' + (element.cargoBike ? " [aktuell Teil von "+element.cargoBike.name+']' : '');
       },
       linkToTable: (element) => '/table/equipment',
       linkToTableParams: (bike) => {

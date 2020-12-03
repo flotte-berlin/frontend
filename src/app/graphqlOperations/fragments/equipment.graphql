@@ -3,6 +3,9 @@ fragment EquipmentFieldsForBikePage on Equipment {
     serialNo
     title
     description
+    cargoBike {
+        name
+    }
 }
 
 fragment EquipmentFieldsForTable on Equipment {
