@@ -10,9 +10,9 @@ export class SnackBarService {
     constructor(private snackBar : MatSnackBar) { } 
   
   
-    openSnackBar(message: string, action: string = "", error: boolean = false, errorMessageArray: Object[] = undefined) { 
+    openSnackBar(message: string, action: string = "", error: boolean = false, errorMessages: Object[] = undefined) { 
         if (error){
-            if (errorMessageArray === undefined){
+            if (errorMessages === undefined){
                 this.snackBar.open(message, action, { 
                     duration: 5000, 
                     panelClass: ['mat-toolbar', 'mat-warn', 'simple-snack-bar']
@@ -22,6 +22,7 @@ export class SnackBarService {
                     data: {
                             "message" : message,
                             "action" : action,
+                            "errorMessages" : errorMessages
                           },
                     panelClass: ['mat-toolbar', 'mat-warn', 'simple-snack-bar'],
                     duration: 5000

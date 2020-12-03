@@ -23,7 +23,8 @@ export class ErrorSnackbarComponent {
 
   public actionAndDismiss(){
       console.log("test");
-      this.dialog.open(SnackbarDialog);
+      let dialogRef = this.dialog.open(SnackbarDialog);
+      dialogRef.componentInstance.errorMessages = this.data.errorMessages;
       this.snackBarRef.dismiss()
   }
 }
@@ -32,4 +33,6 @@ export class ErrorSnackbarComponent {
     selector: 'app-snackbar-dialog',
     templateUrl: 'snackbar-dialog.html',
   })
-  export class SnackbarDialog {}
+  export class SnackbarDialog {
+    errorMessages : Object[];
+  }

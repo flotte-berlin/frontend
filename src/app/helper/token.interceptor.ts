@@ -29,7 +29,7 @@ export class TokenInterceptor implements HttpInterceptor {
           errorMessage = `Error: ${error.error.message}`;
         } else {
           //server error
-          console.log("Error: " + JSON.stringify(error));
+          //console.log("Error: " + JSON.stringify(error));
           if (error.status === 400){
             switch (error.error.message) {
               case "Invalid refresh token!":
