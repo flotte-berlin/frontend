@@ -65,6 +65,9 @@ export class TokenInterceptor implements HttpInterceptor {
   }
 
   private serverErrorMessageGenerator (error: HttpErrorResponse): string  {
+    if (error.error?.errors[0]?.message?.includes("not provided")) {
+      return "Nicht alle benötigten Felder wurden ausgefüllt.";
+    }
     if (error.error.message === undefined){
       return "Viele Fehler sind aufgetreten."  // If you change this you have to change it over this aswell
     } else {

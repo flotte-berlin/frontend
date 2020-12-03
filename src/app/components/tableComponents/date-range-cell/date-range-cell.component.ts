@@ -77,7 +77,6 @@ export class DateRangeCellComponent implements OnInit {
   }
 
   setRangeError(error: boolean): void {
-    console.log("error", error)
     this.validityChange.emit(!error);
     if (error) {
       this.dateRangeGroup.controls['from'].setErrors({ rangeError: true });
