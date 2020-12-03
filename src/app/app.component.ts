@@ -63,8 +63,8 @@ export class AppComponent {
   }
 
   logout() {
+    this.navService.closeNav();
     this.authService.logout().subscribe().add(() => this.router.navigate(['login']));
-    this.sideNav.close();
   }
 
   ngAfterViewInit() {

@@ -1,4 +1,7 @@
-#login-form {
+#login-wrapper {
+    #login-form {
+        display: contents;
+    }
     display: flex;
     flex-direction: column;
     max-width: 32em;
