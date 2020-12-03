@@ -61,11 +61,7 @@ export class ProfileComponent implements OnInit {
     user.password = this.passwordNew.value;
 
     this.loading = true;
-    this.authService.refreshToken().subscribe(
-      () => {
-        this.userService
-      .updateUser(user)
-      .subscribe(
+    this.userService.updateUser(user).subscribe(
         data => {
           this.snackBar.openSnackBar("Das Passwort wurde erfolgreich aktualisiert", "Ok");
           this.password.reset();
@@ -75,8 +71,6 @@ export class ProfileComponent implements OnInit {
       .add(() => {
         this.loading = false;
       });
-      }
-    )
     
   }
 }
