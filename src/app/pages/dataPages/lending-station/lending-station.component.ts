@@ -43,7 +43,9 @@ export class LendingStationComponent implements OnInit {
           ' ' +
           contact.email +
           ' ' +
-          contact.phone
+          contact.phone +
+          ' ' +
+          contact.note
         );
       },
       propertyPrefixToOverwrite: 'contactInformationIntern',
@@ -85,7 +87,9 @@ export class LendingStationComponent implements OnInit {
           ' ' +
           contact.email +
           ' ' +
-          contact.phone
+          contact.phone +
+          ' ' +
+          contact.note
         );
       },
       propertyPrefixToOverwrite: 'contactInformationExtern',
@@ -122,8 +126,11 @@ export class LendingStationComponent implements OnInit {
       dataService: null,
       columnInfo: [
         { dataPath: 'dateRange', translation: 'Zeitraum' },
-        { dataPath: 'cargoBike.name', translation: 'Lastenrad',
-        link: (row) => '/bike/' + row["cargoBike.id"], },
+        {
+          dataPath: 'cargoBike.name',
+          translation: 'Lastenrad',
+          link: (row) => '/bike/' + row['cargoBike.id'],
+        },
       ],
       editableReferences: false,
       linkToTable: () => '/table/timeFrames',
@@ -142,7 +149,7 @@ export class LendingStationComponent implements OnInit {
 
   constructor(
     private lendingStationsService: LendingStationsService,
-    private contactInformationService: ContactInformationService,
+    private contactInformationService: ContactInformationService
   ) {
     this.contactInformationService.loadTableData();
     this.contactInformationService.tableData.subscribe((data) => {
