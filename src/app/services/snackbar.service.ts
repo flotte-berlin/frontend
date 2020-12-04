@@ -1,6 +1,7 @@
 import { Injectable } from '@angular/core';
 import {MatSnackBar} from '@angular/material/snack-bar'; 
 import { ErrorSnackbarComponent } from '../helper/snackbar-ref.component';
+import { replaceAll } from 'src/app/helperFunctions/replaceAll';
 
 @Injectable({
   providedIn: 'root',
@@ -11,6 +12,7 @@ export class SnackBarService {
   
   
     openSnackBar(message: string, action: string = "", error: boolean = false, errorMessages: Object[] = undefined) { 
+        message = replaceAll(message, '"', "");
         if (error){
             if (errorMessages === undefined){
                 this.snackBar.open(message, action, { 

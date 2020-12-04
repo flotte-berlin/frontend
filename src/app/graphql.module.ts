@@ -46,7 +46,8 @@ export function createApollo(httpLink: HttpLink, snackBar: SnackBarService): Apo
       if (networkError) {
         //console.log(`[Network error]: ${networkError}`);
         // THE FOLLOWING CODE IS UNTESTED
-        snackBar.openSnackBar("Ein NetzwerkFehler ist aufgetreten", "Ok", true, [{"message": networkError}] );
+        //snackBar.openSnackBar("Ein NetzwerkFehler ist aufgetreten", "Ok", true, [{"message": networkError}] );
+        snackBar.openSnackBar(JSON.stringify(networkError), "", true);
       } 
     });
 
