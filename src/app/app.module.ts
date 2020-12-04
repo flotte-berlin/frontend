@@ -67,6 +67,7 @@ import { AutocompleteSelectComponent } from './components/autocomplete-select/au
 import { LendingStationComponent } from './pages/dataPages/lending-station/lending-station.component';
 import { ProfileComponent } from './pages/profile/profile.component';
 import { ErrorSnackbarComponent, SnackbarDialog } from './helper/snackbar-ref.component';
+import { HttpLinkModule } from 'apollo-angular-link-http';
 
 
 
@@ -103,6 +104,7 @@ import { ErrorSnackbarComponent, SnackbarDialog } from './helper/snackbar-ref.co
   imports: [
     BrowserModule,
     HttpClientModule,
+    HttpLinkModule,
     AppRoutingModule,
     BrowserAnimationsModule,
     FormsModule,
