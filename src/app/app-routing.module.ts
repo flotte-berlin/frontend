@@ -13,6 +13,12 @@ import { ParticipantsComponent } from './pages/tables/participants/participants.
 import { TimeFramesComponent } from './pages/tables/time-frames/time-frames.component';
 import {AuthGuard} from './helper/auth.guard';
 import { ProfileComponent } from './pages/profile/profile.component';
+import { PersonsComponent } from './pages/tables/persons/persons.component';
+import { ContactInformationComponent } from './pages/tables/contact-information/contact-information.component';
+import { OrganisationsComponent } from './pages/tables/organisations/organisations.component';
+import { ProviderComponent } from './pages/tables/provider/provider.component';
+import { PersonComponent } from './pages/dataPages/person/person.component';
+import { OrganisationComponent } from './pages/dataPages/organisation/organisation.component';
 
 const routes: Routes = [
   { path: 'login', component: LoginComponent },
@@ -26,7 +32,13 @@ const routes: Routes = [
   { path: 'table/engagementTypes', component: EngagementTypesComponent, canActivate: [AuthGuard] },
   { path: 'table/equipment', component: EquipmentComponent, canActivate: [AuthGuard] },
   { path: 'table/timeFrames', component: TimeFramesComponent, canActivate: [AuthGuard] },
+  { path: 'table/persons', component: PersonsComponent, canActivate: [AuthGuard] },
+  { path: 'table/contactInformation', component: ContactInformationComponent, canActivate: [AuthGuard] },
+  { path: 'table/organisations', component: OrganisationsComponent, canActivate: [AuthGuard] },
+  { path: 'table/providers', component: ProviderComponent, canActivate: [AuthGuard] },
   { path: 'lendingStation/:id', component: LendingStationComponent, canActivate: [AuthGuard] },
+  { path: 'person/:id', component: PersonComponent, canActivate: [AuthGuard] },
+  { path: 'organisation/:id', component: OrganisationComponent, canActivate: [AuthGuard] },
   { path: '', redirectTo: 'tableOverview', pathMatch: 'full' },
   { path: 'table', redirectTo: 'tableOverview', pathMatch: 'full' },
   { path: '**', redirectTo: 'tableOverview' },

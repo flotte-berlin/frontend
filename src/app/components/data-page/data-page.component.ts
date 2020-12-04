@@ -17,6 +17,7 @@ interface PropertyTypeInfo {
   dataPath: string;
   translation: string;
   acceptedForUpdating?: boolean;
+  requiredForUpdating?: boolean;
   required?: boolean;
   type?: string;
 }
@@ -53,7 +54,7 @@ export class DataPageComponent implements OnInit, OnDestroy {
   @Input()
   headlineDataPath: string;
   @Input()
-  headlineIconName: string = "help_outline";
+  headlineIconName: string = 'help_outline';
   @Input()
   pageDataGQLType: string;
   @Input()
@@ -79,7 +80,7 @@ export class DataPageComponent implements OnInit, OnDestroy {
   constructor(
     private route: ActivatedRoute,
     private schemaService: SchemaService,
-    public dialog: MatDialog,
+    public dialog: MatDialog
   ) {}
 
   ngOnInit(): void {
@@ -138,6 +139,11 @@ export class DataPageComponent implements OnInit, OnDestroy {
           prop.acceptedForUpdating != null
             ? prop.acceptedForUpdating
             : updateTypeInformation.isPartOfType;
+
+        prop.requiredForUpdating =
+          prop.requiredForUpdating != null
+            ? prop.requiredForUpdating
+            : prop.required || typeInformation.isRequired;
       }
     }
   }
@@ -185,10 +191,11 @@ export class DataPageComponent implements OnInit, OnDestroy {
     });
     dialogRef.afterClosed().subscribe((selectedObject) => {
       if (selectedObject) {
-        this.data[object.propertyNameOfReferenceId] = selectedObject.id
+        this.data[object.propertyNameOfReferenceId] = selectedObject.id;
         const newObjectFlattened = flatten(selectedObject);
-        for(const newProperty in newObjectFlattened) {
-          this.data[object.propertyPrefixToOverwrite + '.' + newProperty ] = newObjectFlattened[newProperty];
+        for (const newProperty in newObjectFlattened) {
+          this.data[object.propertyPrefixToOverwrite + '.' + newProperty] =
+            newObjectFlattened[newProperty];
         }
       }
     });

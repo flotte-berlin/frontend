@@ -6,3 +6,27 @@ fragment OrganisationFieldsGeneral on Organisation {
   }
   associationNo
 }
+
+fragment OrganisationFieldsForTable on Organisation {
+  ...OrganisationFieldsGeneral
+  registeredAt
+  contactInformation {
+    ...ContactInformationFieldsGeneral
+  }
+  isLocked
+  isLockedByMe
+  lockedBy
+  lockedUntil
+}
+
+fragment OrganisationFieldsForPage on Organisation {
+  ...OrganisationFieldsForTable
+  lendingStations {
+    id
+    name
+  }
+  provider {
+    ...ProviderFieldsGeneral
+  }
+}
+

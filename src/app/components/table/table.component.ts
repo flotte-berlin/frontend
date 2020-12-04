@@ -32,16 +32,18 @@ export class TableComponent implements AfterViewInit {
   @Input()
   headline: string = null;
   @Input()
-  headlineIconName: string = "help_outline";
-  
+  headlineIconName: string = 'help_outline';
+
   /** this array defines the columns and translations of the table and the order they are displayed  */
   @Input()
   columnInfo: {
     dataPath: string;
     translation: string;
     acceptedForCreation?: boolean;
+    requiredForCreation?: boolean;
     sticky?: boolean;
     acceptedForUpdating?: boolean;
+    requiredForUpdating?: boolean;
     required?: boolean;
     type?: string;
     link?: (row: any) => string;
@@ -204,6 +206,11 @@ export class TableComponent implements AfterViewInit {
         column.acceptedForUpdating != null
           ? column.acceptedForUpdating
           : typeInformation.isPartOfType;
+
+      column.requiredForUpdating =
+        column.requiredForUpdating != null
+          ? column.requiredForUpdating
+          : column.required || typeInformation.isRequired;
     }
     for (const column of this.columnInfo) {
       const typeInformation = this.schemaService.getTypeInformation(
@@ -214,6 +221,11 @@ export class TableComponent implements AfterViewInit {
         column.acceptedForCreation != null
           ? column.acceptedForCreation
           : typeInformation.isPartOfType;
+
+      column.requiredForCreation =
+        column.requiredForCreation != null
+          ? column.requiredForCreation
+          : column.required || typeInformation.isRequired;
     }
   }
 
@@ -347,8 +359,13 @@ export class TableComponent implements AfterViewInit {
     dialogRef.afterClosed().subscribe((selectedObject) => {
       if (selectedObject) {
         row[column.propertyNameOfReferenceId] = selectedObject.id;
-        row[column.dataPath] = column.valueToOverwriteDataPath(selectedObject);
+        //row[column.dataPath] = column.valueToOverwriteDataPath(selectedObject);
       }
+      const newObjectFlattened = flatten(selectedObject);
+        for (const newProperty in newObjectFlattened) {
+          row[column.propertyPrefixToOverwrite + '.' + newProperty] =
+            newObjectFlattened[newProperty];
+        }
     });
   }
 

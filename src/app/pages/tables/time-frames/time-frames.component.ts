@@ -26,7 +26,7 @@ export class TimeFramesComponent implements OnInit {
       },
       possibleObjects: [],
       nameToShowInSelection: (bike) => bike.name,
-      valueToOverwriteDataPath: (bike) => bike.name,
+      propertyPrefixToOverwrite: 'cargoBike',
       currentlySelectedObjectId: (timeFrame) => {
         return timeFrame['cargoBike.id'];
       },
@@ -40,7 +40,7 @@ export class TimeFramesComponent implements OnInit {
       },
       possibleObjects: [],
       nameToShowInSelection: (station) => station.name,
-      valueToOverwriteDataPath: (station) => station.name,
+      propertyPrefixToOverwrite: 'lendingStation',
       currentlySelectedObjectId: (timeFrame) => {
         return timeFrame['lendingStation.id'];
       },

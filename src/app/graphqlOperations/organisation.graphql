@@ -1,0 +1,45 @@
+query GetOrganisations {
+  organisations {
+    ...OrganisationFieldsForTable   
+  }
+}
+
+query GetOrganisationById($id: ID!) {
+  organisationById(id: $id) {
+    ...OrganisationFieldsForPage
+  }
+}
+
+query ReloadOrganisationById($id: ID!) {
+  organisationById(id: $id) {
+    ...OrganisationFieldsForTable
+  }
+}
+
+mutation CreateOrganisation($organisation: OrganisationCreateInput!) {
+  createOrganisation(organisation: $organisation) {
+    ...OrganisationFieldsForTable
+  }
+}
+
+mutation UpdateOrganisation($organisation: OrganisationUpdateInput!) {
+  updateOrganisation(organisation: $organisation) {
+    ...OrganisationFieldsForPage
+  }
+}
+
+mutation LockOrganisation($id: ID!) {
+  lockOrganisation(id: $id) {
+    ...OrganisationFieldsForPage
+  }
+}
+
+mutation UnlockOrganisation($id: ID!) {
+  unlockOrganisation(id: $id) {
+    ...OrganisationFieldsForPage
+  }
+}
+
+mutation DeleteOrganisation($id: ID!) {
+  deleteOrganisation(id: $id)
+}

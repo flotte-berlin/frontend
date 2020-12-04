@@ -1,0 +1,45 @@
+query GetPersons {
+  persons {
+    ...PersonFieldsForTable   
+  }
+}
+
+query GetPersonById($id: ID!) {
+  personById(id: $id) {
+    ...PersonFieldsForPage
+  }
+}
+
+query ReloadPersonById($id: ID!) {
+  personById(id: $id) {
+    ...PersonFieldsForTable
+  }
+}
+
+mutation CreatePerson($person: PersonCreateInput!) {
+  createPerson(person: $person) {
+    ...PersonFieldsForTable
+  }
+}
+
+mutation UpdatePerson($person: PersonUpdateInput!) {
+  updatePerson(person: $person) {
+    ...PersonFieldsForPage
+  }
+}
+
+mutation LockPerson($id: ID!) {
+  lockPerson(id: $id) {
+    ...PersonFieldsForPage
+  }
+}
+
+mutation UnlockPerson($id: ID!) {
+  unlockPerson(id: $id) {
+    ...PersonFieldsForPage
+  }
+}
+
+mutation DeletePerson($id: ID!) {
+  deletePerson(id: $id)
+}

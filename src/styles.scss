@@ -5,7 +5,7 @@ html, body { height: 100%; }
 body { margin: 0; font-family: Roboto, "Helvetica Neue", sans-serif; }
 
 h1 {
-    display: block;
+    display: inline-block;
     padding-bottom: 5px;
     position: relative;
 }
@@ -18,7 +18,7 @@ h1:before {
     border-bottom: 3px solid #7fc600;
 }
 h2 {
-    display: block;
+    display: inline-block;
     padding-bottom: 0;
     position: relative;
 }

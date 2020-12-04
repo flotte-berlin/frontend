@@ -67,6 +67,12 @@ import { AutocompleteSelectComponent } from './components/autocomplete-select/au
 import { LendingStationComponent } from './pages/dataPages/lending-station/lending-station.component';
 import { ProfileComponent } from './pages/profile/profile.component';
 import { ErrorSnackbarComponent, SnackbarDialog } from './helper/snackbar-ref.component';
+import { PersonsComponent } from './pages/tables/persons/persons.component';
+import { ContactInformationComponent } from './pages/tables/contact-information/contact-information.component';
+import { OrganisationsComponent } from './pages/tables/organisations/organisations.component';
+import { ProviderComponent } from './pages/tables/provider/provider.component';
+import { OrganisationComponent } from './pages/dataPages/organisation/organisation.component';
+import { PersonComponent } from './pages/dataPages/person/person.component';
 
 
 
@@ -98,7 +104,13 @@ import { ErrorSnackbarComponent, SnackbarDialog } from './helper/snackbar-ref.co
     LendingStationComponent,
     ProfileComponent,
     ErrorSnackbarComponent,
-    SnackbarDialog
+    SnackbarDialog,
+    PersonsComponent,
+    ContactInformationComponent,
+    OrganisationsComponent,
+    ProviderComponent,
+    OrganisationComponent,
+    PersonComponent
   ],
   imports: [
     BrowserModule,

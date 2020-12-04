@@ -2,14 +2,29 @@ fragment ProviderFieldsGeneral on Provider {
   id
   formName
   privatePerson {
+    ...ContactInformationFieldsGeneral
+  }
+  organisation {
     id
-    person {
-      id
-      name
-      firstName
-      contactInformation {
-        email
-      }
+    name
+    contactInformation {
+      ...ContactInformationFieldsGeneral
     }
+  }
+}
+
+fragment ProviderFieldsForTable on Provider {
+  ...ProviderFieldsGeneral
+  isLocked
+  isLockedByMe
+  lockedBy
+  lockedUntil
+}
+
+fragment ProviderFieldsForPage on Provider {
+  ...ProviderFieldsForTable
+  cargoBikes {
+    id
+    name
   }
 }
