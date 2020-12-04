@@ -19,7 +19,7 @@ export class TokenInterceptor implements HttpInterceptor {
   constructor(private authService: AuthService, private snackBar : SnackBarService, private router: Router) { }
 
   intercept(request: HttpRequest<any>, next: HttpHandler): Observable<HttpEvent<any>> {
-    console.log("i intercepted something");
+    //console.log("i intercepted something");
     if (this.authService.getRequestToken()) {
       request = this.addToken(request, this.authService.getRequestToken());
     }

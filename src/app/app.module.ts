@@ -38,7 +38,7 @@ import { AppComponent } from './app.component';
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 import { LoginComponent } from './pages/login/login.component';
 import { BikesComponent } from './pages/tables/bikes/bikes.component';
-import { GraphQLModule2 } from './graphql.module';
+import { GraphQLModule } from './graphql.module';
 import { ParticipantsComponent } from './pages/tables/participants/participants.component';
 import { LendingStationsComponent } from './pages/tables/lending-stations/lending-stations.component';
 import { TableOverviewComponent } from './pages/table-overview/table-overview.component';
@@ -126,7 +126,7 @@ import { HttpLinkModule } from 'apollo-angular-link-http';
     MatProgressBarModule,
     MatCheckboxModule,
     MatSnackBarModule,
-    GraphQLModule2,
+    GraphQLModule,
     DragDropModule,
     MatTooltipModule,
     MatSelectModule,

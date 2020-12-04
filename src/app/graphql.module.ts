@@ -1,29 +1,22 @@
-/*import { NgModule } from '@angular/core';
+import { NgModule } from '@angular/core';
 import { APOLLO_OPTIONS } from 'apollo-angular';
 import {
   ApolloClientOptions,
-  HttpLink,
   InMemoryCache,
 } from '@apollo/client/core';
-//import { HttpLink } from 'apollo-angular/http';
 import { environment } from '../environments/environment';
 import { DefaultOptions } from '@apollo/client/core/ApolloClient';
 
-//import { HttpLink } from 'apollo-link-http';
 import { onError } from '@apollo/link-error';
+
+import {Apollo, gql} from 'apollo-angular';
+import {HttpLink} from 'apollo-angular/http';
+import { SnackBarService } from './services/snackbar.service';
 
 
 const uri = environment.apiUrl + '/graphql'; // <-- add the URL of the GraphQL server here
 
-const errorLink = onError(({ graphQLErrors, networkError }) => {
-  if (graphQLErrors)
-    graphQLErrors.map(({ message, locations, path }) =>
-      console.log(
-        `[GraphQL error]: Message: ${message}, Location: ${locations}, Path: ${path}`,
-      ),
-    );
-    if (networkError) console.log(`[Network error]: ${networkError}`);
-  });
+
 
 const defaultOptions: DefaultOptions = {
   watchQuery: {
@@ -36,9 +29,29 @@ const defaultOptions: DefaultOptions = {
   },
 }
 
-export function createApollo(httpLink: HttpLink): ApolloClientOptions<any> {
+
+
+export function createApollo(httpLink: HttpLink, snackBar: SnackBarService): ApolloClientOptions<any> {
+
+  const errorLink = onError(({ graphQLErrors, networkError }) => {
+    if (graphQLErrors)
+      graphQLErrors.map(({ message, locations, path }) => {
+        snackBar.openSnackBar(JSON.stringify(message), "Ok", true);
+        /*console.log(
+          `[GraphQL error]: Message: ${message}, Location: ${locations}, Path: ${path}`,
+        )*/
+      },
+      
+      );
+      if (networkError) {
+        //console.log(`[Network error]: ${networkError}`);
+        // THE FOLLOWING CODE IS UNTESTED
+        snackBar.openSnackBar("Ein NetzwerkFehler ist aufgetreten", "Ok", true, [{"message": networkError}] );
+      } 
+    });
+
   return {
-    //link: errorLink.concat(new HttpLink({ uri })),
+    link: errorLink.concat(httpLink.create({ uri })),
     cache: new InMemoryCache({}),
     defaultOptions: defaultOptions,
   };
@@ -49,63 +62,10 @@ export function createApollo(httpLink: HttpLink): ApolloClientOptions<any> {
     {
       provide: APOLLO_OPTIONS,
       useFactory: createApollo,
-      deps: [HttpLink],
+      deps: [HttpLink, SnackBarService],
     }
   ],
 })
-export class GraphQLModule {}
-
-*/
-import { Apollo } from 'apollo-angular';
-import { HTTP_INTERCEPTORS } from '@angular/common/http';
-import { TokenInterceptor } from './helper/token.interceptor';
-import { NgModule } from '@angular/core';
-
-import {
-  ApolloClientOptions,
-  HttpLink,
-  InMemoryCache,
-} from '@apollo/client/core';
-
-import { environment } from '../environments/environment';
-import { onError } from '@apollo/link-error';
-//import { HttpLink } from 'apollo-angular-link-http';
-
-//import { HttpLink } from 'apollo-link-http';
-//import { onError } from 'apollo-link-error';
-
-
-@NgModule({
-  providers: [
-    { provide: HTTP_INTERCEPTORS, useClass: TokenInterceptor, multi: true },
-  ]
-})
-export class GraphQLModule2 {
-  constructor(
-    apollo: Apollo,
-  ) {
-    const link = new HttpLink({
-      uri: environment.apiUrl + '/graphql',
-    });
-    const errorLink = onError(({ graphQLErrors, networkError }) => {
-      if (graphQLErrors)
-        graphQLErrors.map(({ message, locations, path }) =>
-          console.log(
-            `[GraphQL error]: Message: ${message}, Location: ${locations}, Path: ${path}`,
-          ),
-        );
-        if (networkError) console.log(`[Network error]: ${networkError}`);
-      });
-
-      apollo.create({
-        link: errorLink.concat(link),
-        cache: new InMemoryCache()
-      });
-
-  }
-
-  
-  
-  
+export class GraphQLModule {
 
 }
