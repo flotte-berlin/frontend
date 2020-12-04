@@ -1,6 +1,7 @@
 import { Component, OnInit } from '@angular/core';
 import { AuthService } from '../../services/auth.service';
 import { SnackBarService } from '../../services/snackbar.service';
+import { NavService } from '../menu-list-item/nav.service';
 
 @Component({
   selector: 'sidenav-profile',
@@ -12,7 +13,7 @@ export class SidenavProfileComponent implements OnInit {
   email: String;
   profileURL: String = '/assets/flotte_logo.png';
 
-  constructor( private auth: AuthService, private snackBar: SnackBarService) { }
+  constructor( private auth: AuthService, private snackBar: SnackBarService, private navService: NavService) { }
 
   ngOnInit() {
     this.auth.currentUser.subscribe(user => {
@@ -27,5 +28,9 @@ export class SidenavProfileComponent implements OnInit {
 
   testSnackBar(){
     this.snackBar.openSnackBar("A user administration will be found here", "Ok");
+  }
+
+  closeSidenav() {
+    this.navService.closeNav();
   }
 }
