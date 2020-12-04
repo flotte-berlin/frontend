@@ -31,6 +31,11 @@ h2:before {
     border-bottom: 2px solid #7fc600;
 }
 
+.link {
+    cursor: pointer;
+    outline: none;
+}
+
 .mat-list-item-content {
     width: 100%;
 }
