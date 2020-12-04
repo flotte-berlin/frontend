@@ -7,7 +7,10 @@ import { SnackBarService } from '../services/snackbar.service';
 import { Router, RouterStateSnapshot } from '@angular/router';
 import { JsonPipe } from '@angular/common';
 
-@Injectable()
+@Injectable({
+  providedIn: 'root',
+}
+)
 export class TokenInterceptor implements HttpInterceptor {
 
   private isRefreshing = false;
@@ -16,7 +19,7 @@ export class TokenInterceptor implements HttpInterceptor {
   constructor(private authService: AuthService, private snackBar : SnackBarService, private router: Router) { }
 
   intercept(request: HttpRequest<any>, next: HttpHandler): Observable<HttpEvent<any>> {
-
+    console.log("i intercepted something");
     if (this.authService.getRequestToken()) {
       request = this.addToken(request, this.authService.getRequestToken());
     }

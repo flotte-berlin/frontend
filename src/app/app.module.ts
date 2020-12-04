@@ -38,7 +38,7 @@ import { AppComponent } from './app.component';
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 import { LoginComponent } from './pages/login/login.component';
 import { BikesComponent } from './pages/tables/bikes/bikes.component';
-import { GraphQLModule } from './graphql.module';
+import { GraphQLModule2 } from './graphql.module';
 import { ParticipantsComponent } from './pages/tables/participants/participants.component';
 import { LendingStationsComponent } from './pages/tables/lending-stations/lending-stations.component';
 import { TableOverviewComponent } from './pages/table-overview/table-overview.component';
@@ -67,6 +67,7 @@ import { AutocompleteSelectComponent } from './components/autocomplete-select/au
 import { LendingStationComponent } from './pages/dataPages/lending-station/lending-station.component';
 import { ProfileComponent } from './pages/profile/profile.component';
 import { ErrorSnackbarComponent, SnackbarDialog } from './helper/snackbar-ref.component';
+import { HttpLinkModule } from 'apollo-angular-link-http';
 
 
 
@@ -103,6 +104,7 @@ import { ErrorSnackbarComponent, SnackbarDialog } from './helper/snackbar-ref.co
   imports: [
     BrowserModule,
     HttpClientModule,
+    HttpLinkModule,
     AppRoutingModule,
     BrowserAnimationsModule,
     FormsModule,
@@ -124,7 +126,7 @@ import { ErrorSnackbarComponent, SnackbarDialog } from './helper/snackbar-ref.co
     MatProgressBarModule,
     MatCheckboxModule,
     MatSnackBarModule,
-    GraphQLModule,
+    GraphQLModule2,
     DragDropModule,
     MatTooltipModule,
     MatSelectModule,
