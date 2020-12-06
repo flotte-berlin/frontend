@@ -357,7 +357,6 @@ export class TableComponent implements AfterViewInit {
       },
     });
     dialogRef.afterClosed().subscribe((selectedObject) => {
-      console.log(selectedObject);
       if (selectedObject) {
         row[column.propertyNameOfReferenceId] = selectedObject.id;
         const newObjectFlattened = flatten(selectedObject);

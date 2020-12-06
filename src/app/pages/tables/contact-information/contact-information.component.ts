@@ -27,8 +27,8 @@ export class ContactInformationComponent implements OnInit {
       possibleObjects: [],
       nameToShowInSelection: (person) => person.firstName + ' ' + person.name,
       propertyPrefixToOverwrite: 'person',
-      currentlySelectedObjectId: (timeFrame) => {
-        return timeFrame['cargoBike.id'];
+      currentlySelectedObjectId: (contactInformation) => {
+        return contactInformation['person.id'];
       },
       propertyNameOfReferenceId: 'personId',
     },
