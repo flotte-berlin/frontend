@@ -11,6 +11,7 @@ export class NavService {
     this.router.events.subscribe((event: Event) => {
       if (event instanceof NavigationEnd) {
         this.currentUrl.next(event.urlAfterRedirects);
+        this.closeNav();
       }
     });
   }
