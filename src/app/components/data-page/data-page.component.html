@@ -9,11 +9,17 @@
 
 <div class="data-page-wrapper" *ngIf="data">
   <h1 class="headline">
-    {{ data[headlineDataPath] }}
+    {{ getHeadline !== undefined ? getHeadline(data) : data[headlineDataPath] }}
     <mat-icon>{{ headlineIconName }}</mat-icon>
   </h1>
   <ng-container *ngFor="let object of propertiesInfo">
-    <mat-card class="inline-card" *ngIf="object.type === 'Group'">
+    <mat-card
+      class="inline-card"
+      *ngIf="
+        object.type === 'Group' &&
+        (!object.hideCondition || !object.hideCondition(data))
+      "
+    >
       <mat-card-title class="card-header">
         <h2>{{ object.title }}</h2>
         <button
@@ -26,7 +32,7 @@
       </mat-card-title>
       <ng-container *ngFor="let prop of object.properties">
         <app-cell
-          *ngIf="prop.type !== 'NumRange'"
+          *ngIf="prop.type !== 'NumRange' && prop.type !== 'Link'"
           [editable]="data.isLockedByMe && prop.acceptedForUpdating"
           [required]="prop.requiredForUpdating && data.isLockedByMe"
           (validityChange)="validityChange(prop.dataPath, $event)"
@@ -41,11 +47,25 @@
           [(min)]="data[prop.dataPath + '.min']"
           [(max)]="data[prop.dataPath + '.max']"
           [label]="prop.translation || prop.dataPath"
-        ></app-number-range-cell
-      ></ng-container>
+        ></app-number-range-cell>
+        <a
+          mat-button
+          class="link-button"
+          color="primary"
+          *ngIf="prop.type === 'Link'"
+          [routerLink]="prop.link(data)"
+          >{{ prop.linkText }}
+        </a>
+      </ng-container>
     </mat-card>
 
-    <mat-card class="inline-card" *ngIf="object.type === 'ReferenceTable'">
+    <mat-card
+      class="inline-card"
+      *ngIf="
+        object.type === 'ReferenceTable' &&
+        (!object.hideCondition || !object.hideCondition(data))
+      "
+    >
       <mat-card-title
         ><h2>{{ object.title }}</h2>
         <a

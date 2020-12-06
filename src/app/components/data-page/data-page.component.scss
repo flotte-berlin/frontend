@@ -10,6 +10,10 @@
     display: inline-table;
     min-width: 20em;
     margin: 1em;
+    .link-button {
+      padding: 0;
+      margin-top: -16px;
+    }
   }
 }
 #floating-fab-button-box {

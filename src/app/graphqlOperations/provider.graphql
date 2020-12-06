@@ -1,0 +1,45 @@
+query GetProviders {
+  providers {
+    ...ProviderFieldsForTable   
+  }
+}
+
+query GetProviderById($id: ID!) {
+  providerById(id: $id) {
+    ...ProviderFieldsForPage
+  }
+}
+
+query ReloadProviderById($id: ID!) {
+  providerById(id: $id) {
+    ...ProviderFieldsForTable
+  }
+}
+
+mutation CreateProvider($provider: ProviderCreateInput!) {
+  createProvider(provider: $provider) {
+    ...ProviderFieldsForTable
+  }
+}
+
+mutation UpdateProvider($provider: ProviderUpdateInput!) {
+  updateProvider(provider: $provider) {
+    ...ProviderFieldsForPage
+  }
+}
+
+mutation LockProvider($id: ID!) {
+  lockProvider(id: $id) {
+    ...ProviderFieldsForPage
+  }
+}
+
+mutation UnlockProvider($id: ID!) {
+  unlockProvider(id: $id) {
+    ...ProviderFieldsForPage
+  }
+}
+
+mutation DeleteProvider($id: ID!) {
+  deleteProvider(id: $id)
+}

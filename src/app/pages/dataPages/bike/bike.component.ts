@@ -155,26 +155,62 @@ export class BikeComponent implements OnInit {
     },
     {
       type: 'Group',
-      title: 'provider',
+      title: 'Anbieter (Person)',
+      hideCondition: (data) => data['provider.privatePerson.person.id'] == null,
       properties: [
-        { dataPath: 'provider.id', translation: '' },
-        { dataPath: 'provider.formName', translation: '' },
-        { dataPath: 'provider.privatePerson.id', translation: '' },
-        { dataPath: 'provider.privatePerson.person.id', translation: '' },
-        { dataPath: 'provider.privatePerson.person.name', translation: '' },
+        {
+          type: 'Link',
+          linkText: 'Zum Anbieter',
+          link: (data) => {
+            return '/provider/' + data['provider.id'];
+          },
+        },
+        { dataPath: 'provider.formName', translation: 'Formular Name' },
         {
           dataPath: 'provider.privatePerson.person.firstName',
-          translation: '',
+          translation: 'Vorname',
+        },
+        { dataPath: 'provider.privatePerson.person.name', translation: 'Nachname' },
+        {
+          dataPath: 'provider.privatePerson.email',
+          translation: 'Email',
         },
         {
-          dataPath: 'provider.privatePerson.person.contactInformation.email',
-          translation: '',
+          dataPath: 'provider.privatePerson.phone',
+          translation: 'Telefonnummer',
         },
       ],
     },
     {
       type: 'Group',
-      title: 'lendingstation',
+      title: 'Anbieter (Unternehmen)',
+      hideCondition: (data) => data['provider.organisation.id'] == null,
+      properties: [
+        {
+          type: 'Link',
+          linkText: 'Zum Anbieter',
+          link: (data) => {
+            return '/provider/' + data['provider.id'];
+          },
+        },
+        { dataPath: 'provider.organisation.name', translation: 'Name' },
+        {
+          dataPath: 'provider.organisation.address.street',
+          translation: 'Straße',
+        },
+        {
+          dataPath: 'provider.organisation.address.number',
+          translation: 'Hausnummer',
+        },
+        {
+          dataPath: 'provider.organisation.address.zip',
+          translation: 'Postleitzahl',
+        },
+      ],
+    },
+    {
+      type: 'Group',
+      title: 'Standort',
       properties: [
         { dataPath: 'lendingStation.id', translation: '' },
         { dataPath: 'lendingStation.name', translation: '' },
@@ -211,7 +247,15 @@ export class BikeComponent implements OnInit {
         { dataPath: 'description', translation: 'Beschreibung' },
       ],
       nameToShowInSelection: (element) => {
-        return element.title + ' (' + element.serialNo + ')' + (element.cargoBike ? " [aktuell Teil von "+element.cargoBike.name+']' : '');
+        return (
+          element.title +
+          ' (' +
+          element.serialNo +
+          ')' +
+          (element.cargoBike
+            ? ' [aktuell Teil von ' + element.cargoBike.name + ']'
+            : '')
+        );
       },
       linkToTable: (element) => '/table/equipment',
       linkToTableParams: (bike) => {
@@ -229,7 +273,7 @@ export class BikeComponent implements OnInit {
         {
           dataPath: 'lendingStation.name',
           translation: 'Standort',
-          link: (row) => '/lendingStation/' + row["lendingStation.id"],
+          link: (row) => '/lendingStation/' + row['lendingStation.id'],
         },
       ],
       editableReferences: false,

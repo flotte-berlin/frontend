@@ -14,8 +14,8 @@ export class OrganisationComponent implements OnInit {
       title: 'Allgemein',
       properties: [
         { dataPath: 'name', translation: 'Name' },
-        { dataPath: 'address.number', translation: 'Hausnummer' },
         { dataPath: 'address.street', translation: 'Straße' },
+        { dataPath: 'address.number', translation: 'Hausnummer' },
         { dataPath: 'address.zip', translation: 'Postleitzahl' },
 
         { dataPath: 'associationNo', translation: 'Vereinsnummer' },
@@ -67,7 +67,23 @@ export class OrganisationComponent implements OnInit {
       ],
     },
     {
+      type: 'Group',
+      title: 'Anbieterinformationen',
+      hideCondition: (data) => data.provider === null,
+      properties: [
+        { dataPath: 'provider.formName', translation: 'Formularname' },
+        {
+          type: 'Link',
+          linkText: "Zur Anbieterseite",
+          link: (data) => {
+            return '/provider/' + data['provider.id'];
+          },
+        },
+      ],
+    },
+    {
       type: 'ReferenceTable',
+      hideCondition: (data) => data.provider === null,
       title: 'Bereitgestellte Lastenräder',
       dataPath: 'provider.cargoBikes',
       dataService: null,
@@ -75,31 +91,16 @@ export class OrganisationComponent implements OnInit {
         {
           dataPath: 'name',
           translation: 'Lastenrad',
-          link: (row) => '/bike/' + row['cargoBike.id'],
+          link: (row) => '/bike/' + row['id'],
         },
       ],
       editableReferences: false,
       linkToTable: () => '/table/provider',
     },
-    /*{
-      type: 'ReferenceTable',
-      title: 'Fahrräder',
-      dataPath: 'contactInformation',
-      dataService: null,
-      columnInfo: [
-        { dataPath: 'email', translation: 'Email' },
-        { dataPath: 'email2', translation: 'Email 2' },
-        { dataPath: 'phone', translation: 'Telefonnummer' },
-        { dataPath: 'phone2', translation: 'Telefonnummer 2' },
-        { dataPath: 'note', translation: 'Anmerkung' },
-      ],
-      editableReferences: false,
-      linkToTable: () => '/table/contactInformation',
-    },*/
   ];
 
   headlineDataPath = 'name';
-  headlineIconName = 'organisation';
+  headlineIconName = 'business';
   pageDataGQLType: string = 'Organisation';
   pageDataGQLUpdateInputType: string = 'OrganisationUpdateInput';
 

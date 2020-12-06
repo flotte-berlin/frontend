@@ -53,6 +53,9 @@ export class DataPageComponent implements OnInit, OnDestroy {
   /** specifies which property should be shown in the headline */
   @Input()
   headlineDataPath: string;
+  /** specifies which string should be shown in the headline. If this is provided headlineDataPath is ignored*/
+  @Input()
+  getHeadline: (any) => string;
   @Input()
   headlineIconName: string = 'help_outline';
   @Input()
@@ -112,6 +115,9 @@ export class DataPageComponent implements OnInit, OnDestroy {
 
   addPropertiesFromGQLSchemaToObject(infoObject: any) {
     for (const prop of infoObject) {
+      if (prop.type === 'Link') {
+        continue;
+      }
       if (prop.type === 'Group') {
         this.addPropertiesFromGQLSchemaToObject(prop.properties);
       } else if (prop.type === 'ReferenceTable') {

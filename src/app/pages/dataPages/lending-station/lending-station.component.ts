@@ -43,11 +43,15 @@ export class LendingStationComponent implements OnInit {
       type: 'Group',
       title: 'Organisation',
       properties: [
-        { dataPath: 'organisation.name', translation: 'Name', link: (data)=> "/organisation/" + data["organisation.id"] },
-        { dataPath: 'organisation.address.street', translation: 'Straße'},
-        { dataPath: 'organisation.address.number', translation: 'Hausnummer'},
-        { dataPath: 'organisation.address.zip', translation: 'Postleitzahl'},
-        { dataPath: 'organisation.associationNo', translation: 'Nummer'},
+        {
+          dataPath: 'organisation.name',
+          translation: 'Name',
+          link: (data) => '/organisation/' + data['organisation.id'],
+        },
+        { dataPath: 'organisation.address.street', translation: 'Straße' },
+        { dataPath: 'organisation.address.number', translation: 'Hausnummer' },
+        { dataPath: 'organisation.address.zip', translation: 'Postleitzahl' },
+        { dataPath: 'organisation.associationNo', translation: 'Nummer' },
       ],
     },
     {
@@ -56,15 +60,15 @@ export class LendingStationComponent implements OnInit {
       possibleObjects: [],
       nameToShowInSelection: (contact) => {
         return (
-          contact.person.firstName +
+          (contact.person.firstName || '') +
           ' ' +
-          contact.person.name +
+          (contact.person.name || '') +
           ' ' +
-          contact.email +
+          (contact.email || '') +
           ' ' +
-          contact.phone +
+          (contact.phone || '') +
           ' ' +
-          contact.note
+          (contact.note || '')
         );
       },
       propertyPrefixToOverwrite: 'contactInformationIntern',
@@ -100,15 +104,15 @@ export class LendingStationComponent implements OnInit {
       possibleObjects: [],
       nameToShowInSelection: (contact) => {
         return (
-          contact.person.firstName +
+          (contact.person.firstName || '') +
           ' ' +
-          contact.person.name +
+          (contact.person.name || '') +
           ' ' +
-          contact.email +
+          (contact.email || '') +
           ' ' +
-          contact.phone +
+          (contact.phone || '') +
           ' ' +
-          contact.note
+          (contact.note || '')
         );
       },
       propertyPrefixToOverwrite: 'contactInformationExtern',

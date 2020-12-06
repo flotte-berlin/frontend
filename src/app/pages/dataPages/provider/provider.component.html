@@ -1,1 +1,12 @@
-<p>provider works!</p>
+<app-data-page
+  [dataService]="dataService"
+  [propertiesInfo]="propertiesInfo"
+  [headlineDataPath]="headlineDataPath"
+  [getHeadline]="getHeadline"
+  [headlineIconName]="headlineIconName"
+  [pageDataGQLType]="pageDataGQLType"
+  [pageDataGQLUpdateInputType]="pageDataGQLUpdateInputType"
+  (lockEvent)="lock($event)"
+  (saveEvent)="save($event)"
+  (cancelEvent)="cancel($event)"
+></app-data-page>

@@ -71,9 +71,10 @@ import { HttpLinkModule } from 'apollo-angular-link-http';
 import { PersonsComponent } from './pages/tables/persons/persons.component';
 import { ContactInformationComponent } from './pages/tables/contact-information/contact-information.component';
 import { OrganisationsComponent } from './pages/tables/organisations/organisations.component';
-import { ProviderComponent } from './pages/tables/provider/provider.component';
+import { ProvidersComponent } from './pages/tables/providers/providers.component';
 import { OrganisationComponent } from './pages/dataPages/organisation/organisation.component';
 import { PersonComponent } from './pages/dataPages/person/person.component';
+import { ProviderComponent } from './pages/dataPages/provider/provider.component';
 
 
 
@@ -109,9 +110,10 @@ import { PersonComponent } from './pages/dataPages/person/person.component';
     PersonsComponent,
     ContactInformationComponent,
     OrganisationsComponent,
-    ProviderComponent,
+    ProvidersComponent,
     OrganisationComponent,
-    PersonComponent
+    PersonComponent,
+    ProviderComponent
   ],
   imports: [
     BrowserModule,

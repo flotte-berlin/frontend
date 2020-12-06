@@ -736,7 +736,7 @@ export type Provider = {
 
 /** (dt. Anbieter) */
 export type ProviderCreateInput = {
-  formName: Scalars['String'];
+  formName?: Maybe<Scalars['String']>;
   privatePersonId?: Maybe<Scalars['ID']>;
   organisationId?: Maybe<Scalars['ID']>;
   cargoBikeIds?: Maybe<Array<Scalars['ID']>>;
@@ -830,7 +830,6 @@ export type Organisation = {
   registeredAt?: Maybe<Scalars['String']>;
   provider?: Maybe<Provider>;
   contactInformation?: Maybe<ContactInformation>;
-  otherData?: Maybe<Scalars['String']>;
   isLocked: Scalars['Boolean'];
   isLockedByMe: Scalars['Boolean'];
   /** null if not locked by other user */
@@ -842,11 +841,10 @@ export type OrganisationCreateInput = {
   address: AddressCreateInput;
   name: Scalars['String'];
   /** registration number of association */
-  associationNo: Scalars['String'];
+  associationNo?: Maybe<Scalars['String']>;
   /** If Club, at what court registered */
   registeredAt?: Maybe<Scalars['String']>;
   contactInformationId?: Maybe<Scalars['ID']>;
-  otherData?: Maybe<Scalars['String']>;
 };
 
 export type OrganisationUpdateInput = {
@@ -858,7 +856,6 @@ export type OrganisationUpdateInput = {
   /** If Club, at what court registered */
   registeredAt?: Maybe<Scalars['String']>;
   contactInformationId?: Maybe<Scalars['ID']>;
-  otherData?: Maybe<Scalars['String']>;
   keepLock?: Maybe<Scalars['Boolean']>;
 };
 
@@ -2123,7 +2120,7 @@ export type OrganisationFieldsForTableFragment = (
 export type OrganisationFieldsForPageFragment = (
   { __typename?: 'Organisation', lendingStations?: Maybe<Array<{ __typename?: 'LendingStation', id: string, name: string }>>, provider?: Maybe<(
     { __typename?: 'Provider' }
-    & ProviderFieldsGeneralFragment
+    & ProviderFieldsForPageFragment
   )> }
   & OrganisationFieldsForTableFragment
 );
@@ -2396,6 +2393,81 @@ export type DeletePersonMutationVariables = Exact<{
 
 
 export type DeletePersonMutation = { __typename?: 'Mutation', deletePerson: boolean };
+
+export type GetProvidersQueryVariables = Exact<{ [key: string]: never; }>;
+
+
+export type GetProvidersQuery = { __typename?: 'Query', providers: Array<(
+    { __typename?: 'Provider' }
+    & ProviderFieldsForTableFragment
+  )> };
+
+export type GetProviderByIdQueryVariables = Exact<{
+  id: Scalars['ID'];
+}>;
+
+
+export type GetProviderByIdQuery = { __typename?: 'Query', providerById?: Maybe<(
+    { __typename?: 'Provider' }
+    & ProviderFieldsForPageFragment
+  )> };
+
+export type ReloadProviderByIdQueryVariables = Exact<{
+  id: Scalars['ID'];
+}>;
+
+
+export type ReloadProviderByIdQuery = { __typename?: 'Query', providerById?: Maybe<(
+    { __typename?: 'Provider' }
+    & ProviderFieldsForTableFragment
+  )> };
+
+export type CreateProviderMutationVariables = Exact<{
+  provider: ProviderCreateInput;
+}>;
+
+
+export type CreateProviderMutation = { __typename?: 'Mutation', createProvider: (
+    { __typename?: 'Provider' }
+    & ProviderFieldsForTableFragment
+  ) };
+
+export type UpdateProviderMutationVariables = Exact<{
+  provider: ProviderUpdateInput;
+}>;
+
+
+export type UpdateProviderMutation = { __typename?: 'Mutation', updateProvider: (
+    { __typename?: 'Provider' }
+    & ProviderFieldsForPageFragment
+  ) };
+
+export type LockProviderMutationVariables = Exact<{
+  id: Scalars['ID'];
+}>;
+
+
+export type LockProviderMutation = { __typename?: 'Mutation', lockProvider: (
+    { __typename?: 'Provider' }
+    & ProviderFieldsForPageFragment
+  ) };
+
+export type UnlockProviderMutationVariables = Exact<{
+  id: Scalars['ID'];
+}>;
+
+
+export type UnlockProviderMutation = { __typename?: 'Mutation', unlockProvider: (
+    { __typename?: 'Provider' }
+    & ProviderFieldsForPageFragment
+  ) };
+
+export type DeleteProviderMutationVariables = Exact<{
+  id: Scalars['ID'];
+}>;
+
+
+export type DeleteProviderMutation = { __typename?: 'Mutation', deleteProvider: boolean };
 
 export type GetTimeFramesQueryVariables = Exact<{ [key: string]: never; }>;
 
@@ -2870,6 +2942,24 @@ export const OrganisationFieldsForTableFragmentDoc = gql`
 }
     ${OrganisationFieldsGeneralFragmentDoc}
 ${ContactInformationFieldsGeneralFragmentDoc}`;
+export const ProviderFieldsForTableFragmentDoc = gql`
+    fragment ProviderFieldsForTable on Provider {
+  ...ProviderFieldsGeneral
+  isLocked
+  isLockedByMe
+  lockedBy
+  lockedUntil
+}
+    ${ProviderFieldsGeneralFragmentDoc}`;
+export const ProviderFieldsForPageFragmentDoc = gql`
+    fragment ProviderFieldsForPage on Provider {
+  ...ProviderFieldsForTable
+  cargoBikes {
+    id
+    name
+  }
+}
+    ${ProviderFieldsForTableFragmentDoc}`;
 export const OrganisationFieldsForPageFragmentDoc = gql`
     fragment OrganisationFieldsForPage on Organisation {
   ...OrganisationFieldsForTable
@@ -2878,11 +2968,11 @@ export const OrganisationFieldsForPageFragmentDoc = gql`
     name
   }
   provider {
-    ...ProviderFieldsGeneral
+    ...ProviderFieldsForPage
   }
 }
     ${OrganisationFieldsForTableFragmentDoc}
-${ProviderFieldsGeneralFragmentDoc}`;
+${ProviderFieldsForPageFragmentDoc}`;
 export const PersonFieldsForTableFragmentDoc = gql`
     fragment PersonFieldsForTable on Person {
   id
@@ -2903,24 +2993,6 @@ export const PersonFieldsForPageFragmentDoc = gql`
 }
     ${PersonFieldsForTableFragmentDoc}
 ${ContactInformationFieldsGeneralFragmentDoc}`;
-export const ProviderFieldsForTableFragmentDoc = gql`
-    fragment ProviderFieldsForTable on Provider {
-  ...ProviderFieldsGeneral
-  isLocked
-  isLockedByMe
-  lockedBy
-  lockedUntil
-}
-    ${ProviderFieldsGeneralFragmentDoc}`;
-export const ProviderFieldsForPageFragmentDoc = gql`
-    fragment ProviderFieldsForPage on Provider {
-  ...ProviderFieldsForTable
-  cargoBikes {
-    id
-    name
-  }
-}
-    ${ProviderFieldsForTableFragmentDoc}`;
 export const TimeFrameFieldsFragmentDoc = gql`
     fragment TimeFrameFields on TimeFrame {
   id
@@ -3824,6 +3896,148 @@ export const DeletePersonDocument = gql`
   })
   export class DeletePersonGQL extends Apollo.Mutation<DeletePersonMutation, DeletePersonMutationVariables> {
     document = DeletePersonDocument;
+    
+    constructor(apollo: Apollo.Apollo) {
+      super(apollo);
+    }
+  }
+export const GetProvidersDocument = gql`
+    query GetProviders {
+  providers {
+    ...ProviderFieldsForTable
+  }
+}
+    ${ProviderFieldsForTableFragmentDoc}`;
+
+  @Injectable({
+    providedIn: 'root'
+  })
+  export class GetProvidersGQL extends Apollo.Query<GetProvidersQuery, GetProvidersQueryVariables> {
+    document = GetProvidersDocument;
+    
+    constructor(apollo: Apollo.Apollo) {
+      super(apollo);
+    }
+  }
+export const GetProviderByIdDocument = gql`
+    query GetProviderById($id: ID!) {
+  providerById(id: $id) {
+    ...ProviderFieldsForPage
+  }
+}
+    ${ProviderFieldsForPageFragmentDoc}`;
+
+  @Injectable({
+    providedIn: 'root'
+  })
+  export class GetProviderByIdGQL extends Apollo.Query<GetProviderByIdQuery, GetProviderByIdQueryVariables> {
+    document = GetProviderByIdDocument;
+    
+    constructor(apollo: Apollo.Apollo) {
+      super(apollo);
+    }
+  }
+export const ReloadProviderByIdDocument = gql`
+    query ReloadProviderById($id: ID!) {
+  providerById(id: $id) {
+    ...ProviderFieldsForTable
+  }
+}
+    ${ProviderFieldsForTableFragmentDoc}`;
+
+  @Injectable({
+    providedIn: 'root'
+  })
+  export class ReloadProviderByIdGQL extends Apollo.Query<ReloadProviderByIdQuery, ReloadProviderByIdQueryVariables> {
+    document = ReloadProviderByIdDocument;
+    
+    constructor(apollo: Apollo.Apollo) {
+      super(apollo);
+    }
+  }
+export const CreateProviderDocument = gql`
+    mutation CreateProvider($provider: ProviderCreateInput!) {
+  createProvider(provider: $provider) {
+    ...ProviderFieldsForTable
+  }
+}
+    ${ProviderFieldsForTableFragmentDoc}`;
+
+  @Injectable({
+    providedIn: 'root'
+  })
+  export class CreateProviderGQL extends Apollo.Mutation<CreateProviderMutation, CreateProviderMutationVariables> {
+    document = CreateProviderDocument;
+    
+    constructor(apollo: Apollo.Apollo) {
+      super(apollo);
+    }
+  }
+export const UpdateProviderDocument = gql`
+    mutation UpdateProvider($provider: ProviderUpdateInput!) {
+  updateProvider(provider: $provider) {
+    ...ProviderFieldsForPage
+  }
+}
+    ${ProviderFieldsForPageFragmentDoc}`;
+
+  @Injectable({
+    providedIn: 'root'
+  })
+  export class UpdateProviderGQL extends Apollo.Mutation<UpdateProviderMutation, UpdateProviderMutationVariables> {
+    document = UpdateProviderDocument;
+    
+    constructor(apollo: Apollo.Apollo) {
+      super(apollo);
+    }
+  }
+export const LockProviderDocument = gql`
+    mutation LockProvider($id: ID!) {
+  lockProvider(id: $id) {
+    ...ProviderFieldsForPage
+  }
+}
+    ${ProviderFieldsForPageFragmentDoc}`;
+
+  @Injectable({
+    providedIn: 'root'
+  })
+  export class LockProviderGQL extends Apollo.Mutation<LockProviderMutation, LockProviderMutationVariables> {
+    document = LockProviderDocument;
+    
+    constructor(apollo: Apollo.Apollo) {
+      super(apollo);
+    }
+  }
+export const UnlockProviderDocument = gql`
+    mutation UnlockProvider($id: ID!) {
+  unlockProvider(id: $id) {
+    ...ProviderFieldsForPage
+  }
+}
+    ${ProviderFieldsForPageFragmentDoc}`;
+
+  @Injectable({
+    providedIn: 'root'
+  })
+  export class UnlockProviderGQL extends Apollo.Mutation<UnlockProviderMutation, UnlockProviderMutationVariables> {
+    document = UnlockProviderDocument;
+    
+    constructor(apollo: Apollo.Apollo) {
+      super(apollo);
+    }
+  }
+export const DeleteProviderDocument = gql`
+    mutation DeleteProvider($id: ID!) {
+  deleteProvider(id: $id)
+}
+    `;
+
+  @Injectable({
+    providedIn: 'root'
+  })
+  export class DeleteProviderGQL extends Apollo.Mutation<DeleteProviderMutation, DeleteProviderMutationVariables> {
+    document = DeleteProviderDocument;
     
     constructor(apollo: Apollo.Apollo) {
       super(apollo);
