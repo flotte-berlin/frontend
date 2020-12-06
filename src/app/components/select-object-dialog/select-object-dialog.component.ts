@@ -15,10 +15,13 @@ export class SelectObjectDialogComponent implements OnInit {
   ngOnInit(): void {}
 
   onObjectClicked(object: any) {
-    this.data.currentlySelectedObjectId = object.id;
+    this.data.currentlySelectedObjectId = object?.id || null;
   }
 
   getSelectedObject() {
+    if (this.data.currentlySelectedObjectId === null) {
+      return null;
+    }
     return this.data.possibleObjects.find(
       (object) => object.id === this.data.currentlySelectedObjectId
     );

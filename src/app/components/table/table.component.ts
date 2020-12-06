@@ -357,15 +357,22 @@ export class TableComponent implements AfterViewInit {
       },
     });
     dialogRef.afterClosed().subscribe((selectedObject) => {
+      console.log(selectedObject);
       if (selectedObject) {
         row[column.propertyNameOfReferenceId] = selectedObject.id;
-        //row[column.dataPath] = column.valueToOverwriteDataPath(selectedObject);
-      }
-      const newObjectFlattened = flatten(selectedObject);
+        const newObjectFlattened = flatten(selectedObject);
         for (const newProperty in newObjectFlattened) {
           row[column.propertyPrefixToOverwrite + '.' + newProperty] =
             newObjectFlattened[newProperty];
         }
+      } else if (selectedObject === null) {
+        row[column.propertyNameOfReferenceId] = null;
+        for (const prop in row) {
+          if (prop.startsWith(column.propertyPrefixToOverwrite)) {
+            row[prop] = null;
+          }
+        }
+      }
     });
   }
 

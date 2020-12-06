@@ -197,6 +197,13 @@ export class DataPageComponent implements OnInit, OnDestroy {
           this.data[object.propertyPrefixToOverwrite + '.' + newProperty] =
             newObjectFlattened[newProperty];
         }
+      } else if (selectedObject === null) {
+        this.data[object.propertyNameOfReferenceId] = null;
+        for (const prop in this.data) {
+          if (prop.startsWith(object.propertyPrefixToOverwrite)) {
+           this.data[prop] = null;
+          }
+        }
       }
     });
   }

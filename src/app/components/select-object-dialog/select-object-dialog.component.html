@@ -10,7 +10,19 @@
     (selectedElementChange)="onObjectClicked($event)"
   ></app-autocomplete-select>
 
-  <span>aktuell ausgewählt: <b>{{getSelectedObjectName()}}</b></span>
+  <span
+    >aktuell ausgewählt: <b>{{ getSelectedObjectName() }}</b></span
+  >
+  <button
+    mat-button
+    *ngIf="!!getSelectedObject()"
+    matSuffix
+    mat-icon-button
+    aria-label="Clear"
+    (click)="onObjectClicked(null)"
+  >
+    <mat-icon>close</mat-icon>
+  </button>
 </div>
 
 <div mat-dialog-actions>
