@@ -1,17 +1,33 @@
 fragment EngagementFieldsForBikePage on Engagement {
-    id
-    engagementType {
-        ...EngagementTypeFields
-    }
-    dateRange {
-        from
-        to
-    }
-    participant {
-        ...ParticipantFieldsForBikePage
-    }
-    isLocked
+  id
+  engagementType {
+    ...EngagementTypeFields
+  }
+  dateRange {
+    from
+    to
+  }
+  participant {
+    ...ParticipantFieldsGeneral
+  }
+  
+  isLocked
   isLockedByMe
   lockedBy
   lockedUntil
+}
+
+fragment EngagementFieldsForParticipant on Engagement {
+  id
+  engagementType {
+    ...EngagementTypeFields
+  }
+  dateRange {
+    from
+    to
+  }
+  cargoBike {
+    id
+    name
+  }
 }

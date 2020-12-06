@@ -102,7 +102,6 @@ export class TableComponent implements AfterViewInit {
 
   ngAfterViewInit(): void {
     this.addColumnPropertiesFromGQLSchemaToColumnInfo();
-    console.log(this.columnInfo)
     this.data.paginator = this.paginator;
     this.data.sortingDataAccessor = (item, columnName) => {
       if (typeof item[columnName] === 'string') {

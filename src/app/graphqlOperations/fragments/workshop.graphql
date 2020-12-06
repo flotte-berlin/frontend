@@ -1,0 +1,27 @@
+fragment WorkshopFieldsGeneral on Workshop {
+    id
+    title
+    description
+    date
+    workshopType {
+        ...WorkshopTypefieldsGeneral
+    }
+    trainer1 {
+        ...ParticipantFieldsGeneral
+    }
+    trainer2 {
+        ...ParticipantFieldsGeneral
+    }
+
+}
+
+fragment WorkshopFieldsForTable on Workshop {
+    ...WorkshopFieldsGeneral
+    participants {
+        ...ParticipantFieldsGeneral
+    }
+    isLocked
+    isLockedByMe
+    lockedBy
+    lockedUntil
+}

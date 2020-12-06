@@ -1,17 +1,35 @@
-fragment ParticipantFieldsForBikePage on Participant {
-    id
-    dateRange {
-      from
-      to
-    }
-    usernamefLotte
-    usernameSlack
-    contactInformation {
-        ...ContactInformationFieldsGeneral
-    }
+fragment ParticipantFieldsGeneral on Participant {
+  id
+  dateRange {
+    from
+    to
+  }
+  contactInformation {
+    ...ContactInformationFieldsGeneral
+  }
+  usernamefLotte
+  usernameSlack
+}
 
-    isLocked
+fragment ParticipantFieldsForTable on Participant {
+  ...ParticipantFieldsGeneral
+  memberADFC
+  locationZIPs
+  memberCoreTeam
+  distributedActiveBikeParte
+
+  isLocked
   isLockedByMe
   lockedBy
   lockedUntil
+}
+
+fragment ParticipantFieldsForPage on Participant {
+  ...ParticipantFieldsForTable
+  engagement {
+    ...EngagementFieldsForParticipant
+  }
+  workshops {
+    ...WorkshopFieldsGeneral
+  }
 }

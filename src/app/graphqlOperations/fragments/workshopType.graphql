@@ -1,0 +1,12 @@
+fragment WorkshopTypefieldsGeneral on WorkshopType {
+    id
+    name
+}
+
+fragment WorkshopTypefieldsForTable on WorkshopType {
+    ...WorkshopTypefieldsGeneral
+    isLocked
+    isLockedByMe
+    lockedBy
+    lockedUntil
+}

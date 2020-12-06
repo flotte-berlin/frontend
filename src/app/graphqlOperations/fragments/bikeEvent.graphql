@@ -4,10 +4,33 @@ fragment BikeEventFieldsForBikePage on BikeEvent {
     ...BikeEventTypeFields
   }
   responsible {
-    ...ParticipantFieldsForBikePage
+    ...ParticipantFieldsGeneral
   }
   date
-  responsible {
-    id
+}
+
+fragment BikeEventFieldsForTable on BikeEvent {
+  id
+  bikeEventType {
+    ...BikeEventTypeFields
   }
+  cargoBike {
+    id
+    name
+  }
+  responsible {
+    ...ParticipantFieldsGeneral
+  }
+  related {
+    ...ParticipantFieldsGeneral
+  }
+  date
+  description
+  documents
+  remark
+
+  isLockedByMe
+  isLocked
+  lockedBy
+  lockedUntil
 }

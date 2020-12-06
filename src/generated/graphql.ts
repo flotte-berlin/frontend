@@ -2042,11 +2042,22 @@ export type BikeEventFieldsForBikePageFragment = { __typename?: 'BikeEvent', id:
     { __typename?: 'BikeEventType' }
     & BikeEventTypeFieldsFragment
   ), responsible?: Maybe<(
-    { __typename?: 'Participant', id: string }
-    & ParticipantFieldsForBikePageFragment
+    { __typename?: 'Participant' }
+    & ParticipantFieldsGeneralFragment
   )> };
 
-export type BikeEventTypeFieldsFragment = { __typename?: 'BikeEventType', id: string, name: string, isLocked: boolean, isLockedByMe: boolean, lockedUntil?: Maybe<any> };
+export type BikeEventFieldsForTableFragment = { __typename?: 'BikeEvent', id: string, date: any, description?: Maybe<string>, documents: Array<string>, remark?: Maybe<string>, isLockedByMe: boolean, isLocked: boolean, lockedBy?: Maybe<string>, lockedUntil?: Maybe<any>, bikeEventType: (
+    { __typename?: 'BikeEventType' }
+    & BikeEventTypeFieldsFragment
+  ), cargoBike: { __typename?: 'CargoBike', id: string, name: string }, responsible?: Maybe<(
+    { __typename?: 'Participant' }
+    & ParticipantFieldsGeneralFragment
+  )>, related?: Maybe<(
+    { __typename?: 'Participant' }
+    & ParticipantFieldsGeneralFragment
+  )> };
+
+export type BikeEventTypeFieldsFragment = { __typename?: 'BikeEventType', id: string, name: string, isLocked: boolean, isLockedByMe: boolean, lockedBy?: Maybe<string>, lockedUntil?: Maybe<any> };
 
 export type ContactInformationFieldsGeneralFragment = { __typename?: 'ContactInformation', id: string, phone?: Maybe<string>, phone2?: Maybe<string>, email?: Maybe<string>, email2?: Maybe<string>, note?: Maybe<string>, person: (
     { __typename?: 'Person' }
@@ -2063,8 +2074,13 @@ export type EngagementFieldsForBikePageFragment = { __typename?: 'Engagement', i
     & EngagementTypeFieldsFragment
   ), dateRange: { __typename?: 'DateRange', from: any, to?: Maybe<any> }, participant: (
     { __typename?: 'Participant' }
-    & ParticipantFieldsForBikePageFragment
+    & ParticipantFieldsGeneralFragment
   ) };
+
+export type EngagementFieldsForParticipantFragment = { __typename?: 'Engagement', id: string, engagementType: (
+    { __typename?: 'EngagementType' }
+    & EngagementTypeFieldsFragment
+  ), dateRange: { __typename?: 'DateRange', from: any, to?: Maybe<any> }, cargoBike: { __typename?: 'CargoBike', id: string, name: string } };
 
 export type EngagementTypeFieldsFragment = { __typename?: 'EngagementType', id: string, name: string, description: string, isLocked: boolean, isLockedByMe: boolean, lockedBy?: Maybe<string>, lockedUntil?: Maybe<any> };
 
@@ -2125,10 +2141,26 @@ export type OrganisationFieldsForPageFragment = (
   & OrganisationFieldsForTableFragment
 );
 
-export type ParticipantFieldsForBikePageFragment = { __typename?: 'Participant', id: string, usernamefLotte?: Maybe<string>, usernameSlack?: Maybe<string>, isLocked: boolean, isLockedByMe: boolean, lockedBy?: Maybe<string>, lockedUntil?: Maybe<any>, dateRange: { __typename?: 'DateRange', from: any, to?: Maybe<any> }, contactInformation: (
+export type ParticipantFieldsGeneralFragment = { __typename?: 'Participant', id: string, usernamefLotte?: Maybe<string>, usernameSlack?: Maybe<string>, dateRange: { __typename?: 'DateRange', from: any, to?: Maybe<any> }, contactInformation: (
     { __typename?: 'ContactInformation' }
     & ContactInformationFieldsGeneralFragment
   ) };
+
+export type ParticipantFieldsForTableFragment = (
+  { __typename?: 'Participant', memberADFC: boolean, locationZIPs: Array<Maybe<string>>, memberCoreTeam: boolean, distributedActiveBikeParte: boolean, isLocked: boolean, isLockedByMe: boolean, lockedBy?: Maybe<string>, lockedUntil?: Maybe<any> }
+  & ParticipantFieldsGeneralFragment
+);
+
+export type ParticipantFieldsForPageFragment = (
+  { __typename?: 'Participant', engagement?: Maybe<Array<Maybe<(
+    { __typename?: 'Engagement' }
+    & EngagementFieldsForParticipantFragment
+  )>>>, workshops?: Maybe<Array<Maybe<(
+    { __typename?: 'Workshop' }
+    & WorkshopFieldsGeneralFragment
+  )>>> }
+  & ParticipantFieldsForTableFragment
+);
 
 export type PersonFieldsGeneralFragment = { __typename?: 'Person', id: string, name: string, firstName: string };
 
@@ -2168,6 +2200,32 @@ export type TimeFrameFieldsForBikePageFragment = { __typename?: 'TimeFrame', id:
 export type TimeFrameFieldsForLendingStationFragment = { __typename?: 'TimeFrame', id: string, note?: Maybe<string>, dateRange: { __typename?: 'DateRange', from: any, to?: Maybe<any> }, cargoBike: { __typename?: 'CargoBike', id: string, name: string } };
 
 export type TimeFrameFieldsFragment = { __typename?: 'TimeFrame', id: string, note?: Maybe<string>, isLocked: boolean, isLockedByMe: boolean, lockedBy?: Maybe<string>, lockedUntil?: Maybe<any>, dateRange: { __typename?: 'DateRange', from: any, to?: Maybe<any> }, lendingStation: { __typename?: 'LendingStation', id: string, name: string }, cargoBike: { __typename?: 'CargoBike', id: string, name: string } };
+
+export type WorkshopFieldsGeneralFragment = { __typename?: 'Workshop', id: string, title: string, description: string, date: any, workshopType: (
+    { __typename?: 'WorkshopType' }
+    & WorkshopTypefieldsGeneralFragment
+  ), trainer1: (
+    { __typename?: 'Participant' }
+    & ParticipantFieldsGeneralFragment
+  ), trainer2?: Maybe<(
+    { __typename?: 'Participant' }
+    & ParticipantFieldsGeneralFragment
+  )> };
+
+export type WorkshopFieldsForTableFragment = (
+  { __typename?: 'Workshop', isLocked: boolean, isLockedByMe: boolean, lockedBy?: Maybe<string>, lockedUntil?: Maybe<any>, participants?: Maybe<Array<Maybe<(
+    { __typename?: 'Participant' }
+    & ParticipantFieldsGeneralFragment
+  )>>> }
+  & WorkshopFieldsGeneralFragment
+);
+
+export type WorkshopTypefieldsGeneralFragment = { __typename?: 'WorkshopType', id: string, name: string };
+
+export type WorkshopTypefieldsForTableFragment = (
+  { __typename?: 'WorkshopType', isLocked: boolean, isLockedByMe: boolean, lockedBy?: Maybe<string>, lockedUntil?: Maybe<any> }
+  & WorkshopTypefieldsGeneralFragment
+);
 
 export type GetLendingStationsQueryVariables = Exact<{ [key: string]: never; }>;
 
@@ -2711,25 +2769,22 @@ export const BikeEventTypeFieldsFragmentDoc = gql`
   name
   isLocked
   isLockedByMe
+  lockedBy
   lockedUntil
 }
     `;
-export const ParticipantFieldsForBikePageFragmentDoc = gql`
-    fragment ParticipantFieldsForBikePage on Participant {
+export const ParticipantFieldsGeneralFragmentDoc = gql`
+    fragment ParticipantFieldsGeneral on Participant {
   id
   dateRange {
     from
     to
   }
-  usernamefLotte
-  usernameSlack
   contactInformation {
     ...ContactInformationFieldsGeneral
   }
-  isLocked
-  isLockedByMe
-  lockedBy
-  lockedUntil
+  usernamefLotte
+  usernameSlack
 }
     ${ContactInformationFieldsGeneralFragmentDoc}`;
 export const BikeEventFieldsForBikePageFragmentDoc = gql`
@@ -2739,16 +2794,12 @@ export const BikeEventFieldsForBikePageFragmentDoc = gql`
     ...BikeEventTypeFields
   }
   responsible {
-    ...ParticipantFieldsForBikePage
-    id
+    ...ParticipantFieldsGeneral
   }
   date
-  responsible {
-    id
-  }
 }
     ${BikeEventTypeFieldsFragmentDoc}
-${ParticipantFieldsForBikePageFragmentDoc}`;
+${ParticipantFieldsGeneralFragmentDoc}`;
 export const EquipmentFieldsForBikePageFragmentDoc = gql`
     fragment EquipmentFieldsForBikePage on Equipment {
   id
@@ -2793,7 +2844,7 @@ export const EngagementFieldsForBikePageFragmentDoc = gql`
     to
   }
   participant {
-    ...ParticipantFieldsForBikePage
+    ...ParticipantFieldsGeneral
   }
   isLocked
   isLockedByMe
@@ -2801,7 +2852,7 @@ export const EngagementFieldsForBikePageFragmentDoc = gql`
   lockedUntil
 }
     ${EngagementTypeFieldsFragmentDoc}
-${ParticipantFieldsForBikePageFragmentDoc}`;
+${ParticipantFieldsGeneralFragmentDoc}`;
 export const TimeFrameFieldsForBikePageFragmentDoc = gql`
     fragment TimeFrameFieldsForBikePage on TimeFrame {
   id
@@ -2843,6 +2894,33 @@ ${EquipmentFieldsForBikePageFragmentDoc}
 ${EquipmentTypeFieldsFragmentDoc}
 ${EngagementFieldsForBikePageFragmentDoc}
 ${TimeFrameFieldsForBikePageFragmentDoc}`;
+export const BikeEventFieldsForTableFragmentDoc = gql`
+    fragment BikeEventFieldsForTable on BikeEvent {
+  id
+  bikeEventType {
+    ...BikeEventTypeFields
+  }
+  cargoBike {
+    id
+    name
+  }
+  responsible {
+    ...ParticipantFieldsGeneral
+  }
+  related {
+    ...ParticipantFieldsGeneral
+  }
+  date
+  description
+  documents
+  remark
+  isLockedByMe
+  isLocked
+  lockedBy
+  lockedUntil
+}
+    ${BikeEventTypeFieldsFragmentDoc}
+${ParticipantFieldsGeneralFragmentDoc}`;
 export const ContactInformationFieldsFragmentDoc = gql`
     fragment ContactInformationFields on ContactInformation {
   ...ContactInformationFieldsGeneral
@@ -2973,6 +3051,72 @@ export const OrganisationFieldsForPageFragmentDoc = gql`
 }
     ${OrganisationFieldsForTableFragmentDoc}
 ${ProviderFieldsForPageFragmentDoc}`;
+export const ParticipantFieldsForTableFragmentDoc = gql`
+    fragment ParticipantFieldsForTable on Participant {
+  ...ParticipantFieldsGeneral
+  memberADFC
+  locationZIPs
+  memberCoreTeam
+  distributedActiveBikeParte
+  isLocked
+  isLockedByMe
+  lockedBy
+  lockedUntil
+}
+    ${ParticipantFieldsGeneralFragmentDoc}`;
+export const EngagementFieldsForParticipantFragmentDoc = gql`
+    fragment EngagementFieldsForParticipant on Engagement {
+  id
+  engagementType {
+    ...EngagementTypeFields
+  }
+  dateRange {
+    from
+    to
+  }
+  cargoBike {
+    id
+    name
+  }
+}
+    ${EngagementTypeFieldsFragmentDoc}`;
+export const WorkshopTypefieldsGeneralFragmentDoc = gql`
+    fragment WorkshopTypefieldsGeneral on WorkshopType {
+  id
+  name
+}
+    `;
+export const WorkshopFieldsGeneralFragmentDoc = gql`
+    fragment WorkshopFieldsGeneral on Workshop {
+  id
+  title
+  description
+  date
+  workshopType {
+    ...WorkshopTypefieldsGeneral
+  }
+  trainer1 {
+    ...ParticipantFieldsGeneral
+  }
+  trainer2 {
+    ...ParticipantFieldsGeneral
+  }
+}
+    ${WorkshopTypefieldsGeneralFragmentDoc}
+${ParticipantFieldsGeneralFragmentDoc}`;
+export const ParticipantFieldsForPageFragmentDoc = gql`
+    fragment ParticipantFieldsForPage on Participant {
+  ...ParticipantFieldsForTable
+  engagement {
+    ...EngagementFieldsForParticipant
+  }
+  workshops {
+    ...WorkshopFieldsGeneral
+  }
+}
+    ${ParticipantFieldsForTableFragmentDoc}
+${EngagementFieldsForParticipantFragmentDoc}
+${WorkshopFieldsGeneralFragmentDoc}`;
 export const PersonFieldsForTableFragmentDoc = gql`
     fragment PersonFieldsForTable on Person {
   id
@@ -3015,6 +3159,28 @@ export const TimeFrameFieldsFragmentDoc = gql`
   lockedUntil
 }
     `;
+export const WorkshopFieldsForTableFragmentDoc = gql`
+    fragment WorkshopFieldsForTable on Workshop {
+  ...WorkshopFieldsGeneral
+  participants {
+    ...ParticipantFieldsGeneral
+  }
+  isLocked
+  isLockedByMe
+  lockedBy
+  lockedUntil
+}
+    ${WorkshopFieldsGeneralFragmentDoc}
+${ParticipantFieldsGeneralFragmentDoc}`;
+export const WorkshopTypefieldsForTableFragmentDoc = gql`
+    fragment WorkshopTypefieldsForTable on WorkshopType {
+  ...WorkshopTypefieldsGeneral
+  isLocked
+  isLockedByMe
+  lockedBy
+  lockedUntil
+}
+    ${WorkshopTypefieldsGeneralFragmentDoc}`;
 export const GetCargoBikesDocument = gql`
     query GetCargoBikes {
   cargoBikes {
