@@ -1,4 +1,8 @@
-<div class="dateRange-wrapper" *ngIf="editable || label; else stringValue" [formGroup]="dateRangeGroup">
+<div
+  class="dateRange-wrapper"
+  *ngIf="editable || label; else stringValue"
+  [formGroup]="dateRangeGroup"
+>
   <mat-label *ngIf="label">{{ label }}</mat-label>
   <mat-form-field class="date-range-input">
     <input
@@ -10,6 +14,16 @@
       formControlName="from"
       (dateChange)="startDateChange($event)"
     />
+    <button
+      mat-button
+      *ngIf="editable && from"
+      matSuffix
+      mat-icon-button
+      aria-label="Clear"
+      (click)="startDateChange({ value: null })"
+    >
+      <mat-icon>close</mat-icon>
+    </button>
     <mat-datepicker-toggle matSuffix [for]="fromPicker"></mat-datepicker-toggle>
     <mat-datepicker #fromPicker [disabled]="!editable"></mat-datepicker>
   </mat-form-field>
@@ -24,7 +38,14 @@
       formControlName="to"
       (dateChange)="endDateChange($event)"
     />
-    <button mat-button *ngIf="editable && to" matSuffix mat-icon-button aria-label="Clear" (click)="endDateChange({value: null})">
+    <button
+      mat-button
+      *ngIf="editable && to"
+      matSuffix
+      mat-icon-button
+      aria-label="Clear"
+      (click)="endDateChange({ value: null })"
+    >
       <mat-icon>close</mat-icon>
     </button>
     <mat-datepicker-toggle matSuffix [for]="toPicker"></mat-datepicker-toggle>
