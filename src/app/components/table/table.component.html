@@ -116,7 +116,7 @@
         <th mat-header-cell *matHeaderCellDef mat-sort-header>
           {{ getTranslation(column.dataPath) }}
         </th>
-        <td mat-cell *matCellDef="let element">
+        <td mat-cell *matCellDef="let element" [ngClass]="{'highlighted-column': column.highlighted}" >
           <ng-container
             *ngIf="
               column.type !== 'DateRange' &&

@@ -47,6 +47,7 @@ export class TableComponent implements AfterViewInit {
     required?: boolean;
     type?: string;
     link?: (row: any) => string;
+    highlighted: boolean; // whether this column is a bit darker
   }[] = [];
 
   @Input()
@@ -188,17 +189,27 @@ export class TableComponent implements AfterViewInit {
   }
 
   addColumnPropertiesFromGQLSchemaToColumnInfo() {
+    let previousColumnDataPathPrefix = null;
+    let previousColumnIsHighlighted = false;
     for (const column of this.columnInfo) {
-      const typeInformation = this.schemaService.getTypeInformation(
+      const columnnDataPathPrefix = column.dataPath.split('.')[0];
+      if (columnnDataPathPrefix === previousColumnDataPathPrefix) {
+        column.highlighted = previousColumnIsHighlighted;
+      } else {
+        column.highlighted = !previousColumnIsHighlighted;
+        previousColumnIsHighlighted = !previousColumnIsHighlighted;
+        previousColumnDataPathPrefix = columnnDataPathPrefix;
+      }
+
+      let typeInformation = this.schemaService.getTypeInformation(
         this.tableDataGQLType,
         column.dataPath
       );
       column.type = column.type || typeInformation.type;
       column.required =
         column.required != null ? column.required : typeInformation.isRequired;
-    }
-    for (const column of this.columnInfo) {
-      const typeInformation = this.schemaService.getTypeInformation(
+
+      typeInformation = this.schemaService.getTypeInformation(
         this.tableDataGQLUpdateInputType,
         column.dataPath
       );
@@ -211,9 +222,7 @@ export class TableComponent implements AfterViewInit {
         column.requiredForUpdating != null
           ? column.requiredForUpdating
           : column.required || typeInformation.isRequired;
-    }
-    for (const column of this.columnInfo) {
-      const typeInformation = this.schemaService.getTypeInformation(
+      typeInformation = this.schemaService.getTypeInformation(
         this.tableDataGQLCreateInputType,
         column.dataPath
       );

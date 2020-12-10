@@ -19,15 +19,15 @@ export class BikesComponent implements OnInit {
     { dataPath: 'group', translation: 'Gruppe' },
     { dataPath: 'modelName', translation: 'Modell' },
     { dataPath: 'state', translation: 'Status' },
+    { dataPath: 'insuranceData.name', translation: 'Versicherer' },
+    { dataPath: 'insuranceData.benefactor', translation: 'Kostenträger' },
+    { dataPath: 'insuranceData.noPnP', translation: 'Nr. P&P' },
     {
       dataPath: 'insuranceData.billing',
       translation: 'Versicherung Abrechnung',
     },
     { dataPath: 'insuranceData.hasFixedRate', translation: 'Pauschale j/n' },
     { dataPath: 'insuranceData.fixedRate', translation: 'Pauschale Betrag' },
-    { dataPath: 'insuranceData.name', translation: 'Versicherer' },
-    { dataPath: 'insuranceData.benefactor', translation: 'Kostenträger' },
-    { dataPath: 'insuranceData.noPnP', translation: 'Nr. P&P' },
     {
       dataPath: 'insuranceData.maintenanceResponsible',
       translation: 'Wartung zuständig',
