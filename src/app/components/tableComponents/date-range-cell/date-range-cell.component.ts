@@ -47,7 +47,7 @@ export class DateRangeCellComponent implements OnInit {
     this.dateRangeGroup.controls['to'].markAsTouched();
 
     if (this.editable) {
-    setTimeout(()=>this.checkIfDateRangeIsValid());
+      setTimeout(() => this.checkIfDateRangeIsValid());
     }
   }
 
@@ -64,11 +64,11 @@ export class DateRangeCellComponent implements OnInit {
   }
 
   checkIfDateRangeIsValid() {
-    if (this.required && this.from == null) {
+    if (this.required && !this.from) {
       this.setRangeError(true);
       return;
     }
-    if (this.to == null || this.from == null) {
+    if (!this.to || !this.from) {
       this.setRangeError(false);
       return;
     }
@@ -96,5 +96,10 @@ export class DateRangeCellComponent implements OnInit {
       return '';
     }
     return new Date(date).toLocaleDateString();
+  }
+
+  stringToDate(dateString: string): Date {
+    if (!dateString) return null;
+    return new Date(dateString) || null;
   }
 }

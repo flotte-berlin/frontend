@@ -9,7 +9,7 @@
       matInput
       placeholder="Startdatum"
       [matDatepicker]="fromPicker"
-      [value]="from"
+      [value]="stringToDate(from)"
       disabled
       formControlName="from"
       (dateChange)="startDateChange($event)"
@@ -33,7 +33,7 @@
       matInput
       placeholder="Enddatum"
       [matDatepicker]="toPicker"
-      [value]="to"
+      [value]="stringToDate(to)"
       disabled
       formControlName="to"
       (dateChange)="endDateChange($event)"
