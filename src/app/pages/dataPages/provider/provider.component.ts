@@ -49,7 +49,7 @@ export class ProviderComponent implements OnInit {
       properties: [
         {
           type: 'Link',
-          linkText: "Zum Unternehmen",
+          linkText: "Zum Organisation",
           link: (data) => {
             return '/organisation/' + data['organisation.id'];
           },

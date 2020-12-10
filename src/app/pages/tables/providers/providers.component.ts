@@ -17,7 +17,7 @@ export class ProvidersComponent implements OnInit {
     },
     {
       dataPath: 'organisation.name',
-      translation: 'Anbieter (Unternehmen)',
+      translation: 'Anbieter (Organisation)',
       link: (row: any) => {
         return '/provider/' + row['id'];
       },

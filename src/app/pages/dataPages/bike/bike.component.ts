@@ -183,7 +183,7 @@ export class BikeComponent implements OnInit {
     },
     {
       type: 'Group',
-      title: 'Anbieter (Unternehmen)',
+      title: 'Anbieter (Organisation)',
       hideCondition: (data) => data['provider.organisation.id'] == null,
       properties: [
         {
