@@ -15,8 +15,6 @@ export class TimeFramesComponent implements OnInit {
     {
       dataPath: 'dateRange',
       translation: 'Zeitraum',
-      type: 'DateRange',
-      readonly: false,
     },
     {
       dataPath: 'cargoBike.name',
@@ -45,6 +43,10 @@ export class TimeFramesComponent implements OnInit {
         return timeFrame['lendingStation.id'];
       },
       propertyNameOfReferenceId: 'lendingStationId'
+    },
+    {
+      dataPath: 'note',
+      translation: 'Anmerkung',
     },
   ];
 
