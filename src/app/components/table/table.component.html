@@ -71,83 +71,14 @@
         *ngFor="let column of columnInfo"
         [matColumnDef]="column.dataPath + '.filter'"
         [sticky]="isStickyColumn(column.dataPath)"
-      >
-        <th mat-header-cell *matHeaderCellDef>
-          <mat-form-field
-            *ngIf="column.type === 'String' || column.type === 'Id'"
-          >
-            <input
-              matInput
-              [type]="text"
-              [(ngModel)]="filters.columnFilters[column.dataPath].value"
-              (ngModelChange)="newFilterValue()"
-            />
-            <button
-              matTooltip="exakte Übereinstimmung"
-              mat-button
-              [color]="
-                filters.columnFilters[column.dataPath].options['exact']
-                  ? 'primary'
-                  : ''
-              "
-              matSuffix
-              mat-icon-button
-              (click)="
-                filters.columnFilters[column.dataPath].options[
-                  'exact'
-                ] = !filters.columnFilters[column.dataPath].options['exact'];
-                newFilterValue()
-              "
-            >
-              <mat-icon>short_text</mat-icon>
-            </button>
-            <button
-              matTooltip="Groß- und Kleinschreibung beachten"
-              mat-button
-              [color]="
-                filters.columnFilters[column.dataPath].options['caseSensitive']
-                  ? 'primary'
-                  : ''
-              "
-              matSuffix
-              mat-icon-button
-              (click)="
-                filters.columnFilters[column.dataPath].options[
-                  'caseSensitive'
-                ] = !filters.columnFilters[column.dataPath].options[
-                  'caseSensitive'
-                ];
-                newFilterValue()
-              "
-            >
-              <mat-icon>text_fields</mat-icon>
-            </button>
-            <button
-              *ngIf="filters.columnFilters[column.dataPath].value"
-              matTooltip="Eingabe löschen"
-              mat-button
-              matSuffix
-              mat-icon-button
-              (click)="
-                filters.columnFilters[column.dataPath].value = '';
-                newFilterValue()
-              "
-            >
-              <mat-icon>cancel</mat-icon>
-            </button>
-          </mat-form-field>
-          <app-number-range-cell
-            *ngIf="column.type === 'Int' || column.type === 'Float' || column.type === 'Money'"
-            [editable]="true"
-            [(min)]="filters.columnFilters[column.dataPath].min"
-            (minChange)="newFilterValue()"
-            [(max)]="filters.columnFilters[column.dataPath].max"
-            (maxChange)="newFilterValue()"
-          >
-          </app-number-range-cell>
+        ><th mat-header-cell *matHeaderCellDef>
+          <app-filter-row
+            [column]="column"
+            [(filter)]="filters.columnFilters[column.dataPath]"
+            (filtersChange)="newFilterValue()"
+          ></app-filter-row>
         </th>
       </ng-container>
-
       <!-- Checkbox Column -->
       <ng-container matColumnDef="select" sticky>
         <th mat-header-cell *matHeaderCellDef>

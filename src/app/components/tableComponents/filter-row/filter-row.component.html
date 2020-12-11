@@ -1,0 +1,63 @@
+<mat-form-field *ngIf="column.type === 'String' || column.type === 'Id'">
+  <input
+    matInput
+    [type]="text"
+    [(ngModel)]="filter.value"
+    (ngModelChange)="newFilterValue()"
+  />
+  <button
+    matTooltip="exakte Übereinstimmung"
+    mat-button
+    [color]="
+      filter.options['exact'] ? 'primary' : ''
+    "
+    matSuffix
+    mat-icon-button
+    (click)="
+      filter.options['exact'] = !filter.options['exact'];
+      newFilterValue()
+    "
+  >
+    <mat-icon>short_text</mat-icon>
+  </button>
+  <button
+    matTooltip="Groß- und Kleinschreibung beachten"
+    mat-button
+    [color]="
+      filter.options['caseSensitive']
+        ? 'primary'
+        : ''
+    "
+    matSuffix
+    mat-icon-button
+    (click)="
+      filter.options['caseSensitive'] = !filter.options['caseSensitive'];
+      newFilterValue()
+    "
+  >
+    <mat-icon>text_fields</mat-icon>
+  </button>
+  <button
+    *ngIf="filter.value"
+    matTooltip="Eingabe löschen"
+    mat-button
+    matSuffix
+    mat-icon-button
+    (click)="
+      filter.value = ''; newFilterValue()
+    "
+  >
+    <mat-icon>cancel</mat-icon>
+  </button>
+</mat-form-field>
+<app-number-range-cell
+  *ngIf="
+    column.type === 'Int' || column.type === 'Float' || column.type === 'Money'
+  "
+  [editable]="true"
+  [(min)]="filter.min"
+  (minChange)="newFilterValue()"
+  [(max)]="filter.max"
+  (maxChange)="newFilterValue()"
+>
+</app-number-range-cell>

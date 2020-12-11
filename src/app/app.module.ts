@@ -86,6 +86,7 @@ import { EngagementsComponent } from './pages/tables/engagements/engagements.com
 import { BikeEventsComponent } from './pages/tables/bike-events/bike-events.component';
 import { BikeEventTypesComponent } from './pages/tables/bike-event-types/bike-event-types.component';
 import { WorkshopTypesComponent } from './pages/tables/workshop-types/workshop-types.component';
+import { FilterRowComponent } from './components/tableComponents/filter-row/filter-row.component';
 
 @NgModule({
   declarations: [
@@ -130,6 +131,7 @@ import { WorkshopTypesComponent } from './pages/tables/workshop-types/workshop-t
     BikeEventsComponent,
     BikeEventTypesComponent,
     WorkshopTypesComponent,
+    FilterRowComponent,
   ],
   imports: [
     BrowserModule,
