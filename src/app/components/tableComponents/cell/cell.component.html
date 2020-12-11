@@ -67,11 +67,11 @@
     <mat-chip-list #chipList>
       <mat-chip
         *ngFor="let element of value"
-        [removable]="true"
+        [removable]="editable"
         (removed)="removeElementFromList(element)"
       >
         {{ element }}
-        <mat-icon matChipRemove>cancel</mat-icon>
+        <mat-icon matChipRemove *ngIf="editable">cancel</mat-icon>
       </mat-chip>
       <input
         placeholder="hinzufügen..."
@@ -79,6 +79,7 @@
         [matChipInputSeparatorKeyCodes]="separatorKeysCodes"
         [matChipInputAddOnBlur]="true"
         (matChipInputTokenEnd)="addElementToList($event)"
+        *ngIf="editable"
       />
     </mat-chip-list>
   </mat-form-field>
