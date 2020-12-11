@@ -1,0 +1,45 @@
+query GetWorkshops {
+  workshops {
+    ...WorkshopFieldsForTable   
+  }
+}
+
+query GetWorkshopById($id: ID!) {
+  workshopById(id: $id) {
+    ...WorkshopFieldsForPage
+  }
+}
+
+query ReloadWorkshopById($id: ID!) {
+  workshopById(id: $id) {
+    ...WorkshopFieldsForTable
+  }
+}
+
+mutation CreateWorkshop($workshop: WorkshopCreateInput!) {
+  createWorkshop(workshop: $workshop) {
+    ...WorkshopFieldsForTable
+  }
+}
+
+mutation UpdateWorkshop($workshop: WorkshopUpdateInput!) {
+  updateWorkshop(workshop: $workshop) {
+    ...WorkshopFieldsForPage
+  }
+}
+
+mutation LockWorkshop($id: ID!) {
+  lockWorkshop(id: $id) {
+    ...WorkshopFieldsForPage
+  }
+}
+
+mutation UnlockWorkshop($id: ID!) {
+  unlockWorkshop(id: $id) {
+    ...WorkshopFieldsForPage
+  }
+}
+
+mutation DeleteWorkshop($id: ID!) {
+  deleteWorkshop(id: $id)
+}

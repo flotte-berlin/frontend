@@ -19,7 +19,7 @@ export class OrganisationComponent implements OnInit {
         { dataPath: 'address.zip', translation: 'Postleitzahl' },
 
         { dataPath: 'associationNo', translation: 'Vereinsnummer' },
-        { dataPath: 'registeredAt', translation: 'Eingetragen seit' },
+        { dataPath: 'registeredAt', translation: 'Registergericht' },
       ],
     },
     {

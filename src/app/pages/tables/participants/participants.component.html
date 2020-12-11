@@ -1,1 +1,14 @@
-<p>participants works!</p>
+<app-table
+  [headline]="headline"
+  [headlineIconName]="headlineIconName"
+  [columnInfo]="columnInfo"
+  [dataService]="dataService"
+  [tableDataGQLType]="tableDataGQLType"
+  [tableDataGQLCreateInputType]="tableDataGQLCreateInputType"
+  [tableDataGQLUpdateInputType]="tableDataGQLUpdateInputType"
+  (createEvent)="create($event)"
+  (lockEvent)="lock($event)"
+  (saveEvent)="save($event)"
+  (cancelEvent)="cancel($event)"
+  (deleteEvent)="delete($event)"
+></app-table>

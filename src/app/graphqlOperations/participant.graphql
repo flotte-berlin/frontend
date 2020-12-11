@@ -1,0 +1,45 @@
+query GetParticipants {
+  participants {
+    ...ParticipantFieldsForTable   
+  }
+}
+
+query GetParticipantById($id: ID!) {
+  participantById(id: $id) {
+    ...ParticipantFieldsForPage
+  }
+}
+
+query ReloadParticipantById($id: ID!) {
+  participantById(id: $id) {
+    ...ParticipantFieldsForTable
+  }
+}
+
+mutation CreateParticipant($participant: ParticipantCreateInput!) {
+  createParticipant(participant: $participant) {
+    ...ParticipantFieldsForTable
+  }
+}
+
+mutation UpdateParticipant($participant: ParticipantUpdateInput!) {
+  updateParticipant(participant: $participant) {
+    ...ParticipantFieldsForPage
+  }
+}
+
+mutation LockParticipant($id: ID!) {
+  lockParticipant(id: $id) {
+    ...ParticipantFieldsForPage
+  }
+}
+
+mutation UnlockParticipant($id: ID!) {
+  unlockParticipant(id: $id) {
+    ...ParticipantFieldsForPage
+  }
+}
+
+mutation DeleteParticipant($id: ID!) {
+  deleteParticipant(id: $id)
+}

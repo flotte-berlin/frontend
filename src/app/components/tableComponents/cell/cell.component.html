@@ -10,6 +10,37 @@
   >
 </div>
 
+<div *ngIf="htmlInputType === 'date'" [formGroup]="dateGroup">
+  <mat-form-field *ngIf="editable || label; else nonEditableText">
+    <mat-label *ngIf="label">{{ label }}</mat-label>
+
+    <input
+      matInput
+      [matDatepicker]="picker"
+      required
+      disabled
+      (dateChange)="dateChange($event)"
+      [value]="stringToDate(value)"
+      formControlName="dateControl"
+    />
+    <button
+      mat-button
+      *ngIf="editable && value"
+      matSuffix
+      mat-icon-button
+      aria-label="Clear"
+      (click)="dateChange({ value: null })"
+    >
+      <mat-icon>close</mat-icon>
+    </button>
+    <mat-datepicker-toggle matSuffix [for]="picker"></mat-datepicker-toggle>
+    <mat-datepicker #picker [disabled]="!editable"></mat-datepicker>
+  </mat-form-field>
+  <ng-template #nonEditableText>
+    {{ toLocaleDate(stringToDate(value)) }}
+  </ng-template>
+</div>
+
 <div #enumInputType *ngIf="htmlInputType === 'enum'">
   <mat-form-field *ngIf="editable || label; else nonEditableText">
     <mat-label *ngIf="label">{{ label }}</mat-label>
@@ -27,6 +58,62 @@
   </mat-form-field>
   <ng-template #nonEditableText>
     {{ value }}
+  </ng-template>
+</div>
+
+<div #enumInputType *ngIf="htmlInputType === 'stringList'">
+  <mat-form-field *ngIf="editable || label; else nonEditableText">
+    <mat-label *ngIf="label">{{ label }}</mat-label>
+    <mat-chip-list #chipList>
+      <mat-chip
+        *ngFor="let element of value"
+        [removable]="true"
+        (removed)="removeElementFromList(element)"
+      >
+        {{ element }}
+        <mat-icon matChipRemove>cancel</mat-icon>
+      </mat-chip>
+      <input
+        placeholder="hinzufügen..."
+        [matChipInputFor]="chipList"
+        [matChipInputSeparatorKeyCodes]="separatorKeysCodes"
+        [matChipInputAddOnBlur]="true"
+        (matChipInputTokenEnd)="addElementToList($event)"
+      />
+    </mat-chip-list>
+  </mat-form-field>
+  <ng-template #nonEditableText>
+    {{ value.join(", ") }}
+  </ng-template>
+</div>
+
+<div #enumInputType *ngIf="htmlInputType === 'linkList'">
+  <mat-form-field *ngIf="editable || label; else nonEditableText">
+    <mat-label *ngIf="label">{{ label }}</mat-label>
+    <mat-chip-list #chipList>
+      <mat-chip
+        *ngFor="let element of value"
+        [removable]="true"
+        (removed)="removeElementFromList(element)"
+      >
+        {{ element }}
+        <mat-icon matChipRemove>cancel</mat-icon>
+      </mat-chip>
+      <input
+        placeholder="hinzufügen..."
+        [matChipInputFor]="chipList"
+        [matChipInputSeparatorKeyCodes]="separatorKeysCodes"
+        [matChipInputAddOnBlur]="true"
+        (matChipInputTokenEnd)="addElementToList($event)"
+      />
+    </mat-chip-list>
+  </mat-form-field>
+  <ng-template #nonEditableText>
+    <ng-container *ngFor="let link of value">
+      <a mat-button color="primary" [href]="link">{{
+        link
+      }}</a>
+    </ng-container>
   </ng-template>
 </div>
 

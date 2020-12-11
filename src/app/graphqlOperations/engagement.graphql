@@ -1,0 +1,33 @@
+query GetEngagements {
+  engagements {
+    ...EngagementFields
+  }
+}
+
+mutation CreateEngagement($engagement: EngagementCreateInput!) {
+  createEngagement(engagement: $engagement) {
+    ...EngagementFields
+  }
+}
+
+mutation UpdateEngagement($engagement: EngagementUpdateInput!) {
+  updateEngagement(engagement: $engagement) {
+    ...EngagementFields
+  }
+}
+
+mutation LockEngagement($id: ID!) {
+  lockEngagement(id: $id) {
+    ...EngagementFields
+  }
+}
+
+mutation UnlockEngagement($id: ID!) {
+  unlockEngagement(id: $id) {
+    ...EngagementFields
+  }
+}
+
+mutation DeleteEngagement($id: ID!) {
+  deleteEngagement(id: $id)
+}

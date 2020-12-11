@@ -1,0 +1,45 @@
+query GetBikeEvents {
+  bikeEvents {
+    ...BikeEventFieldsForTable   
+  }
+}
+
+query GetBikeEventById($id: ID!) {
+  bikeEventById(id: $id) {
+    ...BikeEventFieldsForPage
+  }
+}
+
+query ReloadBikeEventById($id: ID!) {
+  bikeEventById(id: $id) {
+    ...BikeEventFieldsForTable
+  }
+}
+
+mutation CreateBikeEvent($bikeEvent: BikeEventCreateInput!) {
+  createBikeEvent(bikeEvent: $bikeEvent) {
+    ...BikeEventFieldsForTable
+  }
+}
+
+mutation UpdateBikeEvent($bikeEvent: BikeEventUpdateInput!) {
+  updateBikeEvent(bikeEvent: $bikeEvent) {
+    ...BikeEventFieldsForPage
+  }
+}
+
+mutation LockBikeEvent($id: ID!) {
+  lockBikeEvent(id: $id) {
+    ...BikeEventFieldsForPage
+  }
+}
+
+mutation UnlockBikeEvent($id: ID!) {
+  unlockBikeEvent(id: $id) {
+    ...BikeEventFieldsForPage
+  }
+}
+
+mutation DeleteBikeEvent($id: ID!) {
+  deleteBikeEvent(id: $id)
+}

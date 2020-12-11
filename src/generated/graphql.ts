@@ -24,9 +24,11 @@ export type Scalars = {
    * The kind of currency depends on the database.
    */
   Money: any;
+  Link: any;
   /** The `Upload` scalar type represents a file upload. */
   Upload: any;
 };
+
 
 
 
@@ -418,6 +420,7 @@ export type Participant = {
    * This value is calculated form other values.
    * It is true, if the person is not on the black list and not retired
    * and is either Mentor dt. Pate or Partner Mentor dt. Partnerpate for at least one bike.
+   * Note: this will always be false for the moment.
    */
   distributedActiveBikeParte: Scalars['Boolean'];
   engagement?: Maybe<Array<Maybe<Engagement>>>;
@@ -667,7 +670,7 @@ export type BikeEvent = {
   date: Scalars['Date'];
   description?: Maybe<Scalars['String']>;
   /** Path to documents */
-  documents: Array<Scalars['String']>;
+  documents: Array<Scalars['Link']>;
   remark?: Maybe<Scalars['String']>;
   isLocked: Scalars['Boolean'];
   isLockedByMe: Scalars['Boolean'];
@@ -684,7 +687,7 @@ export type BikeEventCreateInput = {
   date: Scalars['Date'];
   description?: Maybe<Scalars['String']>;
   /** Path to documents */
-  documents?: Maybe<Array<Maybe<Scalars['String']>>>;
+  documents?: Maybe<Array<Maybe<Scalars['Link']>>>;
   remark?: Maybe<Scalars['String']>;
 };
 
@@ -697,7 +700,7 @@ export type BikeEventUpdateInput = {
   date?: Maybe<Scalars['Date']>;
   description?: Maybe<Scalars['String']>;
   /** Path to documents */
-  documents?: Maybe<Array<Maybe<Scalars['String']>>>;
+  documents?: Maybe<Array<Maybe<Scalars['Link']>>>;
   remark?: Maybe<Scalars['String']>;
   keepLock?: Maybe<Scalars['Boolean']>;
 };
@@ -1011,6 +1014,8 @@ export type Query = {
   __typename?: 'Query';
   /** Will (eventually) return all properties of cargo bike */
   cargoBikeById?: Maybe<CargoBike>;
+  /** copies cargoBike, the id of the copy needs to be delted by the front end. This function will not create a new entry in the data base */
+  copyCargoBikeById?: Maybe<CargoBike>;
   /** Returns cargoBikes ordered by name ascending. If offset or limit is not provided, both values are ignored. */
   cargoBikes: Array<CargoBike>;
   engagementById?: Maybe<Engagement>;
@@ -1057,7 +1062,7 @@ export type Query = {
   persons?: Maybe<Array<Person>>;
   /** If offset or limit is not provided, both values are ignored */
   bikeEventTypes?: Maybe<Array<BikeEventType>>;
-  bikeEventTypeByd?: Maybe<BikeEventType>;
+  bikeEventTypeById?: Maybe<BikeEventType>;
   /** If offset or limit is not provided, both values are ignored */
   bikeEvents: Array<BikeEvent>;
   bikeEventById?: Maybe<BikeEvent>;
@@ -1071,6 +1076,11 @@ export type Query = {
 
 
 export type QueryCargoBikeByIdArgs = {
+  id: Scalars['ID'];
+};
+
+
+export type QueryCopyCargoBikeByIdArgs = {
   id: Scalars['ID'];
 };
 
@@ -1230,7 +1240,7 @@ export type QueryBikeEventTypesArgs = {
 };
 
 
-export type QueryBikeEventTypeBydArgs = {
+export type QueryBikeEventTypeByIdArgs = {
   id: Scalars['ID'];
 };
 
@@ -1265,6 +1275,8 @@ export type Mutation = {
   updateCargoBike: CargoBike;
   /** true on success */
   deleteCargoBike: Scalars['Boolean'];
+  /** edit or add key value pair to copy config for cargo bikes */
+  editCopyConfig: Scalars['Boolean'];
   /**
    * EQUIPMENT
    * creates new peace of unique Equipment
@@ -1382,6 +1394,12 @@ export type MutationUpdateCargoBikeArgs = {
 
 export type MutationDeleteCargoBikeArgs = {
   id: Scalars['ID'];
+};
+
+
+export type MutationEditCopyConfigArgs = {
+  key: Scalars['String'];
+  value: Scalars['Boolean'];
 };
 
 
@@ -1840,6 +1858,136 @@ export type DeleteCargoBikeMutationVariables = Exact<{
 
 export type DeleteCargoBikeMutation = { __typename?: 'Mutation', deleteCargoBike: boolean };
 
+export type GetBikeEventsQueryVariables = Exact<{ [key: string]: never; }>;
+
+
+export type GetBikeEventsQuery = { __typename?: 'Query', bikeEvents: Array<(
+    { __typename?: 'BikeEvent' }
+    & BikeEventFieldsForTableFragment
+  )> };
+
+export type GetBikeEventByIdQueryVariables = Exact<{
+  id: Scalars['ID'];
+}>;
+
+
+export type GetBikeEventByIdQuery = { __typename?: 'Query', bikeEventById?: Maybe<(
+    { __typename?: 'BikeEvent' }
+    & BikeEventFieldsForPageFragment
+  )> };
+
+export type ReloadBikeEventByIdQueryVariables = Exact<{
+  id: Scalars['ID'];
+}>;
+
+
+export type ReloadBikeEventByIdQuery = { __typename?: 'Query', bikeEventById?: Maybe<(
+    { __typename?: 'BikeEvent' }
+    & BikeEventFieldsForTableFragment
+  )> };
+
+export type CreateBikeEventMutationVariables = Exact<{
+  bikeEvent: BikeEventCreateInput;
+}>;
+
+
+export type CreateBikeEventMutation = { __typename?: 'Mutation', createBikeEvent: (
+    { __typename?: 'BikeEvent' }
+    & BikeEventFieldsForTableFragment
+  ) };
+
+export type UpdateBikeEventMutationVariables = Exact<{
+  bikeEvent: BikeEventUpdateInput;
+}>;
+
+
+export type UpdateBikeEventMutation = { __typename?: 'Mutation', updateBikeEvent?: Maybe<(
+    { __typename?: 'BikeEvent' }
+    & BikeEventFieldsForPageFragment
+  )> };
+
+export type LockBikeEventMutationVariables = Exact<{
+  id: Scalars['ID'];
+}>;
+
+
+export type LockBikeEventMutation = { __typename?: 'Mutation', lockBikeEvent: (
+    { __typename?: 'BikeEvent' }
+    & BikeEventFieldsForPageFragment
+  ) };
+
+export type UnlockBikeEventMutationVariables = Exact<{
+  id: Scalars['ID'];
+}>;
+
+
+export type UnlockBikeEventMutation = { __typename?: 'Mutation', unlockBikeEvent: (
+    { __typename?: 'BikeEvent' }
+    & BikeEventFieldsForPageFragment
+  ) };
+
+export type DeleteBikeEventMutationVariables = Exact<{
+  id: Scalars['ID'];
+}>;
+
+
+export type DeleteBikeEventMutation = { __typename?: 'Mutation', deleteBikeEvent: boolean };
+
+export type GetBikeEventTypesQueryVariables = Exact<{ [key: string]: never; }>;
+
+
+export type GetBikeEventTypesQuery = { __typename?: 'Query', bikeEventTypes?: Maybe<Array<(
+    { __typename?: 'BikeEventType' }
+    & BikeEventTypeFieldsFragment
+  )>> };
+
+export type CreateBikeEventTypeMutationVariables = Exact<{
+  bikeEventType: Scalars['String'];
+}>;
+
+
+export type CreateBikeEventTypeMutation = { __typename?: 'Mutation', createBikeEventType: (
+    { __typename?: 'BikeEventType' }
+    & BikeEventTypeFieldsFragment
+  ) };
+
+export type UpdateBikeEventTypeMutationVariables = Exact<{
+  bikeEventType: BikeEventTypeUpdateInput;
+}>;
+
+
+export type UpdateBikeEventTypeMutation = { __typename?: 'Mutation', updateBikeEventType: (
+    { __typename?: 'BikeEventType' }
+    & BikeEventTypeFieldsFragment
+  ) };
+
+export type LockBikeEventTypeMutationVariables = Exact<{
+  id: Scalars['ID'];
+}>;
+
+
+export type LockBikeEventTypeMutation = { __typename?: 'Mutation', lockBikeEventType: (
+    { __typename?: 'BikeEventType' }
+    & BikeEventTypeFieldsFragment
+  ) };
+
+export type UnlockBikeEventTypeMutationVariables = Exact<{
+  id: Scalars['ID'];
+}>;
+
+
+export type UnlockBikeEventTypeMutation = { __typename?: 'Mutation', unlockBikeEventType: (
+    { __typename?: 'BikeEventType' }
+    & BikeEventTypeFieldsFragment
+  ) };
+
+export type DeleteBikeEventTypeMutationVariables = Exact<{
+  id: Scalars['ID'];
+}>;
+
+
+export type DeleteBikeEventTypeMutation = { __typename?: 'Mutation', deleteBikeEventType: boolean };
+
 export type GetContactInformationQueryVariables = Exact<{ [key: string]: never; }>;
 
 
@@ -1894,6 +2042,116 @@ export type DeleteContactInformationMutationVariables = Exact<{
 
 
 export type DeleteContactInformationMutation = { __typename?: 'Mutation', deleteContactInformation: boolean };
+
+export type GetEngagementsQueryVariables = Exact<{ [key: string]: never; }>;
+
+
+export type GetEngagementsQuery = { __typename?: 'Query', engagements: Array<(
+    { __typename?: 'Engagement' }
+    & EngagementFieldsFragment
+  )> };
+
+export type CreateEngagementMutationVariables = Exact<{
+  engagement: EngagementCreateInput;
+}>;
+
+
+export type CreateEngagementMutation = { __typename?: 'Mutation', createEngagement: (
+    { __typename?: 'Engagement' }
+    & EngagementFieldsFragment
+  ) };
+
+export type UpdateEngagementMutationVariables = Exact<{
+  engagement: EngagementUpdateInput;
+}>;
+
+
+export type UpdateEngagementMutation = { __typename?: 'Mutation', updateEngagement: (
+    { __typename?: 'Engagement' }
+    & EngagementFieldsFragment
+  ) };
+
+export type LockEngagementMutationVariables = Exact<{
+  id: Scalars['ID'];
+}>;
+
+
+export type LockEngagementMutation = { __typename?: 'Mutation', lockEngagement: (
+    { __typename?: 'Engagement' }
+    & EngagementFieldsFragment
+  ) };
+
+export type UnlockEngagementMutationVariables = Exact<{
+  id: Scalars['ID'];
+}>;
+
+
+export type UnlockEngagementMutation = { __typename?: 'Mutation', unlockEngagement: (
+    { __typename?: 'Engagement' }
+    & EngagementFieldsFragment
+  ) };
+
+export type DeleteEngagementMutationVariables = Exact<{
+  id: Scalars['ID'];
+}>;
+
+
+export type DeleteEngagementMutation = { __typename?: 'Mutation', deleteEngagement: boolean };
+
+export type GetEngagementTypesQueryVariables = Exact<{ [key: string]: never; }>;
+
+
+export type GetEngagementTypesQuery = { __typename?: 'Query', engagementTypes: Array<(
+    { __typename?: 'EngagementType' }
+    & EngagementTypeFieldsFragment
+  )> };
+
+export type CreateEngagementTypeMutationVariables = Exact<{
+  engagementType: EngagementTypeCreateInput;
+}>;
+
+
+export type CreateEngagementTypeMutation = { __typename?: 'Mutation', createEngagementType: (
+    { __typename?: 'EngagementType' }
+    & EngagementTypeFieldsFragment
+  ) };
+
+export type UpdateEngagementTypeMutationVariables = Exact<{
+  engagementType: EngagementTypeUpdateInput;
+}>;
+
+
+export type UpdateEngagementTypeMutation = { __typename?: 'Mutation', updateEngagementType: (
+    { __typename?: 'EngagementType' }
+    & EngagementTypeFieldsFragment
+  ) };
+
+export type LockEngagementTypeMutationVariables = Exact<{
+  id: Scalars['ID'];
+}>;
+
+
+export type LockEngagementTypeMutation = { __typename?: 'Mutation', lockEngagementType: (
+    { __typename?: 'EngagementType' }
+    & EngagementTypeFieldsFragment
+  ) };
+
+export type UnlockEngagementTypeMutationVariables = Exact<{
+  id: Scalars['ID'];
+}>;
+
+
+export type UnlockEngagementTypeMutation = { __typename?: 'Mutation', unlockEngagementType: (
+    { __typename?: 'EngagementType' }
+    & EngagementTypeFieldsFragment
+  ) };
+
+export type DeleteEngagementTypeMutationVariables = Exact<{
+  id: Scalars['ID'];
+}>;
+
+
+export type DeleteEngagementTypeMutation = { __typename?: 'Mutation', deleteEngagementType: boolean };
 
 export type GetEquipmentsQueryVariables = Exact<{ [key: string]: never; }>;
 
@@ -2046,7 +2304,7 @@ export type BikeEventFieldsForBikePageFragment = { __typename?: 'BikeEvent', id:
     & ParticipantFieldsGeneralFragment
   )> };
 
-export type BikeEventFieldsForTableFragment = { __typename?: 'BikeEvent', id: string, date: any, description?: Maybe<string>, documents: Array<string>, remark?: Maybe<string>, isLockedByMe: boolean, isLocked: boolean, lockedBy?: Maybe<string>, lockedUntil?: Maybe<any>, bikeEventType: (
+export type BikeEventFieldsForTableFragment = { __typename?: 'BikeEvent', id: string, date: any, description?: Maybe<string>, documents: Array<any>, remark?: Maybe<string>, isLockedByMe: boolean, isLocked: boolean, lockedBy?: Maybe<string>, lockedUntil?: Maybe<any>, bikeEventType: (
     { __typename?: 'BikeEventType' }
     & BikeEventTypeFieldsFragment
   ), cargoBike: { __typename?: 'CargoBike', id: string, name: string }, responsible?: Maybe<(
@@ -2056,6 +2314,11 @@ export type BikeEventFieldsForTableFragment = { __typename?: 'BikeEvent', id: st
     { __typename?: 'Participant' }
     & ParticipantFieldsGeneralFragment
   )> };
+
+export type BikeEventFieldsForPageFragment = (
+  { __typename?: 'BikeEvent' }
+  & BikeEventFieldsForTableFragment
+);
 
 export type BikeEventTypeFieldsFragment = { __typename?: 'BikeEventType', id: string, name: string, isLocked: boolean, isLockedByMe: boolean, lockedBy?: Maybe<string>, lockedUntil?: Maybe<any> };
 
@@ -2081,6 +2344,14 @@ export type EngagementFieldsForParticipantFragment = { __typename?: 'Engagement'
     { __typename?: 'EngagementType' }
     & EngagementTypeFieldsFragment
   ), dateRange: { __typename?: 'DateRange', from: any, to?: Maybe<any> }, cargoBike: { __typename?: 'CargoBike', id: string, name: string } };
+
+export type EngagementFieldsFragment = { __typename?: 'Engagement', id: string, isLocked: boolean, isLockedByMe: boolean, lockedBy?: Maybe<string>, lockedUntil?: Maybe<any>, engagementType: (
+    { __typename?: 'EngagementType' }
+    & EngagementTypeFieldsFragment
+  ), dateRange: { __typename?: 'DateRange', from: any, to?: Maybe<any> }, participant: (
+    { __typename?: 'Participant' }
+    & ParticipantFieldsGeneralFragment
+  ), cargoBike: { __typename?: 'CargoBike', id: string, name: string } };
 
 export type EngagementTypeFieldsFragment = { __typename?: 'EngagementType', id: string, name: string, description: string, isLocked: boolean, isLockedByMe: boolean, lockedBy?: Maybe<string>, lockedUntil?: Maybe<any> };
 
@@ -2220,9 +2491,14 @@ export type WorkshopFieldsForTableFragment = (
   & WorkshopFieldsGeneralFragment
 );
 
+export type WorkshopFieldsForPageFragment = (
+  { __typename?: 'Workshop' }
+  & WorkshopFieldsForTableFragment
+);
+
 export type WorkshopTypefieldsGeneralFragment = { __typename?: 'WorkshopType', id: string, name: string };
 
-export type WorkshopTypefieldsForTableFragment = (
+export type WorkshopTypeFieldsFragment = (
   { __typename?: 'WorkshopType', isLocked: boolean, isLockedByMe: boolean, lockedBy?: Maybe<string>, lockedUntil?: Maybe<any> }
   & WorkshopTypefieldsGeneralFragment
 );
@@ -2376,6 +2652,81 @@ export type DeleteOrganisationMutationVariables = Exact<{
 
 
 export type DeleteOrganisationMutation = { __typename?: 'Mutation', deleteOrganisation: boolean };
+
+export type GetParticipantsQueryVariables = Exact<{ [key: string]: never; }>;
+
+
+export type GetParticipantsQuery = { __typename?: 'Query', participants: Array<(
+    { __typename?: 'Participant' }
+    & ParticipantFieldsForTableFragment
+  )> };
+
+export type GetParticipantByIdQueryVariables = Exact<{
+  id: Scalars['ID'];
+}>;
+
+
+export type GetParticipantByIdQuery = { __typename?: 'Query', participantById?: Maybe<(
+    { __typename?: 'Participant' }
+    & ParticipantFieldsForPageFragment
+  )> };
+
+export type ReloadParticipantByIdQueryVariables = Exact<{
+  id: Scalars['ID'];
+}>;
+
+
+export type ReloadParticipantByIdQuery = { __typename?: 'Query', participantById?: Maybe<(
+    { __typename?: 'Participant' }
+    & ParticipantFieldsForTableFragment
+  )> };
+
+export type CreateParticipantMutationVariables = Exact<{
+  participant: ParticipantCreateInput;
+}>;
+
+
+export type CreateParticipantMutation = { __typename?: 'Mutation', createParticipant: (
+    { __typename?: 'Participant' }
+    & ParticipantFieldsForTableFragment
+  ) };
+
+export type UpdateParticipantMutationVariables = Exact<{
+  participant: ParticipantUpdateInput;
+}>;
+
+
+export type UpdateParticipantMutation = { __typename?: 'Mutation', updateParticipant: (
+    { __typename?: 'Participant' }
+    & ParticipantFieldsForPageFragment
+  ) };
+
+export type LockParticipantMutationVariables = Exact<{
+  id: Scalars['ID'];
+}>;
+
+
+export type LockParticipantMutation = { __typename?: 'Mutation', lockParticipant: (
+    { __typename?: 'Participant' }
+    & ParticipantFieldsForPageFragment
+  ) };
+
+export type UnlockParticipantMutationVariables = Exact<{
+  id: Scalars['ID'];
+}>;
+
+
+export type UnlockParticipantMutation = { __typename?: 'Mutation', unlockParticipant?: Maybe<(
+    { __typename?: 'Participant' }
+    & ParticipantFieldsForPageFragment
+  )> };
+
+export type DeleteParticipantMutationVariables = Exact<{
+  id: Scalars['ID'];
+}>;
+
+
+export type DeleteParticipantMutation = { __typename?: 'Mutation', deleteParticipant: boolean };
 
 export type GetPersonsQueryVariables = Exact<{ [key: string]: never; }>;
 
@@ -2581,6 +2932,136 @@ export type DeleteTimeFrameMutationVariables = Exact<{
 
 
 export type DeleteTimeFrameMutation = { __typename?: 'Mutation', deleteTimeFrame: boolean };
+
+export type GetWorkshopsQueryVariables = Exact<{ [key: string]: never; }>;
+
+
+export type GetWorkshopsQuery = { __typename?: 'Query', workshops: Array<(
+    { __typename?: 'Workshop' }
+    & WorkshopFieldsForTableFragment
+  )> };
+
+export type GetWorkshopByIdQueryVariables = Exact<{
+  id: Scalars['ID'];
+}>;
+
+
+export type GetWorkshopByIdQuery = { __typename?: 'Query', workshopById?: Maybe<(
+    { __typename?: 'Workshop' }
+    & WorkshopFieldsForPageFragment
+  )> };
+
+export type ReloadWorkshopByIdQueryVariables = Exact<{
+  id: Scalars['ID'];
+}>;
+
+
+export type ReloadWorkshopByIdQuery = { __typename?: 'Query', workshopById?: Maybe<(
+    { __typename?: 'Workshop' }
+    & WorkshopFieldsForTableFragment
+  )> };
+
+export type CreateWorkshopMutationVariables = Exact<{
+  workshop: WorkshopCreateInput;
+}>;
+
+
+export type CreateWorkshopMutation = { __typename?: 'Mutation', createWorkshop: (
+    { __typename?: 'Workshop' }
+    & WorkshopFieldsForTableFragment
+  ) };
+
+export type UpdateWorkshopMutationVariables = Exact<{
+  workshop: WorkshopUpdateInput;
+}>;
+
+
+export type UpdateWorkshopMutation = { __typename?: 'Mutation', updateWorkshop: (
+    { __typename?: 'Workshop' }
+    & WorkshopFieldsForPageFragment
+  ) };
+
+export type LockWorkshopMutationVariables = Exact<{
+  id: Scalars['ID'];
+}>;
+
+
+export type LockWorkshopMutation = { __typename?: 'Mutation', lockWorkshop: (
+    { __typename?: 'Workshop' }
+    & WorkshopFieldsForPageFragment
+  ) };
+
+export type UnlockWorkshopMutationVariables = Exact<{
+  id: Scalars['ID'];
+}>;
+
+
+export type UnlockWorkshopMutation = { __typename?: 'Mutation', unlockWorkshop: (
+    { __typename?: 'Workshop' }
+    & WorkshopFieldsForPageFragment
+  ) };
+
+export type DeleteWorkshopMutationVariables = Exact<{
+  id: Scalars['ID'];
+}>;
+
+
+export type DeleteWorkshopMutation = { __typename?: 'Mutation', deleteWorkshop: boolean };
+
+export type GetWorkshopTypesQueryVariables = Exact<{ [key: string]: never; }>;
+
+
+export type GetWorkshopTypesQuery = { __typename?: 'Query', workshopTypes: Array<(
+    { __typename?: 'WorkshopType' }
+    & WorkshopTypeFieldsFragment
+  )> };
+
+export type CreateWorkshopTypeMutationVariables = Exact<{
+  workshopType: WorkshopTypeCreateInput;
+}>;
+
+
+export type CreateWorkshopTypeMutation = { __typename?: 'Mutation', createWorkshopType: (
+    { __typename?: 'WorkshopType' }
+    & WorkshopTypeFieldsFragment
+  ) };
+
+export type UpdateWorkshopTypeMutationVariables = Exact<{
+  workshopType: WorkshopTypeUpdateInput;
+}>;
+
+
+export type UpdateWorkshopTypeMutation = { __typename?: 'Mutation', updateWorkshopType: (
+    { __typename?: 'WorkshopType' }
+    & WorkshopTypeFieldsFragment
+  ) };
+
+export type LockWorkshopTypeMutationVariables = Exact<{
+  id: Scalars['ID'];
+}>;
+
+
+export type LockWorkshopTypeMutation = { __typename?: 'Mutation', lockWorkshopType: (
+    { __typename?: 'WorkshopType' }
+    & WorkshopTypeFieldsFragment
+  ) };
+
+export type UnlockWorkshopTypeMutationVariables = Exact<{
+  id: Scalars['ID'];
+}>;
+
+
+export type UnlockWorkshopTypeMutation = { __typename?: 'Mutation', unlockWorkshopType: (
+    { __typename?: 'WorkshopType' }
+    & WorkshopTypeFieldsFragment
+  ) };
+
+export type DeleteWorkshopTypeMutationVariables = Exact<{
+  id: Scalars['ID'];
+}>;
+
+
+export type DeleteWorkshopTypeMutation = { __typename?: 'Mutation', deleteWorkshopType: boolean };
 
 export const PersonFieldsGeneralFragmentDoc = gql`
     fragment PersonFieldsGeneral on Person {
@@ -2921,6 +3402,11 @@ export const BikeEventFieldsForTableFragmentDoc = gql`
 }
     ${BikeEventTypeFieldsFragmentDoc}
 ${ParticipantFieldsGeneralFragmentDoc}`;
+export const BikeEventFieldsForPageFragmentDoc = gql`
+    fragment BikeEventFieldsForPage on BikeEvent {
+  ...BikeEventFieldsForTable
+}
+    ${BikeEventFieldsForTableFragmentDoc}`;
 export const ContactInformationFieldsFragmentDoc = gql`
     fragment ContactInformationFields on ContactInformation {
   ...ContactInformationFieldsGeneral
@@ -2930,6 +3416,30 @@ export const ContactInformationFieldsFragmentDoc = gql`
   lockedUntil
 }
     ${ContactInformationFieldsGeneralFragmentDoc}`;
+export const EngagementFieldsFragmentDoc = gql`
+    fragment EngagementFields on Engagement {
+  id
+  engagementType {
+    ...EngagementTypeFields
+  }
+  dateRange {
+    from
+    to
+  }
+  participant {
+    ...ParticipantFieldsGeneral
+  }
+  cargoBike {
+    id
+    name
+  }
+  isLocked
+  isLockedByMe
+  lockedBy
+  lockedUntil
+}
+    ${EngagementTypeFieldsFragmentDoc}
+${ParticipantFieldsGeneralFragmentDoc}`;
 export const EquipmentFieldsForTableFragmentDoc = gql`
     fragment EquipmentFieldsForTable on Equipment {
   id
@@ -3172,8 +3682,13 @@ export const WorkshopFieldsForTableFragmentDoc = gql`
 }
     ${WorkshopFieldsGeneralFragmentDoc}
 ${ParticipantFieldsGeneralFragmentDoc}`;
-export const WorkshopTypefieldsForTableFragmentDoc = gql`
-    fragment WorkshopTypefieldsForTable on WorkshopType {
+export const WorkshopFieldsForPageFragmentDoc = gql`
+    fragment WorkshopFieldsForPage on Workshop {
+  ...WorkshopFieldsForTable
+}
+    ${WorkshopFieldsForTableFragmentDoc}`;
+export const WorkshopTypeFieldsFragmentDoc = gql`
+    fragment WorkshopTypeFields on WorkshopType {
   ...WorkshopTypefieldsGeneral
   isLocked
   isLockedByMe
@@ -3323,6 +3838,254 @@ export const DeleteCargoBikeDocument = gql`
       super(apollo);
     }
   }
+export const GetBikeEventsDocument = gql`
+    query GetBikeEvents {
+  bikeEvents {
+    ...BikeEventFieldsForTable
+  }
+}
+    ${BikeEventFieldsForTableFragmentDoc}`;
+
+  @Injectable({
+    providedIn: 'root'
+  })
+  export class GetBikeEventsGQL extends Apollo.Query<GetBikeEventsQuery, GetBikeEventsQueryVariables> {
+    document = GetBikeEventsDocument;
+    
+    constructor(apollo: Apollo.Apollo) {
+      super(apollo);
+    }
+  }
+export const GetBikeEventByIdDocument = gql`
+    query GetBikeEventById($id: ID!) {
+  bikeEventById(id: $id) {
+    ...BikeEventFieldsForPage
+  }
+}
+    ${BikeEventFieldsForPageFragmentDoc}`;
+
+  @Injectable({
+    providedIn: 'root'
+  })
+  export class GetBikeEventByIdGQL extends Apollo.Query<GetBikeEventByIdQuery, GetBikeEventByIdQueryVariables> {
+    document = GetBikeEventByIdDocument;
+    
+    constructor(apollo: Apollo.Apollo) {
+      super(apollo);
+    }
+  }
+export const ReloadBikeEventByIdDocument = gql`
+    query ReloadBikeEventById($id: ID!) {
+  bikeEventById(id: $id) {
+    ...BikeEventFieldsForTable
+  }
+}
+    ${BikeEventFieldsForTableFragmentDoc}`;
+
+  @Injectable({
+    providedIn: 'root'
+  })
+  export class ReloadBikeEventByIdGQL extends Apollo.Query<ReloadBikeEventByIdQuery, ReloadBikeEventByIdQueryVariables> {
+    document = ReloadBikeEventByIdDocument;
+    
+    constructor(apollo: Apollo.Apollo) {
+      super(apollo);
+    }
+  }
+export const CreateBikeEventDocument = gql`
+    mutation CreateBikeEvent($bikeEvent: BikeEventCreateInput!) {
+  createBikeEvent(bikeEvent: $bikeEvent) {
+    ...BikeEventFieldsForTable
+  }
+}
+    ${BikeEventFieldsForTableFragmentDoc}`;
+
+  @Injectable({
+    providedIn: 'root'
+  })
+  export class CreateBikeEventGQL extends Apollo.Mutation<CreateBikeEventMutation, CreateBikeEventMutationVariables> {
+    document = CreateBikeEventDocument;
+    
+    constructor(apollo: Apollo.Apollo) {
+      super(apollo);
+    }
+  }
+export const UpdateBikeEventDocument = gql`
+    mutation UpdateBikeEvent($bikeEvent: BikeEventUpdateInput!) {
+  updateBikeEvent(bikeEvent: $bikeEvent) {
+    ...BikeEventFieldsForPage
+  }
+}
+    ${BikeEventFieldsForPageFragmentDoc}`;
+
+  @Injectable({
+    providedIn: 'root'
+  })
+  export class UpdateBikeEventGQL extends Apollo.Mutation<UpdateBikeEventMutation, UpdateBikeEventMutationVariables> {
+    document = UpdateBikeEventDocument;
+    
+    constructor(apollo: Apollo.Apollo) {
+      super(apollo);
+    }
+  }
+export const LockBikeEventDocument = gql`
+    mutation LockBikeEvent($id: ID!) {
+  lockBikeEvent(id: $id) {
+    ...BikeEventFieldsForPage
+  }
+}
+    ${BikeEventFieldsForPageFragmentDoc}`;
+
+  @Injectable({
+    providedIn: 'root'
+  })
+  export class LockBikeEventGQL extends Apollo.Mutation<LockBikeEventMutation, LockBikeEventMutationVariables> {
+    document = LockBikeEventDocument;
+    
+    constructor(apollo: Apollo.Apollo) {
+      super(apollo);
+    }
+  }
+export const UnlockBikeEventDocument = gql`
+    mutation UnlockBikeEvent($id: ID!) {
+  unlockBikeEvent(id: $id) {
+    ...BikeEventFieldsForPage
+  }
+}
+    ${BikeEventFieldsForPageFragmentDoc}`;
+
+  @Injectable({
+    providedIn: 'root'
+  })
+  export class UnlockBikeEventGQL extends Apollo.Mutation<UnlockBikeEventMutation, UnlockBikeEventMutationVariables> {
+    document = UnlockBikeEventDocument;
+    
+    constructor(apollo: Apollo.Apollo) {
+      super(apollo);
+    }
+  }
+export const DeleteBikeEventDocument = gql`
+    mutation DeleteBikeEvent($id: ID!) {
+  deleteBikeEvent(id: $id)
+}
+    `;
+
+  @Injectable({
+    providedIn: 'root'
+  })
+  export class DeleteBikeEventGQL extends Apollo.Mutation<DeleteBikeEventMutation, DeleteBikeEventMutationVariables> {
+    document = DeleteBikeEventDocument;
+    
+    constructor(apollo: Apollo.Apollo) {
+      super(apollo);
+    }
+  }
+export const GetBikeEventTypesDocument = gql`
+    query GetBikeEventTypes {
+  bikeEventTypes {
+    ...BikeEventTypeFields
+  }
+}
+    ${BikeEventTypeFieldsFragmentDoc}`;
+
+  @Injectable({
+    providedIn: 'root'
+  })
+  export class GetBikeEventTypesGQL extends Apollo.Query<GetBikeEventTypesQuery, GetBikeEventTypesQueryVariables> {
+    document = GetBikeEventTypesDocument;
+    
+    constructor(apollo: Apollo.Apollo) {
+      super(apollo);
+    }
+  }
+export const CreateBikeEventTypeDocument = gql`
+    mutation CreateBikeEventType($bikeEventType: String!) {
+  createBikeEventType(name: $bikeEventType) {
+    ...BikeEventTypeFields
+  }
+}
+    ${BikeEventTypeFieldsFragmentDoc}`;
+
+  @Injectable({
+    providedIn: 'root'
+  })
+  export class CreateBikeEventTypeGQL extends Apollo.Mutation<CreateBikeEventTypeMutation, CreateBikeEventTypeMutationVariables> {
+    document = CreateBikeEventTypeDocument;
+    
+    constructor(apollo: Apollo.Apollo) {
+      super(apollo);
+    }
+  }
+export const UpdateBikeEventTypeDocument = gql`
+    mutation UpdateBikeEventType($bikeEventType: BikeEventTypeUpdateInput!) {
+  updateBikeEventType(bikeEventType: $bikeEventType) {
+    ...BikeEventTypeFields
+  }
+}
+    ${BikeEventTypeFieldsFragmentDoc}`;
+
+  @Injectable({
+    providedIn: 'root'
+  })
+  export class UpdateBikeEventTypeGQL extends Apollo.Mutation<UpdateBikeEventTypeMutation, UpdateBikeEventTypeMutationVariables> {
+    document = UpdateBikeEventTypeDocument;
+    
+    constructor(apollo: Apollo.Apollo) {
+      super(apollo);
+    }
+  }
+export const LockBikeEventTypeDocument = gql`
+    mutation LockBikeEventType($id: ID!) {
+  lockBikeEventType(id: $id) {
+    ...BikeEventTypeFields
+  }
+}
+    ${BikeEventTypeFieldsFragmentDoc}`;
+
+  @Injectable({
+    providedIn: 'root'
+  })
+  export class LockBikeEventTypeGQL extends Apollo.Mutation<LockBikeEventTypeMutation, LockBikeEventTypeMutationVariables> {
+    document = LockBikeEventTypeDocument;
+    
+    constructor(apollo: Apollo.Apollo) {
+      super(apollo);
+    }
+  }
+export const UnlockBikeEventTypeDocument = gql`
+    mutation UnlockBikeEventType($id: ID!) {
+  unlockBikeEventType(id: $id) {
+    ...BikeEventTypeFields
+  }
+}
+    ${BikeEventTypeFieldsFragmentDoc}`;
+
+  @Injectable({
+    providedIn: 'root'
+  })
+  export class UnlockBikeEventTypeGQL extends Apollo.Mutation<UnlockBikeEventTypeMutation, UnlockBikeEventTypeMutationVariables> {
+    document = UnlockBikeEventTypeDocument;
+    
+    constructor(apollo: Apollo.Apollo) {
+      super(apollo);
+    }
+  }
+export const DeleteBikeEventTypeDocument = gql`
+    mutation DeleteBikeEventType($id: ID!) {
+  deleteBikeEventType(id: $id)
+}
+    `;
+
+  @Injectable({
+    providedIn: 'root'
+  })
+  export class DeleteBikeEventTypeGQL extends Apollo.Mutation<DeleteBikeEventTypeMutation, DeleteBikeEventTypeMutationVariables> {
+    document = DeleteBikeEventTypeDocument;
+    
+    constructor(apollo: Apollo.Apollo) {
+      super(apollo);
+    }
+  }
 export const GetContactInformationDocument = gql`
     query GetContactInformation {
   contactInformation {
@@ -3424,6 +4187,218 @@ export const DeleteContactInformationDocument = gql`
   })
   export class DeleteContactInformationGQL extends Apollo.Mutation<DeleteContactInformationMutation, DeleteContactInformationMutationVariables> {
     document = DeleteContactInformationDocument;
+    
+    constructor(apollo: Apollo.Apollo) {
+      super(apollo);
+    }
+  }
+export const GetEngagementsDocument = gql`
+    query GetEngagements {
+  engagements {
+    ...EngagementFields
+  }
+}
+    ${EngagementFieldsFragmentDoc}`;
+
+  @Injectable({
+    providedIn: 'root'
+  })
+  export class GetEngagementsGQL extends Apollo.Query<GetEngagementsQuery, GetEngagementsQueryVariables> {
+    document = GetEngagementsDocument;
+    
+    constructor(apollo: Apollo.Apollo) {
+      super(apollo);
+    }
+  }
+export const CreateEngagementDocument = gql`
+    mutation CreateEngagement($engagement: EngagementCreateInput!) {
+  createEngagement(engagement: $engagement) {
+    ...EngagementFields
+  }
+}
+    ${EngagementFieldsFragmentDoc}`;
+
+  @Injectable({
+    providedIn: 'root'
+  })
+  export class CreateEngagementGQL extends Apollo.Mutation<CreateEngagementMutation, CreateEngagementMutationVariables> {
+    document = CreateEngagementDocument;
+    
+    constructor(apollo: Apollo.Apollo) {
+      super(apollo);
+    }
+  }
+export const UpdateEngagementDocument = gql`
+    mutation UpdateEngagement($engagement: EngagementUpdateInput!) {
+  updateEngagement(engagement: $engagement) {
+    ...EngagementFields
+  }
+}
+    ${EngagementFieldsFragmentDoc}`;
+
+  @Injectable({
+    providedIn: 'root'
+  })
+  export class UpdateEngagementGQL extends Apollo.Mutation<UpdateEngagementMutation, UpdateEngagementMutationVariables> {
+    document = UpdateEngagementDocument;
+    
+    constructor(apollo: Apollo.Apollo) {
+      super(apollo);
+    }
+  }
+export const LockEngagementDocument = gql`
+    mutation LockEngagement($id: ID!) {
+  lockEngagement(id: $id) {
+    ...EngagementFields
+  }
+}
+    ${EngagementFieldsFragmentDoc}`;
+
+  @Injectable({
+    providedIn: 'root'
+  })
+  export class LockEngagementGQL extends Apollo.Mutation<LockEngagementMutation, LockEngagementMutationVariables> {
+    document = LockEngagementDocument;
+    
+    constructor(apollo: Apollo.Apollo) {
+      super(apollo);
+    }
+  }
+export const UnlockEngagementDocument = gql`
+    mutation UnlockEngagement($id: ID!) {
+  unlockEngagement(id: $id) {
+    ...EngagementFields
+  }
+}
+    ${EngagementFieldsFragmentDoc}`;
+
+  @Injectable({
+    providedIn: 'root'
+  })
+  export class UnlockEngagementGQL extends Apollo.Mutation<UnlockEngagementMutation, UnlockEngagementMutationVariables> {
+    document = UnlockEngagementDocument;
+    
+    constructor(apollo: Apollo.Apollo) {
+      super(apollo);
+    }
+  }
+export const DeleteEngagementDocument = gql`
+    mutation DeleteEngagement($id: ID!) {
+  deleteEngagement(id: $id)
+}
+    `;
+
+  @Injectable({
+    providedIn: 'root'
+  })
+  export class DeleteEngagementGQL extends Apollo.Mutation<DeleteEngagementMutation, DeleteEngagementMutationVariables> {
+    document = DeleteEngagementDocument;
+    
+    constructor(apollo: Apollo.Apollo) {
+      super(apollo);
+    }
+  }
+export const GetEngagementTypesDocument = gql`
+    query GetEngagementTypes {
+  engagementTypes {
+    ...EngagementTypeFields
+  }
+}
+    ${EngagementTypeFieldsFragmentDoc}`;
+
+  @Injectable({
+    providedIn: 'root'
+  })
+  export class GetEngagementTypesGQL extends Apollo.Query<GetEngagementTypesQuery, GetEngagementTypesQueryVariables> {
+    document = GetEngagementTypesDocument;
+    
+    constructor(apollo: Apollo.Apollo) {
+      super(apollo);
+    }
+  }
+export const CreateEngagementTypeDocument = gql`
+    mutation CreateEngagementType($engagementType: EngagementTypeCreateInput!) {
+  createEngagementType(engagementType: $engagementType) {
+    ...EngagementTypeFields
+  }
+}
+    ${EngagementTypeFieldsFragmentDoc}`;
+
+  @Injectable({
+    providedIn: 'root'
+  })
+  export class CreateEngagementTypeGQL extends Apollo.Mutation<CreateEngagementTypeMutation, CreateEngagementTypeMutationVariables> {
+    document = CreateEngagementTypeDocument;
+    
+    constructor(apollo: Apollo.Apollo) {
+      super(apollo);
+    }
+  }
+export const UpdateEngagementTypeDocument = gql`
+    mutation UpdateEngagementType($engagementType: EngagementTypeUpdateInput!) {
+  updateEngagementType(engagementType: $engagementType) {
+    ...EngagementTypeFields
+  }
+}
+    ${EngagementTypeFieldsFragmentDoc}`;
+
+  @Injectable({
+    providedIn: 'root'
+  })
+  export class UpdateEngagementTypeGQL extends Apollo.Mutation<UpdateEngagementTypeMutation, UpdateEngagementTypeMutationVariables> {
+    document = UpdateEngagementTypeDocument;
+    
+    constructor(apollo: Apollo.Apollo) {
+      super(apollo);
+    }
+  }
+export const LockEngagementTypeDocument = gql`
+    mutation LockEngagementType($id: ID!) {
+  lockEngagementType(id: $id) {
+    ...EngagementTypeFields
+  }
+}
+    ${EngagementTypeFieldsFragmentDoc}`;
+
+  @Injectable({
+    providedIn: 'root'
+  })
+  export class LockEngagementTypeGQL extends Apollo.Mutation<LockEngagementTypeMutation, LockEngagementTypeMutationVariables> {
+    document = LockEngagementTypeDocument;
+    
+    constructor(apollo: Apollo.Apollo) {
+      super(apollo);
+    }
+  }
+export const UnlockEngagementTypeDocument = gql`
+    mutation UnlockEngagementType($id: ID!) {
+  unlockEngagementType(id: $id) {
+    ...EngagementTypeFields
+  }
+}
+    ${EngagementTypeFieldsFragmentDoc}`;
+
+  @Injectable({
+    providedIn: 'root'
+  })
+  export class UnlockEngagementTypeGQL extends Apollo.Mutation<UnlockEngagementTypeMutation, UnlockEngagementTypeMutationVariables> {
+    document = UnlockEngagementTypeDocument;
+    
+    constructor(apollo: Apollo.Apollo) {
+      super(apollo);
+    }
+  }
+export const DeleteEngagementTypeDocument = gql`
+    mutation DeleteEngagementType($id: ID!) {
+  deleteEngagementType(id: $id)
+}
+    `;
+
+  @Injectable({
+    providedIn: 'root'
+  })
+  export class DeleteEngagementTypeGQL extends Apollo.Mutation<DeleteEngagementTypeMutation, DeleteEngagementTypeMutationVariables> {
+    document = DeleteEngagementTypeDocument;
     
     constructor(apollo: Apollo.Apollo) {
       super(apollo);
@@ -3925,6 +4900,148 @@ export const DeleteOrganisationDocument = gql`
       super(apollo);
     }
   }
+export const GetParticipantsDocument = gql`
+    query GetParticipants {
+  participants {
+    ...ParticipantFieldsForTable
+  }
+}
+    ${ParticipantFieldsForTableFragmentDoc}`;
+
+  @Injectable({
+    providedIn: 'root'
+  })
+  export class GetParticipantsGQL extends Apollo.Query<GetParticipantsQuery, GetParticipantsQueryVariables> {
+    document = GetParticipantsDocument;
+    
+    constructor(apollo: Apollo.Apollo) {
+      super(apollo);
+    }
+  }
+export const GetParticipantByIdDocument = gql`
+    query GetParticipantById($id: ID!) {
+  participantById(id: $id) {
+    ...ParticipantFieldsForPage
+  }
+}
+    ${ParticipantFieldsForPageFragmentDoc}`;
+
+  @Injectable({
+    providedIn: 'root'
+  })
+  export class GetParticipantByIdGQL extends Apollo.Query<GetParticipantByIdQuery, GetParticipantByIdQueryVariables> {
+    document = GetParticipantByIdDocument;
+    
+    constructor(apollo: Apollo.Apollo) {
+      super(apollo);
+    }
+  }
+export const ReloadParticipantByIdDocument = gql`
+    query ReloadParticipantById($id: ID!) {
+  participantById(id: $id) {
+    ...ParticipantFieldsForTable
+  }
+}
+    ${ParticipantFieldsForTableFragmentDoc}`;
+
+  @Injectable({
+    providedIn: 'root'
+  })
+  export class ReloadParticipantByIdGQL extends Apollo.Query<ReloadParticipantByIdQuery, ReloadParticipantByIdQueryVariables> {
+    document = ReloadParticipantByIdDocument;
+    
+    constructor(apollo: Apollo.Apollo) {
+      super(apollo);
+    }
+  }
+export const CreateParticipantDocument = gql`
+    mutation CreateParticipant($participant: ParticipantCreateInput!) {
+  createParticipant(participant: $participant) {
+    ...ParticipantFieldsForTable
+  }
+}
+    ${ParticipantFieldsForTableFragmentDoc}`;
+
+  @Injectable({
+    providedIn: 'root'
+  })
+  export class CreateParticipantGQL extends Apollo.Mutation<CreateParticipantMutation, CreateParticipantMutationVariables> {
+    document = CreateParticipantDocument;
+    
+    constructor(apollo: Apollo.Apollo) {
+      super(apollo);
+    }
+  }
+export const UpdateParticipantDocument = gql`
+    mutation UpdateParticipant($participant: ParticipantUpdateInput!) {
+  updateParticipant(participant: $participant) {
+    ...ParticipantFieldsForPage
+  }
+}
+    ${ParticipantFieldsForPageFragmentDoc}`;
+
+  @Injectable({
+    providedIn: 'root'
+  })
+  export class UpdateParticipantGQL extends Apollo.Mutation<UpdateParticipantMutation, UpdateParticipantMutationVariables> {
+    document = UpdateParticipantDocument;
+    
+    constructor(apollo: Apollo.Apollo) {
+      super(apollo);
+    }
+  }
+export const LockParticipantDocument = gql`
+    mutation LockParticipant($id: ID!) {
+  lockParticipant(id: $id) {
+    ...ParticipantFieldsForPage
+  }
+}
+    ${ParticipantFieldsForPageFragmentDoc}`;
+
+  @Injectable({
+    providedIn: 'root'
+  })
+  export class LockParticipantGQL extends Apollo.Mutation<LockParticipantMutation, LockParticipantMutationVariables> {
+    document = LockParticipantDocument;
+    
+    constructor(apollo: Apollo.Apollo) {
+      super(apollo);
+    }
+  }
+export const UnlockParticipantDocument = gql`
+    mutation UnlockParticipant($id: ID!) {
+  unlockParticipant(id: $id) {
+    ...ParticipantFieldsForPage
+  }
+}
+    ${ParticipantFieldsForPageFragmentDoc}`;
+
+  @Injectable({
+    providedIn: 'root'
+  })
+  export class UnlockParticipantGQL extends Apollo.Mutation<UnlockParticipantMutation, UnlockParticipantMutationVariables> {
+    document = UnlockParticipantDocument;
+    
+    constructor(apollo: Apollo.Apollo) {
+      super(apollo);
+    }
+  }
+export const DeleteParticipantDocument = gql`
+    mutation DeleteParticipant($id: ID!) {
+  deleteParticipant(id: $id)
+}
+    `;
+
+  @Injectable({
+    providedIn: 'root'
+  })
+  export class DeleteParticipantGQL extends Apollo.Mutation<DeleteParticipantMutation, DeleteParticipantMutationVariables> {
+    document = DeleteParticipantDocument;
+    
+    constructor(apollo: Apollo.Apollo) {
+      super(apollo);
+    }
+  }
 export const GetPersonsDocument = gql`
     query GetPersons {
   persons {
@@ -4310,6 +5427,254 @@ export const DeleteTimeFrameDocument = gql`
   })
   export class DeleteTimeFrameGQL extends Apollo.Mutation<DeleteTimeFrameMutation, DeleteTimeFrameMutationVariables> {
     document = DeleteTimeFrameDocument;
+    
+    constructor(apollo: Apollo.Apollo) {
+      super(apollo);
+    }
+  }
+export const GetWorkshopsDocument = gql`
+    query GetWorkshops {
+  workshops {
+    ...WorkshopFieldsForTable
+  }
+}
+    ${WorkshopFieldsForTableFragmentDoc}`;
+
+  @Injectable({
+    providedIn: 'root'
+  })
+  export class GetWorkshopsGQL extends Apollo.Query<GetWorkshopsQuery, GetWorkshopsQueryVariables> {
+    document = GetWorkshopsDocument;
+    
+    constructor(apollo: Apollo.Apollo) {
+      super(apollo);
+    }
+  }
+export const GetWorkshopByIdDocument = gql`
+    query GetWorkshopById($id: ID!) {
+  workshopById(id: $id) {
+    ...WorkshopFieldsForPage
+  }
+}
+    ${WorkshopFieldsForPageFragmentDoc}`;
+
+  @Injectable({
+    providedIn: 'root'
+  })
+  export class GetWorkshopByIdGQL extends Apollo.Query<GetWorkshopByIdQuery, GetWorkshopByIdQueryVariables> {
+    document = GetWorkshopByIdDocument;
+    
+    constructor(apollo: Apollo.Apollo) {
+      super(apollo);
+    }
+  }
+export const ReloadWorkshopByIdDocument = gql`
+    query ReloadWorkshopById($id: ID!) {
+  workshopById(id: $id) {
+    ...WorkshopFieldsForTable
+  }
+}
+    ${WorkshopFieldsForTableFragmentDoc}`;
+
+  @Injectable({
+    providedIn: 'root'
+  })
+  export class ReloadWorkshopByIdGQL extends Apollo.Query<ReloadWorkshopByIdQuery, ReloadWorkshopByIdQueryVariables> {
+    document = ReloadWorkshopByIdDocument;
+    
+    constructor(apollo: Apollo.Apollo) {
+      super(apollo);
+    }
+  }
+export const CreateWorkshopDocument = gql`
+    mutation CreateWorkshop($workshop: WorkshopCreateInput!) {
+  createWorkshop(workshop: $workshop) {
+    ...WorkshopFieldsForTable
+  }
+}
+    ${WorkshopFieldsForTableFragmentDoc}`;
+
+  @Injectable({
+    providedIn: 'root'
+  })
+  export class CreateWorkshopGQL extends Apollo.Mutation<CreateWorkshopMutation, CreateWorkshopMutationVariables> {
+    document = CreateWorkshopDocument;
+    
+    constructor(apollo: Apollo.Apollo) {
+      super(apollo);
+    }
+  }
+export const UpdateWorkshopDocument = gql`
+    mutation UpdateWorkshop($workshop: WorkshopUpdateInput!) {
+  updateWorkshop(workshop: $workshop) {
+    ...WorkshopFieldsForPage
+  }
+}
+    ${WorkshopFieldsForPageFragmentDoc}`;
+
+  @Injectable({
+    providedIn: 'root'
+  })
+  export class UpdateWorkshopGQL extends Apollo.Mutation<UpdateWorkshopMutation, UpdateWorkshopMutationVariables> {
+    document = UpdateWorkshopDocument;
+    
+    constructor(apollo: Apollo.Apollo) {
+      super(apollo);
+    }
+  }
+export const LockWorkshopDocument = gql`
+    mutation LockWorkshop($id: ID!) {
+  lockWorkshop(id: $id) {
+    ...WorkshopFieldsForPage
+  }
+}
+    ${WorkshopFieldsForPageFragmentDoc}`;
+
+  @Injectable({
+    providedIn: 'root'
+  })
+  export class LockWorkshopGQL extends Apollo.Mutation<LockWorkshopMutation, LockWorkshopMutationVariables> {
+    document = LockWorkshopDocument;
+    
+    constructor(apollo: Apollo.Apollo) {
+      super(apollo);
+    }
+  }
+export const UnlockWorkshopDocument = gql`
+    mutation UnlockWorkshop($id: ID!) {
+  unlockWorkshop(id: $id) {
+    ...WorkshopFieldsForPage
+  }
+}
+    ${WorkshopFieldsForPageFragmentDoc}`;
+
+  @Injectable({
+    providedIn: 'root'
+  })
+  export class UnlockWorkshopGQL extends Apollo.Mutation<UnlockWorkshopMutation, UnlockWorkshopMutationVariables> {
+    document = UnlockWorkshopDocument;
+    
+    constructor(apollo: Apollo.Apollo) {
+      super(apollo);
+    }
+  }
+export const DeleteWorkshopDocument = gql`
+    mutation DeleteWorkshop($id: ID!) {
+  deleteWorkshop(id: $id)
+}
+    `;
+
+  @Injectable({
+    providedIn: 'root'
+  })
+  export class DeleteWorkshopGQL extends Apollo.Mutation<DeleteWorkshopMutation, DeleteWorkshopMutationVariables> {
+    document = DeleteWorkshopDocument;
+    
+    constructor(apollo: Apollo.Apollo) {
+      super(apollo);
+    }
+  }
+export const GetWorkshopTypesDocument = gql`
+    query GetWorkshopTypes {
+  workshopTypes {
+    ...WorkshopTypeFields
+  }
+}
+    ${WorkshopTypeFieldsFragmentDoc}`;
+
+  @Injectable({
+    providedIn: 'root'
+  })
+  export class GetWorkshopTypesGQL extends Apollo.Query<GetWorkshopTypesQuery, GetWorkshopTypesQueryVariables> {
+    document = GetWorkshopTypesDocument;
+    
+    constructor(apollo: Apollo.Apollo) {
+      super(apollo);
+    }
+  }
+export const CreateWorkshopTypeDocument = gql`
+    mutation CreateWorkshopType($workshopType: WorkshopTypeCreateInput!) {
+  createWorkshopType(workshopType: $workshopType) {
+    ...WorkshopTypeFields
+  }
+}
+    ${WorkshopTypeFieldsFragmentDoc}`;
+
+  @Injectable({
+    providedIn: 'root'
+  })
+  export class CreateWorkshopTypeGQL extends Apollo.Mutation<CreateWorkshopTypeMutation, CreateWorkshopTypeMutationVariables> {
+    document = CreateWorkshopTypeDocument;
+    
+    constructor(apollo: Apollo.Apollo) {
+      super(apollo);
+    }
+  }
+export const UpdateWorkshopTypeDocument = gql`
+    mutation UpdateWorkshopType($workshopType: WorkshopTypeUpdateInput!) {
+  updateWorkshopType(workshopType: $workshopType) {
+    ...WorkshopTypeFields
+  }
+}
+    ${WorkshopTypeFieldsFragmentDoc}`;
+
+  @Injectable({
+    providedIn: 'root'
+  })
+  export class UpdateWorkshopTypeGQL extends Apollo.Mutation<UpdateWorkshopTypeMutation, UpdateWorkshopTypeMutationVariables> {
+    document = UpdateWorkshopTypeDocument;
+    
+    constructor(apollo: Apollo.Apollo) {
+      super(apollo);
+    }
+  }
+export const LockWorkshopTypeDocument = gql`
+    mutation LockWorkshopType($id: ID!) {
+  lockWorkshopType(id: $id) {
+    ...WorkshopTypeFields
+  }
+}
+    ${WorkshopTypeFieldsFragmentDoc}`;
+
+  @Injectable({
+    providedIn: 'root'
+  })
+  export class LockWorkshopTypeGQL extends Apollo.Mutation<LockWorkshopTypeMutation, LockWorkshopTypeMutationVariables> {
+    document = LockWorkshopTypeDocument;
+    
+    constructor(apollo: Apollo.Apollo) {
+      super(apollo);
+    }
+  }
+export const UnlockWorkshopTypeDocument = gql`
+    mutation UnlockWorkshopType($id: ID!) {
+  unlockWorkshopType(id: $id) {
+    ...WorkshopTypeFields
+  }
+}
+    ${WorkshopTypeFieldsFragmentDoc}`;
+
+  @Injectable({
+    providedIn: 'root'
+  })
+  export class UnlockWorkshopTypeGQL extends Apollo.Mutation<UnlockWorkshopTypeMutation, UnlockWorkshopTypeMutationVariables> {
+    document = UnlockWorkshopTypeDocument;
+    
+    constructor(apollo: Apollo.Apollo) {
+      super(apollo);
+    }
+  }
+export const DeleteWorkshopTypeDocument = gql`
+    mutation DeleteWorkshopType($id: ID!) {
+  deleteWorkshopType(id: $id)
+}
+    `;
+
+  @Injectable({
+    providedIn: 'root'
+  })
+  export class DeleteWorkshopTypeGQL extends Apollo.Mutation<DeleteWorkshopTypeMutation, DeleteWorkshopTypeMutationVariables> {
+    document = DeleteWorkshopTypeDocument;
     
     constructor(apollo: Apollo.Apollo) {
       super(apollo);

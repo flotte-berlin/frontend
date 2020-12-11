@@ -20,6 +20,14 @@ import { ProvidersComponent } from './pages/tables/providers/providers.component
 import { PersonComponent } from './pages/dataPages/person/person.component';
 import { OrganisationComponent } from './pages/dataPages/organisation/organisation.component';
 import { ProviderComponent } from './pages/dataPages/provider/provider.component';
+import { ParticipantComponent } from './pages/dataPages/participant/participant.component';
+import { WorkshopComponent } from './pages/dataPages/workshop/workshop.component';
+import { WorkshopsComponent } from './pages/tables/workshops/workshops.component';
+import { WorkshopTypesComponent } from './pages/tables/workshop-types/workshop-types.component';
+import { EngagementsComponent } from './pages/tables/engagements/engagements.component';
+import { BikeEventsComponent } from './pages/tables/bike-events/bike-events.component';
+import { BikeEventComponent } from './pages/dataPages/bike-event/bike-event.component';
+import { BikeEventTypesComponent } from './pages/tables/bike-event-types/bike-event-types.component';
 
 const routes: Routes = [
   { path: 'login', component: LoginComponent },
@@ -27,11 +35,15 @@ const routes: Routes = [
   { path: 'profile', component: ProfileComponent, canActivate: [AuthGuard]},
   { path: 'table/bikes', component: BikesComponent, canActivate: [AuthGuard] },
   { path: 'bike/:id', component: BikeComponent, canActivate: [AuthGuard] },
+  { path: 'table/bikeEvents', component: BikeEventsComponent, canActivate: [AuthGuard] },
+  { path: 'bikeEvent/:id', component: BikeEventComponent, canActivate: [AuthGuard] },
+  { path: 'table/bikeEventTypes', component: BikeEventTypesComponent, canActivate: [AuthGuard] },
   { path: 'table/participants', component: ParticipantsComponent, canActivate: [AuthGuard] },
   { path: 'table/lendingStations', component: LendingStationsComponent, canActivate: [AuthGuard] },
   { path: 'table/equipmentTypes', component: EquipmentTypesComponent, canActivate: [AuthGuard] },
   { path: 'table/engagementTypes', component: EngagementTypesComponent, canActivate: [AuthGuard] },
-  { path: 'table/equipment', component: EquipmentComponent, canActivate: [AuthGuard] },
+  { path: 'table/engagements', component: EngagementsComponent, canActivate: [AuthGuard] },
+  { path: 'table/equipments', component: EquipmentComponent, canActivate: [AuthGuard] },
   { path: 'table/timeFrames', component: TimeFramesComponent, canActivate: [AuthGuard] },
   { path: 'table/persons', component: PersonsComponent, canActivate: [AuthGuard] },
   { path: 'table/contactInformation', component: ContactInformationComponent, canActivate: [AuthGuard] },
@@ -41,6 +53,11 @@ const routes: Routes = [
   { path: 'person/:id', component: PersonComponent, canActivate: [AuthGuard] },
   { path: 'provider/:id', component: ProviderComponent, canActivate: [AuthGuard] },
   { path: 'organisation/:id', component: OrganisationComponent, canActivate: [AuthGuard] },
+  { path: 'participant/:id', component: ParticipantComponent, canActivate: [AuthGuard] },
+  { path: 'participants', component: ParticipantsComponent, canActivate: [AuthGuard] },
+  { path: 'workshop/:id', component: WorkshopComponent, canActivate: [AuthGuard] },
+  { path: 'table/workshops', component: WorkshopsComponent, canActivate: [AuthGuard] },
+  { path: 'table/workshopTypes', component: WorkshopTypesComponent, canActivate: [AuthGuard] },
   { path: '', redirectTo: 'tableOverview', pathMatch: 'full' },
   { path: 'table', redirectTo: 'tableOverview', pathMatch: 'full' },
   { path: '**', redirectTo: 'tableOverview' },

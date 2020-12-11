@@ -46,6 +46,7 @@ export class TableComponent implements AfterViewInit {
     requiredForUpdating?: boolean;
     required?: boolean;
     type?: string;
+    list?: boolean; //whether the type is a list
     link?: (row: any) => string;
     highlighted: boolean; // whether this column is a bit darker
   }[] = [];
@@ -206,6 +207,7 @@ export class TableComponent implements AfterViewInit {
         column.dataPath
       );
       column.type = column.type || typeInformation.type;
+      column.list = typeInformation.isList;
       column.required =
         column.required != null ? column.required : typeInformation.isRequired;
 

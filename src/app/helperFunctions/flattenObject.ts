@@ -5,7 +5,11 @@ export function flatten(object: Object, prefix: string = ''): any {
     if (Array.isArray(object[prop])) {
       newObject[propName] = [];
       for (const arrayElement of object[prop]) {
-        newObject[propName].push(flatten(arrayElement));
+        if (typeof arrayElement === 'object' && arrayElement !== null) {
+          newObject[propName].push(flatten(arrayElement));
+        } else {
+          newObject[propName].push(arrayElement);
+        }
       }
     } else if (typeof object[prop] === 'object' && object[prop] !== null) {
       const flattenedObject = flatten(object[prop], propName + '.');

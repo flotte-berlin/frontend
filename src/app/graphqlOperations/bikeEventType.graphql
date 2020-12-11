@@ -1,0 +1,33 @@
+query GetBikeEventTypes {
+  bikeEventTypes {
+    ...BikeEventTypeFields
+  }
+}
+
+mutation CreateBikeEventType($bikeEventType: String!) {
+  createBikeEventType(name: $bikeEventType) {
+    ...BikeEventTypeFields
+  }
+}
+
+mutation UpdateBikeEventType($bikeEventType: BikeEventTypeUpdateInput!) {
+  updateBikeEventType(bikeEventType: $bikeEventType) {
+    ...BikeEventTypeFields
+  }
+}
+
+mutation LockBikeEventType($id: ID!) {
+  lockBikeEventType(id: $id) {
+    ...BikeEventTypeFields
+  }
+}
+
+mutation UnlockBikeEventType($id: ID!) {
+  unlockBikeEventType(id: $id) {
+    ...BikeEventTypeFields
+  }
+}
+
+mutation DeleteBikeEventType($id: ID!) {
+  deleteBikeEventType(id: $id)
+}

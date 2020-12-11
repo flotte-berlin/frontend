@@ -25,3 +25,7 @@ fragment WorkshopFieldsForTable on Workshop {
     lockedBy
     lockedUntil
 }
+
+fragment WorkshopFieldsForPage on Workshop {
+    ...WorkshopFieldsForTable
+}

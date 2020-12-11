@@ -50,6 +50,16 @@
         "possibleTypes": null
       },
       {
+        "kind": "SCALAR",
+        "name": "Link",
+        "description": null,
+        "fields": null,
+        "inputFields": null,
+        "interfaces": null,
+        "enumValues": null,
+        "possibleTypes": null
+      },
+      {
         "kind": "OBJECT",
         "name": "CargoBike",
         "description": "The CargoBike type is central to the graph. You could call it the root.",
@@ -2487,7 +2497,7 @@
           },
           {
             "name": "distributedActiveBikeParte",
-            "description": "Note the kommentierte Infodaten Tabelle.\nThis value is calculated form other values.\nIt is true, if the person is not on the black list and not retired\nand is either Mentor dt. Pate or Partner Mentor dt. Partnerpate for at least one bike.",
+            "description": "Note the kommentierte Infodaten Tabelle.\nThis value is calculated form other values.\nIt is true, if the person is not on the black list and not retired\nand is either Mentor dt. Pate or Partner Mentor dt. Partnerpate for at least one bike.\nNote: this will always be false for the moment.",
             "args": [],
             "type": {
               "kind": "NON_NULL",
@@ -4581,7 +4591,7 @@
                   "name": null,
                   "ofType": {
                     "kind": "SCALAR",
-                    "name": "String",
+                    "name": "Link",
                     "ofType": null
                   }
                 }
@@ -4750,7 +4760,7 @@
               "name": null,
               "ofType": {
                 "kind": "SCALAR",
-                "name": "String",
+                "name": "Link",
                 "ofType": null
               }
             },
@@ -4859,7 +4869,7 @@
               "name": null,
               "ofType": {
                 "kind": "SCALAR",
-                "name": "String",
+                "name": "Link",
                 "ofType": null
               }
             },
@@ -7461,6 +7471,33 @@
             "deprecationReason": null
           },
           {
+            "name": "copyCargoBikeById",
+            "description": "copies cargoBike, the id of the copy needs to be delted by the front end. This function will not create a new entry in the data base",
+            "args": [
+              {
+                "name": "id",
+                "description": null,
+                "type": {
+                  "kind": "NON_NULL",
+                  "name": null,
+                  "ofType": {
+                    "kind": "SCALAR",
+                    "name": "ID",
+                    "ofType": null
+                  }
+                },
+                "defaultValue": null
+              }
+            ],
+            "type": {
+              "kind": "OBJECT",
+              "name": "CargoBike",
+              "ofType": null
+            },
+            "isDeprecated": false,
+            "deprecationReason": null
+          },
+          {
             "name": "cargoBikes",
             "description": "Returns cargoBikes ordered by name ascending. If offset or limit is not provided, both values are ignored.",
             "args": [
@@ -8479,7 +8516,7 @@
             "deprecationReason": null
           },
           {
-            "name": "bikeEventTypeByd",
+            "name": "bikeEventTypeById",
             "description": null,
             "args": [
               {
@@ -8800,6 +8837,51 @@
                   "ofType": {
                     "kind": "SCALAR",
                     "name": "ID",
+                    "ofType": null
+                  }
+                },
+                "defaultValue": null
+              }
+            ],
+            "type": {
+              "kind": "NON_NULL",
+              "name": null,
+              "ofType": {
+                "kind": "SCALAR",
+                "name": "Boolean",
+                "ofType": null
+              }
+            },
+            "isDeprecated": false,
+            "deprecationReason": null
+          },
+          {
+            "name": "editCopyConfig",
+            "description": "edit or add key value pair to copy config for cargo bikes",
+            "args": [
+              {
+                "name": "key",
+                "description": null,
+                "type": {
+                  "kind": "NON_NULL",
+                  "name": null,
+                  "ofType": {
+                    "kind": "SCALAR",
+                    "name": "String",
+                    "ofType": null
+                  }
+                },
+                "defaultValue": null
+              },
+              {
+                "name": "value",
+                "description": null,
+                "type": {
+                  "kind": "NON_NULL",
+                  "name": null,
+                  "ofType": {
+                    "kind": "SCALAR",
+                    "name": "Boolean",
                     "ofType": null
                   }
                 },

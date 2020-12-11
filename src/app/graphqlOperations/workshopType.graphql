@@ -1,0 +1,33 @@
+query GetWorkshopTypes {
+  workshopTypes {
+    ...WorkshopTypeFields
+  }
+}
+
+mutation CreateWorkshopType($workshopType: WorkshopTypeCreateInput!) {
+  createWorkshopType(workshopType: $workshopType) {
+    ...WorkshopTypeFields
+  }
+}
+
+mutation UpdateWorkshopType($workshopType: WorkshopTypeUpdateInput!) {
+  updateWorkshopType(workshopType: $workshopType) {
+    ...WorkshopTypeFields
+  }
+}
+
+mutation LockWorkshopType($id: ID!) {
+  lockWorkshopType(id: $id) {
+    ...WorkshopTypeFields
+  }
+}
+
+mutation UnlockWorkshopType($id: ID!) {
+  unlockWorkshopType(id: $id) {
+    ...WorkshopTypeFields
+  }
+}
+
+mutation DeleteWorkshopType($id: ID!) {
+  deleteWorkshopType(id: $id)
+}

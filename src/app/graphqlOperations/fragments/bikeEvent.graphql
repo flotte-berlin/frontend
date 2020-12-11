@@ -34,3 +34,7 @@ fragment BikeEventFieldsForTable on BikeEvent {
   lockedBy
   lockedUntil
 }
+
+fragment BikeEventFieldsForPage on BikeEvent {
+  ...BikeEventFieldsForTable
+}

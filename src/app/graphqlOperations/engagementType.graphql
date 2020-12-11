@@ -1,0 +1,33 @@
+query GetEngagementTypes {
+  engagementTypes {
+    ...EngagementTypeFields
+  }
+}
+
+mutation CreateEngagementType($engagementType: EngagementTypeCreateInput!) {
+  createEngagementType(engagementType: $engagementType) {
+    ...EngagementTypeFields
+  }
+}
+
+mutation UpdateEngagementType($engagementType: EngagementTypeUpdateInput!) {
+  updateEngagementType(engagementType: $engagementType) {
+    ...EngagementTypeFields
+  }
+}
+
+mutation LockEngagementType($id: ID!) {
+  lockEngagementType(id: $id) {
+    ...EngagementTypeFields
+  }
+}
+
+mutation UnlockEngagementType($id: ID!) {
+  unlockEngagementType(id: $id) {
+    ...EngagementTypeFields
+  }
+}
+
+mutation DeleteEngagementType($id: ID!) {
+  deleteEngagementType(id: $id)
+}

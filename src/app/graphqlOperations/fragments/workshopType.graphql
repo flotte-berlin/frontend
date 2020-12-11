@@ -3,7 +3,7 @@ fragment WorkshopTypefieldsGeneral on WorkshopType {
     name
 }
 
-fragment WorkshopTypefieldsForTable on WorkshopType {
+fragment WorkshopTypeFields on WorkshopType {
     ...WorkshopTypefieldsGeneral
     isLocked
     isLockedByMe

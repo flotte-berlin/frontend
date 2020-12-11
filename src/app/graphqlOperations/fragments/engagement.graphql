@@ -31,3 +31,25 @@ fragment EngagementFieldsForParticipant on Engagement {
     name
   }
 }
+
+fragment EngagementFields on Engagement {
+  id
+  engagementType {
+    ...EngagementTypeFields
+  }
+  dateRange {
+    from
+    to
+  }
+  participant {
+    ...ParticipantFieldsGeneral
+  }
+  cargoBike {
+    id
+    name
+  }
+  isLocked
+  isLockedByMe
+  lockedBy
+  lockedUntil
+}

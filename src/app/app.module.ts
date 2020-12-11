@@ -6,7 +6,7 @@ import { HttpClientModule, HTTP_INTERCEPTORS } from '@angular/common/http';
 import { DragDropModule } from '@angular/cdk/drag-drop';
 import { FlexLayoutModule } from '@angular/flex-layout';
 
-import { DatePipe } from '@angular/common'
+import { DatePipe } from '@angular/common';
 
 // Angular Material Components
 import { MatToolbarModule } from '@angular/material/toolbar';
@@ -32,6 +32,7 @@ import { MatDialogModule } from '@angular/material/dialog';
 import { MatAutocompleteModule } from '@angular/material/autocomplete';
 import { MatDatepickerModule } from '@angular/material/datepicker';
 import { MatNativeDateModule, MAT_DATE_LOCALE } from '@angular/material/core';
+import { MatChipsModule } from '@angular/material/chips';
 
 import { AppRoutingModule } from './app-routing.module';
 import { AppComponent } from './app.component';
@@ -66,7 +67,10 @@ import { SelectObjectDialogComponent } from './components/select-object-dialog/s
 import { AutocompleteSelectComponent } from './components/autocomplete-select/autocomplete-select.component';
 import { LendingStationComponent } from './pages/dataPages/lending-station/lending-station.component';
 import { ProfileComponent } from './pages/profile/profile.component';
-import { ErrorSnackbarComponent, SnackbarDialog } from './helper/snackbar-ref.component';
+import {
+  ErrorSnackbarComponent,
+  SnackbarDialog,
+} from './helper/snackbar-ref.component';
 import { HttpLinkModule } from 'apollo-angular-link-http';
 import { PersonsComponent } from './pages/tables/persons/persons.component';
 import { ContactInformationComponent } from './pages/tables/contact-information/contact-information.component';
@@ -75,8 +79,13 @@ import { ProvidersComponent } from './pages/tables/providers/providers.component
 import { OrganisationComponent } from './pages/dataPages/organisation/organisation.component';
 import { PersonComponent } from './pages/dataPages/person/person.component';
 import { ProviderComponent } from './pages/dataPages/provider/provider.component';
-
-
+import { WorkshopComponent } from './pages/dataPages/workshop/workshop.component';
+import { BikeEventComponent } from './pages/dataPages/bike-event/bike-event.component';
+import { ParticipantComponent } from './pages/dataPages/participant/participant.component';
+import { EngagementsComponent } from './pages/tables/engagements/engagements.component';
+import { BikeEventsComponent } from './pages/tables/bike-events/bike-events.component';
+import { BikeEventTypesComponent } from './pages/tables/bike-event-types/bike-event-types.component';
+import { WorkshopTypesComponent } from './pages/tables/workshop-types/workshop-types.component';
 
 @NgModule({
   declarations: [
@@ -113,7 +122,14 @@ import { ProviderComponent } from './pages/dataPages/provider/provider.component
     ProvidersComponent,
     OrganisationComponent,
     PersonComponent,
-    ProviderComponent
+    ProviderComponent,
+    WorkshopComponent,
+    BikeEventComponent,
+    ParticipantComponent,
+    EngagementsComponent,
+    BikeEventsComponent,
+    BikeEventTypesComponent,
+    WorkshopTypesComponent,
   ],
   imports: [
     BrowserModule,
@@ -149,7 +165,8 @@ import { ProviderComponent } from './pages/dataPages/provider/provider.component
     MatDialogModule,
     MatAutocompleteModule,
     MatDatepickerModule,
-    MatNativeDateModule
+    MatNativeDateModule,
+    MatChipsModule,
   ],
   providers: [
     NavService,
@@ -157,8 +174,8 @@ import { ProviderComponent } from './pages/dataPages/provider/provider.component
     MatDatepickerModule,
     DatePipe,
     { provide: HTTP_INTERCEPTORS, useClass: TokenInterceptor, multi: true },
-    
-    {provide: MAT_DATE_LOCALE, useValue: 'de-DE'},
+
+    { provide: MAT_DATE_LOCALE, useValue: 'de-DE' },
   ],
 
   bootstrap: [AppComponent],
