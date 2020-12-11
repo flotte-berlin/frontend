@@ -14,6 +14,21 @@ Run `ng serve` for a dev server. Navigate to `http://localhost:4200/`. The app w
 
 Run `ng build` to build the project. The build artifacts will be stored in the `dist/` directory. Use the `--prod` flag for a production build.
 
+### Build Container
+
+You can build a small container that runs a single executable that serves the front end. The web app is baked into the executable.
+To build the container, run
+```bash
+docker build -t <tag> .
+```
+You can build the container for a different architecture. For example for arm64, run
+```bash
+docker build -t <tag:arm64> . --build-arg ARCH=arm64
+```
+See [here](https://golang.org/cmd/go/) for more info about how to build go binaries.
+
+__Note:__ After [changing the urls](#Where-to-change-the-urls) for the back end you need to rebuild the container with the new urls.
+
 ### regenerate graphql schema, queries and mutations and more
 
 Run `npm run generateGQL`
