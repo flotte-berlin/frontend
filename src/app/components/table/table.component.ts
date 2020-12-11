@@ -68,6 +68,9 @@ export class TableComponent implements AfterViewInit {
   additionalColumnsBack: string[] = ['buttons'];
   displayedColumns: string[] = [];
 
+  displayedFilterColumns = [];
+  filters: any = {};
+
   loadingRowIds: string[] = [];
 
   /** data source of the table */
@@ -80,10 +83,9 @@ export class TableComponent implements AfterViewInit {
 
   @Input()
   relockingIntervalDuration = 1000 * 60 * 1;
-  filter = { includesString: '', onlyUnsaved: false };
-  filterStringChanged: Subject<string> = new Subject<string>();
 
-  initialFilter = this.filter;
+  filterChanged: Subject<any> = new Subject<any>();
+
   isLoaded = false;
 
   @Output() createEvent = new EventEmitter();
@@ -98,12 +100,27 @@ export class TableComponent implements AfterViewInit {
     private activatedroute: ActivatedRoute,
     private cdRef: ChangeDetectorRef
   ) {
-    this.filter.includesString =
-      this.activatedroute.snapshot.queryParamMap.get('filter') || '';
+    /*this.filter.includesString =
+      this.activatedroute.snapshot.queryParamMap.get('filter') || '';*/
+    //TODO: add filter from url
+  }
+
+  ngOnInit() {
+    this.addColumnPropertiesFromGQLSchemaToColumnInfo();
+    console.log(this.columnInfo);
+    this.columnInfo.forEach((column) =>
+      this.displayedColumns.push(column.dataPath)
+    );
+    this.displayedFilterColumns = this.displayedColumns.map(
+      (columnName) => columnName + '.filter'
+    );
+    this.displayedColumns.unshift(...this.additionalColumnsFront);
+    this.displayedColumns.push(...this.additionalColumnsBack);
+
+    this.resetFilters();
   }
 
   ngAfterViewInit(): void {
-    this.addColumnPropertiesFromGQLSchemaToColumnInfo();
     this.data.paginator = this.paginator;
     this.data.sortingDataAccessor = (item, columnName) => {
       if (typeof item[columnName] === 'string') {
@@ -113,10 +130,52 @@ export class TableComponent implements AfterViewInit {
     };
     this.data.sort = this.sort;
 
-    this.data.filter = (this.filter as unknown) as string;
+    this.data.filter = (this.filters as unknown) as string;
     this.data.filterPredicate = (data, filter: any) => {
-      const a = !filter.onlyUnsaved || data.newObject || data.isLockedByMe;
-      const b =
+      if (data.newObject) {
+        return true; // always show new objects
+      }
+      if (filter.onlyUnsaved && !data.isLockedByMe) {
+        return false;
+      }
+      for (const filterElementName of Object.keys(filter.columnFilters)) {
+        const filterElement = filter.columnFilters[filterElementName];
+        if (filterElement.value) {
+          if (filterElement.type === 'String' || filterElement.type === 'Id') {
+            let searchString = filterElement.value.trim();
+            let dataElement = data[filterElementName]?.trim();
+            if (!filterElement.options.caseSensitive) {
+              searchString = searchString.toLowerCase();
+              dataElement = dataElement.toLowerCase();
+            }
+            if (
+              (filterElement.options.exact && dataElement !== searchString) ||
+              !dataElement.includes(searchString)
+            ) {
+              return false;
+            }
+          }
+        }
+        if (filterElement.min != null || filterElement.max != null) {
+          if (
+            filterElement.type === 'Float' ||
+            filterElement.type === 'Int' ||
+            filterElement.type === 'Money'
+          ) {
+            let dataElement = data[filterElementName];
+            if (dataElement == null) {
+              return false;
+            }
+            if (filterElement.min != null && dataElement < filterElement.min) {
+              return false;
+            }
+            if (filterElement.max != null && dataElement > filterElement.max) {
+              return false;
+            }
+          }
+        }
+      }
+      /*const b =
         !filter.includesString ||
         Object.keys(data).some(
           (k) =>
@@ -125,19 +184,13 @@ export class TableComponent implements AfterViewInit {
               .toString()
               .toLowerCase()
               .includes(filter.includesString.toLowerCase())
-        );
-      return a && b;
+        );*/
+      return true;
     };
 
-    this.filterStringChanged
-      .pipe(debounceTime(400))
-      .subscribe(() => this.applyFilter());
-
-    this.columnInfo.forEach((column) =>
-      this.displayedColumns.push(column.dataPath)
-    );
-    this.displayedColumns.unshift(...this.additionalColumnsFront);
-    this.displayedColumns.push(...this.additionalColumnsBack);
+    this.filterChanged.pipe(debounceTime(400)).subscribe(() => {
+      this.applyFilters();
+    });
 
     this.dataService.loadingRowIds.subscribe((rowIds) => {
       this.loadingRowIds = rowIds;
@@ -287,7 +340,6 @@ export class TableComponent implements AfterViewInit {
 
   addNewObject() {
     this.paginator.firstPage();
-    this.setFilter({ ...this.filter, includesString: '' });
     this.resetSorting();
     this.data.data = [
       { newObject: true, id: this.getNewId() },
@@ -413,25 +465,36 @@ export class TableComponent implements AfterViewInit {
   }
 
   showOnlyUnsavedElements(value: boolean) {
-    this.filter.onlyUnsaved = value;
-    this.filter.includesString = '';
-    this.applyFilter();
+    if (value) {
+      this.resetFilters();
+    }
+    this.filters['onlyUnsaved'] = value;
+    this.applyFilters();
   }
 
-  newFilterStringValue(): void {
-    this.filterStringChanged.next(this.filter.includesString);
+  newFilterValue(): void {
+    console.log(this.filters);
+    this.filterChanged.next(this.filters);
   }
 
-  applyFilter(): void {
-    this.data.filter = ({
-      ...this.filter,
-      includesString: this.filter.includesString.trim().toLowerCase(),
-    } as unknown) as string;
+  applyFilters(): void {
+    this.isLoaded = false;
+    setTimeout(() => {
+      this.data.filter = (this.filters as unknown) as string;
+      this.isLoaded = true;
+    });
   }
 
-  setFilter(filterObject) {
-    this.filter = filterObject;
-    this.applyFilter();
+  resetFilters() {
+    this.filters = [];
+    this.filters['columnFilters'] = [];
+    for (const column of this.columnInfo) {
+      this.filters.columnFilters[column.dataPath] = {
+        value: null,
+        type: column.type,
+        options: {},
+      };
+    }
   }
 
   resetSorting() {

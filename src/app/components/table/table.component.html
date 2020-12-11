@@ -30,28 +30,8 @@
     >
       <mat-icon class="spin">add</mat-icon>
     </button>
-    <mat-form-field class="filter">
-      <mat-label>Filter</mat-label>
-      <input
-        matInput
-        [(ngModel)]="filter.includesString"
-        (ngModelChange)="newFilterStringValue()"
-        placeholder="Suchbegriff eingeben..."
-      />
-      <button
-        mat-button
-        *ngIf="filter.includesString"
-        matSuffix
-        mat-icon-button
-        aria-label="Clear"
-        (click)="filter.includesString = ''; applyFilter()"
-        color="accent"
-      >
-        <mat-icon>close</mat-icon>
-      </button>
-    </mat-form-field>
     <button
-      *ngIf="!filter.onlyUnsaved && countUnsavedRows() > 0"
+      *ngIf="!filters['onlyUnsaved'] && countUnsavedRows() > 0"
       mat-raised-button
       color="accent"
       class="table-control-button"
@@ -62,9 +42,9 @@
       {{ countUnsavedRows() }} ungespeicherte(s) Element(e) anzeigen
     </button>
     <mat-checkbox
-      *ngIf="filter.onlyUnsaved"
+      *ngIf="filters['onlyUnsaved']"
       (change)="showOnlyUnsavedElements(false)"
-      [(ngModel)]="filter.onlyUnsaved"
+      [(ngModel)]="filters['onlyUnsaved']"
     >
       nur ungespeicherte Elemente anzeigen
     </mat-checkbox>
@@ -85,6 +65,88 @@
     >
       <!--- Note that these columns can be defined in any order.
           The actual rendered columns are set as a property on the row definition" -->
+
+      <!-- Filter Header Row -->
+      <ng-container
+        *ngFor="let column of columnInfo"
+        [matColumnDef]="column.dataPath + '.filter'"
+        [sticky]="isStickyColumn(column.dataPath)"
+      >
+        <th mat-header-cell *matHeaderCellDef>
+          <mat-form-field
+            *ngIf="column.type === 'String' || column.type === 'Id'"
+          >
+            <input
+              matInput
+              [type]="text"
+              [(ngModel)]="filters.columnFilters[column.dataPath].value"
+              (ngModelChange)="newFilterValue()"
+            />
+            <button
+              matTooltip="exakte Übereinstimmung"
+              mat-button
+              [color]="
+                filters.columnFilters[column.dataPath].options['exact']
+                  ? 'primary'
+                  : ''
+              "
+              matSuffix
+              mat-icon-button
+              (click)="
+                filters.columnFilters[column.dataPath].options[
+                  'exact'
+                ] = !filters.columnFilters[column.dataPath].options['exact'];
+                newFilterValue()
+              "
+            >
+              <mat-icon>short_text</mat-icon>
+            </button>
+            <button
+              matTooltip="Groß- und Kleinschreibung beachten"
+              mat-button
+              [color]="
+                filters.columnFilters[column.dataPath].options['caseSensitive']
+                  ? 'primary'
+                  : ''
+              "
+              matSuffix
+              mat-icon-button
+              (click)="
+                filters.columnFilters[column.dataPath].options[
+                  'caseSensitive'
+                ] = !filters.columnFilters[column.dataPath].options[
+                  'caseSensitive'
+                ];
+                newFilterValue()
+              "
+            >
+              <mat-icon>text_fields</mat-icon>
+            </button>
+            <button
+              *ngIf="filters.columnFilters[column.dataPath].value"
+              matTooltip="Eingabe löschen"
+              mat-button
+              matSuffix
+              mat-icon-button
+              (click)="
+                filters.columnFilters[column.dataPath].value = '';
+                newFilterValue()
+              "
+            >
+              <mat-icon>cancel</mat-icon>
+            </button>
+          </mat-form-field>
+          <app-number-range-cell
+            *ngIf="column.type === 'Int' || column.type === 'Float' || column.type === 'Money'"
+            [editable]="true"
+            [(min)]="filters.columnFilters[column.dataPath].min"
+            (minChange)="newFilterValue()"
+            [(max)]="filters.columnFilters[column.dataPath].max"
+            (maxChange)="newFilterValue()"
+          >
+          </app-number-range-cell>
+        </th>
+      </ng-container>
 
       <!-- Checkbox Column -->
       <ng-container matColumnDef="select" sticky>
@@ -331,6 +393,10 @@
       </ng-container>
 
       <!-- Table Definition -->
+      <tr
+        mat-header-row
+        *matHeaderRowDef="displayedFilterColumns; sticky: true"
+      ></tr>
       <tr mat-header-row *matHeaderRowDef="displayedColumns; sticky: true"></tr>
       <tr mat-row *matRowDef="let row; columns: displayedColumns"></tr>
     </table>
