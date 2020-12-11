@@ -91,9 +91,14 @@ export class DataPageComponent implements OnInit, OnDestroy {
     this.id = this.route.snapshot.paramMap.get('id');
     this.reloadPageData();
     this.dataService.pageData.subscribe((data) => {
-      // dont overwrite data when in edit mode and relock is performed
-      if (this.data?.isLockedByMe && data?.isLockedByMe) return;
-      this.data = flatten(data);
+      if (data == null) {
+        this.data = null;
+      } else if (this.data?.isLockedByMe && data?.isLockedByMe) {
+        // dont overwrite data when in edit mode and relock is performed
+        return;
+      } else {
+        this.data = flatten(data);
+      }
     });
     this.dataService.isLoadingPageData.subscribe(
       (isLoading) => (this.isLoading = isLoading)
@@ -103,7 +108,7 @@ export class DataPageComponent implements OnInit, OnDestroy {
     });
 
     this.relockingInterval = setInterval(() => {
-      if (this.data.isLockedByMe) {
+      if (this.data?.isLockedByMe) {
         this.lock();
       }
     }, this.relockingIntervalDuration);
@@ -149,7 +154,8 @@ export class DataPageComponent implements OnInit, OnDestroy {
               prop.dataPath +
               ' on ' +
               this.pageDataGQLType
-          );}
+          );
+        }
         prop.required =
           prop.required != null ? prop.required : typeInformation.isRequired;
 

@@ -7,7 +7,7 @@
   <h1>Seite konnte nicht gefunden werden :(</h1>
 </div>
 
-<div class="data-page-wrapper" *ngIf="data">
+<div class="data-page-wrapper" *ngIf="data && !isLoading">
   <h1 class="headline">
     {{ getHeadline !== undefined ? getHeadline(data) : data[headlineDataPath] }}
     <mat-icon>{{ headlineIconName }}</mat-icon>
@@ -24,7 +24,7 @@
         <h2>{{ object.title }}</h2>
         <button
           mat-button
-          *ngIf="data.isLockedByMe && object.possibleObjects"
+          *ngIf="data?.isLockedByMe && object.possibleObjects"
           (click)="openSelectObjectDialog(object)"
         >
           <mat-icon>expand_more</mat-icon>
@@ -38,8 +38,8 @@
             prop.type !== 'DateRange'
           "
           [isList]="prop.list"
-          [editable]="data.isLockedByMe && prop.acceptedForUpdating"
-          [required]="prop.requiredForUpdating && data.isLockedByMe"
+          [editable]="data?.isLockedByMe && prop.acceptedForUpdating"
+          [required]="prop.requiredForUpdating && data?.isLockedByMe"
           (validityChange)="validityChange(prop.dataPath, $event)"
           [(value)]="data[prop.dataPath]"
           [label]="prop.translation || prop.dataPath"
@@ -47,7 +47,7 @@
         ></app-cell>
         <app-number-range-cell
           *ngIf="prop.type === 'NumRange'"
-          [editable]="data.isLockedByMe && prop.acceptedForUpdating"
+          [editable]="data?.isLockedByMe && prop.acceptedForUpdating"
           (validityChange)="validityChange(prop.dataPath, $event)"
           [(min)]="data[prop.dataPath + '.min']"
           [(max)]="data[prop.dataPath + '.max']"
@@ -55,8 +55,8 @@
         ></app-number-range-cell>
         <app-date-range-cell
           *ngIf="prop.type === 'DateRange'"
-          [editable]="data.isLockedByMe && prop.acceptedForUpdating"
-          [required]="prop.requiredForUpdating && data.isLockedByMe"
+          [editable]="data?.isLockedByMe && prop.acceptedForUpdating"
+          [required]="prop.requiredForUpdating && data?.isLockedByMe"
           (validityChange)="validityChange(prop.dataPath, $event)"
           [(from)]="data[prop.dataPath + '.from']"
           [(to)]="data[prop.dataPath + '.to']"
@@ -100,7 +100,7 @@
         [nameToShowInSelection]="object.nameToShowInSelection"
         [columnInfo]="object.columnInfo"
         [data]="data[object.dataPath]"
-        [editable]="data.isLockedByMe"
+        [editable]="data?.isLockedByMe"
         [tableDataGQLType]="object.tableDataGQLType"
         (referenceIds)="addReferenceIdsToObject($event, object)"
         [editableReferences]="object.editableReferences"
@@ -124,7 +124,7 @@
   <button
     mat-fab
     (click)="lock()"
-    *ngIf="!data.isLockedByMe && !data.isLocked"
+    *ngIf="!data?.isLockedByMe && !data?.isLocked"
     class="floating-fab-button"
     color="primary"
     [disabled]="isSavingOrLocking || isLoading"
@@ -134,14 +134,14 @@
   <button
     mat-mini-fab
     (click)="cancel()"
-    *ngIf="data.isLockedByMe"
+    *ngIf="data?.isLockedByMe"
     class="floating-fab-button"
     [disabled]="isSavingOrLocking || isLoading"
   >
     <mat-icon>cancel</mat-icon>
   </button>
   <div
-    *ngIf="data.isLockedByMe"
+    *ngIf="data?.isLockedByMe"
     [matTooltip]="
       countUnvalidProperties() > 0
         ? 'Ungültige oder nicht ausgefüllte Pflichtfelder (rot): ' +
@@ -162,7 +162,7 @@
   </div>
   <button
     mat-fab
-    *ngIf="data.isLocked"
+    *ngIf="data?.isLocked"
     matTooltip="Dieser Eintrag wird gerade von einem anderen Bearbeiter editiert. Aktualisieren Sie die Seite, um den neuen Status abzurufen."
     class="floating-fab-button"
   >
