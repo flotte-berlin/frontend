@@ -170,7 +170,10 @@ export class BikeComponent implements OnInit {
           dataPath: 'provider.privatePerson.person.firstName',
           translation: 'Vorname',
         },
-        { dataPath: 'provider.privatePerson.person.name', translation: 'Nachname' },
+        {
+          dataPath: 'provider.privatePerson.person.name',
+          translation: 'Nachname',
+        },
         {
           dataPath: 'provider.privatePerson.email',
           translation: 'Email',
@@ -220,7 +223,10 @@ export class BikeComponent implements OnInit {
           },
         },
         { dataPath: 'lendingStation.address.street', translation: 'Straße' },
-        { dataPath: 'lendingStation.address.number', translation: 'Hausnummer' },
+        {
+          dataPath: 'lendingStation.address.number',
+          translation: 'Hausnummer',
+        },
         { dataPath: 'lendingStation.address.zip', translation: 'PLZ' },
         { dataPath: 'lendingStation.address.city', translation: 'Ort' },
       ],
@@ -284,6 +290,39 @@ export class BikeComponent implements OnInit {
       ],
       editableReferences: false,
       linkToTable: () => '/table/timeFrames',
+      linkToTableParams: (bike) => {
+        return { filter: bike.name };
+      },
+    },
+    {
+      type: 'ReferenceTable',
+      title: 'Engagements',
+      dataPath: 'engagements',
+      dataService: null,
+      columnInfo: [
+        {
+          dataPath: 'engagementType.name',
+          translation: 'Engagementtyp',
+        },
+        {
+          dataPath: 'engagementType.description',
+          translation: 'Engagementtyp Erklärung',
+        },
+        { dataPath: 'dateRange', translation: 'Zeitraum' },
+        {
+          dataPath: 'participant.contactInformation.person.firstName',
+          translation: 'Aktiver Vorname',
+        },
+        {
+          dataPath: 'participant.contactInformation.person.name',
+          translation: 'Aktiver Nachname',
+          link: (row: any) => {
+            return '/participant/' + row['participant.id'];
+          },
+        },
+      ],
+      editableReferences: false,
+      linkToTable: () => '/table/engagements',
       linkToTableParams: (bike) => {
         return { filter: bike.name };
       },
