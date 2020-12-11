@@ -20,6 +20,9 @@ import { FormControl, FormGroup, Validators } from '@angular/forms';
 export class CellComponent implements AfterViewInit {
   @Input()
   set value(value: any) {
+    if (this.inputType === 'Money') {
+      value = value.toString().replace('$', '');
+    }
     this._value = value;
     setTimeout(() => {
       this.checkIfValid();
@@ -78,7 +81,7 @@ export class CellComponent implements AfterViewInit {
   htmlInputType = 'string';
 
   @ViewChild('input') input: any;
-  
+
   dateGroup: FormGroup;
 
   readonly separatorKeysCodes: number[] = [ENTER, COMMA];
@@ -86,7 +89,7 @@ export class CellComponent implements AfterViewInit {
   constructor(private cdr: ChangeDetectorRef, public datepipe: DatePipe) {}
 
   ngOnInit() {
-    if(this.htmlInputType === "date") {
+    if (this.htmlInputType === 'date') {
       this.dateGroup = new FormGroup({
         dateControl: new FormControl(),
       });
@@ -106,7 +109,6 @@ export class CellComponent implements AfterViewInit {
           this.change(false);
         });
       }
-
     }
   }
 
@@ -114,7 +116,7 @@ export class CellComponent implements AfterViewInit {
     if (type.split('//')[0] === 'Enum') {
       this.enumValues = type.split('//').slice(1);
       this.htmlInputType = 'enum';
-    } else if (type === 'Int' || type === 'Float') {
+    } else if (type === 'Int' || type === 'Float' || type === 'Money') {
       this.htmlInputType = 'number';
     } else if (type === 'ID' || type === 'String') {
       this.htmlInputType = 'text';
@@ -138,6 +140,9 @@ export class CellComponent implements AfterViewInit {
   }
 
   change(newValue): void {
+    if (this.inputType === 'Money') {
+      newValue = newValue.toString().replace('$', '');
+    }
     if (this.inputType === 'Int') {
       newValue = newValue.toString().replace('.', '');
     }
@@ -179,17 +184,22 @@ export class CellComponent implements AfterViewInit {
       if (!this.value && this.isList) {
         this.value = [];
         this.valueChange.emit([]);
-      } else if (this.editable &&
-        this.required && this.htmlInputType === "date") {
-          const dateIsEmpty = !this.value;
-          this.isValid = !dateIsEmpty;
-          this.validityChange.emit(this.isValid);
-          if (dateIsEmpty) {
-            this.dateGroup.controls['dateControl'].setErrors({ rangeError: true });
-          } else {
-            this.dateGroup.controls['dateControl'].setErrors(null);
-          }
-        } else if (
+      } else if (
+        this.editable &&
+        this.required &&
+        this.htmlInputType === 'date'
+      ) {
+        const dateIsEmpty = !this.value;
+        this.isValid = !dateIsEmpty;
+        this.validityChange.emit(this.isValid);
+        if (dateIsEmpty) {
+          this.dateGroup.controls['dateControl'].setErrors({
+            rangeError: true,
+          });
+        } else {
+          this.dateGroup.controls['dateControl'].setErrors(null);
+        }
+      } else if (
         this.editable &&
         this.required &&
         this.inputType !== 'Boolean' &&
@@ -202,7 +212,7 @@ export class CellComponent implements AfterViewInit {
   }
 
   dateChange(event) {
-    this.value = this.transformDate(event.value)
+    this.value = this.transformDate(event.value);
     this.valueChange.emit(this.value);
     this.checkIfValid();
   }

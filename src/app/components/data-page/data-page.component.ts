@@ -128,6 +128,14 @@ export class DataPageComponent implements OnInit, OnDestroy {
             this.pageDataGQLType,
             prop.dataPath
           ).type;
+        if (!prop.type) {
+          console.error(
+            "Didn't found type for: " +
+              prop.dataPath +
+              ' on ' +
+              this.pageDataGQLType
+          );
+        }
         prop.referenceIds = [];
       } else {
         const typeInformation = this.schemaService.getTypeInformation(
@@ -135,6 +143,13 @@ export class DataPageComponent implements OnInit, OnDestroy {
           prop.dataPath
         );
         prop.type = prop.type || typeInformation.type;
+        if (!prop.type) {
+          console.error(
+            "Didn't found type for: " +
+              prop.dataPath +
+              ' on ' +
+              this.pageDataGQLType
+          );}
         prop.required =
           prop.required != null ? prop.required : typeInformation.isRequired;
 
@@ -208,7 +223,7 @@ export class DataPageComponent implements OnInit, OnDestroy {
         this.data[object.propertyNameOfReferenceId] = null;
         for (const prop in this.data) {
           if (prop.startsWith(object.propertyPrefixToOverwrite)) {
-           this.data[prop] = null;
+            this.data[prop] = null;
           }
         }
       }
