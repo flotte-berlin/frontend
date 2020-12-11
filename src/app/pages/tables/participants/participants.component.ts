@@ -14,7 +14,7 @@ export class ParticipantsComponent implements OnInit {
       translation: 'Vorname',
       sticky: true,
       link: (row: any) => {
-        return '/person/' + row['contactInformation.person.id'];
+        return '/participant/' + row['id'];
       },
     },
     {

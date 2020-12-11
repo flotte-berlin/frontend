@@ -51,7 +51,7 @@ export class ProviderComponent implements OnInit {
         { dataPath: 'formName', translation: 'Formular Name' },
         {
           type: 'Link',
-          linkText: "Zum Organisation",
+          linkText: "Zur Organisation",
           link: (data) => {
             return '/organisation/' + data['organisation.id'];
           },

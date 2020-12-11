@@ -45,11 +45,18 @@ export class LendingStationComponent implements OnInit {
     {
       type: 'Group',
       title: 'Organisation',
+      hideCondition: (data) => data.organisation === null,
       properties: [
+        {
+          type: 'Link',
+          linkText: "Zur Organisation",
+          link: (data) => {
+            return '/organisation/' + data['organisation.id'];
+          },
+        },
         {
           dataPath: 'organisation.name',
           translation: 'Name',
-          link: (data) => '/organisation/' + data['organisation.id'],
         },
         { dataPath: 'organisation.address.street', translation: 'Straße' },
         { dataPath: 'organisation.address.number', translation: 'Hausnummer' },

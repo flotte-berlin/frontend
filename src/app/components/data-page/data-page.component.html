@@ -32,7 +32,12 @@
       </mat-card-title>
       <ng-container *ngFor="let prop of object.properties">
         <app-cell
-          *ngIf="prop.type !== 'NumRange' && prop.type !== 'Link'"
+          *ngIf="
+            prop.type !== 'NumRange' &&
+            prop.type !== 'Link' &&
+            prop.type !== 'DateRange'
+          "
+          [isList]="prop.list"
           [editable]="data.isLockedByMe && prop.acceptedForUpdating"
           [required]="prop.requiredForUpdating && data.isLockedByMe"
           (validityChange)="validityChange(prop.dataPath, $event)"
@@ -48,6 +53,14 @@
           [(max)]="data[prop.dataPath + '.max']"
           [label]="prop.translation || prop.dataPath"
         ></app-number-range-cell>
+        <app-date-range-cell
+          *ngIf="prop.type === 'DateRange'"
+          [editable]="data.isLockedByMe && prop.acceptedForUpdating"
+          [required]="prop.requiredForUpdating && data.isLockedByMe"
+          (validityChange)="validityChange(prop.dataPath, $event)"
+          [(from)]="data[prop.dataPath + '.from']"
+          [(to)]="data[prop.dataPath + '.to']"
+        ></app-date-range-cell>
         <a
           mat-button
           class="link-button"

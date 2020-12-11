@@ -88,7 +88,6 @@ export class DataPageComponent implements OnInit, OnDestroy {
 
   ngOnInit(): void {
     this.addPropertiesFromGQLSchemaToObject(this.propertiesInfo);
-    console.log(this.propertiesInfo);
     this.id = this.route.snapshot.paramMap.get('id');
     this.reloadPageData();
     this.dataService.pageData.subscribe((data) => {
@@ -143,6 +142,7 @@ export class DataPageComponent implements OnInit, OnDestroy {
           prop.dataPath
         );
         prop.type = prop.type || typeInformation.type;
+        prop.list = typeInformation.isList;
         if (!prop.type) {
           console.error(
             "Didn't found type for: " +

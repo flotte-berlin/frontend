@@ -1,5 +1,6 @@
 import { Component, OnInit } from '@angular/core';
 import { LendingStationsService } from 'src/app/services/lending-stations.service';
+import { OrganisationsService } from 'src/app/services/organisation.service';
 
 @Component({
   selector: 'app-lending-stations',
@@ -23,7 +24,20 @@ export class LendingStationsComponent implements OnInit {
 
     { dataPath: 'remark', translation: 'Anmerkung' },
 
-    { dataPath: 'organisation.name', translation: 'Organisation' },
+    {
+      dataPath: 'organisation.name',
+      translation: 'Organisation',
+      link: (row: any) => {
+        return '/organisation/' + row['organisation.id'];
+      },
+      possibleObjects: [],
+      nameToShowInSelection: (o) => o.name,
+      propertyPrefixToOverwrite: 'organisation',
+      currentlySelectedObjectId: (station) => {
+        return station['organisation.id'];
+      },
+      propertyNameOfReferenceId: 'organisationId',
+    },
 
     {
       dataPath: 'contactInformationIntern.person.firstName',
@@ -74,7 +88,17 @@ export class LendingStationsComponent implements OnInit {
   headlineIconName = 'location_on';
 
   loadingRowIds: string[] = [];
-  constructor(private lendingStationsService: LendingStationsService) {}
+  constructor(
+    private lendingStationsService: LendingStationsService,
+    private organisationsService: OrganisationsService
+  ) {
+    this.organisationsService.loadTableData();
+    this.organisationsService.tableData.subscribe((data) => {
+      this.columnInfo.find(
+        (column) => column.propertyPrefixToOverwrite === 'organisation'
+      ).possibleObjects = data;
+    });
+  }
 
   ngOnInit() {
     this.dataService = this.lendingStationsService;

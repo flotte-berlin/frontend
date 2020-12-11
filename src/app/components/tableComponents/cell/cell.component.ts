@@ -21,7 +21,7 @@ export class CellComponent implements AfterViewInit {
   @Input()
   set value(value: any) {
     if (this.inputType === 'Money') {
-      value = value.toString().replace('$', '');
+      value = value.toString().replace('$', '').replace('€', '');
     }
     this._value = value;
     setTimeout(() => {
@@ -184,19 +184,20 @@ export class CellComponent implements AfterViewInit {
       if (!this.value && this.isList) {
         this.value = [];
         this.valueChange.emit([]);
-      } else if (
-        this.editable &&
-        this.required &&
-        this.htmlInputType === 'date'
-      ) {
-        const dateIsEmpty = !this.value;
-        this.isValid = !dateIsEmpty;
-        this.validityChange.emit(this.isValid);
-        if (dateIsEmpty) {
-          this.dateGroup.controls['dateControl'].setErrors({
-            rangeError: true,
-          });
+      } else if (this.htmlInputType === 'date') {
+        if (this.editable && this.required) {
+          const dateIsEmpty = !this.value;
+          this.isValid = !dateIsEmpty;
+          this.validityChange.emit(this.isValid);
+          if (dateIsEmpty) {
+            this.dateGroup.controls['dateControl'].setErrors({
+              rangeError: true,
+            });
+          } else {
+            this.dateGroup.controls['dateControl'].setErrors(null);
+          }
         } else {
+          this.validityChange.emit(this.isValid);
           this.dateGroup.controls['dateControl'].setErrors(null);
         }
       } else if (

@@ -13,6 +13,9 @@ export class WorkshopsComponent implements OnInit {
     {
       dataPath: 'title',
       translation: 'Workshopname',
+      link: (row: any) => {
+        return '/workshop/' + row['id'];
+      },
     },
     {
       dataPath: 'description',
