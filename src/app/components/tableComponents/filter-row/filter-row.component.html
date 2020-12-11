@@ -1,3 +1,4 @@
+<!-- String Filter -->
 <mat-form-field *ngIf="column.type === 'String' || column.type === 'Id'">
   <input
     matInput
@@ -8,14 +9,11 @@
   <button
     matTooltip="exakte Übereinstimmung"
     mat-button
-    [color]="
-      filter.options['exact'] ? 'primary' : ''
-    "
+    [color]="filter.options['exact'] ? 'primary' : ''"
     matSuffix
     mat-icon-button
     (click)="
-      filter.options['exact'] = !filter.options['exact'];
-      newFilterValue()
+      filter.options['exact'] = !filter.options['exact']; newFilterValue()
     "
   >
     <mat-icon>short_text</mat-icon>
@@ -23,11 +21,7 @@
   <button
     matTooltip="Groß- und Kleinschreibung beachten"
     mat-button
-    [color]="
-      filter.options['caseSensitive']
-        ? 'primary'
-        : ''
-    "
+    [color]="filter.options['caseSensitive'] ? 'primary' : ''"
     matSuffix
     mat-icon-button
     (click)="
@@ -43,13 +37,13 @@
     mat-button
     matSuffix
     mat-icon-button
-    (click)="
-      filter.value = ''; newFilterValue()
-    "
+    (click)="filter.value = ''; newFilterValue()"
   >
     <mat-icon>cancel</mat-icon>
   </button>
 </mat-form-field>
+
+<!-- Number Filter -->
 <app-number-range-cell
   *ngIf="
     column.type === 'Int' || column.type === 'Float' || column.type === 'Money'
@@ -61,3 +55,27 @@
   (maxChange)="newFilterValue()"
 >
 </app-number-range-cell>
+
+<!-- NumberRange Filter -->
+<ng-container *ngIf="column.type === 'NumRange'">
+    <app-number-range-cell
+    [editable]="true"
+    [(min)]="filter.minValue.min"
+    (minChange)="newFilterValue()"
+    [(max)]="filter.minValue.max"
+    (maxChange)="newFilterValue()"
+    placeholderMin="minmin"
+    placeholderMax="minmax"
+  >
+  </app-number-range-cell>
+  <app-number-range-cell
+    [editable]="true"
+    [(min)]="filter.maxValue.min"
+    (minChange)="newFilterValue()"
+    [(max)]="filter.maxValue.max"
+    (maxChange)="newFilterValue()"
+    placeholderMin="maxmin"
+    placeholderMax="maxmax"
+  >
+  </app-number-range-cell>
+</ng-container>

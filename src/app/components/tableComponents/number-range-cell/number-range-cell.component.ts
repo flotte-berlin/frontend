@@ -37,6 +37,11 @@ export class NumberRangeCellComponent implements OnInit {
 
   rangeForm: FormGroup;
 
+  @Input()
+  placeholderMin = '';
+  @Input()
+  placeholderMax = '';
+
   @Output() minChange = new EventEmitter<number>();
   @Output() maxChange = new EventEmitter<number>();
 

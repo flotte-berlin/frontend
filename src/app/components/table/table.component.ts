@@ -11,6 +11,7 @@ import {
 import { CdkDragDrop, moveItemInArray } from '@angular/cdk/drag-drop';
 import { flatten } from 'src/app/helperFunctions/flattenObject';
 import { deepen } from 'src/app/helperFunctions/deepenObject';
+import { customTableFilterFunction } from 'src/app/helperFunctions/customTableFilterFunction';
 import { SchemaService } from 'src/app/services/schema.service';
 
 import { MatTableDataSource } from '@angular/material/table';
@@ -131,62 +132,7 @@ export class TableComponent implements AfterViewInit {
     this.data.sort = this.sort;
 
     this.data.filter = (this.filters as unknown) as string;
-    this.data.filterPredicate = (data, filter: any) => {
-      if (data.newObject) {
-        return true; // always show new objects
-      }
-      if (filter.onlyUnsaved && !data.isLockedByMe) {
-        return false;
-      }
-      for (const filterElementName of Object.keys(filter.columnFilters)) {
-        const filterElement = filter.columnFilters[filterElementName];
-        if (filterElement.value) {
-          if (filterElement.type === 'String' || filterElement.type === 'Id') {
-            let searchString = filterElement.value.trim();
-            let dataElement = data[filterElementName]?.trim();
-            if (!filterElement.options.caseSensitive) {
-              searchString = searchString.toLowerCase();
-              dataElement = dataElement.toLowerCase();
-            }
-            if (
-              (filterElement.options.exact && dataElement !== searchString) ||
-              !dataElement.includes(searchString)
-            ) {
-              return false;
-            }
-          }
-        }
-        if (filterElement.min != null || filterElement.max != null) {
-          if (
-            filterElement.type === 'Float' ||
-            filterElement.type === 'Int' ||
-            filterElement.type === 'Money'
-          ) {
-            let dataElement = data[filterElementName];
-            if (dataElement == null) {
-              return false;
-            }
-            if (filterElement.min != null && dataElement < filterElement.min) {
-              return false;
-            }
-            if (filterElement.max != null && dataElement > filterElement.max) {
-              return false;
-            }
-          }
-        }
-      }
-      /*const b =
-        !filter.includesString ||
-        Object.keys(data).some(
-          (k) =>
-            data[k] != null &&
-            data[k]
-              .toString()
-              .toLowerCase()
-              .includes(filter.includesString.toLowerCase())
-        );*/
-      return true;
-    };
+    this.data.filterPredicate = customTableFilterFunction;
 
     this.filterChanged.pipe(debounceTime(400)).subscribe(() => {
       this.applyFilters();
@@ -491,6 +437,8 @@ export class TableComponent implements AfterViewInit {
     for (const column of this.columnInfo) {
       this.filters.columnFilters[column.dataPath] = {
         value: null,
+        minValue: {},
+        maxValue: {},
         type: column.type,
         options: {},
       };
