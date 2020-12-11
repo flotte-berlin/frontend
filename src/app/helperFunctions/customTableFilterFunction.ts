@@ -11,6 +11,9 @@ export function customTableFilterFunction(data: any, filter: any) {
       if (filterElement.type === 'String' || filterElement.type === 'Id') {
         let searchString = filterElement.value.trim();
         let dataElement = data[filterElementName]?.trim();
+        if (dataElement == null) {
+            return false;
+        }
         if (!filterElement.options.caseSensitive) {
           searchString = searchString.toLowerCase();
           dataElement = dataElement.toLowerCase();
@@ -38,6 +41,32 @@ export function customTableFilterFunction(data: any, filter: any) {
         }
         if (filterElement.max != null && dataElement > filterElement.max) {
           return false;
+        }
+      }
+    }
+    if (filterElement.type === 'NumRange') {
+      if (
+        filterElement.minValue.min != null ||
+        filterElement.minValue.max != null ||
+        filterElement.maxValue.min != null ||
+        filterElement.maxValue.max != null
+      ) {
+        let dataElementMin = data[filterElementName + '.min'];
+        let dataElementMax = data[filterElementName + '.max'];
+        if (dataElementMin == null && dataElementMax == null) {
+            return false;
+        }
+        if (filterElement.minValue.min != null && dataElementMin < filterElement.minValue.min) {
+            return false;
+        }
+        if (filterElement.minValue.max != null && dataElementMin > filterElement.minValue.max) {
+            return false;
+        }
+        if (filterElement.maxValue.min != null && dataElementMax < filterElement.maxValue.min) {
+            return false;
+        }
+        if (filterElement.maxValue.max != null && dataElementMax > filterElement.maxValue.max) {
+            return false;
         }
       }
     }
