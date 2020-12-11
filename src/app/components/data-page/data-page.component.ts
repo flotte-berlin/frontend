@@ -74,7 +74,7 @@ export class DataPageComponent implements OnInit, OnDestroy {
   @Output() cancelEvent = new EventEmitter();
 
   id: string;
-  data: any;
+  data: any = null;
   isLoading: boolean = false;
   isSavingOrLocking: boolean = false;
 
@@ -88,6 +88,7 @@ export class DataPageComponent implements OnInit, OnDestroy {
 
   ngOnInit(): void {
     this.addPropertiesFromGQLSchemaToObject(this.propertiesInfo);
+    console.log(this.propertiesInfo);
     this.id = this.route.snapshot.paramMap.get('id');
     this.reloadPageData();
     this.dataService.pageData.subscribe((data) => {

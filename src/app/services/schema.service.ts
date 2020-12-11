@@ -27,6 +27,7 @@ export class SchemaService {
       (type) => type.name === startingObjectName
     );
     if (!startingObject) {
+      //console.error("Did't found " + startingObjectName + " in ", startingObject);
       return {
         isPartOfType: false,
         type: '',
@@ -36,6 +37,8 @@ export class SchemaService {
     }
     const fields = startingObject.fields || startingObject.inputFields;
     if (!fields) {
+      //console.error("Did't found fields in ", startingObject);
+
       return {
         isPartOfType: false,
         type: '',
@@ -45,6 +48,8 @@ export class SchemaService {
     }
     const field = fields.find((field) => field.name === variablePath[0]);
     if (!field) {
+      //console.error("[" + startingObjectName + ", " + variable + "] " + "Did't found field in ", fields);
+
       return {
         isPartOfType: false,
         type: '',

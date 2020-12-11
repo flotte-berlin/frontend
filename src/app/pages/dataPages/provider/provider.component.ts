@@ -17,6 +17,7 @@ export class ProviderComponent implements OnInit {
       title: 'Allgemein',
       hideCondition: (data) => data.privatePerson === null,
       properties: [
+        { dataPath: 'formName', translation: 'Formular Name' },
         {
           type: 'Link',
           linkText: "Zur Person",
@@ -47,6 +48,7 @@ export class ProviderComponent implements OnInit {
       title: 'Allgemein',
       hideCondition: (data) => data.organisation === null,
       properties: [
+        { dataPath: 'formName', translation: 'Formular Name' },
         {
           type: 'Link',
           linkText: "Zum Organisation",
@@ -54,10 +56,11 @@ export class ProviderComponent implements OnInit {
             return '/organisation/' + data['organisation.id'];
           },
         },
-        { dataPath: 'organisation.name', translation: 'Name' },
-        { dataPath: 'organisation.address.street', translation: 'Straße' },
+        { dataPath: 'organisation.name', translation: 'Name Organisation' },
         { dataPath: 'organisation.address.number', translation: 'Hausnummer' },
+        { dataPath: 'organisation.address.street', translation: 'Straße' },
         { dataPath: 'organisation.address.zip', translation: 'Postleitzahl' },
+        { dataPath: 'organisation.address.city', translation: 'Ort' },
       ],
     },
     {

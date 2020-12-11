@@ -24,6 +24,7 @@ fragment LendingStationFieldsForTable on LendingStation {
   organisation {
     ...OrganisationFieldsGeneral
   }
+  remark
   isLocked
   isLockedByMe
   lockedBy
@@ -40,6 +41,8 @@ fragment LendingStationFieldsForPage on LendingStation {
     ...TimeFrameFieldsForLendingStation
   }
   loanPeriod {
+    generalRemark
+    holidays
     mo
     tu
     we

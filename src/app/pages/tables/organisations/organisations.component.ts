@@ -19,6 +19,7 @@ export class OrganisationsComponent implements OnInit {
     { dataPath: 'address.number', translation: 'Hausnummer' },
     { dataPath: 'address.street', translation: 'Straße' },
     { dataPath: 'address.zip', translation: 'Postleitzahl' },
+{ dataPath: 'address.city', translation: 'Ort' },
 
     { dataPath: 'associationNo', translation: 'Vereinsnummer' },
     { dataPath: 'registeredAt', translation: 'Registergericht' },

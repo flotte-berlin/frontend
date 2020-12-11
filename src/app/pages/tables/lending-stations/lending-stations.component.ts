@@ -19,6 +19,9 @@ export class LendingStationsComponent implements OnInit {
     { dataPath: 'address.number', translation: 'Hausnummer' },
     { dataPath: 'address.street', translation: 'Straße' },
     { dataPath: 'address.zip', translation: 'Postleitzahl' },
+    { dataPath: 'address.city', translation: 'Ort' },
+
+    { dataPath: 'remark', translation: 'Anmerkung' },
 
     { dataPath: 'organisation.name', translation: 'Organisation' },
 

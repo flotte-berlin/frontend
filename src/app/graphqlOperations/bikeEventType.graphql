@@ -4,8 +4,8 @@ query GetBikeEventTypes {
   }
 }
 
-mutation CreateBikeEventType($bikeEventType: String!) {
-  createBikeEventType(name: $bikeEventType) {
+mutation CreateBikeEventType($bikeEventType: BikeEventTypeCreateInput!) {
+  createBikeEventType(bikeEventType: $bikeEventType) {
     ...BikeEventTypeFields
   }
 }

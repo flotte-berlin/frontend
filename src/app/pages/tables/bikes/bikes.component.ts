@@ -111,17 +111,17 @@ export class BikesComponent implements OnInit {
       dataPath: 'provider.privatePerson.person.contactInformation.email',
       translation: '',
     },
-    { dataPath: 'lendingStation.id', translation: '' },
     {
       dataPath: 'lendingStation.name',
-      translation: '',
+      translation: 'Standort',
       link: (row: any) => {
         return '/lendingStation/' + row['lendingStation.id'];
       },
     },
-    { dataPath: 'lendingStation.address.number', translation: '' },
-    { dataPath: 'lendingStation.address.street', translation: '' },
-    { dataPath: 'lendingStation.address.zip', translation: '' },
+    { dataPath: 'lendingStation.address.street', translation: 'Straße' },
+    { dataPath: 'lendingStation.address.number', translation: 'Hausnummer' },
+    { dataPath: 'lendingStation.address.zip', translation: 'PLZ' },
+    { dataPath: 'lendingStation.address.city', translation: 'Ort' },
   ];
 
   dataService: any;

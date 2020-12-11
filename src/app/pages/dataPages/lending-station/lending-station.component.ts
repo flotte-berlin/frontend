@@ -14,22 +14,25 @@ export class LendingStationComponent implements OnInit {
       title: 'Allgemein',
       properties: [
         { dataPath: 'name', translation: 'Name' },
-        { dataPath: 'organisation.name', translation: 'Organisation' },
+        { dataPath: 'remark', translation: 'Anmerkung' },
       ],
     },
     {
       type: 'Group',
       title: 'Adresse',
       properties: [
-        { dataPath: 'address.number', translation: 'Hausnummer' },
         { dataPath: 'address.street', translation: 'Straße' },
+        { dataPath: 'address.number', translation: 'Hausnummer' },
         { dataPath: 'address.zip', translation: 'Postleitzahl' },
+        { dataPath: 'address.city', translation: 'Ort' },
       ],
     },
     {
       type: 'Group',
       title: 'Ausleihzeiten',
       properties: [
+        { dataPath: 'loanPeriod.generalRemark', translation: 'Anmerkung' },
+        { dataPath: 'loanPeriod.holidays', translation: 'An Feiertagen' },
         { dataPath: 'loanPeriod.mo', translation: 'Montag' },
         { dataPath: 'loanPeriod.tu', translation: 'Dienstag' },
         { dataPath: 'loanPeriod.we', translation: 'Mittwoch' },
@@ -51,6 +54,7 @@ export class LendingStationComponent implements OnInit {
         { dataPath: 'organisation.address.street', translation: 'Straße' },
         { dataPath: 'organisation.address.number', translation: 'Hausnummer' },
         { dataPath: 'organisation.address.zip', translation: 'Postleitzahl' },
+        { dataPath: 'organisation.address.city', translation: 'Ort' },
         { dataPath: 'organisation.associationNo', translation: 'Nummer' },
       ],
     },
