@@ -7,6 +7,7 @@ export function customTableFilterFunction(data: any, filter: any) {
   }
   for (const filterElementName of Object.keys(filter.columnFilters)) {
     const filterElement = filter.columnFilters[filterElementName];
+    // String Filter
     if (filterElement.value) {
       if (filterElement.type === 'String' || filterElement.type === 'Id') {
         let searchString = filterElement.value.trim();
@@ -26,6 +27,7 @@ export function customTableFilterFunction(data: any, filter: any) {
         }
       }
     }
+    // Number Filter
     if (filterElement.min != null || filterElement.max != null) {
       if (
         filterElement.type === 'Float' ||
@@ -44,6 +46,7 @@ export function customTableFilterFunction(data: any, filter: any) {
         }
       }
     }
+    // NumberRange Filter
     if (filterElement.type === 'NumRange') {
       if (
         filterElement.minValue.min != null ||
@@ -69,6 +72,19 @@ export function customTableFilterFunction(data: any, filter: any) {
             return false;
         }
       }
+    }
+    // Date Filter
+    if (filterElement.from != null || filterElement.to != null) {
+        let dataElement = data[filterElementName];
+        if (dataElement == null) {
+            return false;
+        }
+        if (filterElement.from != null && new Date(dataElement) < new Date(filterElement.from)) {
+            return false;
+        }
+        if (filterElement.to != null && new Date(dataElement) > new Date(filterElement.to)) {
+            return false;
+        }
     }
   }
   /*const b =

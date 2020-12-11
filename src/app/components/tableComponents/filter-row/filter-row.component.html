@@ -58,7 +58,7 @@
 
 <!-- NumberRange Filter -->
 <ng-container *ngIf="column.type === 'NumRange'">
-    <app-number-range-cell
+  <app-number-range-cell
     [editable]="true"
     [(min)]="filter.minValue.min"
     (minChange)="newFilterValue()"
@@ -79,3 +79,14 @@
   >
   </app-number-range-cell>
 </ng-container>
+
+<!-- Date Filter -->
+<app-date-range-cell
+  *ngIf="column.type === 'Date'"
+  [editable]="true"
+  [(from)]="filter.from"
+  (fromChange)="newFilterValue()"
+  [(to)]="filter.to"
+  (toChange)="newFilterValue()"
+>
+</app-date-range-cell>
