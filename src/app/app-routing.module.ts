@@ -43,7 +43,7 @@ const routes: Routes = [
   { path: 'table/equipmentTypes', component: EquipmentTypesComponent, canActivate: [AuthGuard] },
   { path: 'table/engagementTypes', component: EngagementTypesComponent, canActivate: [AuthGuard] },
   { path: 'table/engagements', component: EngagementsComponent, canActivate: [AuthGuard] },
-  { path: 'table/equipments', component: EquipmentComponent, canActivate: [AuthGuard] },
+  { path: 'table/equipment', component: EquipmentComponent, canActivate: [AuthGuard] },
   { path: 'table/timeFrames', component: TimeFramesComponent, canActivate: [AuthGuard] },
   { path: 'table/persons', component: PersonsComponent, canActivate: [AuthGuard] },
   { path: 'table/contactInformation', component: ContactInformationComponent, canActivate: [AuthGuard] },
