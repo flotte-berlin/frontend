@@ -151,6 +151,10 @@ export function customTableFilterFunction(data: any, filter: any) {
     if (filterElement.type.startsWith('Enum') && filterElement.value != null && filterElement.value !== data[filterElementName]) {
         return false;
     }
+    // Boolean Filter
+    if (filterElement.type === "Boolean" && ((filterElement.value === "Ja" && !data[filterElementName])||(filterElement.value === "Nein" && data[filterElementName]))) {
+        return false;
+    }
   }
   /*const b =
       !filter.includesString ||
