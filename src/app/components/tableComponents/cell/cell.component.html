@@ -51,6 +51,7 @@
       [required]="required"
       [disabled]="!editable"
     >
+      <mat-option [value]="null"></mat-option>
       <mat-option *ngFor="let option of enumValues" [value]="option">
         {{ option }}
       </mat-option>
@@ -111,9 +112,7 @@
   </mat-form-field>
   <ng-template #nonEditableText>
     <ng-container *ngFor="let link of value">
-      <a mat-button color="primary" [href]="link">{{
-        link
-      }}</a>
+      <a mat-button color="primary" [href]="link">{{ link }}</a>
     </ng-container>
   </ng-template>
 </div>

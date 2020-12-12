@@ -114,3 +114,13 @@
   >
   </app-date-range-cell>
 </ng-container>
+
+<!-- DateRange Filter -->
+<app-cell
+  *ngIf="column.type.startsWith('Enum')"
+  [editable]="true"
+  [(value)]="filter.value"
+  (valueChange)="newFilterValue()"
+  [inputType]="column.type"
+>
+</app-cell>

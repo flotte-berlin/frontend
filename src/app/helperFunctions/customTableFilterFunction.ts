@@ -147,6 +147,10 @@ export function customTableFilterFunction(data: any, filter: any) {
         return false;
       }
     }
+    // Enum Filter
+    if (filterElement.type.startsWith('Enum') && filterElement.value != null && filterElement.value !== data[filterElementName]) {
+        return false;
+    }
   }
   /*const b =
       !filter.includesString ||
