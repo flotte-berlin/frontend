@@ -442,6 +442,7 @@ export class TableComponent implements AfterViewInit {
         fromValue: {},
         toValue: {},
         type: column.type,
+        list: column.list,
         options: {},
       };
     }
