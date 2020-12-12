@@ -31,6 +31,12 @@ export class DateRangeCellComponent implements OnInit {
   required = false;
   @Input()
   label: string = null;
+  @Input()
+  placeholderFrom = "Startdatum";
+  @Input()
+  placeholderTo = "Enddatum";
+
+
   @Output() validityChange = new EventEmitter<boolean>();
   isValid = true;
 

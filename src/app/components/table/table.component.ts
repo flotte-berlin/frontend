@@ -439,6 +439,8 @@ export class TableComponent implements AfterViewInit {
         value: null,
         minValue: {},
         maxValue: {},
+        fromValue: {},
+        toValue: {},
         type: column.type,
         options: {},
       };

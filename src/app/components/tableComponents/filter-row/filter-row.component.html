@@ -90,3 +90,27 @@
   (toChange)="newFilterValue()"
 >
 </app-date-range-cell>
+
+<!-- DateRange Filter -->
+<ng-container *ngIf="column.type === 'DateRange'">
+  <app-date-range-cell
+    [editable]="true"
+    [(from)]="filter.fromValue.from"
+    (fromChange)="newFilterValue()"
+    [(to)]="filter.fromValue.to"
+    (toChange)="newFilterValue()"
+    placeholderFrom="Startdatum von"
+    placeholderTo="Startdatum bis"
+  >
+  </app-date-range-cell>
+  <app-date-range-cell
+    [editable]="true"
+    [(from)]="filter.toValue.from"
+    (fromChange)="newFilterValue()"
+    [(to)]="filter.toValue.to"
+    (toChange)="newFilterValue()"
+    placeholderFrom="Enddatum von"
+    placeholderTo="Enddatum bis"
+  >
+  </app-date-range-cell>
+</ng-container>

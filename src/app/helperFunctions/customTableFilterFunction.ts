@@ -13,7 +13,7 @@ export function customTableFilterFunction(data: any, filter: any) {
         let searchString = filterElement.value.trim();
         let dataElement = data[filterElementName]?.trim();
         if (dataElement == null) {
-            return false;
+          return false;
         }
         if (!filterElement.options.caseSensitive) {
           searchString = searchString.toLowerCase();
@@ -57,34 +57,95 @@ export function customTableFilterFunction(data: any, filter: any) {
         let dataElementMin = data[filterElementName + '.min'];
         let dataElementMax = data[filterElementName + '.max'];
         if (dataElementMin == null && dataElementMax == null) {
-            return false;
+          return false;
         }
-        if (filterElement.minValue.min != null && dataElementMin < filterElement.minValue.min) {
-            return false;
+        if (
+          filterElement.minValue.min != null &&
+          dataElementMin < filterElement.minValue.min
+        ) {
+          return false;
         }
-        if (filterElement.minValue.max != null && dataElementMin > filterElement.minValue.max) {
-            return false;
+        if (
+          filterElement.minValue.max != null &&
+          dataElementMin > filterElement.minValue.max
+        ) {
+          return false;
         }
-        if (filterElement.maxValue.min != null && dataElementMax < filterElement.maxValue.min) {
-            return false;
+        if (
+          filterElement.maxValue.min != null &&
+          dataElementMax < filterElement.maxValue.min
+        ) {
+          return false;
         }
-        if (filterElement.maxValue.max != null && dataElementMax > filterElement.maxValue.max) {
-            return false;
+        if (
+          filterElement.maxValue.max != null &&
+          dataElementMax > filterElement.maxValue.max
+        ) {
+          return false;
         }
       }
     }
     // Date Filter
-    if (filterElement.from != null || filterElement.to != null) {
-        let dataElement = data[filterElementName];
-        if (dataElement == null) {
-            return false;
-        }
-        if (filterElement.from != null && new Date(dataElement) < new Date(filterElement.from)) {
-            return false;
-        }
-        if (filterElement.to != null && new Date(dataElement) > new Date(filterElement.to)) {
-            return false;
-        }
+    if (
+      filterElement.type === 'Date' &&
+      (filterElement.from != null || filterElement.to != null)
+    ) {
+      let dataElement = data[filterElementName];
+      if (dataElement == null) {
+        return false;
+      }
+      if (
+        filterElement.from != null &&
+        new Date(dataElement) < new Date(filterElement.from)
+      ) {
+        return false;
+      }
+      if (
+        filterElement.to != null &&
+        new Date(dataElement) > new Date(filterElement.to)
+      ) {
+        return false;
+      }
+    }
+    // DateRange Filter
+    if (
+      filterElement.type === 'DateRange' &&
+      (filterElement.fromValue.from != null ||
+        filterElement.fromValue.to != null ||
+        filterElement.toValue.from != null ||
+        filterElement.toValue.to != null)
+    ) {
+      let dataElementFrom = data[filterElementName + '.from'];
+      let dataElementTo = data[filterElementName + '.to'];
+      if (!dataElementFrom && !dataElementTo) {
+        return false;
+      }
+      if (
+        filterElement.fromValue.from != null &&
+        (!dataElementFrom ||
+          new Date(dataElementFrom) < new Date(filterElement.fromValue.from))
+      ) {
+        return false;
+      }
+      if (
+        filterElement.fromValue.to != null &&
+        new Date(dataElementFrom) > new Date(filterElement.fromValue.to)
+      ) {
+        return false;
+      }
+      if (
+        filterElement.toValue.from != null &&
+        new Date(dataElementTo) < new Date(filterElement.toValue.from)
+      ) {
+        return false;
+      }
+      if (
+        filterElement.toValue.to != null &&
+        (!dataElementTo ||
+          new Date(dataElementTo) > new Date(filterElement.toValue.to))
+      ) {
+        return false;
+      }
     }
   }
   /*const b =
