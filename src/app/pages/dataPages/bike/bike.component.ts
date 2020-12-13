@@ -269,7 +269,7 @@ export class BikeComponent implements OnInit {
             : '')
         );
       },
-      linkToTable: (element) => '/table/equipment',
+      linkToTable: (element) => '/table/equipments',
       linkToTableParams: (bike) => {
         return { filter: bike.name };
       },

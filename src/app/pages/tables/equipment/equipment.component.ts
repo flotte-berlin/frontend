@@ -7,7 +7,7 @@ import { EquipmentService } from 'src/app/services/equipment.service';
   styleUrls: ['./equipment.component.scss'],
 })
 export class EquipmentComponent implements OnInit {
-  headline = 'Equipment';
+  headline = 'Equipments';
   headlineIconName = 'battery_full';
 
   columnInfo = [
