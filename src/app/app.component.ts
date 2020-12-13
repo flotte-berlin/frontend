@@ -5,7 +5,6 @@ import { Router } from '@angular/router';
 import { ViewChild } from '@angular/core';
 import { MatSidenav } from '@angular/material/sidenav';
 import { NavService } from './components/menu-list-item/nav.service';
-import { NavItem } from './components/menu-list-item/nav-item';
 import { tableLinks } from 'src/app/tableLinks';
 
 @Component({
@@ -21,13 +20,7 @@ export class AppComponent {
   @ViewChild('sidenav') public sideNav:MatSidenav;
   @ViewChild('appDrawer') appDrawer: ElementRef;
 
-  navItems: NavItem[] = [
-    {
-      displayName: 'Tabellen',
-      iconName: 'recent_actors',
-      route: 'tableOverview',
-      children: tableLinks
-      }];
+  tableLinks = tableLinks
         
 
   constructor(

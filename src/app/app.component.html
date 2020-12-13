@@ -31,16 +31,23 @@
     <mat-sidenav #appDrawer mode="over" opened="false">
       <mat-nav-list class="nav-profile-list">
         <mat-list-item class="nav-profile-list-item">
-            <sidenav-profile>
-          </sidenav-profile>
+          <sidenav-profile> </sidenav-profile>
         </mat-list-item>
       </mat-nav-list>
       <mat-nav-list>
-        <app-menu-list-item *ngFor="let item of navItems" [item]="item"></app-menu-list-item>
+        <a
+          [routerLink]="link.route"
+          *ngFor="let link of tableLinks"
+        >
+          <mat-list-item [ngClass]="{'primary-color': link.route === router.url.split('?')[0] }">
+            <mat-icon class="nav-list-icon">{{ link.iconName }}</mat-icon>
+            {{ link.displayName }}
+          </mat-list-item>
+        </a>
       </mat-nav-list>
     </mat-sidenav>
     <mat-sidenav-content>
-        <router-outlet></router-outlet>
+      <router-outlet></router-outlet>
     </mat-sidenav-content>
   </mat-sidenav-container>
 </div>
