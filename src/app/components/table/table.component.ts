@@ -92,6 +92,7 @@ export class TableComponent implements AfterViewInit {
   filterChanged: Subject<any> = new Subject<any>();
 
   isLoaded = false;
+  isProcessing = false;
 
   @Output() createEvent = new EventEmitter();
   @Output() lockEvent = new EventEmitter();
@@ -151,11 +152,11 @@ export class TableComponent implements AfterViewInit {
     });
 
     this.dataService.tableData.subscribe((newTableDataSource) => {
-      this.reloadingTable = false;
       const tempDataSource = [];
       if (newTableDataSource === null) {
         return;
       }
+      this.reloadingTable = false;
       this.isLoaded = true;
       for (const row of newTableDataSource) {
         const oldRow = this.getRowById(row.id);
@@ -427,10 +428,10 @@ export class TableComponent implements AfterViewInit {
   }
 
   applyFilters(): void {
-    this.isLoaded = false;
+    this.isProcessing = true;
     setTimeout(() => {
       this.data.filter = (this.filters as unknown) as string;
-      this.isLoaded = true;
+      this.isProcessing = false;
     });
   }
 

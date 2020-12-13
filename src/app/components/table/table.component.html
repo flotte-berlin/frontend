@@ -63,6 +63,8 @@
       showFirstLastButtons
     ></mat-paginator>
   </div>
+
+  <!-- Table -->
   <div class="table-container">
     <table
       mat-table
@@ -72,6 +74,7 @@
       cdkDropListOrientation="horizontal"
       (cdkDropListDropped)="drop($event)"
       [dataSource]="data"
+      [ngClass]="{ 'idle-overlay': !isLoaded }"
     >
       <!--- Note that these columns can be defined in any order.
           The actual rendered columns are set as a property on the row definition" -->
@@ -361,14 +364,16 @@
         *matHeaderRowDef="displayedColumns; sticky: true"
         #headerRow
       ></tr>
-      <tr mat-row *matRowDef="let row; columns: displayedColumns"></tr>
+      <tr
+        [ngClass]="{ 'idle-overlay': isProcessing }"
+        mat-row
+        *matRowDef="let row; columns: displayedColumns"
+      ></tr>
     </table>
-
-    <mat-card
-      *ngIf="!isLoaded"
-      style="display: flex; justify-content: center; align-items: center"
-    >
-      <mat-spinner [diameter]="32"></mat-spinner>
-    </mat-card>
   </div>
+  <mat-spinner
+    class="idle-spinner"
+    *ngIf="!isLoaded || isProcessing"
+    [diameter]="48"
+  ></mat-spinner>
 </div>
