@@ -22,6 +22,7 @@ import { ActivatedRoute } from '@angular/router';
 import { Subject } from 'rxjs';
 import { debounceTime } from 'rxjs/internal/operators/debounceTime';
 import { SelectObjectDialogComponent } from '../select-object-dialog/select-object-dialog.component';
+import { filter } from 'rxjs/operators';
 
 @Component({
   selector: 'app-table',
@@ -111,16 +112,17 @@ export class TableComponent implements AfterViewInit {
     this.columnInfo.forEach((column) =>
       this.displayedColumns.push(column.dataPath)
     );
+    this.displayedColumns.unshift(...this.additionalColumnsFront);
+    this.displayedColumns.push(...this.additionalColumnsBack);
     this.displayedFilterColumns = this.displayedColumns.map(
       (columnName) => columnName + '.filter'
     );
-    this.displayedColumns.unshift(...this.additionalColumnsFront);
-    this.displayedColumns.push(...this.additionalColumnsBack);
 
     this.resetFilters();
   }
 
   ngAfterViewInit(): void {
+    this.setTableFilterRowHeight();
     this.data.paginator = this.paginator;
     this.data.sortingDataAccessor = (item, columnName) => {
       if (typeof item[columnName] === 'string') {
@@ -429,11 +431,20 @@ export class TableComponent implements AfterViewInit {
     });
   }
 
-  resetFilters() {
-    this.filters = [];
+  columnFiltersAreSet(): boolean {
+    for (const filterObject of Object.keys(this.filters.columnFilters)) {
+      if (this.filters.columnFilters[filterObject].isSet) {
+        return true;
+      }
+    }
+    return false;
+  }
+
+  resetColumnFilters() {
     this.filters['columnFilters'] = [];
     for (const column of this.columnInfo) {
       this.filters.columnFilters[column.dataPath] = {
+        isSet: false,
         value: null,
         minValue: {},
         maxValue: {},
@@ -444,6 +455,26 @@ export class TableComponent implements AfterViewInit {
         options: {},
       };
     }
+    this.setTableFilterRowHeight();
+  }
+
+  resetFilters() {
+    this.filters = [];
+    this.resetColumnFilters();
+  }
+
+  setTableFilterRowHeight() {
+    setTimeout(() => {
+      const filterRowHeight = document.getElementsByClassName('filter-row')[0]
+        .clientHeight;
+      const headerRowCells = Array.from(
+        document.getElementsByClassName('header-row')[0]
+          .children as HTMLCollectionOf<HTMLElement>
+      );
+      for (let i = 0; i < headerRowCells.length; i++) {
+        headerRowCells[i].style.top = filterRowHeight + 'px';
+      }
+    });
   }
 
   resetSorting() {

@@ -48,6 +48,16 @@
     >
       nur ungespeicherte Elemente anzeigen
     </mat-checkbox>
+    <button
+      mat-raised-button
+      color="primary"
+      class="table-control-button"
+      *ngIf="columnFiltersAreSet()"
+      i18n
+      (click)="resetColumnFilters()"
+    >
+      Spaltenfilterwerte zurücksetzen
+    </button>
     <mat-paginator
       [pageSizeOptions]="[15, 25, 30]"
       showFirstLastButtons
@@ -73,12 +83,29 @@
         [sticky]="isStickyColumn(column.dataPath)"
         ><th mat-header-cell *matHeaderCellDef>
           <app-filter-row
+            *ngIf="filters.columnFilters[column.dataPath]?.isSet"
             [column]="column"
             [(filter)]="filters.columnFilters[column.dataPath]"
             (filtersChange)="newFilterValue()"
           ></app-filter-row>
+          <button
+            mat-icon-button
+            matTooltip="Filter hinzufügen"
+            *ngIf="!filters.columnFilters[column.dataPath]?.isSet"
+            (click)="
+              filters.columnFilters[column.dataPath].isSet = true;
+              setTableFilterRowHeight()
+            "
+          >
+            <mat-icon>filter_list</mat-icon>
+          </button>
         </th>
       </ng-container>
+      <!-- empty filter cell -->
+      <ng-container matColumnDef="buttons.filter">
+        <th mat-header-cell *matHeaderCellDef></th>
+      </ng-container>
+
       <!-- Checkbox Column -->
       <ng-container matColumnDef="select" sticky>
         <th mat-header-cell *matHeaderCellDef>
@@ -327,8 +354,13 @@
       <tr
         mat-header-row
         *matHeaderRowDef="displayedFilterColumns; sticky: true"
+        class="filter-row"
       ></tr>
-      <tr mat-header-row *matHeaderRowDef="displayedColumns; sticky: true"></tr>
+      <tr
+        mat-header-row
+        *matHeaderRowDef="displayedColumns; sticky: true"
+        class="header-row"
+      ></tr>
       <tr mat-row *matRowDef="let row; columns: displayedColumns"></tr>
     </table>
 
