@@ -108,7 +108,6 @@ export class TableComponent implements AfterViewInit {
 
   ngOnInit() {
     this.addColumnPropertiesFromGQLSchemaToColumnInfo();
-    console.log(this.columnInfo);
     this.columnInfo.forEach((column) =>
       this.displayedColumns.push(column.dataPath)
     );
@@ -419,7 +418,6 @@ export class TableComponent implements AfterViewInit {
   }
 
   newFilterValue(): void {
-    console.log(this.filters);
     this.filterChanged.next(this.filters);
   }
 
