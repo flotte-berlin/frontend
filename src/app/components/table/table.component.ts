@@ -7,6 +7,7 @@ import {
   ViewChild,
   AfterViewInit,
   ChangeDetectorRef,
+  ElementRef,
 } from '@angular/core';
 import { CdkDragDrop, moveItemInArray } from '@angular/cdk/drag-drop';
 import { flatten } from 'src/app/helperFunctions/flattenObject';
@@ -22,7 +23,6 @@ import { ActivatedRoute } from '@angular/router';
 import { Subject } from 'rxjs';
 import { debounceTime } from 'rxjs/internal/operators/debounceTime';
 import { SelectObjectDialogComponent } from '../select-object-dialog/select-object-dialog.component';
-import { filter } from 'rxjs/operators';
 
 @Component({
   selector: 'app-table',
@@ -65,6 +65,9 @@ export class TableComponent implements AfterViewInit {
 
   @ViewChild(MatPaginator) paginator: MatPaginator;
   @ViewChild(MatSort) sort: MatSort;
+
+  @ViewChild('filterRow', { read: ElementRef }) filterRow: ElementRef;
+  @ViewChild('headerRow', { read: ElementRef }) headerRow: ElementRef;
 
   additionalColumnsFront: string[] = [];
   additionalColumnsBack: string[] = ['buttons'];
@@ -456,6 +459,7 @@ export class TableComponent implements AfterViewInit {
       };
     }
     this.setTableFilterRowHeight();
+    this.applyFilters();
   }
 
   resetFilters() {
@@ -465,11 +469,9 @@ export class TableComponent implements AfterViewInit {
 
   setTableFilterRowHeight() {
     setTimeout(() => {
-      const filterRowHeight = document.getElementsByClassName('filter-row')[0]
-        .clientHeight;
+      const filterRowHeight = this.filterRow.nativeElement.clientHeight;
       const headerRowCells = Array.from(
-        document.getElementsByClassName('header-row')[0]
-          .children as HTMLCollectionOf<HTMLElement>
+        this.headerRow.nativeElement.children as HTMLCollectionOf<HTMLElement>
       );
       for (let i = 0; i < headerRowCells.length; i++) {
         headerRowCells[i].style.top = filterRowHeight + 'px';

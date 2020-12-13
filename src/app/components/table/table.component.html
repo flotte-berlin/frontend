@@ -354,12 +354,12 @@
       <tr
         mat-header-row
         *matHeaderRowDef="displayedFilterColumns; sticky: true"
-        class="filter-row"
+        #filterRow
       ></tr>
       <tr
         mat-header-row
         *matHeaderRowDef="displayedColumns; sticky: true"
-        class="header-row"
+        #headerRow
       ></tr>
       <tr mat-row *matRowDef="let row; columns: displayedColumns"></tr>
     </table>

@@ -1,5 +1,15 @@
 <div class="table-page-wrapper">
   <div class="table-control">
+    <button
+      mat-raised-button
+      color="primary"
+      class="table-control-button"
+      *ngIf="columnFiltersAreSet()"
+      i18n
+      (click)="resetColumnFilters()"
+    >
+      Filter zurücksetzen
+    </button>
     <div *ngIf="editableReferences">
       <app-autocomplete-select
         [editable]="editable"
@@ -10,26 +20,6 @@
         (selectedElementChange)="addReference($event)"
       ></app-autocomplete-select>
     </div>
-    <mat-form-field class="filter">
-      <mat-label>Tabelle filtern</mat-label>
-      <input
-        matInput
-        [(ngModel)]="tableFilterString"
-        (ngModelChange)="newFilterStringValue()"
-        placeholder="Suchbegriff eingeben..."
-      />
-      <button
-        mat-button
-        *ngIf="tableFilterString"
-        matSuffix
-        mat-icon-button
-        aria-label="Clear"
-        (click)="tableFilterString = ''; applyTableFilter()"
-        color="accent"
-      >
-        <mat-icon>close</mat-icon>
-      </button>
-    </mat-form-field>
     <mat-paginator
       [pageSizeOptions]="[15, 25]"
       showFirstLastButtons
@@ -39,6 +29,36 @@
     <table mat-table class="mat-elevation-z8" matSort [dataSource]="dataSource">
       <!--- Note that these columns can be defined in any order.
             The actual rendered columns are set as a property on the row definition" -->
+
+      <!-- Filter Header Row -->
+      <ng-container
+        *ngFor="let column of columnInfo"
+        [matColumnDef]="column.dataPath + '.filter'"
+        [sticky]="isStickyColumn(column.dataPath)"
+        ><th mat-header-cell *matHeaderCellDef>
+          <app-filter-row
+            *ngIf="filters.columnFilters[column.dataPath]?.isSet"
+            [column]="column"
+            [(filter)]="filters.columnFilters[column.dataPath]"
+            (filtersChange)="newFilterValue()"
+          ></app-filter-row>
+          <button
+            mat-icon-button
+            matTooltip="Filter hinzufügen"
+            *ngIf="!filters.columnFilters[column.dataPath]?.isSet"
+            (click)="
+              filters.columnFilters[column.dataPath].isSet = true;
+              setTableFilterRowHeight()
+            "
+          >
+            <mat-icon>filter_list</mat-icon>
+          </button>
+        </th>
+      </ng-container>
+      <!-- empty filter cell -->
+      <ng-container matColumnDef="buttons.filter">
+        <th mat-header-cell *matHeaderCellDef></th>
+      </ng-container>
 
       <!-- Other Columns -->
       <ng-container
@@ -96,7 +116,16 @@
       </ng-container>
 
       <!-- Table Definition -->
-      <tr mat-header-row *matHeaderRowDef="displayedColumns; sticky: true"></tr>
+      <tr
+        mat-header-row
+        *matHeaderRowDef="displayedFilterColumns; sticky: true"
+        #filterRow
+      ></tr>
+      <tr
+        mat-header-row
+        #headerRow
+        *matHeaderRowDef="displayedColumns; sticky: true"
+      ></tr>
       <tr mat-row *matRowDef="let row; columns: displayedColumns"></tr>
     </table>
   </div>

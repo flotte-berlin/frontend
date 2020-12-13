@@ -1,5 +1,6 @@
 import {
   Component,
+  ElementRef,
   EventEmitter,
   Input,
   Output,
@@ -11,7 +12,7 @@ import { SchemaService } from 'src/app/services/schema.service';
 import { MatTableDataSource } from '@angular/material/table';
 import { MatPaginator } from '@angular/material/paginator';
 import { MatSort } from '@angular/material/sort';
-import { FormControl, FormGroup } from '@angular/forms';
+import { customTableFilterFunction } from 'src/app/helperFunctions/customTableFilterFunction';
 import { Subject } from 'rxjs/internal/Subject';
 import { debounceTime } from 'rxjs/internal/operators/debounceTime';
 
@@ -28,6 +29,7 @@ export class ReferenceTableComponent {
     translation: string;
     sticky?: boolean;
     type?: string;
+    list?: boolean; //whether the type is a list
     link?: (row: any) => string;
   }[] = [];
 
@@ -77,6 +79,9 @@ export class ReferenceTableComponent {
   @ViewChild(MatPaginator) paginator: MatPaginator;
   @ViewChild(MatSort) sort: MatSort;
 
+  @ViewChild('filterRow', { read: ElementRef }) filterRow: ElementRef;
+  @ViewChild('headerRow', { read: ElementRef }) headerRow: ElementRef;
+
   displayedColumns: string[] = [];
 
   /** data source of the table */
@@ -86,8 +91,9 @@ export class ReferenceTableComponent {
 
   reloadingTable = false;
 
-  tableFilterString = '';
-  filterStringChanged: Subject<string> = new Subject<string>();
+  displayedFilterColumns = [];
+  filters: any = {};
+  filterChanged: Subject<any> = new Subject<any>();
 
   constructor(private schemaService: SchemaService) {}
 
@@ -99,15 +105,25 @@ export class ReferenceTableComponent {
     if (this.editableReferences) {
       this.displayedColumns.push('buttons');
     }
+    this.displayedFilterColumns = this.displayedColumns.map(
+      (columnName) => columnName + '.filter'
+    );
 
-    this.filterStringChanged
-      .pipe(debounceTime(400))
-      .subscribe(() => this.applyTableFilter());
+    this.dataSource.filterPredicate = customTableFilterFunction;
+    this.resetFilters();
   }
 
   ngAfterViewInit() {
+    this.setTableFilterRowHeight();
+
     this.dataSource.paginator = this.paginator;
     this.dataSource.sort = this.sort;
+
+    this.dataSource.filter = (this.filters as unknown) as string;
+
+    this.filterChanged.pipe(debounceTime(400)).subscribe(() => {
+      this.applyFilters();
+    });
 
     this.dataSource.sortingDataAccessor = (item, columnName) => {
       if (typeof item[columnName] === 'string') {
@@ -152,9 +168,9 @@ export class ReferenceTableComponent {
       (element) => element.id === row.id
     );
     if (index !== -1) {
-    this.dataSource.data.splice(index, 1);
-    this.dataSource.data = this.dataSource.data; //needed to trigger update lol
-    this.onReferenceChange();
+      this.dataSource.data.splice(index, 1);
+      this.dataSource.data = this.dataSource.data; //needed to trigger update lol
+      this.onReferenceChange();
     }
 
     // show it again in the selection
@@ -166,21 +182,12 @@ export class ReferenceTableComponent {
   addReference(row: any) {
     this.dataSource.data = [flatten(row), ...this.dataSource.data];
     this.idsOfObjectsToHide = [row.id, ...this.idsOfObjectsToHide];
-    this.tableFilterString = '';
-    this.applyTableFilter();
+    this.resetFilters();
     this.onReferenceChange();
   }
 
   getRowById(id: string) {
     return this.dataSource.data.find((row) => row.id === id);
-  }
-
-  newFilterStringValue(): void {
-    this.filterStringChanged.next(this.tableFilterString);
-  }
-
-  applyTableFilter() {
-    this.dataSource.filter = this.tableFilterString;
   }
 
   onReferenceChange() {
@@ -189,5 +196,59 @@ export class ReferenceTableComponent {
       ids.push(element.id);
     }
     this.referenceIds.emit(ids);
+  }
+
+  /** Filter functions **************************************************************/
+  newFilterValue(): void {
+    this.filterChanged.next(this.filters);
+  }
+
+  applyFilters(): void {
+    this.dataSource.filter = (this.filters as unknown) as string;
+  }
+
+  columnFiltersAreSet(): boolean {
+    for (const filterObject of Object.keys(this.filters.columnFilters)) {
+      if (this.filters.columnFilters[filterObject].isSet) {
+        return true;
+      }
+    }
+    return false;
+  }
+
+  resetColumnFilters() {
+    this.filters['columnFilters'] = [];
+    for (const column of this.columnInfo) {
+      this.filters.columnFilters[column.dataPath] = {
+        isSet: false,
+        value: null,
+        minValue: {},
+        maxValue: {},
+        fromValue: {},
+        toValue: {},
+        type: column.type,
+        list: column.list,
+        options: {},
+      };
+    }
+    this.setTableFilterRowHeight();
+    this.applyFilters();
+  }
+
+  resetFilters() {
+    this.filters = [];
+    this.resetColumnFilters();
+  }
+
+  setTableFilterRowHeight() {
+    setTimeout(() => {
+      const filterRowHeight = this.filterRow.nativeElement.clientHeight;
+      const headerRowCells = Array.from(
+        this.headerRow.nativeElement.children as HTMLCollectionOf<HTMLElement>
+      );
+      for (let i = 0; i < headerRowCells.length; i++) {
+        headerRowCells[i].style.top = filterRowHeight + 'px';
+      }
+    });
   }
 }
