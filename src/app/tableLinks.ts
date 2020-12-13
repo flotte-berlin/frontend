@@ -3,81 +3,81 @@ export const tableLinks = [
     {
       displayName: 'Lastenräder',
       iconName: 'directions_bike',
-      route: 'table/bikes'
+      route: '/table/bikes'
     },
     {
       displayName: 'Aktive',
       iconName: 'directions_run',
-      route: 'table/participants'
+      route: '/table/participants'
     },
     {
       displayName: 'Standorte',
       iconName: 'location_on',
-      route: 'table/lendingStations'
+      route: '/table/lendingStations'
     },
     {
       displayName: 'Personen',
       iconName: 'person',
-      route: 'table/persons'
+      route: '/table/persons'
     },
     {
       displayName: 'Kontaktinformationen',
       iconName: 'contact_page',
-      route: 'table/contactInformation'
+      route: '/table/contactInformation'
     },
     {
       displayName: 'Zeitscheiben',
       iconName: 'access_time',
-      route: 'table/timeFrames'
+      route: '/table/timeFrames'
     },
     {
       displayName: 'Lastenfahrrad-Eventtypen',
       iconName: 'build',
-      route: 'table/bikeEventTypes'
+      route: '/table/bikeEventTypes'
     },
     {
       displayName: 'Lastenfahrrad-Events',
       iconName: 'event',
-      route: 'table/bikeEvents'
+      route: '/table/bikeEvents'
     },
     {
       displayName: 'Equipmenttypen',
       iconName: 'toys',
-      route: 'table/equipmentTypes'
+      route: '/table/equipmentTypes'
     },
     {
       displayName: 'Equipment',
       iconName: 'battery_full',
-      route: 'table/equipments'
+      route: '/table/equipments'
     },
     {
       displayName: 'Engagementypen',
       iconName: 'track_changes',
-      route: 'table/engagementTypes'
+      route: '/table/engagementTypes'
     },
     {
       displayName: 'Engagements',
       iconName: 'update',
-      route: 'table/engagements'
+      route: '/table/engagements'
     },
     {
       displayName: 'Organisationen',
       iconName: 'business',
-      route: 'table/organisations'
+      route: '/table/organisations'
     },
     {
       displayName: 'Anbieter',
       iconName: 'people',
-      route: 'table/providers'
+      route: '/table/providers'
     },
     {
       displayName: 'Workshops',
       iconName: 'school',
-      route: 'table/workshops'
+      route: '/table/workshops'
     },
     {
       displayName: 'Workshoptypen',
       iconName: 'multiline_chart',
-      route: 'table/workshopTypes'
+      route: '/table/workshopTypes'
     },
   ]
