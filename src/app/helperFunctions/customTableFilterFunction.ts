@@ -1,6 +1,6 @@
 export function customTableFilterFunction(data: any, filter: any) {
   if (data.newObject) {
-    return true; // always show new objects
+    return true; // always show newly created objects
   }
   if (filter.onlyUnsaved && !data.isLockedByMe) {
     return false;
@@ -8,7 +8,7 @@ export function customTableFilterFunction(data: any, filter: any) {
   for (const filterElementName of Object.keys(filter.columnFilters)) {
     const filterElement = filter.columnFilters[filterElementName];
     // List Filter - ignore types if column is list
-    if (filterElement.list && filterElement.values.length > 0) {
+    if (filterElement.list && filterElement.values?.length > 0) {
       let dataElement: Array<any> = data[filterElementName];
       if (dataElement.length !== filterElement.values.length) {
         return false;
