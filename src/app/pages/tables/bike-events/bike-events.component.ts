@@ -118,7 +118,7 @@ export class BikeEventsComponent implements OnInit {
   tableDataGQLCreateInputType: string = 'BikeEventCreateInput';
   tableDataGQLUpdateInputType: string = 'BikeEventUpdateInput';
 
-  headline = 'Lastenradevent';
+  headline = 'Lastenradevents';
   headlineIconName = 'event';
 
   loadingRowIds: string[] = [];

@@ -6,6 +6,7 @@ import { ViewChild } from '@angular/core';
 import { MatSidenav } from '@angular/material/sidenav';
 import { NavService } from './components/menu-list-item/nav.service';
 import { NavItem } from './components/menu-list-item/nav-item';
+import { tableLinks } from 'src/app/tableLinks';
 
 @Component({
   selector: 'app-root',
@@ -20,28 +21,12 @@ export class AppComponent {
   @ViewChild('sidenav') public sideNav:MatSidenav;
   @ViewChild('appDrawer') appDrawer: ElementRef;
 
-
   navItems: NavItem[] = [
     {
       displayName: 'Tabellen',
       iconName: 'recent_actors',
       route: 'tableOverview',
-      children: [
-        {
-          displayName: 'Lastenräder',
-          iconName: 'directions_bike',
-          route: 'table/bikes'
-        },
-        {
-          displayName: 'Beteiligte',
-          iconName: 'group',
-          route: 'table/participants'
-        },
-        {
-          displayName: 'Standorte',
-          iconName: 'place',
-          route: 'table/lendingStations'
-        }]
+      children: tableLinks
       }];
         
 

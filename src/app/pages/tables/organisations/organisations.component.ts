@@ -50,7 +50,7 @@ export class OrganisationsComponent implements OnInit {
   tableDataGQLCreateInputType: string = 'OrganisationCreateInput';
   tableDataGQLUpdateInputType: string = 'OrganisationUpdateInput';
 
-  headline = 'Organisation';
+  headline = 'Organisationen';
   headlineIconName = 'business';
 
   loadingRowIds: string[] = [];
