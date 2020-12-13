@@ -28,11 +28,12 @@ export class TokenInterceptor implements HttpInterceptor {
       let errorMessage = '';
         if (error.error instanceof ErrorEvent) {
           //client error
+          //console.log("Client Error: " + JSON.stringify(error));
 
           errorMessage = `Error: ${error.error.message}`;
         } else {
           //server error
-          //console.log("Error: " + JSON.stringify(error));
+          //console.log("Server Error: " + JSON.stringify(error));
           if (error.status === 400){
             switch (error.error.message) {
               case "Invalid refresh token!":
@@ -57,7 +58,7 @@ export class TokenInterceptor implements HttpInterceptor {
             errorMessage = this.serverErrorMessageGenerator(error);
           }
         }
-      if (errorMessage === "Viele Fehler sind aufgetreten.") {
+      if (errorMessage === "Viele Fehler sind aufgetreten.") { // Here is the thing I ment
         this.snackBar.openSnackBar(errorMessage, "Erweitert", true, error.error.errors);
       } else {
         this.snackBar.openSnackBar(errorMessage, "Ok", true);
@@ -68,13 +69,14 @@ export class TokenInterceptor implements HttpInterceptor {
   }
 
   private serverErrorMessageGenerator (error: HttpErrorResponse): string  {
-    if (error.error?.errors[0]?.message?.includes("not provided")) {
-      return "Nicht alle benötigten Felder wurden ausgefüllt.";
-    }
     if (error.error.message === undefined){
-      return "Viele Fehler sind aufgetreten."  // If you change this you have to change it over this aswell
+      if (error.error.errors[0].message.includes("not provided")) {
+        return "Nicht alle benötigten Felder wurden ausgefüllt.";
+      } else {
+        return "Viele Fehler sind aufgetreten." // If you change this you have to change it over this aswell ( I know its terrible to @ )
+      }
     } else {
-      `${error.error.message}. Fehlercode: ${error.status}.`;
+      return `${error.error.message}.`; //`${error.error.message}. Fehlercode: ${error.status}.`
     }
 
   }
