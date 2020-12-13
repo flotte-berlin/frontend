@@ -2,6 +2,7 @@
   [headline]="headline"
   [headlineIconName]="headlineIconName"
   [columnInfo]="columnInfo"
+  [copyableRows]="copyableRows"
   [dataService]="dataService"
   [tableDataGQLType]="tableDataGQLType"
   [tableDataGQLCreateInputType]="tableDataGQLCreateInputType"
@@ -9,6 +10,7 @@
   (createEvent)="create($event)"
   (lockEvent)="lock($event)"
   (saveEvent)="save($event)"
+  (copyEvent)="copy($event)"
   (cancelEvent)="cancel($event)"
   (deleteEvent)="delete($event)"
 ></app-table>

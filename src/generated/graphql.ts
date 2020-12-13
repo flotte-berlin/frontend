@@ -1813,6 +1813,16 @@ export type GetCargoBikeByIdQuery = { __typename?: 'Query', cargoBikeById?: Mayb
     & CargoBikeFieldsForPageFragment
   )> };
 
+export type CopyCargoBikeByIdQueryVariables = Exact<{
+  id: Scalars['ID'];
+}>;
+
+
+export type CopyCargoBikeByIdQuery = { __typename?: 'Query', copyCargoBikeById?: Maybe<(
+    { __typename?: 'CargoBike' }
+    & CargoBikeFieldsForTableFragment
+  )> };
+
 export type ReloadCargoBikeByIdQueryVariables = Exact<{
   id: Scalars['ID'];
 }>;
@@ -3743,6 +3753,24 @@ export const GetCargoBikeByIdDocument = gql`
   })
   export class GetCargoBikeByIdGQL extends Apollo.Query<GetCargoBikeByIdQuery, GetCargoBikeByIdQueryVariables> {
     document = GetCargoBikeByIdDocument;
+    
+    constructor(apollo: Apollo.Apollo) {
+      super(apollo);
+    }
+  }
+export const CopyCargoBikeByIdDocument = gql`
+    query copyCargoBikeById($id: ID!) {
+  copyCargoBikeById(id: $id) {
+    ...CargoBikeFieldsForTable
+  }
+}
+    ${CargoBikeFieldsForTableFragmentDoc}`;
+
+  @Injectable({
+    providedIn: 'root'
+  })
+  export class CopyCargoBikeByIdGQL extends Apollo.Query<CopyCargoBikeByIdQuery, CopyCargoBikeByIdQueryVariables> {
+    document = CopyCargoBikeByIdDocument;
     
     constructor(apollo: Apollo.Apollo) {
       super(apollo);

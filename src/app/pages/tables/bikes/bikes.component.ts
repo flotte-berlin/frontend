@@ -132,6 +132,7 @@ export class BikesComponent implements OnInit {
 
   headline = 'Lastenräder';
   headlineIconName = 'directions_bike';
+  copyableRows = true;
 
   loadingRowIds: string[] = [];
   constructor(private bikesService: BikesService) {}
@@ -150,6 +151,10 @@ export class BikesComponent implements OnInit {
 
   save(row: any) {
     this.bikesService.updateBike({ bike: row });
+  }
+
+  copy(row: any) {
+    this.bikesService.copyBikeById({ id: row.id });
   }
 
   cancel(row: any) {

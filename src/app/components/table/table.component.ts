@@ -63,6 +63,9 @@ export class TableComponent implements AfterViewInit {
   @Input()
   tableDataGQLUpdateInputType: string;
 
+  @Input()
+  copyableRows = false;
+
   @ViewChild(MatPaginator) paginator: MatPaginator;
   @ViewChild(MatSort) sort: MatSort;
 
@@ -97,6 +100,7 @@ export class TableComponent implements AfterViewInit {
   @Output() createEvent = new EventEmitter();
   @Output() lockEvent = new EventEmitter();
   @Output() saveEvent = new EventEmitter();
+  @Output() copyEvent = new EventEmitter();
   @Output() cancelEvent = new EventEmitter();
   @Output() deleteEvent = new EventEmitter();
 
@@ -159,6 +163,12 @@ export class TableComponent implements AfterViewInit {
       this.reloadingTable = false;
       this.isLoaded = true;
       for (const row of newTableDataSource) {
+        if (row.newObject) {
+          // its a copied object
+          row.id = this.getNewId();
+          tempDataSource.push(flatten(row));
+          continue;
+        }
         const oldRow = this.getRowById(row.id);
         /** make sure to not overwrite a row that is being edited */
         if (!oldRow) {
@@ -338,6 +348,14 @@ export class TableComponent implements AfterViewInit {
       deepen(row)
     );
     this.saveEvent.emit(deepenRow);
+  }
+
+  copy(row: any) {
+    const deepenRow = this.schemaService.filterObject(
+      this.tableDataGQLUpdateInputType,
+      deepen(row)
+    );
+    this.copyEvent.emit(deepenRow);
   }
 
   cancel(row: any) {

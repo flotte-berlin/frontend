@@ -10,6 +10,12 @@ query GetCargoBikeById($id: ID!) {
   }
 }
 
+query copyCargoBikeById($id: ID!) {
+  copyCargoBikeById(id: $id) {
+    ...CargoBikeFieldsForTable
+  }
+}
+
 query ReloadCargoBikeById($id: ID!) {
   cargoBikeById(id: $id) {
     ...CargoBikeFieldsForTable

@@ -284,7 +284,12 @@
               >
                 <mat-icon>delete</mat-icon>Löschen
               </button>
-              <button mat-menu-item disabled>
+              <button
+                mat-menu-item
+                *ngIf="copyableRows"
+                [disabled]="false"
+                (click)="copy(element)"
+              >
                 <mat-icon>content_copy</mat-icon>Duplizieren
               </button>
             </mat-menu>
