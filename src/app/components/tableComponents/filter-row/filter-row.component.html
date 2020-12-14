@@ -1,3 +1,15 @@
+<!-- List Filter -->
+<app-cell
+  *ngIf="column.list"
+  [isList]="true"
+  [editable]="true"
+  [(value)]="filter.values"
+  (valueChange)="newFilterValue()"
+  [inputType]="'String'"
+>
+</app-cell>
+
+<ng-container *ngIf="!column.list">
 <!-- String Filter -->
 <mat-form-field *ngIf="column.type === 'String' || column.type === 'Id'">
   <input
@@ -134,3 +146,4 @@
   [inputType]="'Enum//Ja//Nein'"
 >
 </app-cell>
+</ng-container>

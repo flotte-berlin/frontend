@@ -16,6 +16,8 @@ import {
   DeleteCargoBikeMutationVariables,
   GetCargoBikeByIdGQL,
   GetCargoBikeByIdQueryVariables,
+  CopyCargoBikeByIdGQL,
+  CopyCargoBikeByIdQueryVariables
 } from 'src/generated/graphql';
 
 @Injectable({
@@ -34,6 +36,7 @@ export class BikesService {
     private getCargoBikeByIdGQL: GetCargoBikeByIdGQL,
     private reloadCargoBikeByIdGQL: ReloadCargoBikeByIdGQL,
     private updateCargoBikeGQL: UpdateCargoBikeGQL,
+    private copyCargoBikeByIdGQL: CopyCargoBikeByIdGQL,
     private lockCargoBikeGQL: LockCargoBikeGQL,
     private unlockCargoBikeGQL: UnlockCargoBikeGQL,
     private createCargoBikeGQL: CreateCargoBikeGQL,
@@ -71,6 +74,19 @@ export class BikesService {
       .add(() => {
         this.isLoadingPageData.next(false);
       });
+  }
+
+  copyBikeById(variables: CopyCargoBikeByIdQueryVariables) {
+
+    this.copyCargoBikeByIdGQL
+      .fetch(variables)
+      .subscribe((result) => {
+        const newBike = result.data.copyCargoBikeById;
+        newBike["newObject"] = true;
+        const currentTableData = this.tableData.getValue();
+        this.tableData.next([newBike, ...this.tableData.getValue()]);
+        this.tableData.next(currentTableData);
+      })
   }
 
   reloadBike(variables: ReloadCargoBikeByIdQueryVariables) {

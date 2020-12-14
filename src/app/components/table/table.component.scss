@@ -26,8 +26,17 @@
       margin-right: 0.5em;
     }
   }
+  .idle-overlay {
+    filter: blur(5px);
+  }
+  .idle-spinner {
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    z-index: 999;
+  }
   .table-container {
-    flex: 1;
     width: auto;
     margin-left: 0.5em;
     margin-right: 0.5em;

@@ -44,7 +44,6 @@ import { ParticipantsComponent } from './pages/tables/participants/participants.
 import { LendingStationsComponent } from './pages/tables/lending-stations/lending-stations.component';
 import { TableOverviewComponent } from './pages/table-overview/table-overview.component';
 import { CellComponent } from './components/tableComponents/cell/cell.component';
-import { MenuListItemComponent } from './components/menu-list-item/menu-list-item.component';
 import { SidenavProfileComponent } from './components/sidenav-profile/sidenav-profile.component';
 import { NavService } from './components/menu-list-item/nav.service';
 import { TokenInterceptor } from './helper/token.interceptor';
@@ -91,7 +90,6 @@ import { FilterRowComponent } from './components/tableComponents/filter-row/filt
 @NgModule({
   declarations: [
     AppComponent,
-    MenuListItemComponent,
     SidenavProfileComponent,
     LoginComponent,
     BikesComponent,

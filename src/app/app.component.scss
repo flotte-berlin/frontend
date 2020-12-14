@@ -1,4 +1,5 @@
 @import '../theme';
+$primary-color: mat-color($light-primary, 300);
 
 #page-wrapper {
   display: flex;
@@ -20,8 +21,15 @@
   padding-top:0px
 }
 
+.primary-color {
+  color: $primary-color !important;
+}
+
 mat-nav-list .nav-profile-list-item {
   height:200px;
-  background: mat-color($light-primary, 300);;
-  //color:white;
+  background: $primary-color;
+}
+
+.nav-list-icon {
+  margin-right: 1em;
 }

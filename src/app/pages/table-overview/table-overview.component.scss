@@ -1,12 +1,34 @@
-mat-grid-tile {
-  cursor: pointer;
-  background: grey;
-}
-
-.grid-list-spacer {
-  margin: 15px;
-}
-
-.big-list {
-  margin-bottom: 30px;
+.page-wrapper {
+  display: flex;
+  height: 100%;
+  .link-box {
+    flex-basis: 50%;
+    height: 100%;
+    overflow: auto;
+    .text-wrapper {
+      padding: 1.5em 3em;
+    }
+  }
+  .banner-box {
+    flex-basis: 50%;
+    overflow: hidden;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    text-align: center;
+    .center-text {
+      margin: 0.5em;
+      position: absolute;
+      word-break: break-word;
+      color: white;
+      z-index: 5;
+    }
+    .banner-img-box {
+      height: 100%;
+      filter: blur(2px);
+      img {
+        height: 100%;
+      }
+    }
+  }
 }

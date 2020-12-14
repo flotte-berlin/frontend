@@ -1,4 +1,6 @@
 import { Component, OnInit } from '@angular/core';
+import { AuthService } from 'src/app/services/auth.service';
+import { tableLinks } from 'src/app/tableLinks';
 
 @Component({
   selector: 'app-table-overview',
@@ -7,9 +9,17 @@ import { Component, OnInit } from '@angular/core';
 })
 export class TableOverviewComponent implements OnInit {
 
-  constructor() { }
+  username = "fLotte Nutzer"
+  tableLinks = tableLinks;
+
+  constructor(private auth: AuthService) {
+   }
 
   ngOnInit(): void {
+    this.auth.currentUser.subscribe(user => {
+      const name = user?.user?.name;
+      this.username = name || this.username    
+    });
   }
 
 }

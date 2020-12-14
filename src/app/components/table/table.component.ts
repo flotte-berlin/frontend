@@ -7,6 +7,7 @@ import {
   ViewChild,
   AfterViewInit,
   ChangeDetectorRef,
+  ElementRef,
 } from '@angular/core';
 import { CdkDragDrop, moveItemInArray } from '@angular/cdk/drag-drop';
 import { flatten } from 'src/app/helperFunctions/flattenObject';
@@ -62,8 +63,14 @@ export class TableComponent implements AfterViewInit {
   @Input()
   tableDataGQLUpdateInputType: string;
 
+  @Input()
+  copyableRows = false;
+
   @ViewChild(MatPaginator) paginator: MatPaginator;
   @ViewChild(MatSort) sort: MatSort;
+
+  @ViewChild('filterRow', { read: ElementRef }) filterRow: ElementRef;
+  @ViewChild('headerRow', { read: ElementRef }) headerRow: ElementRef;
 
   additionalColumnsFront: string[] = [];
   additionalColumnsBack: string[] = ['buttons'];
@@ -88,10 +95,12 @@ export class TableComponent implements AfterViewInit {
   filterChanged: Subject<any> = new Subject<any>();
 
   isLoaded = false;
+  isProcessing = false;
 
   @Output() createEvent = new EventEmitter();
   @Output() lockEvent = new EventEmitter();
   @Output() saveEvent = new EventEmitter();
+  @Output() copyEvent = new EventEmitter();
   @Output() cancelEvent = new EventEmitter();
   @Output() deleteEvent = new EventEmitter();
 
@@ -108,20 +117,20 @@ export class TableComponent implements AfterViewInit {
 
   ngOnInit() {
     this.addColumnPropertiesFromGQLSchemaToColumnInfo();
-    console.log(this.columnInfo);
     this.columnInfo.forEach((column) =>
       this.displayedColumns.push(column.dataPath)
     );
+    this.displayedColumns.unshift(...this.additionalColumnsFront);
+    this.displayedColumns.push(...this.additionalColumnsBack);
     this.displayedFilterColumns = this.displayedColumns.map(
       (columnName) => columnName + '.filter'
     );
-    this.displayedColumns.unshift(...this.additionalColumnsFront);
-    this.displayedColumns.push(...this.additionalColumnsBack);
 
     this.resetFilters();
   }
 
   ngAfterViewInit(): void {
+    this.setTableFilterRowHeight();
     this.data.paginator = this.paginator;
     this.data.sortingDataAccessor = (item, columnName) => {
       if (typeof item[columnName] === 'string') {
@@ -147,13 +156,19 @@ export class TableComponent implements AfterViewInit {
     });
 
     this.dataService.tableData.subscribe((newTableDataSource) => {
-      this.reloadingTable = false;
       const tempDataSource = [];
       if (newTableDataSource === null) {
         return;
       }
+      this.reloadingTable = false;
       this.isLoaded = true;
       for (const row of newTableDataSource) {
+        if (row.newObject) {
+          // its a copied object
+          row.id = this.getNewId();
+          tempDataSource.push(flatten(row));
+          continue;
+        }
         const oldRow = this.getRowById(row.id);
         /** make sure to not overwrite a row that is being edited */
         if (!oldRow) {
@@ -335,6 +350,14 @@ export class TableComponent implements AfterViewInit {
     this.saveEvent.emit(deepenRow);
   }
 
+  copy(row: any) {
+    const deepenRow = this.schemaService.filterObject(
+      this.tableDataGQLUpdateInputType,
+      deepen(row)
+    );
+    this.copyEvent.emit(deepenRow);
+  }
+
   cancel(row: any) {
     this.cancelEvent.emit(row);
   }
@@ -419,32 +442,60 @@ export class TableComponent implements AfterViewInit {
   }
 
   newFilterValue(): void {
-    console.log(this.filters);
     this.filterChanged.next(this.filters);
   }
 
   applyFilters(): void {
-    this.isLoaded = false;
+    this.isProcessing = true;
     setTimeout(() => {
       this.data.filter = (this.filters as unknown) as string;
-      this.isLoaded = true;
+      this.isProcessing = false;
     });
   }
 
-  resetFilters() {
-    this.filters = [];
+  columnFiltersAreSet(): boolean {
+    for (const filterObject of Object.keys(this.filters.columnFilters)) {
+      if (this.filters.columnFilters[filterObject].isSet) {
+        return true;
+      }
+    }
+    return false;
+  }
+
+  resetColumnFilters() {
     this.filters['columnFilters'] = [];
     for (const column of this.columnInfo) {
       this.filters.columnFilters[column.dataPath] = {
+        isSet: false,
         value: null,
         minValue: {},
         maxValue: {},
         fromValue: {},
         toValue: {},
         type: column.type,
+        list: column.list,
         options: {},
       };
     }
+    this.setTableFilterRowHeight();
+    this.applyFilters();
+  }
+
+  resetFilters() {
+    this.filters = [];
+    this.resetColumnFilters();
+  }
+
+  setTableFilterRowHeight() {
+    setTimeout(() => {
+      const filterRowHeight = this.filterRow.nativeElement.clientHeight;
+      const headerRowCells = Array.from(
+        this.headerRow.nativeElement.children as HTMLCollectionOf<HTMLElement>
+      );
+      for (let i = 0; i < headerRowCells.length; i++) {
+        headerRowCells[i].style.top = filterRowHeight + 'px';
+      }
+    });
   }
 
   resetSorting() {

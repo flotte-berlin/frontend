@@ -48,11 +48,23 @@
     >
       nur ungespeicherte Elemente anzeigen
     </mat-checkbox>
+    <button
+      mat-raised-button
+      color="primary"
+      class="table-control-button"
+      *ngIf="columnFiltersAreSet()"
+      i18n
+      (click)="resetColumnFilters()"
+    >
+      Spaltenfilterwerte zurücksetzen
+    </button>
     <mat-paginator
       [pageSizeOptions]="[15, 25, 30]"
       showFirstLastButtons
     ></mat-paginator>
   </div>
+
+  <!-- Table -->
   <div class="table-container">
     <table
       mat-table
@@ -62,6 +74,7 @@
       cdkDropListOrientation="horizontal"
       (cdkDropListDropped)="drop($event)"
       [dataSource]="data"
+      [ngClass]="{ 'idle-overlay': !isLoaded }"
     >
       <!--- Note that these columns can be defined in any order.
           The actual rendered columns are set as a property on the row definition" -->
@@ -73,12 +86,29 @@
         [sticky]="isStickyColumn(column.dataPath)"
         ><th mat-header-cell *matHeaderCellDef>
           <app-filter-row
+            *ngIf="filters.columnFilters[column.dataPath]?.isSet"
             [column]="column"
             [(filter)]="filters.columnFilters[column.dataPath]"
             (filtersChange)="newFilterValue()"
           ></app-filter-row>
+          <button
+            mat-icon-button
+            matTooltip="Filter hinzufügen"
+            *ngIf="!filters.columnFilters[column.dataPath]?.isSet"
+            (click)="
+              filters.columnFilters[column.dataPath].isSet = true;
+              setTableFilterRowHeight()
+            "
+          >
+            <mat-icon>filter_list</mat-icon>
+          </button>
         </th>
       </ng-container>
+      <!-- empty filter cell -->
+      <ng-container matColumnDef="buttons.filter">
+        <th mat-header-cell *matHeaderCellDef></th>
+      </ng-container>
+
       <!-- Checkbox Column -->
       <ng-container matColumnDef="select" sticky>
         <th mat-header-cell *matHeaderCellDef>
@@ -254,7 +284,12 @@
               >
                 <mat-icon>delete</mat-icon>Löschen
               </button>
-              <button mat-menu-item disabled>
+              <button
+                mat-menu-item
+                *ngIf="copyableRows"
+                [disabled]="false"
+                (click)="copy(element)"
+              >
                 <mat-icon>content_copy</mat-icon>Duplizieren
               </button>
             </mat-menu>
@@ -327,16 +362,23 @@
       <tr
         mat-header-row
         *matHeaderRowDef="displayedFilterColumns; sticky: true"
+        #filterRow
       ></tr>
-      <tr mat-header-row *matHeaderRowDef="displayedColumns; sticky: true"></tr>
-      <tr mat-row *matRowDef="let row; columns: displayedColumns"></tr>
+      <tr
+        mat-header-row
+        *matHeaderRowDef="displayedColumns; sticky: true"
+        #headerRow
+      ></tr>
+      <tr
+        [ngClass]="{ 'idle-overlay': isProcessing }"
+        mat-row
+        *matRowDef="let row; columns: displayedColumns"
+      ></tr>
     </table>
-
-    <mat-card
-      *ngIf="!isLoaded"
-      style="display: flex; justify-content: center; align-items: center"
-    >
-      <mat-spinner [diameter]="32"></mat-spinner>
-    </mat-card>
   </div>
+  <mat-spinner
+    class="idle-spinner"
+    *ngIf="!isLoaded || isProcessing"
+    [diameter]="48"
+  ></mat-spinner>
 </div>
