@@ -9,6 +9,7 @@
     margin-top: 0.25em;
     .mat-icon {
       margin-left: 8px;
+      user-select: none;
     }
   }
   .table-control {
@@ -77,5 +78,31 @@
         flex-direction: row;
       }
     }
+  }
+}
+
+.drive {
+  animation-name: translate; // Name der Animation
+  animation-duration: 6s; // Dauer der Animation
+  animation-iteration-count: 1; // Anzahl der Wiederholungen
+}
+
+@keyframes translate {
+  0% {
+    transform: translateX(0px);
+  }
+  69% {
+    visibility: hidden;
+    transform: translateX(100vw);
+  }
+  70% {
+    visibility: hidden;
+    transform: translateX(-100vw);
+  }
+  71% {
+    transform: translateX(-100vw);
+  }
+  100% {
+    transform: translateX(0px);
   }
 }
