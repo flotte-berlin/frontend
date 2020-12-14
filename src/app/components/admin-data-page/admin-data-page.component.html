@@ -1,0 +1,171 @@
+<mat-spinner
+  *ngIf="isLoading"
+  [diameter]="32"
+  class="page-loading-spinner"
+></mat-spinner>
+<div class="page-wrapper" *ngIf="!isLoading && !data">
+  <h1>Seite konnte nicht gefunden werden :(</h1>
+</div>
+
+<div class="data-page-wrapper" *ngIf="data && !isLoading">
+  <h1 class="headline">
+    {{ getHeadline !== undefined ? getHeadline(data) : data[headlineDataPath] }}
+    <mat-icon>{{ headlineIconName }}</mat-icon>
+  </h1>
+  <ng-container *ngFor="let object of propertiesInfo">
+    <mat-card
+      class="inline-card"
+      *ngIf="
+        object.type === 'Group' &&
+        (!object.hideCondition || !object.hideCondition(data))
+      "
+    >
+      <mat-card-title class="card-header">
+        <h2>{{ object.title }}</h2>
+        <button
+          mat-button
+          *ngIf="data?.isLockedByMe && object.possibleObjects"
+          (click)="openSelectObjectDialog(object)"
+        >
+          <mat-icon>expand_more</mat-icon>
+        </button>
+      </mat-card-title>
+      <ng-container *ngFor="let prop of object.properties">
+        <app-cell
+          *ngIf="
+            prop.type !== 'NumRange' &&
+            prop.type !== 'Link' &&
+            prop.type !== 'DateRange'
+          "
+          [isList]="prop.list"
+          [editable]="data?.isLockedByMe && prop.acceptedForUpdating"
+          [required]="prop.requiredForUpdating && data?.isLockedByMe"
+          (validityChange)="validityChange(prop.dataPath, $event)"
+          [(value)]="data[prop.dataPath]"
+          [label]="prop.translation || prop.dataPath"
+          [inputType]="prop.type"
+        ></app-cell>
+        <app-number-range-cell
+          *ngIf="prop.type === 'NumRange'"
+          [editable]="data?.isLockedByMe && prop.acceptedForUpdating"
+          (validityChange)="validityChange(prop.dataPath, $event)"
+          [(min)]="data[prop.dataPath + '.min']"
+          [(max)]="data[prop.dataPath + '.max']"
+          [label]="prop.translation || prop.dataPath"
+        ></app-number-range-cell>
+        <app-date-range-cell
+          *ngIf="prop.type === 'DateRange'"
+          [editable]="data?.isLockedByMe && prop.acceptedForUpdating"
+          [required]="prop.requiredForUpdating && data?.isLockedByMe"
+          (validityChange)="validityChange(prop.dataPath, $event)"
+          [(from)]="data[prop.dataPath + '.from']"
+          [(to)]="data[prop.dataPath + '.to']"
+        ></app-date-range-cell>
+        <a
+          mat-button
+          class="link-button"
+          color="primary"
+          *ngIf="prop.type === 'Link'"
+          [routerLink]="prop.link(data)"
+          >{{ prop.linkText }}
+        </a>
+      </ng-container>
+    </mat-card>
+
+    <mat-card
+      class="inline-card"
+      *ngIf="
+        object.type === 'ReferenceTable' &&
+        (!object.hideCondition || !object.hideCondition(data))
+      "
+    >
+      <mat-card-title
+        ><h2>{{ object.title }}</h2>
+        <a
+          mat-button
+          *ngIf="object.linkToTable"
+          color="primary"
+          [routerLink]="object.linkToTable(data)"
+          [queryParams]="
+            object.linkToTableParams ? object.linkToTableParams(data) : {}
+          "
+          matTooltip="Zur Tabelle"
+        >
+          <mat-icon>subdirectory_arrow_right</mat-icon>
+          <mat-icon>table_chart</mat-icon>
+        </a>
+      </mat-card-title>
+      <app-reference-table
+        [dataServiceThatProvidesThePossibleData]="object.dataService"
+        [nameToShowInSelection]="object.nameToShowInSelection"
+        [columnInfo]="object.columnInfo"
+        [data]="data[object.dataPath]"
+        [editable]="data?.isLockedByMe"
+        [tableDataGQLType]="object.tableDataGQLType"
+        (referenceIds)="addReferenceIdsToObject($event, object)"
+        [editableReferences]="object.editableReferences"
+      ></app-reference-table>
+    </mat-card>
+  </ng-container>
+</div>
+
+<button
+  mat-mini-fab
+  (click)="reloadPageData()"
+  class="floating-fab-button-top"
+  [disabled]="isSavingOrLocking || isLoading"
+  color="primary"
+  matTooltip="Daten aktualisieren. Achtung! Alle ungespeicherten Änderungen gehen verloren."
+>
+  <mat-icon>sync</mat-icon>
+</button>
+
+<div id="floating-fab-button-box">
+  <button
+    mat-fab
+    (click)="lock()"
+    *ngIf="!data?.isLockedByMe && !data?.isLocked"
+    class="floating-fab-button"
+    color="primary"
+    [disabled]="isSavingOrLocking || isLoading"
+  >
+    <mat-icon>edit</mat-icon>
+  </button>
+  <button
+    mat-mini-fab
+    (click)="cancel()"
+    *ngIf="data?.isLockedByMe"
+    class="floating-fab-button"
+    [disabled]="isSavingOrLocking || isLoading"
+  >
+    <mat-icon>cancel</mat-icon>
+  </button>
+  <div
+    *ngIf="data?.isLockedByMe"
+    [matTooltip]="
+      countUnvalidProperties() > 0
+        ? 'Ungültige oder nicht ausgefüllte Pflichtfelder (rot): ' +
+          countUnvalidProperties()
+        : 'Abspeichern'
+    "
+  >
+    <button
+      mat-fab
+      (click)="save()"
+      class="floating-fab-button"
+      [disabled]="
+        isSavingOrLocking || isLoading || countUnvalidProperties() > 0
+      "
+    >
+      <mat-icon>save</mat-icon>
+    </button>
+  </div>
+  <button
+    mat-fab
+    *ngIf="data?.isLocked"
+    matTooltip="Dieser Eintrag wird gerade von einem anderen Bearbeiter editiert. Aktualisieren Sie die Seite, um den neuen Status abzurufen."
+    class="floating-fab-button"
+  >
+    <mat-icon>locked</mat-icon>
+  </button>
+</div>
