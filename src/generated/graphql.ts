@@ -1795,6 +1795,24 @@ export enum CacheControlScope {
 }
 
 
+export type GetActionLogQueryVariables = Exact<{ [key: string]: never; }>;
+
+
+export type GetActionLogQuery = { __typename?: 'Query', actionLogAll?: Maybe<Array<(
+    { __typename?: 'ActionLog' }
+    & ActionLogFieldsFragment
+  )>> };
+
+export type GetActionLogByUserIdQueryVariables = Exact<{
+  id: Scalars['ID'];
+}>;
+
+
+export type GetActionLogByUserIdQuery = { __typename?: 'Query', actionLogByUser?: Maybe<Array<(
+    { __typename?: 'ActionLog' }
+    & ActionLogFieldsFragment
+  )>> };
+
 export type GetCargoBikesQueryVariables = Exact<{ [key: string]: never; }>;
 
 
@@ -2284,6 +2302,8 @@ export type DeleteEquipmentTypeMutationVariables = Exact<{
 
 
 export type DeleteEquipmentTypeMutation = { __typename?: 'Mutation', deleteEquipmentType: boolean };
+
+export type ActionLogFieldsFragment = { __typename?: 'ActionLog', id: string, action: string, date: any, entity: string, entriesNew: string, entriesOld: string, userId: string };
 
 export type AddressFieldsFragment = { __typename?: 'Address', street: string, number: string, zip: string, city?: Maybe<string> };
 
@@ -3085,6 +3105,17 @@ export type DeleteWorkshopTypeMutationVariables = Exact<{
 
 export type DeleteWorkshopTypeMutation = { __typename?: 'Mutation', deleteWorkshopType: boolean };
 
+export const ActionLogFieldsFragmentDoc = gql`
+    fragment ActionLogFields on ActionLog {
+  id
+  action
+  date
+  entity
+  entriesNew
+  entriesOld
+  userId
+}
+    `;
 export const PersonFieldsGeneralFragmentDoc = gql`
     fragment PersonFieldsGeneral on Person {
   id
@@ -3722,6 +3753,42 @@ export const WorkshopTypeFieldsFragmentDoc = gql`
   lockedUntil
 }
     ${WorkshopTypefieldsGeneralFragmentDoc}`;
+export const GetActionLogDocument = gql`
+    query GetActionLog {
+  actionLogAll {
+    ...ActionLogFields
+  }
+}
+    ${ActionLogFieldsFragmentDoc}`;
+
+  @Injectable({
+    providedIn: 'root'
+  })
+  export class GetActionLogGQL extends Apollo.Query<GetActionLogQuery, GetActionLogQueryVariables> {
+    document = GetActionLogDocument;
+    
+    constructor(apollo: Apollo.Apollo) {
+      super(apollo);
+    }
+  }
+export const GetActionLogByUserIdDocument = gql`
+    query GetActionLogByUserId($id: ID!) {
+  actionLogByUser(id: $id) {
+    ...ActionLogFields
+  }
+}
+    ${ActionLogFieldsFragmentDoc}`;
+
+  @Injectable({
+    providedIn: 'root'
+  })
+  export class GetActionLogByUserIdGQL extends Apollo.Query<GetActionLogByUserIdQuery, GetActionLogByUserIdQueryVariables> {
+    document = GetActionLogByUserIdDocument;
+    
+    constructor(apollo: Apollo.Apollo) {
+      super(apollo);
+    }
+  }
 export const GetCargoBikesDocument = gql`
     query GetCargoBikes {
   cargoBikes {
