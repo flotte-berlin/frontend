@@ -5,7 +5,8 @@
       <mat-list>
         <mat-list-item *ngFor="let link of tableLinks">
           <a mat-button color="primary" [routerLink]="link.route">
-            <mat-icon>{{ link.iconName }}</mat-icon>
+            <mat-icon [svgIcon]="link.svgIconName" *ngIf="!link.iconName"></mat-icon>
+            <mat-icon *ngIf="link.iconName">{{ link.iconName }}</mat-icon>
             {{ link.displayName }}
           </a>
         </mat-list-item>
