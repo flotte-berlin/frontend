@@ -1,0 +1,10 @@
+fragment ActionLogFields on ActionLog {
+    id
+    action
+    date
+    entity
+    entriesNew
+    entriesOld
+    userId
+}
+
