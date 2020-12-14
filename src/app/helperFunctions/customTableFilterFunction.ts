@@ -10,11 +10,9 @@ export function customTableFilterFunction(data: any, filter: any) {
     // List Filter - ignore types if column is list
     if (filterElement.list && filterElement.values?.length > 0) {
       let dataElement: Array<any> = data[filterElementName];
-      if (dataElement.length !== filterElement.values.length) {
-        return false;
-      }
-      for (const element of filterElement.values) {
-        if (!dataElement.includes(element)) {
+      for (const filterValue of filterElement.values) {
+        const searchSring = filterValue.trim().toLowerCase();
+        if (!dataElement.map(element => element.trim().toLowerCase()).includes(searchSring)) {
           return false;
         }
       }
