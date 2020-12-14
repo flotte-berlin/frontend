@@ -184,7 +184,7 @@ export class LendingStationComponent implements OnInit {
       editableReferences: false,
       linkToTable: () => '/table/timeFrames',
       linkToTableParams: (lendingStation) => {
-        return { filter: lendingStation.name };
+        return { "lendingStation.name": lendingStation.name};
       },
     },
   ];

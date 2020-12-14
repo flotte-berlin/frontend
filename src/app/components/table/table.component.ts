@@ -23,6 +23,7 @@ import { ActivatedRoute } from '@angular/router';
 import { Subject } from 'rxjs';
 import { debounceTime } from 'rxjs/internal/operators/debounceTime';
 import { SelectObjectDialogComponent } from '../select-object-dialog/select-object-dialog.component';
+import { filter } from 'rxjs/operators';
 
 @Component({
   selector: 'app-table',
@@ -109,11 +110,7 @@ export class TableComponent implements AfterViewInit {
     public dialog: MatDialog,
     private activatedroute: ActivatedRoute,
     private cdRef: ChangeDetectorRef
-  ) {
-    /*this.filter.includesString =
-      this.activatedroute.snapshot.queryParamMap.get('filter') || '';*/
-    //TODO: add filter from url
-  }
+  ) {}
 
   ngOnInit() {
     this.addColumnPropertiesFromGQLSchemaToColumnInfo();
@@ -127,6 +124,15 @@ export class TableComponent implements AfterViewInit {
     );
 
     this.resetFilters();
+
+    const routeFilter = this.activatedroute.snapshot.queryParams;
+    for (const filterName of Object.keys(routeFilter)) {
+      if (this.filters.columnFilters[filterName]) {
+        this.filters.columnFilters[filterName].value = routeFilter[filterName];
+        this.filters.columnFilters[filterName].isSet = true;
+        this.filters.columnFilters[filterName].options.exact = true;
+      }
+    }
   }
 
   ngAfterViewInit(): void {

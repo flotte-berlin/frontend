@@ -270,9 +270,6 @@ export class BikeComponent implements OnInit {
         );
       },
       linkToTable: (element) => '/table/equipments',
-      linkToTableParams: (bike) => {
-        return { filter: bike.name };
-      },
       propertyNameOfUpdateInput: 'equipmentIds',
     },
     {
@@ -291,7 +288,7 @@ export class BikeComponent implements OnInit {
       editableReferences: false,
       linkToTable: () => '/table/timeFrames',
       linkToTableParams: (bike) => {
-        return { filter: bike.name };
+        return { "cargoBike.name": bike.name};
       },
     },
     {
@@ -324,7 +321,7 @@ export class BikeComponent implements OnInit {
       editableReferences: false,
       linkToTable: () => '/table/engagements',
       linkToTableParams: (bike) => {
-        return { filter: bike.name };
+        return { "cargoBike.name": bike.name};
       },
     },
   ];
