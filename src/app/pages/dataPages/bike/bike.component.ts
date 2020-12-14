@@ -297,7 +297,7 @@ export class BikeComponent implements OnInit {
     {
       type: 'ReferenceTable',
       title: 'Engagements',
-      dataPath: 'engagements',
+      dataPath: 'engagement',
       dataService: null,
       columnInfo: [
         {
