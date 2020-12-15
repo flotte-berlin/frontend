@@ -8,6 +8,7 @@ export class User {
     id: number;
     name: string;
     email: string;
+    email_old?: string;
     own_password: string;
     password: string;
     roles: Role[];

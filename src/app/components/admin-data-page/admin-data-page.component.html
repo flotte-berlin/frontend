@@ -1,18 +1,18 @@
 
-<mat-toolbar color="primary">
-  <span>Admin Table</span>
-  <span class="spacer"></span>
-  Reload data:
+
+<h1>Benutzerverwaltung
   <button mat-icon-button (click)="refresh()">
     <mat-icon>refresh</mat-icon>
   </button>
-</mat-toolbar>
+</h1>
+<span class="spacer"></span>
+  
 
 <div class="container mat-elevation-z8">
 
   <div class="form">
     <mat-form-field floatPlaceholder="never" color="accent">
-      <input matInput #filter placeholder="Filter issues">
+      <input matInput #filter placeholder="Nutzerfilter">
     </mat-form-field>
   </div>
 
@@ -52,7 +52,7 @@
           <mat-icon aria-label="Edit">edit</mat-icon>
         </button>
 
-        <button mat-icon-button color="accent" (click)="deleteItem(i, row.id, row.title, row.state, row.url)">
+        <button mat-icon-button color="accent" (click)="deleteItem(row)">
           <mat-icon aria-label="Delete">delete</mat-icon>
         </button>
       </mat-cell>

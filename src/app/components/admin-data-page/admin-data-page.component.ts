@@ -68,6 +68,7 @@ export class AdminDataPageComponent implements OnInit {
        
         let newUserData = this.userService.getDialogData();
         console.log("add user data");
+        newUserData.password = '';
         newUserData.rolesString = newUserData.roles.join(', ');
         this.dataSource.data.push(newUserData);
         
@@ -90,6 +91,7 @@ export class AdminDataPageComponent implements OnInit {
         let newUserData = this.userService.getDialogData();
         const foundIndex = this.dataSource.data.findIndex(x => x.id === newUserData.id);
         
+        newUserData.password = '';
         newUserData.rolesString = newUserData.roles.join(', ');
         this.dataSource.data[foundIndex] = newUserData;
        
@@ -99,16 +101,15 @@ export class AdminDataPageComponent implements OnInit {
   }
 
 
-  deleteItem(i: number, id: number, title: string, state: string, url: string) {
-    this.index = i;
-    this.id = id;
+  deleteItem(user : User) {
     const dialogRef = this.dialog.open(DeleteDialogComponent, {
-      data: {id: id, title: title, state: state, url: url}
+      data: user
     });
 
     dialogRef.afterClosed().subscribe(result => {
       if (result === 1) {
-        const foundIndex = this.dataSource.data.findIndex(x => x.id === this.id);
+        let newUserData = this.userService.getDialogData();
+        const foundIndex = this.dataSource.data.findIndex(x => x.id === newUserData.id);
 
         this.dataSource.data.splice(foundIndex, 1);
         this.refreshTable();
@@ -133,6 +134,7 @@ export class AdminDataPageComponent implements OnInit {
           roles.push(role.name);
         }
         user.rolesString = roles.join(', ');
+        user.email_old = user.email;
       }
       this.dataSource = new MatTableDataSource(data);
     });
@@ -161,48 +163,7 @@ export class AdminDataPageComponent implements OnInit {
 
     this.dataSource.sort = this.sort;
   }
-
-
-  private load() {
-    console.log("trying to load");
-    
-  }
-
-  delete(user: User) {
-    let ownPassword : string;
-    this.userService.deleteUser(user.email, ownPassword)
-    .pipe(first())
-    .subscribe(
-      data => {
-        //this.loadAllObjects();
-      },
-      error => {
-        
-      }
-    );
-  }
-
-  edit(user: User) {
-    let ownPassword : string;
-    this.userService.updateUser(user, ownPassword)
-    .pipe(first())
-    .subscribe(
-      data => {
-        //this.loadAllObjects();
-      },
-      error => {
-        
-      }
-    );
-  }
-
-  /*findActualData(_id: string) {
-    for (let data of this.actualData) {
-      if (data._id === _id) {
-        return data;
-      }
-    }
-  } */ 
+  
 }
 
 

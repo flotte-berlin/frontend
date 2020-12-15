@@ -17,6 +17,15 @@
     }
 }
 
+#usermanagement{
+    display: flex;
+    flex-direction: column;
+    max-width: 80em;
+    min-width: 5em;
+    margin: auto;
+    margin-top: 3em;
+}
+
 hr {
     color: #7fc600;
     width: 100%;

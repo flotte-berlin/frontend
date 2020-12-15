@@ -40,16 +40,20 @@ export class UserService {
         user.own_password = own_password;
     }
 
-    console.log("Users update: " + JSON.stringify(user));
+    //console.log("Users update: " + JSON.stringify(user));
     return this.http.post<User>(
-      `${environment.authUrl}/users/${user.email}/update`,
+      `${environment.authUrl}/users/${user.email_old}/update`,
       user
     );
   }
 
-  public deleteUser(email: string, own_password? : string): Observable<any> {
+  public deleteUser(user: User, own_password? : string): Observable<any> {
+    if (own_password !== undefined){
+      user.own_password = own_password;
+    }
+    this.dialogData = user;
     return this.http.post<any>(
-      `${environment.authUrl}/users/` + email + '/delete', {"own_password" : own_password}
+      `${environment.authUrl}/users/${user.email}/delete`, {"own_password" : user.own_password}
     );
   }
 
