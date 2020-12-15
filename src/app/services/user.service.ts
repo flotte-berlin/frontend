@@ -13,6 +13,13 @@ import { ObserveOnSubscriber } from 'rxjs/internal/operators/observeOn';
 export class UserService {
   constructor(private http: HttpClient, private authService: AuthService) {}
 
+  // Temporarily stores data from dialogs, kinda shit solution I guess
+  dialogData: any;
+
+  getDialogData() {
+    return this.dialogData;
+  }
+
   public getAllUsers(): Observable<User[]> {
     return this.http.get<User[]>(`${environment.authUrl}/users`);
   }
@@ -27,16 +34,33 @@ export class UserService {
     );
   }
 
-  public updateUser(user: User): Observable<User> {
+  public updateUser(user: User, own_password?: string): Observable<User> {
+    this.dialogData = user;
+    if (own_password !== undefined){
+        user.own_password = own_password;
+    }
+
+    console.log("Users update: " + JSON.stringify(user));
     return this.http.post<User>(
       `${environment.authUrl}/users/${user.email}/update`,
       user
     );
   }
 
-  public deleteUser(email: string): Observable<any> {
-    return this.http.delete<any>(
-      `${environment.authUrl}/users/` + email + '/delete'
+  public deleteUser(email: string, own_password? : string): Observable<any> {
+    return this.http.post<any>(
+      `${environment.authUrl}/users/` + email + '/delete', {"own_password" : own_password}
+    );
+  }
+
+  public addUser(user : User){
+    if (user.attributes === undefined){
+      user.attributes = {};
+    }
+    this.dialogData = user;
+    return this.http.post<User>(
+      `${environment.authUrl}/users/create`,
+      user
     );
   }
 }

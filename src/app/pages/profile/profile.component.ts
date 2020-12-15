@@ -27,7 +27,7 @@ export class ProfileComponent implements OnInit {
 
   returnUrl : string;
 
-  constructor(private authService: AuthService, private snackBar: SnackBarService, 
+  constructor(public authService: AuthService, private snackBar: SnackBarService, 
               private userService: UserService, private router: Router, 
               private route: ActivatedRoute, private formBuilder : FormBuilder) {}
 

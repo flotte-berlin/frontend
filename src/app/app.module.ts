@@ -66,6 +66,7 @@ import { SelectObjectDialogComponent } from './components/select-object-dialog/s
 import { AutocompleteSelectComponent } from './components/autocomplete-select/autocomplete-select.component';
 import { LendingStationComponent } from './pages/dataPages/lending-station/lending-station.component';
 import { ProfileComponent } from './pages/profile/profile.component';
+import { AdminDataPageComponent} from './components/admin-data-page/admin-data-page.component';
 import {
   ErrorSnackbarComponent,
   SnackbarDialog,
@@ -86,6 +87,10 @@ import { BikeEventsComponent } from './pages/tables/bike-events/bike-events.comp
 import { BikeEventTypesComponent } from './pages/tables/bike-event-types/bike-event-types.component';
 import { WorkshopTypesComponent } from './pages/tables/workshop-types/workshop-types.component';
 import { FilterRowComponent } from './components/tableComponents/filter-row/filter-row.component';
+import {DeleteDialogComponent} from './components/dialogs/delete/delete.dialog.component';
+import {AddDialogComponent} from './components/dialogs/add/add.dialog.component';
+import {EditDialogComponent} from './components/dialogs/edit/edit.dialog.component';
+
 
 @NgModule({
   declarations: [
@@ -112,6 +117,10 @@ import { FilterRowComponent } from './components/tableComponents/filter-row/filt
     SelectObjectDialogComponent,
     AutocompleteSelectComponent,
     LendingStationComponent,
+    AddDialogComponent,
+    EditDialogComponent,
+    DeleteDialogComponent,
+    AdminDataPageComponent,
     ProfileComponent,
     ErrorSnackbarComponent,
     SnackbarDialog,
@@ -167,6 +176,11 @@ import { FilterRowComponent } from './components/tableComponents/filter-row/filt
     MatDatepickerModule,
     MatNativeDateModule,
     MatChipsModule,
+  ],
+  entryComponents: [
+    AddDialogComponent,
+    EditDialogComponent,
+    DeleteDialogComponent
   ],
   providers: [
     NavService,

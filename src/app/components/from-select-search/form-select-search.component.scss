@@ -1,0 +1,40 @@
+.mat-stepper-horizontal {
+    margin-top: 8px;
+  }
+  
+  .mat-form-field {
+    margin-top: 16px;
+  }
+  
+  
+  .right-align {
+    text-align: right;
+  }
+  
+  input.right-align::-webkit-outer-spin-button,
+  input.right-align::-webkit-inner-spin-button {
+    display: none;
+  }
+  
+  input.right-align {
+    -moz-appearance: textfield;
+  }
+  
+  .flex {
+    display: flex;
+  }
+  
+  .form-field-less-top-margin{
+    margin-top: 0.5em;
+  }
+  
+  .anti-margin{
+    margin-left: 0;
+    margin-right: 0;
+  }
+
+  .mat-form-field{
+      width: 100%;
+  }
+  
+  

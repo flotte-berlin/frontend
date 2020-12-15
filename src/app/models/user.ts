@@ -10,7 +10,8 @@ export class User {
     email: string;
     own_password: string;
     password: string;
+    roles: string[];
     attributes : {
-        profile_url: string;
+        profile_url?: string;
     }
 }

@@ -1,246 +1,187 @@
+import { HttpClient } from '@angular/common/http';
 import {
   Component,
+  ElementRef,
   EventEmitter,
   Input,
   OnDestroy,
   OnInit,
   Output,
+  ViewChild,
 } from '@angular/core';
 import { MatDialog } from '@angular/material/dialog';
-import { ActivatedRoute } from '@angular/router';
-import { deepen } from '../../helperFunctions/deepenObject';
-import { flatten } from '../../helperFunctions/flattenObject';
-import { SchemaService } from '../../services/schema.service';
-import { SelectObjectDialogComponent } from '../select-object-dialog/select-object-dialog.component';
+import { MatPaginator } from '@angular/material/paginator';
+import { MatSort } from '@angular/material/sort';
+import { MatTableDataSource } from '@angular/material/table';
+import { fromEvent } from 'rxjs';
+import { first } from 'rxjs/operators';
+import { User } from '../../models/user';
+import {UserService} from '../../services/user.service';
+import {DeleteDialogComponent} from '../../components/dialogs/delete/delete.dialog.component';
+import {AddDialogComponent} from '../../components/dialogs/add/add.dialog.component';
+import {EditDialogComponent} from '../../components/dialogs/edit/edit.dialog.component';
 
-interface PropertyTypeInfo {
-  dataPath: string;
-  translation: string;
-  acceptedForUpdating?: boolean;
-  requiredForUpdating?: boolean;
-  required?: boolean;
-  type?: string;
-}
-
-interface PropertyGroupInfo {
-  type: string;
-  title: string;
-  properties: PropertyTypeInfo[];
-}
-interface ReferenceTableInfo {
-  type: string;
-  title: string;
-  dataPath: string;
-  dataService: any;
-  columnInfo: PropertyTypeInfo[];
-  nameToShowInSelection: any;
-  propertyNameOfUpdateInput: string;
-  referenceIds: Array<string>;
-}
+import {deepCopy} from '../../helperFunctions/deepCopy';
 
 @Component({
   selector: 'app-admin-data-page',
   templateUrl: './admin-data-page.component.html',
-  styleUrls: ['./admindata-page.component.scss'],
+  styleUrls: ['./admin-data-page.component.scss'],
 })
-export class DataPageComponent implements OnInit, OnDestroy {
-  @Input()
-  propertiesInfo: Array<any> = [];
+export class AdminDataPageComponent implements OnInit {
 
-  @Input()
-  dataService: any;
 
-  /** specifies which property should be shown in the headline */
-  @Input()
-  headlineDataPath: string;
-  /** specifies which string should be shown in the headline. If this is provided headlineDataPath is ignored*/
-  @Input()
-  getHeadline: (any) => string;
-  @Input()
-  headlineIconName: string = 'help_outline';
-  @Input()
-  pageDataGQLType: string;
-  @Input()
-  pageDataGQLUpdateInputType: string;
-  @Input()
-  propertyNameOfUpdateInput: string;
+  displayedColumns = ['name', 'email', 'password', 'roles', 'actions'];
+  dataSource : MatTableDataSource<User>;
+  index: number;
+  id: number;
 
-  relockingInterval = null;
-  @Input()
-  relockingIntervalDuration = 1000 * 60 * 1;
+  constructor(public httpClient: HttpClient,
+              public dialog: MatDialog,
+              private userService: UserService) {}
 
-  @Output() lockEvent = new EventEmitter();
-  @Output() saveEvent = new EventEmitter();
-  @Output() cancelEvent = new EventEmitter();
+  @ViewChild(MatPaginator, {static: true}) paginator: MatPaginator;
+  @ViewChild(MatSort, {static: true}) sort: MatSort;
+  @ViewChild('filter',  {static: true}) filter: ElementRef;
 
-  id: string;
-  data: any = null;
-  isLoading: boolean = false;
-  isSavingOrLocking: boolean = false;
+  ngOnInit() {
+    this.loadData();
+  }
 
-  propertyValidity = {};
+  refresh() {
+    this.loadData();
+  }
 
-  constructor(
-    private route: ActivatedRoute,
-    private schemaService: SchemaService,
-    public dialog: MatDialog
-  ) {}
 
-  ngOnInit(): void {
-    this.addPropertiesFromGQLSchemaToObject(this.propertiesInfo);
-    this.id = this.route.snapshot.paramMap.get('id');
-    this.reloadPageData();
-    this.dataService.pageData.subscribe((data) => {
-      if (data == null) {
-        this.data = null;
-      } else if (this.data?.isLockedByMe && data?.isLockedByMe) {
-        // dont overwrite data when in edit mode and relock is performed
-        return;
-      } else {
-        this.data = flatten(data);
-      }
-    });
-    this.dataService.isLoadingPageData.subscribe(
-      (isLoading) => (this.isLoading = isLoading)
-    );
-    this.dataService.loadingRowIds.subscribe((loadingRowIds) => {
-      this.isSavingOrLocking = loadingRowIds.includes(this.id);
+  addNew() {
+    const dialogRef = this.dialog.open(AddDialogComponent, {
+      data: {user: User }
     });
 
-    this.relockingInterval = setInterval(() => {
-      if (this.data?.isLockedByMe) {
-        this.lock();
+    dialogRef.afterClosed().subscribe(result => {
+      if (result === 1) {
+       
+
+        this.dataSource.data.push(this.userService.getDialogData());
+        
+        this.refreshTable();
       }
-    }, this.relockingIntervalDuration);
+    });
   }
 
-  ngOnDestroy() {
-    clearInterval(this.relockingInterval);
+  startEdit(user : User) {
+    const dialogRef = this.dialog.open(EditDialogComponent, {
+      data: deepCopy(user)
+    });
+
+    dialogRef.afterClosed().subscribe(result => {
+      if (result === 1) {
+        console.log("editing done");
+
+        const foundIndex = this.dataSource.data.findIndex(x => x.email === this.userService.getDialogData().email);
+        
+        this.dataSource.data[foundIndex] = this.userService.getDialogData();
+       
+        this.refreshTable();
+      }
+    });
   }
 
-  addPropertiesFromGQLSchemaToObject(infoObject: any) {
-    for (const prop of infoObject) {
-      if (prop.type === 'Link') {
-        continue;
+  deleteItem(i: number, id: number, title: string, state: string, url: string) {
+    this.index = i;
+    this.id = id;
+    const dialogRef = this.dialog.open(DeleteDialogComponent, {
+      data: {id: id, title: title, state: state, url: url}
+    });
+
+    dialogRef.afterClosed().subscribe(result => {
+      if (result === 1) {
+        const foundIndex = this.dataSource.data.findIndex(x => x.id === this.id);
+
+        this.dataSource.data.splice(foundIndex, 1);
+        this.refreshTable();
       }
-      if (prop.type === 'Group') {
-        this.addPropertiesFromGQLSchemaToObject(prop.properties);
-      } else if (prop.type === 'ReferenceTable') {
-        prop.tableDataGQLType =
-          prop.tableDataGQLType ||
-          this.schemaService.getTypeInformation(
-            this.pageDataGQLType,
-            prop.dataPath
-          ).type;
-        if (!prop.type) {
-          console.error(
-            "Didn't found type for: " +
-              prop.dataPath +
-              ' on ' +
-              this.pageDataGQLType
-          );
+    });
+  }
+
+
+  private refreshTable() {
+    //this.paginator._changePageSize(this.paginator.pageSize);
+    this.dataSource._updateChangeSubscription();
+  }
+
+  public loadData() {
+    this.userService.getAllUsers().pipe(first()).subscribe((data: User[]) => {
+      this.dataSource = new MatTableDataSource(data);
+    });
+    fromEvent(this.filter.nativeElement, 'keyup')
+      // .debounceTime(150)
+      // .distinctUntilChanged()
+      .subscribe(() => {
+        if (!this.dataSource) {
+          return;
         }
-        prop.referenceIds = [];
-      } else {
-        const typeInformation = this.schemaService.getTypeInformation(
-          this.pageDataGQLType,
-          prop.dataPath
-        );
-        prop.type = prop.type || typeInformation.type;
-        prop.list = typeInformation.isList;
-        if (!prop.type) {
-          console.error(
-            "Didn't found type for: " +
-              prop.dataPath +
-              ' on ' +
-              this.pageDataGQLType
-          );
-        }
-        prop.required =
-          prop.required != null ? prop.required : typeInformation.isRequired;
-
-        const updateTypeInformation = this.schemaService.getTypeInformation(
-          this.pageDataGQLUpdateInputType,
-          prop.dataPath
-        );
-        prop.acceptedForUpdating =
-          prop.acceptedForUpdating != null
-            ? prop.acceptedForUpdating
-            : updateTypeInformation.isPartOfType;
-
-        prop.requiredForUpdating =
-          prop.requiredForUpdating != null
-            ? prop.requiredForUpdating
-            : prop.required || typeInformation.isRequired;
-      }
-    }
+        this.dataSource.filter = this.filter.nativeElement.value;
+      });
   }
 
-  lock() {
-    this.lockEvent.emit(deepen(this.data));
+  ngAfterViewInit() {
+    this.dataSource.paginator = this.paginator;
+    this.dataSource.sort = this.sort;
   }
 
-  validityChange(propName: string, isValid: Event) {
-    this.propertyValidity[propName] = isValid;
+  orderData(id: string, start?: "asc" | "desc") {
+    const matSort = this.dataSource.sort;
+    const disableClear = false;
+
+    matSort.sort({ id: null, start, disableClear });
+    matSort.sort({ id, start, disableClear });
+
+    this.dataSource.sort = this.sort;
   }
 
-  countUnvalidProperties() {
-    let unvalidFieldsCount = 0;
-    for (const prop in this.propertyValidity) {
-      if (!this.propertyValidity[prop]) {
-        unvalidFieldsCount++;
-      }
-    }
-    return unvalidFieldsCount;
+
+  private load() {
+    console.log("trying to load");
+    
   }
 
-  save() {
-    this.saveEvent.emit(
-      this.schemaService.filterObject(
-        this.pageDataGQLUpdateInputType,
-        deepen(this.data)
-      )
-    );
-  }
-
-  cancel() {
-    this.cancelEvent.emit(deepen(this.data));
-  }
-
-  openSelectObjectDialog(object: any) {
-    const dialogRef = this.dialog.open(SelectObjectDialogComponent, {
-      width: 'auto',
-      autoFocus: false,
-      data: {
-        nameToShowInSelection: object.nameToShowInSelection,
-        currentlySelectedObjectId: object.currentlySelectedObjectId(this.data),
-        possibleObjects: object.possibleObjects,
+  delete(user: User) {
+    let ownPassword : string;
+    this.userService.deleteUser(user.email, ownPassword)
+    .pipe(first())
+    .subscribe(
+      data => {
+        //this.loadAllObjects();
       },
-    });
-    dialogRef.afterClosed().subscribe((selectedObject) => {
-      if (selectedObject) {
-        this.data[object.propertyNameOfReferenceId] = selectedObject.id;
-        const newObjectFlattened = flatten(selectedObject);
-        for (const newProperty in newObjectFlattened) {
-          this.data[object.propertyPrefixToOverwrite + '.' + newProperty] =
-            newObjectFlattened[newProperty];
-        }
-      } else if (selectedObject === null) {
-        this.data[object.propertyNameOfReferenceId] = null;
-        for (const prop in this.data) {
-          if (prop.startsWith(object.propertyPrefixToOverwrite)) {
-            this.data[prop] = null;
-          }
-        }
+      error => {
+        
       }
-    });
+    );
   }
 
-  addReferenceIdsToObject(ids: string[], object) {
-    this.data[object.propertyNameOfUpdateInput] = ids;
+  edit(user: User) {
+    let ownPassword : string;
+    this.userService.updateUser(user, ownPassword)
+    .pipe(first())
+    .subscribe(
+      data => {
+        //this.loadAllObjects();
+      },
+      error => {
+        
+      }
+    );
   }
 
-  reloadPageData() {
-    this.dataService.loadPageData({ id: this.id });
-  }
+  /*findActualData(_id: string) {
+    for (let data of this.actualData) {
+      if (data._id === _id) {
+        return data;
+      }
+    }
+  } */ 
 }
+
+
+
