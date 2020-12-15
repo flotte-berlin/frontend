@@ -14,9 +14,10 @@ export class EditDialogComponent {
 
   hide = true;
 
+  selectedRoles: FormControl = new FormControl();
+
   constructor(public dialogRef: MatDialogRef<EditDialogComponent>,
-              @Inject(MAT_DIALOG_DATA) public data: any,
-              @Inject(MAT_DIALOG_DATA) public role: any, public userService: UserService, public snackbarService : SnackBarService) { }
+              @Inject(MAT_DIALOG_DATA) public data: any, public userService: UserService, public snackbarService : SnackBarService) { }
 
   formControl = new FormControl('', [
     Validators.required
@@ -38,7 +39,11 @@ export class EditDialogComponent {
   }
 
   stopEdit(): void {
+    console.log("Selected Role " + JSON.stringify(this.selectedRoles.value));
     this.data.roles = [];
+    for (let role of this.selectedRoles.value){
+      this.data.roles.push(role.name);
+    }
     this.userService.updateUser(this.data).pipe(first())
     .subscribe(
       data => {

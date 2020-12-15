@@ -23,6 +23,36 @@
       </mat-form-field>
     </div>
 
+    <div class="form">
+      <select-search class="mat-form-field" label="Rollen" 
+      [formCtrl]="selectedRoles" 
+      [data]="data.rolesData" 
+      [preSelectedData]="data.roles" multiple></select-search>
+    </div>
+
+
+    <div class="form">
+      <mat-form-field>
+        <mat-label>Admin Passwort</mat-label>
+        <input
+          matInput
+          [type]="hide ? 'password' : 'text'"
+          name="ownPassword"
+          [(ngModel)]="data.own_password"
+          required
+        />
+        <button
+          mat-icon-button
+          matSuffix
+          (click)="hide = !hide"
+          [attr.aria-label]="'Hide password'"
+          [attr.aria-pressed]="hide"
+        >
+          <mat-icon>{{ hide ? "visibility_off" : "visibility" }}</mat-icon>
+        </button>
+      </mat-form-field>
+    </div>
+
     <div mat-dialog-actions>
       <button mat-button [type]="submit" [disabled]="!formControl.valid" [mat-dialog-close]="1" (click)="confirmAdd()">Save</button>
       <button mat-button (click)="onNoClick()" tabindex="-1">Cancel</button>

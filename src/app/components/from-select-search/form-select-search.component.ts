@@ -11,7 +11,8 @@ export class FormSelectSearchComponent implements OnInit, OnDestroy, OnChanges {
   //@Input() group: FormGroup;
   //@Input() controlName: string; 
   @Input() formCtrl: FormControl;
-  
+  //@Input() name: string;
+
   @Input() data: any[];
   @Input() preSelectedData: any[];
   @Input() label: string;
@@ -35,39 +36,24 @@ export class FormSelectSearchComponent implements OnInit, OnDestroy, OnChanges {
     if (changes['data']) {
       
       if (this.preSelectedData !== undefined){
-        //console.log( this.label + " is not undefined :D");
-        //console.log(this.label + " preselected: " + this.preSelectedData);
-        //console.log(JSON.stringify(this.preSelectedData))
         this.riskListGeneratorB(this.preSelectedData);
-        console.log(this.label + " selected options: "+ JSON.stringify(this.selectedOptions) + " all options: " + JSON.stringify(this.data));
       }
       
-      //this.listenInterfacesSearchable();
       this.filterInterfacesBMulti();
     }
     if (changes['preSelectedData']) {
       
       if (this.preSelectedData !== undefined){
-        /*console.log(this.label + " preselect data change");
-        console.log(this.label + " preselected: " + this.preSelectedData);
-        console.log(JSON.stringify(this.preSelectedData))*/
         this.riskListGeneratorB(this.preSelectedData);
-        console.log(this.label + " selected options: "+ JSON.stringify(this.selectedOptions) + " all options: " + JSON.stringify(this.data));
       }
       
-      //this.listenInterfacesSearchable();
       this.filterInterfacesBMulti();
     }
   }
 
   ngOnInit() {
-    //this.group.addControl('searchCtrl', this.searchCtrl);
-    //this.formCtrl = this.group[this.controlName];
     if (this.preSelectedData !== undefined){
-      /*console.log("preselected is not undefined :D");
-      console.log("preselected: " + this.preSelectedData);*/
       this.riskListGeneratorB(this.preSelectedData);
-      console.log("selected options: "+ JSON.stringify(this.selectedOptions) + " all options: " + JSON.stringify(this.data));
     }
     
     this.listenInterfacesSearchable();

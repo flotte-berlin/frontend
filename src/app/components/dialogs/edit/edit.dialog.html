@@ -19,19 +19,27 @@
 
     <div class="form">
       <mat-form-field color="accent">
-        <input matInput placeholder="Passwort" [(ngModel)]="data.password" name="password">
+        <input matInput placeholder="Passwort" [(ngModel)]="data.password" name="password" >
       </mat-form-field>
+    </div>
+
+    <div class="form">
+      <select-search class="mat-form-field" label="Rollen" 
+      [formCtrl]="selectedRoles" 
+      [data]="data.rolesData" 
+      [preSelectedData]="data.roles" multiple></select-search>
     </div>
 
 
     <div class="form">
       <mat-form-field>
-        <mat-label>Eigenes Passwort</mat-label>
+        <mat-label>Admin Passwort</mat-label>
         <input
           matInput
           [type]="hide ? 'password' : 'text'"
           name="ownPassword"
           [(ngModel)]="data.own_password"
+          required
         />
         <button
           mat-icon-button

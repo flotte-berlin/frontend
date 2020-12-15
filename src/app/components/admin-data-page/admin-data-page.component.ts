@@ -15,8 +15,9 @@ import { MatSort } from '@angular/material/sort';
 import { MatTableDataSource } from '@angular/material/table';
 import { fromEvent } from 'rxjs';
 import { first } from 'rxjs/operators';
-import { User } from '../../models/user';
+import { Role, User } from '../../models/user';
 import {UserService} from '../../services/user.service';
+import {RoleService} from '../../services/role.service';
 import {DeleteDialogComponent} from '../../components/dialogs/delete/delete.dialog.component';
 import {AddDialogComponent} from '../../components/dialogs/add/add.dialog.component';
 import {EditDialogComponent} from '../../components/dialogs/edit/edit.dialog.component';
@@ -39,7 +40,8 @@ export class AdminDataPageComponent implements OnInit {
 
   constructor(public httpClient: HttpClient,
               public dialog: MatDialog,
-              private userService: UserService) {}
+              private userService: UserService,
+              private roleService: RoleService) {}
 
   @ViewChild(MatPaginator, {static: true}) paginator: MatPaginator;
   @ViewChild(MatSort, {static: true}) sort: MatSort;
@@ -55,15 +57,19 @@ export class AdminDataPageComponent implements OnInit {
 
 
   addNew() {
+    let dialogData: any = {};
+    dialogData.rolesData = deepCopy(this.roles);
     const dialogRef = this.dialog.open(AddDialogComponent, {
-      data: {user: User }
+      data: dialogData,
     });
 
     dialogRef.afterClosed().subscribe(result => {
       if (result === 1) {
        
-
-        this.dataSource.data.push(this.userService.getDialogData());
+        let newUserData = this.userService.getDialogData();
+        console.log("add user data");
+        newUserData.rolesString = newUserData.roles.join(', ');
+        this.dataSource.data.push(newUserData);
         
         this.refreshTable();
       }
@@ -72,24 +78,26 @@ export class AdminDataPageComponent implements OnInit {
 
   startEdit(user : User) {
     let dialogData = deepCopy(user);
-    dialogData.rolesData = deepCopy(roles);
+    dialogData.rolesData = deepCopy(this.roles);
     const dialogRef = this.dialog.open(EditDialogComponent, {
-      data: deepCopy(user),
-      
+      data: dialogData,
     });
 
     dialogRef.afterClosed().subscribe(result => {
       if (result === 1) {
         console.log("editing done");
 
-        const foundIndex = this.dataSource.data.findIndex(x => x.email === this.userService.getDialogData().email);
+        let newUserData = this.userService.getDialogData();
+        const foundIndex = this.dataSource.data.findIndex(x => x.id === newUserData.id);
         
-        this.dataSource.data[foundIndex] = this.userService.getDialogData();
+        newUserData.rolesString = newUserData.roles.join(', ');
+        this.dataSource.data[foundIndex] = newUserData;
        
         this.refreshTable();
       }
     });
   }
+
 
   deleteItem(i: number, id: number, title: string, state: string, url: string) {
     this.index = i;
@@ -115,6 +123,9 @@ export class AdminDataPageComponent implements OnInit {
   }
 
   public loadData() {
+    this.roleService.getAllRoles().pipe(first()).subscribe((roles: Role[]) => {
+      this.roles = roles;
+    });
     this.userService.getAllUsers().pipe(first()).subscribe((data: User[]) => {
       for (let user of data){
         let roles = [];

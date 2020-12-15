@@ -10,14 +10,14 @@ export class User {
     email: string;
     own_password: string;
     password: string;
-    roles: UserRole[];
+    roles: Role[];
     rolesString? : string;
     attributes : {
         profile_url?: string;
     }
 }
 
-export class UserRole {
+export class Role {
     id: number;
     name: string;
     description: string;

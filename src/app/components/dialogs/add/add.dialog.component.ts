@@ -3,6 +3,8 @@ import {Component, Inject} from '@angular/core';
 import {UserService} from '../../../services/user.service';
 import {FormControl, Validators} from '@angular/forms';
 import {User} from '../../../models/user';
+import { first } from 'rxjs/operators';
+import { SnackBarService } from 'src/app/services/snackbar.service';
 
 @Component({
   selector: 'app-add.dialog',
@@ -12,8 +14,12 @@ import {User} from '../../../models/user';
 
 export class AddDialogComponent {
   constructor(public dialogRef: MatDialogRef<AddDialogComponent>,
-              @Inject(MAT_DIALOG_DATA) public data: User,
-              public userService: UserService) { }
+              @Inject(MAT_DIALOG_DATA) public data: any,
+              public userService: UserService,
+              public snackbarService: SnackBarService) { }
+
+  hide = true;
+  selectedRoles: FormControl = new FormControl();
 
   formControl = new FormControl('', [
     Validators.required
@@ -35,7 +41,20 @@ export class AddDialogComponent {
   }
 
   public confirmAdd(): void {
-    this.userService.addUser(this.data);
-    //this.dataService.addIssue(this.data);
+    this.data.roles = [];
+    for (let role of this.selectedRoles.value){
+      this.data.roles.push(role.name);
+    }
+    this.userService.addUser(this.data).pipe(first())
+    .subscribe(
+      data => {
+        this.snackbarService.openSnackBar("Der Nutzer wurde erfolgreich hinzugefügt");
+        //this.loadAllObjects();
+      },
+      error => {
+        console.log("Eroor while editing: " + JSON.stringify(error));
+        this.snackbarService.openSnackBar(error, "Ok", true);
+      }
+    );
   }
 }

@@ -31,7 +31,7 @@ import { MatSortModule } from '@angular/material/sort';
 import { MatDialogModule } from '@angular/material/dialog';
 import { MatAutocompleteModule } from '@angular/material/autocomplete';
 import { MatDatepickerModule } from '@angular/material/datepicker';
-import { MatNativeDateModule, MAT_DATE_LOCALE } from '@angular/material/core';
+import { MatNativeDateModule, MatOptionModule, MAT_DATE_LOCALE } from '@angular/material/core';
 import { MatChipsModule } from '@angular/material/chips';
 
 import { AppRoutingModule } from './app-routing.module';
@@ -87,6 +87,7 @@ import { BikeEventsComponent } from './pages/tables/bike-events/bike-events.comp
 import { BikeEventTypesComponent } from './pages/tables/bike-event-types/bike-event-types.component';
 import { WorkshopTypesComponent } from './pages/tables/workshop-types/workshop-types.component';
 import { FilterRowComponent } from './components/tableComponents/filter-row/filter-row.component';
+import {FormSelectSearchComponent} from './components/from-select-search/form-select-search.component';
 import {DeleteDialogComponent} from './components/dialogs/delete/delete.dialog.component';
 import {AddDialogComponent} from './components/dialogs/add/add.dialog.component';
 import {EditDialogComponent} from './components/dialogs/edit/edit.dialog.component';
@@ -117,6 +118,7 @@ import {EditDialogComponent} from './components/dialogs/edit/edit.dialog.compone
     SelectObjectDialogComponent,
     AutocompleteSelectComponent,
     LendingStationComponent,
+    FormSelectSearchComponent,
     AddDialogComponent,
     EditDialogComponent,
     DeleteDialogComponent,
@@ -168,6 +170,7 @@ import {EditDialogComponent} from './components/dialogs/edit/edit.dialog.compone
     GraphQLModule,
     DragDropModule,
     MatTooltipModule,
+    MatOptionModule,
     MatSelectModule,
     MatPaginatorModule,
     MatSortModule,
