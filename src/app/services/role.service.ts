@@ -3,7 +3,7 @@ import { HttpClient } from '@angular/common/http';
 import { catchError, finalize, map, tap } from 'rxjs/operators';
 import { environment } from '../../environments/environment';
 import { Observable, BehaviorSubject, of } from 'rxjs';
-import { User } from "../models/user";
+import { Role } from "../models/user";
 import { AuthService} from "./auth.service";
 import { ObserveOnSubscriber } from 'rxjs/internal/operators/observeOn';
 
@@ -18,24 +18,27 @@ export class RoleService {
   }
 
 
-  public getAllUsers(): Observable<User[]> {
-    return this.http.get<User[]>(`${environment.authUrl}/users`);
+  public getAllRoles(): Observable<Role[]> {
+    return this.http.get<Role[]>(`${environment.authUrl}/roles`);
   }
 
-  public getUser(email: string): Observable<User> {
-    return this.http.get<User>(`${environment.authUrl}/users/${email}`);
+  public addRole(user : Role){
+    return this.http.post<Role>(
+      `${environment.authUrl}/roles/create`,
+      user
+    );
   }
 
-  public getUserPermissions(email: string): Observable<any> {
-    return this.http.get<any>(`${environment.authUrl}/users/${email}/permissions`)
+  public getRole(name: string): Observable<Role> {
+    return this.http.get<Role>(`${environment.authUrl}/roles/${name}`);
   }
 
-  public updateUser(user: User): Observable<User> {
-    return this.http.post<User>(`${environment.authUrl}/users/${user.email}/update`, user);
+  public updateRole(role: Role): Observable<Role> {
+    return this.http.post<Role>(`${environment.authUrl}/roles/${role.name}/update`, role);
   }
 
-  public deleteUser(email: string): Observable<any> {
-    return this.http.delete<any>(`${environment.authUrl}/users/` + email + "/delete");
+  public deleteRole(name: string): Observable<any> {
+    return this.http.delete<any>(`${environment.authUrl}/roles/` + name + "/delete");
   }
 
 }

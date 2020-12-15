@@ -35,6 +35,7 @@ export class AdminDataPageComponent implements OnInit {
   dataSource : MatTableDataSource<User>;
   index: number;
   id: number;
+  roles;
 
   constructor(public httpClient: HttpClient,
               public dialog: MatDialog,
@@ -70,8 +71,11 @@ export class AdminDataPageComponent implements OnInit {
   }
 
   startEdit(user : User) {
+    let dialogData = deepCopy(user);
+    dialogData.rolesData = deepCopy(roles);
     const dialogRef = this.dialog.open(EditDialogComponent, {
-      data: deepCopy(user)
+      data: deepCopy(user),
+      
     });
 
     dialogRef.afterClosed().subscribe(result => {
@@ -112,6 +116,13 @@ export class AdminDataPageComponent implements OnInit {
 
   public loadData() {
     this.userService.getAllUsers().pipe(first()).subscribe((data: User[]) => {
+      for (let user of data){
+        let roles = [];
+        for (let role of user.roles){
+          roles.push(role.name);
+        }
+        user.rolesString = roles.join(', ');
+      }
       this.dataSource = new MatTableDataSource(data);
     });
     fromEvent(this.filter.nativeElement, 'keyup')

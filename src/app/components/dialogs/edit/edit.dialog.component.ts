@@ -15,7 +15,8 @@ export class EditDialogComponent {
   hide = true;
 
   constructor(public dialogRef: MatDialogRef<EditDialogComponent>,
-              @Inject(MAT_DIALOG_DATA) public data: any, public userService: UserService, public snackbarService : SnackBarService) { }
+              @Inject(MAT_DIALOG_DATA) public data: any,
+              @Inject(MAT_DIALOG_DATA) public role: any, public userService: UserService, public snackbarService : SnackBarService) { }
 
   formControl = new FormControl('', [
     Validators.required
