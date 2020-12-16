@@ -43,7 +43,6 @@ export class AuthService {
         
       }
       value.user.rolesString = roles.join(', ');
-      console.log("Getting user" + JSON.stringify(value));
     }
     return value;
   }

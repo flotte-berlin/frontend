@@ -22,7 +22,6 @@ export class ErrorSnackbarComponent {
 
 
   public actionAndDismiss(){
-      console.log("test");
       let dialogRef = this.dialog.open(SnackbarDialog);
       dialogRef.componentInstance.errorMessages = this.data.errorMessages;
       this.snackBarRef.dismiss()

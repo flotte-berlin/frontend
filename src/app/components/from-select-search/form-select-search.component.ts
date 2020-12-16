@@ -103,10 +103,8 @@ export class FormSelectSearchComponent implements OnInit, OnDestroy, OnChanges {
     for (let risk of risks) {
       for (let riskItem of this.data) {
         if (risk._id === riskItem._id) {
-          console.log(this.label + " added id actual data: " + risk._id + " id background data: " + riskItem._id);
           if (this.multiple === undefined){
             this.selectedOptions = riskItem;
-            console.log("set instead of add");
           } else if (this.selectedOptions.find(e => e._id === risk._id) == undefined){ // only add it to the list if its not added already
              this.selectedOptions.push(riskItem);
           }

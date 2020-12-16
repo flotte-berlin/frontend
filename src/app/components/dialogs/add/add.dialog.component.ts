@@ -53,7 +53,6 @@ export class AddDialogComponent {
         //this.loadAllObjects();
       },
       error => {
-        console.log("Eroor while editing: " + JSON.stringify(error));
         this.snackbarService.openSnackBar(error, "Ok", true);
       }
     );

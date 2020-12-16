@@ -69,9 +69,7 @@ export class AdminDataPageComponent implements OnInit {
 
     dialogRef.afterClosed().subscribe(result => {
       if (result === 1) {
-       
         let newUserData = this.userService.getDialogData();
-        console.log("add user data");
         newUserData.password = '';
         newUserData.rolesString = newUserData.roles.join(', ');
         this.dataSource.data.push(newUserData);
@@ -90,7 +88,6 @@ export class AdminDataPageComponent implements OnInit {
 
     dialogRef.afterClosed().subscribe(result => {
       if (result === 1) {
-        console.log("editing done");
 
         let newUserData = this.userService.getDialogData();
         const foundIndex = this.dataSource.data.findIndex(x => x.id === newUserData.id);

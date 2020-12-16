@@ -26,7 +26,6 @@ export class DeleteDialogComponent {
   }
 
   confirmDelete(): void {
-    console.log("delete data " + JSON.stringify(this.data));
     this.userService.deleteUser(this.data).pipe(first())
     .subscribe(
       data => {
