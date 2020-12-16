@@ -20,7 +20,6 @@ export class ContactInformationComponent implements OnInit {
     {
       dataPath: 'person.name',
       translation: 'Nachname',
-      sticky: true,
       link: (row: any) => {
         return '/person/' + row['person.id'];
       },

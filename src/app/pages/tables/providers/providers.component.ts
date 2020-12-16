@@ -14,6 +14,7 @@ export class ProvidersComponent implements OnInit {
     {
       dataPath: 'formName',
       translation: 'Formular Name',
+      sticky: true
     },
     {
       dataPath: 'organisation.name',
