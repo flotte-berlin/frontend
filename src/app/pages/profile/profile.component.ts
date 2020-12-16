@@ -59,6 +59,7 @@ export class ProfileComponent implements OnInit {
     let user : User = this.authService.getCurrentUserValue.user;
     user.own_password = this.password.value;
     user.password = this.passwordNew.value;
+    
 
     this.loading = true;
     this.userService.updateUser(user).subscribe(

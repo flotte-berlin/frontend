@@ -4,6 +4,7 @@ import { catchError, finalize, map, tap } from 'rxjs/operators';
 import { environment } from '../../environments/environment';
 import { Observable, BehaviorSubject, of } from 'rxjs';
 import { AuthUser } from "../models/user";
+import { JsonPipe } from '@angular/common';
 
 
 @Injectable({
@@ -31,6 +32,14 @@ export class AuthService {
     var value = this.currentUserSubject.value;
     if (value === null){
       value = new AuthUser();
+    }
+    if (value.user != undefined){
+      let roles = [];
+      for (let role of value.user.roles){
+        roles.push(role.name);
+      }
+      value.user.rolesString = roles.join(', ');
+      console.log("Getting user" + JSON.stringify(value));
     }
     return value;
   }

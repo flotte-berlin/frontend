@@ -89,7 +89,7 @@
 
 <!--<app-admin-data-page *ngIf="this.authService.getCurrentUserValue.user.roles.includes('admin')"></app-admin-data-page> 
 -->
-<div id="usermanagement">
+<div id="usermanagement" *ngIf="!authService.getCurrentUserValue.user.rolesString.includes('SUPERADMIN')">
   <app-admin-data-page></app-admin-data-page> 
 </div>
 
