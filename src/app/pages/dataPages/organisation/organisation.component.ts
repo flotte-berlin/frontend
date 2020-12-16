@@ -29,15 +29,15 @@ export class OrganisationComponent implements OnInit {
       possibleObjects: [],
       nameToShowInSelection: (contact) => {
         return (
-          contact.person.firstName +
+          (contact.person.firstName || '') +
           ' ' +
-          contact.person.name +
+          (contact.person.name || '') +
           ' ' +
-          contact.email +
+          (contact.email || '') +
           ' ' +
-          contact.phone +
+          (contact.phone || '') +
           ' ' +
-          contact.note
+          (contact.note || '')
         );
       },
       propertyPrefixToOverwrite: 'contactInformation',
