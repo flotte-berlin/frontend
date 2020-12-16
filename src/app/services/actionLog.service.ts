@@ -9,7 +9,7 @@ import {
 @Injectable({
   providedIn: 'root',
 })
-export class PersonsService {
+export class ActionLogService {
   constructor(
     private getActionLogGQL: GetActionLogGQL,
     private getActionLogByUserIdGQL: GetActionLogByUserIdGQL
