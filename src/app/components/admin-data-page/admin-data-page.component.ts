@@ -162,8 +162,13 @@ export class AdminDataPageComponent implements OnInit {
   }
 
   afterLoad(){
-    this.dataSource.paginator = this.paginator;
-    this.dataSource.sort = this.sort;
+    
+    setTimeout(() => {
+      this.dataSource.paginator = this.paginator;
+      this.dataSource.sort = this.sort;
+    }, );
+    
+    //this.refreshTable();
   }
 
   orderData(id: string, start?: "asc" | "desc") {
