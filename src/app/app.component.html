@@ -30,9 +30,11 @@
   <mat-sidenav-container id="content">
     <mat-sidenav #appDrawer mode="over" opened="false">
       <mat-nav-list class="nav-profile-list">
-        <mat-list-item class="nav-profile-list-item">
-          <sidenav-profile> </sidenav-profile>
-        </mat-list-item>
+        <a routerLink = "/profile">
+          <mat-list-item class="nav-profile-list-item">
+            <sidenav-profile> </sidenav-profile>
+          </mat-list-item>
+        </a>
       </mat-nav-list>
       <mat-nav-list>
         <a

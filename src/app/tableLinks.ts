@@ -2,9 +2,8 @@
 export const tableLinks = [
     {
       displayName: 'Lastenräder',
-     
-      route: '/table/bikes',
-      svgIconName: 'cargobike' 
+      iconName: 'directions_bike',
+      route: '/table/bikes'
     },
     {
       displayName: 'Aktive',

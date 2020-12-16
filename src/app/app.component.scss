@@ -26,8 +26,13 @@ $primary-color: mat-color($light-primary, 300);
 }
 
 mat-nav-list .nav-profile-list-item {
-  height:200px;
-  background: $primary-color;
+  height: 200px;
+  background: #7fc600;
+}
+
+mat-nav-list .nav-profile-list-item:hover {
+  height: 200px;
+  background: #93e406;
 }
 
 .nav-list-icon {
