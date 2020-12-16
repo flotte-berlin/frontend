@@ -35,8 +35,12 @@ export class AuthService {
     }
     if (value.user != undefined){
       let roles = [];
-      for (let role of value.user.roles){
-        roles.push(role.name);
+      if (value.user.roles.length !== 0 ){
+        
+        for (let role of value.user.roles){
+          roles.push(role.name);
+        }
+        
       }
       value.user.rolesString = roles.join(', ');
       console.log("Getting user" + JSON.stringify(value));
