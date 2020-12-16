@@ -60,6 +60,7 @@
           (validityChange)="validityChange(prop.dataPath, $event)"
           [(from)]="data[prop.dataPath + '.from']"
           [(to)]="data[prop.dataPath + '.to']"
+          [label]="prop.translation || prop.dataPath"
         ></app-date-range-cell>
         <a
           mat-button
