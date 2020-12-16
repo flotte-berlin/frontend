@@ -96,7 +96,10 @@ export class OrganisationComponent implements OnInit {
         },
       ],
       editableReferences: false,
-      linkToTable: () => '/table/provider',
+      linkToTable: () => '/table/bikes',
+      linkToTableParams: (organisation) => {
+        return { "provider.organisation.name": organisation.name,};
+      },
     },
   ];
 
