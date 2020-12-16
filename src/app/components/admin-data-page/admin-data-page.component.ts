@@ -25,6 +25,9 @@ import {EditDialogComponent} from '../../components/dialogs/edit/edit.dialog.com
 import {deepCopy} from '../../helperFunctions/deepCopy';
 import { SnackBarService } from 'src/app/services/snackbar.service';
 import { AuthService } from 'src/app/services/auth.service';
+import { DownloadService } from 'src/app/services/download.service';
+import { ActionLogService } from 'src/app/services/actionLog.service';
+import { DomSanitizer, SafeUrl } from '@angular/platform-browser';
 
 @Component({
   selector: 'app-admin-data-page',
@@ -40,13 +43,17 @@ export class AdminDataPageComponent implements OnInit {
   id: number;
   roles;
   isLoaded : boolean = false;
+  downloadJsonHref;
 
   constructor(public httpClient: HttpClient,
               public dialog: MatDialog,
               private userService: UserService,
               private roleService: RoleService,
-              private snackBarSerivice: SnackBarService,
-              private authService: AuthService) {}
+              private snackBarService: SnackBarService,
+              private authService: AuthService,
+              private sanitizer: DomSanitizer,
+              private downloadService: DownloadService,
+              private actionLogService : ActionLogService) {}
 
   @ViewChild(MatPaginator, {static: true}) paginator: MatPaginator;
   @ViewChild(MatSort, {static: true}) sort: MatSort;
@@ -105,7 +112,7 @@ export class AdminDataPageComponent implements OnInit {
 
   deleteItem(user : User) {
     if (user.id === this.authService.getCurrentUserValue.user.id){
-      this.snackBarSerivice.openSnackBar("Du kannst dich nciht selbst löschen","Ok Im an Idiot", true);
+      this.snackBarService.openSnackBar("Du kannst dich nicht selbst löschen","Ok Im an Idiot", true);
       return;
     }
     const dialogRef = this.dialog.open(DeleteDialogComponent, {
@@ -161,9 +168,16 @@ export class AdminDataPageComponent implements OnInit {
     
   }
 
+
+
   afterLoad(){
-    this.dataSource.paginator = this.paginator;
-    this.dataSource.sort = this.sort;
+    
+    setTimeout(() => {
+      this.dataSource.paginator = this.paginator;
+      this.dataSource.sort = this.sort;
+    }, );
+    
+    //this.refreshTable();
   }
 
   orderData(id: string, start?: "asc" | "desc") {
@@ -174,6 +188,24 @@ export class AdminDataPageComponent implements OnInit {
     matSort.sort({ id, start, disableClear });
 
     this.dataSource.sort = this.sort;
+  }
+
+  donwloadLog(user?: User){
+    if (user === undefined){
+      this.actionLogService.getActionLogAll().pipe(first())
+      .subscribe(
+        data => {
+          this.downloadService.exportJSONFile(data, "actionLog_global");
+        },
+      );
+    } else {
+      this.actionLogService.getActionLogByUserId({id : "" + user.id}).pipe(first())
+      .subscribe(
+        data => {
+          this.downloadService.exportJSONFile(data, "actionLog_" + user.email);
+        },
+      );
+    }
   }
   
 }

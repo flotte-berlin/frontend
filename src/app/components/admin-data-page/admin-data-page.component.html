@@ -55,6 +55,10 @@
         <button mat-icon-button color="accent" (click)="deleteItem(row)">
           <mat-icon aria-label="Delete">delete</mat-icon>
         </button>
+
+        <button mat-icon-button color="primary" (click)="donwloadLog(row)">
+          <mat-icon aria-label="DownloadActionLog">cloud_download</mat-icon>
+        </button>
       </mat-cell>
     </ng-container>
 
@@ -62,12 +66,16 @@
     <mat-row *matRowDef="let row; columns: displayedColumns;"></mat-row>
   </mat-table>
   <mat-paginator #paginator
-                 [length]="dataSource.filteredData.length"
+                 [length]="dataSource ? 'dataSource.filteredData.length' : '10'"
                  [pageIndex]="0"
                  [pageSize]="10"
                  [pageSizeOptions]="[5, 10, 25, 100]"
-                 *ngIf="isLoaded">
+                >
   </mat-paginator>
+  <button id="actionLogDownload" mat-icon-button color="primary" (click)="donwloadLog()">
+    Action Log 
+    <mat-icon aria-label="DownloadActionLog">cloud_download</mat-icon>
+  </button>
 </div>
 
 
