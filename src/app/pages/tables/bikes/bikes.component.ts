@@ -101,16 +101,42 @@ export class BikesComponent implements OnInit {
       dataPath: 'taxes.organisationArea',
       translation: 'Steuern Vereinsbereich',
     },
-    { dataPath: 'provider.id', translation: '' },
-    { dataPath: 'provider.formName', translation: '' },
-    { dataPath: 'provider.privatePerson.id', translation: '' },
-    { dataPath: 'provider.privatePerson.person.id', translation: '' },
-    { dataPath: 'provider.privatePerson.person.name', translation: '' },
-    { dataPath: 'provider.privatePerson.person.firstName', translation: '' },
+    { dataPath: 'provider.formName', translation: 'Anbieter Formular Name' },
     {
-      dataPath: 'provider.privatePerson.person.contactInformation.email',
-      translation: '',
+      dataPath: 'provider.privatePerson.person.firstName',
+      translation: 'Anbieter (Person) Vorname',
     },
+    {
+      dataPath: 'provider.privatePerson.person.name',
+      translation: 'Anbieter (Person) Nachname',
+      link: (data) => {
+        return '/provider/' + data['provider.id'];
+      },
+    },
+    {
+      dataPath: 'provider.organisation.name',
+      translation: 'Anbieter (Organisation) Name',
+      link: (data) => {
+        return '/provider/' + data['provider.id'];
+      },
+    },
+    {
+      dataPath: 'provider.organisation.address.street',
+      translation: 'Straße',
+    },
+    {
+      dataPath: 'provider.organisation.address.number', 
+      translation: 'Hausnummer',
+    },
+    {
+      dataPath: 'provider.organisation.address.zip',
+      translation: 'Postleitzahl',
+    },
+    {
+      dataPath: 'provider.organisation.address.city',
+      translation: 'Ort',
+    },
+
     {
       dataPath: 'lendingStation.name',
       translation: 'Standort',

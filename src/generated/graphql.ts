@@ -2490,7 +2490,10 @@ export type PersonFieldsForPageFragment = (
 export type ProviderFieldsGeneralFragment = { __typename?: 'Provider', id: string, formName?: Maybe<string>, privatePerson?: Maybe<(
     { __typename?: 'ContactInformation' }
     & ContactInformationFieldsGeneralFragment
-  )>, organisation?: Maybe<{ __typename?: 'Organisation', id: string, name: string, contactInformation?: Maybe<(
+  )>, organisation?: Maybe<{ __typename?: 'Organisation', id: string, name: string, address?: Maybe<(
+      { __typename?: 'Address' }
+      & AddressFieldsFragment
+    )>, contactInformation?: Maybe<(
       { __typename?: 'ContactInformation' }
       & ContactInformationFieldsGeneralFragment
     )> }> };
@@ -3136,6 +3139,14 @@ export const ContactInformationFieldsGeneralFragmentDoc = gql`
   note
 }
     ${PersonFieldsGeneralFragmentDoc}`;
+export const AddressFieldsFragmentDoc = gql`
+    fragment AddressFields on Address {
+  street
+  number
+  zip
+  city
+}
+    `;
 export const ProviderFieldsGeneralFragmentDoc = gql`
     fragment ProviderFieldsGeneral on Provider {
   id
@@ -3146,20 +3157,16 @@ export const ProviderFieldsGeneralFragmentDoc = gql`
   organisation {
     id
     name
+    address {
+      ...AddressFields
+    }
     contactInformation {
       ...ContactInformationFieldsGeneral
     }
   }
 }
-    ${ContactInformationFieldsGeneralFragmentDoc}`;
-export const AddressFieldsFragmentDoc = gql`
-    fragment AddressFields on Address {
-  street
-  number
-  zip
-  city
-}
-    `;
+    ${ContactInformationFieldsGeneralFragmentDoc}
+${AddressFieldsFragmentDoc}`;
 export const OrganisationFieldsGeneralFragmentDoc = gql`
     fragment OrganisationFieldsGeneral on Organisation {
   id
