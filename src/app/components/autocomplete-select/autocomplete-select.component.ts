@@ -68,13 +68,14 @@ export class AutocompleteSelectComponent implements OnInit {
       .valueChanges.subscribe(() => this.filterPossibleObjects());
   }
 
-  onOptionClicked(event: Event, element: any, trigger: MatAutocompleteTrigger) {
-    event.stopPropagation();
+  onOptionSelected(element: any, trigger: MatAutocompleteTrigger) {
     if (this.keepAutocompleteOpenAfterClick) {
       trigger.openPanel();
     }
-    this.addForm.get('addGroup').reset();
+    this.addForm.get('addGroup').setValue('');
     this.selectedElementChange.emit(element);
+
+    this.filterPossibleObjects();
   }
 
   filterPossibleObjects() {

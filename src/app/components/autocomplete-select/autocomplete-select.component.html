@@ -12,7 +12,7 @@
       <mat-option
         *ngFor="let object of filteredPossibleObjects"
         [value]="nameToShowInSelection(object)"
-        (click)="onOptionClicked($event, object, trigger)"
+        (onSelectionChange)="onOptionSelected(object, trigger)"
       >
         {{ nameToShowInSelection(object) }}
       </mat-option>
