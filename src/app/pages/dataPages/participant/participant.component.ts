@@ -13,6 +13,13 @@ export class ParticipantComponent implements OnInit {
       type: 'Group',
       title: 'Allgemein',
       properties: [
+        {
+          type: 'Link',
+          linkText: 'Zur Person',
+          link: (data) => {
+            return '/person/' + data['contactInformation.person.id'];
+          },
+        },
         { dataPath: 'dateRange', translation: 'Zeitraum' },
         { dataPath: 'usernamefLotte', translation: 'User fLotte' },
         { dataPath: 'usernameSlack', translation: 'User Slack' },
@@ -104,14 +111,24 @@ export class ParticipantComponent implements OnInit {
     },
   ];
 
-  headlineDataPath = 'contactInformation.person.name';
+  getHeadline = (pageData) => {
+    return (
+      pageData['contactInformation.person.firstName'] +
+      ' ' +
+      pageData['contactInformation.person.name'] +
+      ' (Aktive*r)'
+    );
+  };
   headlineIconName = 'directions_run';
   pageDataGQLType: string = 'Participant';
   pageDataGQLUpdateInputType: string = 'ParticipantUpdateInput';
 
   dataService: any;
 
-  constructor(private participantsService: ParticipantsService, private workshopsService: WorkshopsService) {
+  constructor(
+    private participantsService: ParticipantsService,
+    private workshopsService: WorkshopsService
+  ) {
     this.workshopsService.loadTableData();
     this.workshopsService.tableData.subscribe((data) => {
       this.propertiesInfo.find(

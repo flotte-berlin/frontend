@@ -30,10 +30,21 @@ export class PersonComponent implements OnInit {
       ],
       editableReferences: false,
       linkToTable: () => '/table/contactInformation',
+      linkToTableParams: (person) => {
+        return { "person.name": person.name, "person.firstName": person.firstName,};
+      },
     },
   ];
 
   headlineDataPath = 'name';
+  getHeadline = (pageData) => {
+    return (
+      pageData['firstName'] +
+      ' ' +
+      pageData['name'] +
+      ' (Person)'
+    );
+  };
   headlineIconName = 'person';
   pageDataGQLType: string = 'Person';
   pageDataGQLUpdateInputType: string = 'PersonUpdateInput';
