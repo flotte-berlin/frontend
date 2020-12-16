@@ -33,9 +33,9 @@ export class AuthService {
     if (value === null){
       value = new AuthUser();
     }
-    if (value.user != undefined){
+    if (value.user !== undefined){
       let roles = [];
-      if (value.user.roles.length !== 0 ){
+      if (value.user.roles !== undefined ){
         
         for (let role of value.user.roles){
           roles.push(role.name);
