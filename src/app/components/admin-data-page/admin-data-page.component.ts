@@ -23,6 +23,8 @@ import {AddDialogComponent} from '../../components/dialogs/add/add.dialog.compon
 import {EditDialogComponent} from '../../components/dialogs/edit/edit.dialog.component';
 
 import {deepCopy} from '../../helperFunctions/deepCopy';
+import { SnackBarService } from 'src/app/services/snackbar.service';
+import { AuthService } from 'src/app/services/auth.service';
 
 @Component({
   selector: 'app-admin-data-page',
@@ -41,7 +43,9 @@ export class AdminDataPageComponent implements OnInit {
   constructor(public httpClient: HttpClient,
               public dialog: MatDialog,
               private userService: UserService,
-              private roleService: RoleService) {}
+              private roleService: RoleService,
+              private snackBarSerivice: SnackBarService,
+              private authService: AuthService) {}
 
   @ViewChild(MatPaginator, {static: true}) paginator: MatPaginator;
   @ViewChild(MatSort, {static: true}) sort: MatSort;
@@ -102,6 +106,10 @@ export class AdminDataPageComponent implements OnInit {
 
 
   deleteItem(user : User) {
+    if (user.id === this.authService.getCurrentUserValue.user.id){
+      this.snackBarSerivice.openSnackBar("Du kannst dich nciht selbst löschen","Ok Im an Idiot", true);
+      return;
+    }
     const dialogRef = this.dialog.open(DeleteDialogComponent, {
       data: user
     });
