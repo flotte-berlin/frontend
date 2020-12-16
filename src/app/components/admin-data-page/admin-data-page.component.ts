@@ -39,6 +39,7 @@ export class AdminDataPageComponent implements OnInit {
   index: number;
   id: number;
   roles;
+  isLoaded : boolean = false;
 
   constructor(public httpClient: HttpClient,
               public dialog: MatDialog,
@@ -142,6 +143,8 @@ export class AdminDataPageComponent implements OnInit {
         user.email_old = user.email;
       }
       this.dataSource = new MatTableDataSource(data);
+      this.isLoaded = true;
+      this.afterLoad();
     });
     fromEvent(this.filter.nativeElement, 'keyup')
       // .debounceTime(150)
@@ -155,6 +158,10 @@ export class AdminDataPageComponent implements OnInit {
   }
 
   ngAfterViewInit() {
+    
+  }
+
+  afterLoad(){
     this.dataSource.paginator = this.paginator;
     this.dataSource.sort = this.sort;
   }
