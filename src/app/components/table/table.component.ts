@@ -192,6 +192,13 @@ export class TableComponent implements AfterViewInit {
         }
       }
       this.data.data = tempDataSource;
+
+      setTimeout(() => {
+        if (this.countUnsavedRows() == 0 && this.filters.onlyUnsaved) {
+          this.filters.onlyUnsaved = false;
+          this.applyFilters();
+        }
+      });
     });
     this.dataService.loadTableData();
 
@@ -324,6 +331,10 @@ export class TableComponent implements AfterViewInit {
 
   deleteNewObject(row: any) {
     this.data.data = this.data.data.filter((element) => row.id !== element.id);
+    if (this.countUnsavedRows() == 0 && this.filters.onlyUnsaved) {
+      this.filters.onlyUnsaved = false;
+      this.applyFilters();
+    }
   }
 
   create(row: any) {
