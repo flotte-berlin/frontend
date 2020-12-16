@@ -209,6 +209,10 @@ export class BikeComponent implements OnInit {
           dataPath: 'provider.organisation.address.zip',
           translation: 'Postleitzahl',
         },
+        {
+          dataPath: 'provider.organisation.address.city',
+          translation: 'Ort',
+        },
       ],
     },
     {
