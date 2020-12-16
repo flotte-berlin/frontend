@@ -74,6 +74,10 @@ export class NumberRangeCellComponent implements OnInit {
       minValue: new FormControl(),
       maxValue: new FormControl(),
     });
+    if (!this.editable) {
+      this.rangeForm?.controls['minValue'].disable();
+      this.rangeForm?.controls['maxValue'].disable();
+    }
     this.rangeForm.controls['minValue'].markAsTouched();
     this.rangeForm.controls['maxValue'].markAsTouched();
     this.rangeForm?.controls['minValue'].setValue(this.min);

@@ -3,7 +3,6 @@
   *ngIf="editable || label; else stringValue"
   [formGroup]="dateRangeGroup"
 >
-  <mat-label *ngIf="label">{{ label }}</mat-label>
   <mat-form-field class="date-range-input">
     <input
       matInput

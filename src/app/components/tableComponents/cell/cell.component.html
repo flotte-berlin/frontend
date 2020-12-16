@@ -62,7 +62,7 @@
   </ng-template>
 </div>
 
-<div #enumInputType *ngIf="htmlInputType === 'stringList'">
+<div #enumInputType class="list" *ngIf="htmlInputType === 'stringList'">
   <mat-form-field *ngIf="editable || label; else nonEditableText">
     <mat-label *ngIf="label">{{ label }}</mat-label>
     <mat-chip-list #chipList>
@@ -89,7 +89,7 @@
   </ng-template>
 </div>
 
-<div #enumInputType *ngIf="htmlInputType === 'linkList'">
+<div #enumInputType class="list" *ngIf="htmlInputType === 'linkList'">
   <mat-form-field *ngIf="editable || label; else nonEditableText">
     <mat-label *ngIf="label">{{ label }}</mat-label>
     <mat-chip-list #chipList>
