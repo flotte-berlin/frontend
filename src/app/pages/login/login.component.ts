@@ -9,19 +9,24 @@ import { AuthService } from '../../services/auth.service';
   styleUrls: ['./login.component.scss'],
 })
 export class LoginComponent implements OnInit {
-  email = new FormControl('', [Validators.required, Validators.email]);
+  email = new FormControl('', [Validators.required]);
   password = new FormControl('', [Validators.required]);
   hide = true;
   loading = false;
   errorOccurred = false;
   errorMessage = '';
 
-  returnUrl : string;
+  returnUrl: string;
 
-  constructor(private authService: AuthService, private router: Router, private route: ActivatedRoute) {}
+  constructor(
+    private authService: AuthService,
+    private router: Router,
+    private route: ActivatedRoute
+  ) {}
 
   ngOnInit(): void {
-    this.returnUrl = this.route.snapshot.queryParams['returnUrl'] || '/tableOverview';
+    this.returnUrl =
+      this.route.snapshot.queryParams['returnUrl'] || '/tableOverview';
   }
 
   login() {
