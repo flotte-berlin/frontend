@@ -16,7 +16,7 @@ import { DomSanitizer } from '@angular/platform-browser';
 })
 export class AppComponent {
   title = 'fLotte-fRontend';
-  darkThemeIsActive: boolean = false;
+  darkThemeIsActive: boolean = true;
   loggedIn = false;
 
   @ViewChild('sidenav') public sideNav:MatSidenav;
@@ -36,7 +36,7 @@ export class AppComponent {
   ) {
     this.renderer.addClass(document.body, 'mat-app-background'); //so the background color changes dependent on current theme
     this.themeService.load();
-    this.darkThemeIsActive = this.themeService.currentActive() === 'dark-theme';
+    this.darkThemeIsActive = this.themeService.currentActive() !== 'light-theme';
     this.authService.loggedIn.subscribe((value) => (this.loggedIn = value));
     this.matIconRegistry.addSvgIcon(
       "cargobike",

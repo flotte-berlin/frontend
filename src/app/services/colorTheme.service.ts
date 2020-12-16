@@ -21,7 +21,7 @@ export class ColorThemeService {
              this.colorTheme = window.matchMedia('(prefers-color-theme: dark)').matches ? 'dark-theme' : 'light-theme';
         } else {
              // If browser dont support prefers-color-theme, set it as default to dark
-            this.colorTheme = 'light-theme';
+            this.colorTheme = 'dark-theme';
         }
     }
 
