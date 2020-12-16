@@ -19,6 +19,7 @@ export class AddDialogComponent {
               public snackbarService: SnackBarService) { }
 
   hide = true;
+  hidePW = true;
   selectedRoles: FormControl = new FormControl();
 
   formControl = new FormControl('', [

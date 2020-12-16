@@ -1,5 +1,5 @@
 <div class="container">
-  <h3 mat-dialog-title>Add new Issue</h3>
+  <h3 mat-dialog-title>Neuen Benutzer</h3>
 
   <form class="mat-dialog-content" (ngSubmit)="submit" #formControl="ngForm">
 
@@ -19,7 +19,16 @@
 
     <div class="form">
       <mat-form-field color="accent">
-        <input matInput placeholder="Passwort" [(ngModel)]="data.password" name="password">
+        <input matInput placeholder="Passwort" [(ngModel)]="data.password" name="password" [type]="hidePW ? 'password' : 'text'">
+        <button
+          mat-icon-button
+          matSuffix
+          (click)="hidePW = !hidePW"
+          [attr.aria-label]="'Hide password'"
+          [attr.aria-pressed]="hidePW"
+        >
+          <mat-icon>{{ hidePW ? "visibility_off" : "visibility" }}</mat-icon>
+        </button>
       </mat-form-field>
     </div>
 

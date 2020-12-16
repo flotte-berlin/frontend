@@ -13,6 +13,7 @@ import { SnackBarService } from 'src/app/services/snackbar.service';
 export class EditDialogComponent {
 
   hide = true;
+  hidePW = true;
 
   selectedRoles: FormControl = new FormControl();
 
@@ -51,7 +52,6 @@ export class EditDialogComponent {
         //this.loadAllObjects();
       },
       error => {
-        console.log("Eroor while editing: " + JSON.stringify(error));
         this.snackbarService.openSnackBar(error, "Ok", true);
       }
     );
