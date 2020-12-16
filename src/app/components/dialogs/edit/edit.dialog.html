@@ -36,6 +36,7 @@
       <select-search class="mat-form-field" label="Rollen" 
       [formCtrl]="selectedRoles" 
       [data]="data.rolesData" 
+      [disabled]="authService.getCurrentUserValue.user.id === data.id"
       [preSelectedData]="data.roles" multiple></select-search>
     </div>
 

@@ -2,7 +2,7 @@
 <mat-label>
     {{label}}
 </mat-label>
-<mat-select [ngModel]="selectedOptions" (ngModelChange)="selectedOptions" [formControl]="formCtrl" [multiple]="multiple">
+<mat-select [ngModel]="selectedOptions" (ngModelChange)="selectedOptions" [formControl]="formCtrl" [multiple]="multiple" [disabled]="disabled">
     <mat-select-search [formControl]="searchCtrl"></mat-select-search>
     <mat-option *ngFor="let risk of filteredInterfacesBMulti | async" [value]="risk">{{risk.name}}</mat-option>
 </mat-select>

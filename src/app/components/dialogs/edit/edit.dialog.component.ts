@@ -4,6 +4,7 @@ import {UserService} from '../../../services/user.service';
 import {FormControl, Validators} from '@angular/forms';
 import { first } from 'rxjs/operators';
 import { SnackBarService } from 'src/app/services/snackbar.service';
+import { AuthService } from 'src/app/services/auth.service';
 
 @Component({
   selector: 'app-baza.dialog',
@@ -18,7 +19,9 @@ export class EditDialogComponent {
   selectedRoles: FormControl = new FormControl();
 
   constructor(public dialogRef: MatDialogRef<EditDialogComponent>,
-              @Inject(MAT_DIALOG_DATA) public data: any, public userService: UserService, public snackbarService : SnackBarService) { }
+              @Inject(MAT_DIALOG_DATA) public data: any, public userService: UserService,
+              public snackbarService : SnackBarService,
+              public authService : AuthService) { }
 
   formControl = new FormControl('', [
     Validators.required

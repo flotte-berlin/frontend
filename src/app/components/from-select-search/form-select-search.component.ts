@@ -17,6 +17,7 @@ export class FormSelectSearchComponent implements OnInit, OnDestroy, OnChanges {
   @Input() preSelectedData: any[];
   @Input() label: string;
   @Input() multiple: boolean;
+  @Input() disabled: boolean;
 
   selectedOptions: any[] = [];
 
