@@ -56,7 +56,7 @@ export class WorkshopsService {
   loadTableData() {
     this.tableData.next(null);
     this.getWorkshopsGQL.fetch().subscribe((result) => {
-      this.tableData.next(result.data?.workshops);
+      this.tableData.next(result?.data?.workshops);
     });
   }
 
@@ -66,7 +66,7 @@ export class WorkshopsService {
     this.getWorkshopByIdGQL
       .fetch(variables)
       .subscribe((result) => {
-        this.pageData.next(result.data.workshopById);
+        this.pageData.next(result?.data?.workshopById);
       })
       .add(() => {
         this.isLoadingPageData.next(false);
@@ -78,7 +78,7 @@ export class WorkshopsService {
     this.reloadWorkshopByIdGQL
       .fetch(variables)
       .subscribe((result) => {
-        this.updateDataRowFromResponse(result.data.workshopById);
+        this.updateDataRowFromResponse(result?.data?.workshopById);
       })
       .add(() => {
         this.removeLoadingRowId(variables.id);
@@ -87,7 +87,7 @@ export class WorkshopsService {
 
   createWorkshop(currentId: string, variables: CreateWorkshopMutationVariables) {
     this.createWorkshopGQL.mutate(variables).subscribe((result) => {
-      const newWorkshop = result.data.createWorkshop;
+      const newWorkshop = result?.data?.createWorkshop;
       this.tableData.next([newWorkshop, ...this.tableData.value]);
       this.successfullyCreatedRowWithId.next(currentId);
     });
@@ -98,7 +98,7 @@ export class WorkshopsService {
     this.updateWorkshopGQL
       .mutate(variables)
       .subscribe((result) => {
-        this.updateDataRowFromResponse(result.data.updateWorkshop);
+        this.updateDataRowFromResponse(result?.data?.updateWorkshop);
       })
       .add(() => {
         this.removeLoadingRowId(variables.workshop.id);
@@ -110,7 +110,7 @@ export class WorkshopsService {
     this.lockWorkshopGQL
       .mutate(variables)
       .subscribe((result) => {
-        this.updateDataRowFromResponse(result.data.lockWorkshop);
+        this.updateDataRowFromResponse(result?.data?.lockWorkshop);
       })
       .add(() => {
         this.removeLoadingRowId(variables.id);
@@ -122,7 +122,7 @@ export class WorkshopsService {
     this.unlockWorkshopGQL
       .mutate(variables)
       .subscribe((result) => {
-        this.updateDataRowFromResponse(result.data.unlockWorkshop);
+        this.updateDataRowFromResponse(result?.data?.unlockWorkshop);
       })
       .add(() => {
         this.removeLoadingRowId(variables.id);
@@ -134,7 +134,7 @@ export class WorkshopsService {
     this.deleteWorkshopGQL
       .mutate(variables)
       .subscribe((result) => {
-        if (result.data) {
+        if (result?.data) {
           this.tableData.next(
             [...this.tableData.value].filter((workshop) => workshop.id !== variables.id)
           );

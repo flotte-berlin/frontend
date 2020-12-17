@@ -50,13 +50,13 @@ export class TimeFrameService {
   loadTableData() {
     this.tableData.next(null);
     this.getTimeFramesGQL.fetch().subscribe((result) => {
-      this.tableData.next(result.data.timeFrames);
+      this.tableData.next(result?.data?.timeFrames);
     });
   }
 
   create(currentId: string, variables: CreateTimeFrameMutationVariables) {
     this.createTimeFrameGQL.mutate(variables).subscribe((result) => {
-      const newRow = result.data.createTimeFrame;
+      const newRow = result?.data?.createTimeFrame;
       this.tableData.next([newRow, ...this.tableData.value]);
       this.successfullyCreatedRowWithId.next(currentId);
     });
@@ -67,7 +67,7 @@ export class TimeFrameService {
     this.updateTimeFrameGQL
       .mutate(variables)
       .subscribe((result) => {
-        this.updateDataRowFromResponse(result.data.updateTimeFrame);
+        this.updateDataRowFromResponse(result?.data?.updateTimeFrame);
       })
       .add(() => {
         this.removeLoadingRowId(variables.timeFrame.id);
@@ -79,7 +79,7 @@ export class TimeFrameService {
     this.lockTimeFrameGQL
       .mutate(variables)
       .subscribe((result) => {
-        this.updateDataRowFromResponse(result.data.lockTimeFrame);
+        this.updateDataRowFromResponse(result?.data?.lockTimeFrame);
       })
       .add(() => {
         this.removeLoadingRowId(variables.id);
@@ -91,7 +91,7 @@ export class TimeFrameService {
     this.unlockTimeFrameGQL
       .mutate(variables)
       .subscribe((result) => {
-        this.updateDataRowFromResponse(result.data.unlockTimeFrame);
+        this.updateDataRowFromResponse(result?.data?.unlockTimeFrame);
       })
       .add(() => {
         this.removeLoadingRowId(variables.id);
@@ -103,7 +103,7 @@ export class TimeFrameService {
     this.deleteTimeFrameGQL
       .mutate(variables)
       .subscribe((result) => {
-        if (result.data) {
+        if (result?.data) {
           this.tableData.next(
             [...this.tableData.value].filter((bike) => bike.id !== variables.id)
           );

@@ -59,7 +59,7 @@ export class BikesService {
   loadTableData() {
     this.tableData.next(null);
     this.getCargoBikesGQL.fetch().subscribe((result) => {
-      this.tableData.next(result.data?.cargoBikes);
+      this.tableData.next(result?.data?.cargoBikes);
     });
   }
 
@@ -69,7 +69,7 @@ export class BikesService {
     this.getCargoBikeByIdGQL
       .fetch(variables)
       .subscribe((result) => {
-        this.pageData.next(result.data.cargoBikeById);
+        this.pageData.next(result?.data?.cargoBikeById);
       })
       .add(() => {
         this.isLoadingPageData.next(false);
@@ -81,7 +81,7 @@ export class BikesService {
     this.copyCargoBikeByIdGQL
       .fetch(variables)
       .subscribe((result) => {
-        const newBike = result.data.copyCargoBikeById;
+        const newBike = result?.data?.copyCargoBikeById;
         newBike["newObject"] = true;
         const currentTableData = this.tableData.getValue();
         this.tableData.next([newBike, ...this.tableData.getValue()]);
@@ -94,7 +94,7 @@ export class BikesService {
     this.reloadCargoBikeByIdGQL
       .fetch(variables)
       .subscribe((result) => {
-        this.updateDataRowFromResponse(result.data.cargoBikeById);
+        this.updateDataRowFromResponse(result?.data?.cargoBikeById);
       })
       .add(() => {
         this.removeLoadingRowId(variables.id);
@@ -103,7 +103,7 @@ export class BikesService {
 
   createBike(currentId: string, variables: CreateCargoBikeMutationVariables) {
     this.createCargoBikeGQL.mutate(variables).subscribe((result) => {
-      const newBike = result.data.createCargoBike;
+      const newBike = result?.data?.createCargoBike;
       this.tableData.next([newBike, ...this.tableData.value]);
       this.successfullyCreatedRowWithId.next(currentId);
     });
@@ -114,7 +114,7 @@ export class BikesService {
     this.updateCargoBikeGQL
       .mutate(variables)
       .subscribe((result) => {
-        this.updateDataRowFromResponse(result.data.updateCargoBike);
+        this.updateDataRowFromResponse(result?.data?.updateCargoBike);
       })
       .add(() => {
         this.removeLoadingRowId(variables.bike.id);
@@ -126,7 +126,7 @@ export class BikesService {
     this.lockCargoBikeGQL
       .mutate(variables)
       .subscribe((result) => {
-        this.updateDataRowFromResponse(result.data.lockCargoBike);
+        this.updateDataRowFromResponse(result?.data?.lockCargoBike);
       })
       .add(() => {
         this.removeLoadingRowId(variables.id);
@@ -138,7 +138,7 @@ export class BikesService {
     this.unlockCargoBikeGQL
       .mutate(variables)
       .subscribe((result) => {
-        this.updateDataRowFromResponse(result.data.unlockCargoBike);
+        this.updateDataRowFromResponse(result?.data?.unlockCargoBike);
       })
       .add(() => {
         this.removeLoadingRowId(variables.id);
@@ -150,7 +150,7 @@ export class BikesService {
     this.deleteCargoBikeGQL
       .mutate(variables)
       .subscribe((result) => {
-        if (result.data) {
+        if (result?.data) {
           this.tableData.next(
             [...this.tableData.value].filter((bike) => bike.id !== variables.id)
           );

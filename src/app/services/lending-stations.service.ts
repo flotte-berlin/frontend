@@ -56,7 +56,7 @@ export class LendingStationsService {
   loadTableData() {
     this.tableData.next(null);
     this.getLendingStationsGQL.fetch().subscribe((result) => {
-      this.tableData.next(result.data?.lendingStations);
+      this.tableData.next(result?.data?.lendingStations);
     });
   }
 
@@ -66,7 +66,7 @@ export class LendingStationsService {
     this.getLendingStationByIdGQL
       .fetch(variables)
       .subscribe((result) => {
-        this.pageData.next(result.data.lendingStationById);
+        this.pageData.next(result?.data?.lendingStationById);
       })
       .add(() => {
         this.isLoadingPageData.next(false);
@@ -78,7 +78,7 @@ export class LendingStationsService {
     this.reloadLendingStationByIdGQL
       .fetch(variables)
       .subscribe((result) => {
-        this.updateDataRowFromResponse(result.data.lendingStationById);
+        this.updateDataRowFromResponse(result?.data?.lendingStationById);
       })
       .add(() => {
         this.removeLoadingRowId(variables.id);
@@ -87,7 +87,7 @@ export class LendingStationsService {
 
   createLendingStation(currentId: string, variables: CreateLendingStationMutationVariables) {
     this.createLendingStationGQL.mutate(variables).subscribe((result) => {
-      const newLendingStation = result.data.createLendingStation;
+      const newLendingStation = result?.data?.createLendingStation;
       this.tableData.next([newLendingStation, ...this.tableData.value]);
       this.successfullyCreatedRowWithId.next(currentId);
     });
@@ -98,7 +98,7 @@ export class LendingStationsService {
     this.updateLendingStationGQL
       .mutate(variables)
       .subscribe((result) => {
-        this.updateDataRowFromResponse(result.data.updateLendingStation);
+        this.updateDataRowFromResponse(result?.data?.updateLendingStation);
       })
       .add(() => {
         this.removeLoadingRowId(variables.lendingStation.id);
@@ -110,7 +110,7 @@ export class LendingStationsService {
     this.lockLendingStationGQL
       .mutate(variables)
       .subscribe((result) => {
-        this.updateDataRowFromResponse(result.data.lockLendingStation);
+        this.updateDataRowFromResponse(result?.data?.lockLendingStation);
       })
       .add(() => {
         this.removeLoadingRowId(variables.id);
@@ -122,7 +122,7 @@ export class LendingStationsService {
     this.unlockLendingStationGQL
       .mutate(variables)
       .subscribe((result) => {
-        this.updateDataRowFromResponse(result.data.unlockLendingStation);
+        this.updateDataRowFromResponse(result?.data?.unlockLendingStation);
       })
       .add(() => {
         this.removeLoadingRowId(variables.id);
@@ -134,7 +134,7 @@ export class LendingStationsService {
     this.deleteLendingStationGQL
       .mutate(variables)
       .subscribe((result) => {
-        if (result.data) {
+        if (result?.data) {
           this.tableData.next(
             [...this.tableData.value].filter((lendingStation) => lendingStation.id !== variables.id)
           );

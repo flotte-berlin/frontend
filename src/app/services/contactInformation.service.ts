@@ -50,13 +50,13 @@ export class ContactInformationService {
   loadTableData() {
     this.tableData.next(null);
     this.getContactInformationGQL.fetch().subscribe((result) => {
-      this.tableData.next(result.data?.contactInformation);
+      this.tableData.next(result?.data?.contactInformation);
     });
   }
 
   createContactInformation(currentId: string, variables: CreateContactInformationMutationVariables) {
     this.createContactInformationGQL.mutate(variables).subscribe((result) => {
-      const newContactInformation = result.data.createContactInformation;
+      const newContactInformation = result?.data?.createContactInformation;
       this.tableData.next([newContactInformation, ...this.tableData.value]);
       this.successfullyCreatedRowWithId.next(currentId);
     });
@@ -67,7 +67,7 @@ export class ContactInformationService {
     this.updateContactInformationGQL
       .mutate(variables)
       .subscribe((result) => {
-        this.updateDataRowFromResponse(result.data.updateContactInformation);
+        this.updateDataRowFromResponse(result?.data?.updateContactInformation);
       })
       .add(() => {
         this.removeLoadingRowId(variables.contactInformation.id);
@@ -79,7 +79,7 @@ export class ContactInformationService {
     this.lockContactInformationGQL
       .mutate(variables)
       .subscribe((result) => {
-        this.updateDataRowFromResponse(result.data.lockContactInformation);
+        this.updateDataRowFromResponse(result?.data?.lockContactInformation);
       })
       .add(() => {
         this.removeLoadingRowId(variables.id);
@@ -91,7 +91,7 @@ export class ContactInformationService {
     this.unlockContactInformationGQL
       .mutate(variables)
       .subscribe((result) => {
-        this.updateDataRowFromResponse(result.data.unlockContactInformation);
+        this.updateDataRowFromResponse(result?.data?.unlockContactInformation);
       })
       .add(() => {
         this.removeLoadingRowId(variables.id);
@@ -103,7 +103,7 @@ export class ContactInformationService {
     this.deleteContactInformationGQL
       .mutate(variables)
       .subscribe((result) => {
-        if (result.data) {
+        if (result?.data) {
           this.tableData.next(
             [...this.tableData.value].filter((contactInformation) => contactInformation.id !== variables.id)
           );

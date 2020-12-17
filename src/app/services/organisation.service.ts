@@ -56,7 +56,7 @@ export class OrganisationsService {
   loadTableData() {
     this.tableData.next(null);
     this.getOrganisationsGQL.fetch().subscribe((result) => {
-      this.tableData.next(result.data?.organisations);
+      this.tableData.next(result?.data?.organisations);
     });
   }
 
@@ -66,7 +66,7 @@ export class OrganisationsService {
     this.getOrganisationByIdGQL
       .fetch(variables)
       .subscribe((result) => {
-        this.pageData.next(result.data.organisationById);
+        this.pageData.next(result?.data?.organisationById);
       })
       .add(() => {
         this.isLoadingPageData.next(false);
@@ -78,7 +78,7 @@ export class OrganisationsService {
     this.reloadOrganisationByIdGQL
       .fetch(variables)
       .subscribe((result) => {
-        this.updateDataRowFromResponse(result.data.organisationById);
+        this.updateDataRowFromResponse(result?.data?.organisationById);
       })
       .add(() => {
         this.removeLoadingRowId(variables.id);
@@ -87,7 +87,7 @@ export class OrganisationsService {
 
   createOrganisation(currentId: string, variables: CreateOrganisationMutationVariables) {
     this.createOrganisationGQL.mutate(variables).subscribe((result) => {
-      const newOrganisation = result.data.createOrganisation;
+      const newOrganisation = result?.data?.createOrganisation;
       this.tableData.next([newOrganisation, ...this.tableData.value]);
       this.successfullyCreatedRowWithId.next(currentId);
     });
@@ -98,7 +98,7 @@ export class OrganisationsService {
     this.updateOrganisationGQL
       .mutate(variables)
       .subscribe((result) => {
-        this.updateDataRowFromResponse(result.data.updateOrganisation);
+        this.updateDataRowFromResponse(result?.data?.updateOrganisation);
       })
       .add(() => {
         this.removeLoadingRowId(variables.organisation.id);
@@ -110,7 +110,7 @@ export class OrganisationsService {
     this.lockOrganisationGQL
       .mutate(variables)
       .subscribe((result) => {
-        this.updateDataRowFromResponse(result.data.lockOrganisation);
+        this.updateDataRowFromResponse(result?.data?.lockOrganisation);
       })
       .add(() => {
         this.removeLoadingRowId(variables.id);
@@ -122,7 +122,7 @@ export class OrganisationsService {
     this.unlockOrganisationGQL
       .mutate(variables)
       .subscribe((result) => {
-        this.updateDataRowFromResponse(result.data.unlockOrganisation);
+        this.updateDataRowFromResponse(result?.data?.unlockOrganisation);
       })
       .add(() => {
         this.removeLoadingRowId(variables.id);
@@ -134,7 +134,7 @@ export class OrganisationsService {
     this.deleteOrganisationGQL
       .mutate(variables)
       .subscribe((result) => {
-        if (result.data) {
+        if (result?.data) {
           this.tableData.next(
             [...this.tableData.value].filter((organisation) => organisation.id !== variables.id)
           );

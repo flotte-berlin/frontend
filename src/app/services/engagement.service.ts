@@ -50,13 +50,13 @@ export class EngagementsService {
   loadTableData() {
     this.tableData.next(null);
     this.getEngagementsGQL.fetch().subscribe((result) => {
-      this.tableData.next(result.data.engagements);
+      this.tableData.next(result?.data?.engagements);
     });
   }
 
   create(currentId: string, variables: CreateEngagementMutationVariables) {
     this.createEngagementGQL.mutate(variables).subscribe((result) => {
-      const newRow = result.data.createEngagement;
+      const newRow = result?.data?.createEngagement;
       this.tableData.next([newRow, ...this.tableData.value]);
       this.successfullyCreatedRowWithId.next(currentId);
     });
@@ -67,7 +67,7 @@ export class EngagementsService {
     this.updateEngagementGQL
       .mutate(variables)
       .subscribe((result) => {
-        this.updateDataRowFromResponse(result.data.updateEngagement);
+        this.updateDataRowFromResponse(result?.data?.updateEngagement);
       })
       .add(() => {
         this.removeLoadingRowId(variables.engagement.id);
@@ -79,7 +79,7 @@ export class EngagementsService {
     this.lockEngagementGQL
       .mutate(variables)
       .subscribe((result) => {
-        this.updateDataRowFromResponse(result.data.lockEngagement);
+        this.updateDataRowFromResponse(result?.data?.lockEngagement);
       })
       .add(() => {
         this.removeLoadingRowId(variables.id);
@@ -91,7 +91,7 @@ export class EngagementsService {
     this.unlockEngagementGQL
       .mutate(variables)
       .subscribe((result) => {
-        this.updateDataRowFromResponse(result.data.unlockEngagement);
+        this.updateDataRowFromResponse(result?.data?.unlockEngagement);
       })
       .add(() => {
         this.removeLoadingRowId(variables.id);
@@ -103,7 +103,7 @@ export class EngagementsService {
     this.deleteEngagementGQL
       .mutate(variables)
       .subscribe((result) => {
-        if (result.data) {
+        if (result?.data) {
           this.tableData.next(
             [...this.tableData.value].filter((bike) => bike.id !== variables.id)
           );

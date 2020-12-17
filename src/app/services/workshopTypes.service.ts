@@ -50,13 +50,13 @@ export class WorkshopTypesService {
   loadTableData() {
     this.tableData.next(null);
     this.getWorkshopTypesGQL.fetch().subscribe((result) => {
-      this.tableData.next(result.data.workshopTypes);
+      this.tableData.next(result?.data?.workshopTypes);
     });
   }
 
   create(currentId: string, variables: CreateWorkshopTypeMutationVariables) {
     this.createWorkshopTypeGQL.mutate(variables).subscribe((result) => {
-      const newRow = result.data.createWorkshopType;
+      const newRow = result?.data?.createWorkshopType;
       this.tableData.next([newRow, ...this.tableData.value]);
       this.successfullyCreatedRowWithId.next(currentId);
     });
@@ -67,7 +67,7 @@ export class WorkshopTypesService {
     this.updateWorkshopTypeGQL
       .mutate(variables)
       .subscribe((result) => {
-        this.updateDataRowFromResponse(result.data.updateWorkshopType);
+        this.updateDataRowFromResponse(result?.data?.updateWorkshopType);
       })
       .add(() => {
         this.removeLoadingRowId(variables.workshopType.id);
@@ -79,7 +79,7 @@ export class WorkshopTypesService {
     this.lockWorkshopTypeGQL
       .mutate(variables)
       .subscribe((result) => {
-        this.updateDataRowFromResponse(result.data.lockWorkshopType);
+        this.updateDataRowFromResponse(result?.data?.lockWorkshopType);
       })
       .add(() => {
         this.removeLoadingRowId(variables.id);
@@ -91,7 +91,7 @@ export class WorkshopTypesService {
     this.unlockWorkshopTypeGQL
       .mutate(variables)
       .subscribe((result) => {
-        this.updateDataRowFromResponse(result.data.unlockWorkshopType);
+        this.updateDataRowFromResponse(result?.data?.unlockWorkshopType);
       })
       .add(() => {
         this.removeLoadingRowId(variables.id);
@@ -103,7 +103,7 @@ export class WorkshopTypesService {
     this.deleteWorkshopTypeGQL
       .mutate(variables)
       .subscribe((result) => {
-        if (result.data) {
+        if (result?.data) {
           this.tableData.next(
             [...this.tableData.value].filter((bike) => bike.id !== variables.id)
           );

@@ -50,13 +50,13 @@ export class BikeEventTypesService {
   loadTableData() {
     this.tableData.next(null);
     this.getBikeEventTypesGQL.fetch().subscribe((result) => {
-      this.tableData.next(result.data.bikeEventTypes);
+      this.tableData.next(result?.data?.bikeEventTypes);
     });
   }
 
   create(currentId: string, variables: CreateBikeEventTypeMutationVariables) {
     this.createBikeEventTypeGQL.mutate(variables).subscribe((result) => {
-      const newRow = result.data.createBikeEventType;
+      const newRow = result?.data?.createBikeEventType;
       this.tableData.next([newRow, ...this.tableData.value]);
       this.successfullyCreatedRowWithId.next(currentId);
     });
@@ -67,7 +67,7 @@ export class BikeEventTypesService {
     this.updateBikeEventTypeGQL
       .mutate(variables)
       .subscribe((result) => {
-        this.updateDataRowFromResponse(result.data.updateBikeEventType);
+        this.updateDataRowFromResponse(result?.data?.updateBikeEventType);
       })
       .add(() => {
         this.removeLoadingRowId(variables.bikeEventType.id);
@@ -79,7 +79,7 @@ export class BikeEventTypesService {
     this.lockBikeEventTypeGQL
       .mutate(variables)
       .subscribe((result) => {
-        this.updateDataRowFromResponse(result.data.lockBikeEventType);
+        this.updateDataRowFromResponse(result?.data?.lockBikeEventType);
       })
       .add(() => {
         this.removeLoadingRowId(variables.id);
@@ -91,7 +91,7 @@ export class BikeEventTypesService {
     this.unlockBikeEventTypeGQL
       .mutate(variables)
       .subscribe((result) => {
-        this.updateDataRowFromResponse(result.data.unlockBikeEventType);
+        this.updateDataRowFromResponse(result?.data?.unlockBikeEventType);
       })
       .add(() => {
         this.removeLoadingRowId(variables.id);
@@ -103,7 +103,7 @@ export class BikeEventTypesService {
     this.deleteBikeEventTypeGQL
       .mutate(variables)
       .subscribe((result) => {
-        if (result.data) {
+        if (result?.data) {
           this.tableData.next(
             [...this.tableData.value].filter((bike) => bike.id !== variables.id)
           );

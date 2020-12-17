@@ -56,7 +56,7 @@ export class ProvidersService {
   loadTableData() {
     this.tableData.next(null);
     this.getProvidersGQL.fetch().subscribe((result) => {
-      this.tableData.next(result.data?.providers);
+      this.tableData.next(result?.data?.providers);
     });
   }
 
@@ -66,7 +66,7 @@ export class ProvidersService {
     this.getProviderByIdGQL
       .fetch(variables)
       .subscribe((result) => {
-        this.pageData.next(result.data.providerById);
+        this.pageData.next(result?.data?.providerById);
       })
       .add(() => {
         this.isLoadingPageData.next(false);
@@ -78,7 +78,7 @@ export class ProvidersService {
     this.reloadProviderByIdGQL
       .fetch(variables)
       .subscribe((result) => {
-        this.updateDataRowFromResponse(result.data.providerById);
+        this.updateDataRowFromResponse(result?.data?.providerById);
       })
       .add(() => {
         this.removeLoadingRowId(variables.id);
@@ -87,7 +87,7 @@ export class ProvidersService {
 
   createProvider(currentId: string, variables: CreateProviderMutationVariables) {
     this.createProviderGQL.mutate(variables).subscribe((result) => {
-      const newProvider = result.data.createProvider;
+      const newProvider = result?.data?.createProvider;
       this.tableData.next([newProvider, ...this.tableData.value]);
       this.successfullyCreatedRowWithId.next(currentId);
     });
@@ -98,7 +98,7 @@ export class ProvidersService {
     this.updateProviderGQL
       .mutate(variables)
       .subscribe((result) => {
-        this.updateDataRowFromResponse(result.data.updateProvider);
+        this.updateDataRowFromResponse(result?.data?.updateProvider);
       })
       .add(() => {
         this.removeLoadingRowId(variables.provider.id);
@@ -110,7 +110,7 @@ export class ProvidersService {
     this.lockProviderGQL
       .mutate(variables)
       .subscribe((result) => {
-        this.updateDataRowFromResponse(result.data.lockProvider);
+        this.updateDataRowFromResponse(result?.data?.lockProvider);
       })
       .add(() => {
         this.removeLoadingRowId(variables.id);
@@ -122,7 +122,7 @@ export class ProvidersService {
     this.unlockProviderGQL
       .mutate(variables)
       .subscribe((result) => {
-        this.updateDataRowFromResponse(result.data.unlockProvider);
+        this.updateDataRowFromResponse(result?.data?.unlockProvider);
       })
       .add(() => {
         this.removeLoadingRowId(variables.id);
@@ -134,7 +134,7 @@ export class ProvidersService {
     this.deleteProviderGQL
       .mutate(variables)
       .subscribe((result) => {
-        if (result.data) {
+        if (result?.data) {
           this.tableData.next(
             [...this.tableData.value].filter((provider) => provider.id !== variables.id)
           );

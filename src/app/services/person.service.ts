@@ -56,7 +56,7 @@ export class PersonsService {
   loadTableData() {
     this.tableData.next(null);
     this.getPersonsGQL.fetch().subscribe((result) => {
-      this.tableData.next(result.data?.persons);
+      this.tableData.next(result?.data?.persons);
     });
   }
 
@@ -66,7 +66,7 @@ export class PersonsService {
     this.getPersonByIdGQL
       .fetch(variables)
       .subscribe((result) => {
-        this.pageData.next(result.data.personById);
+        this.pageData.next(result?.data?.personById);
       })
       .add(() => {
         this.isLoadingPageData.next(false);
@@ -78,7 +78,7 @@ export class PersonsService {
     this.reloadPersonByIdGQL
       .fetch(variables)
       .subscribe((result) => {
-        this.updateDataRowFromResponse(result.data.personById);
+        this.updateDataRowFromResponse(result?.data?.personById);
       })
       .add(() => {
         this.removeLoadingRowId(variables.id);
@@ -87,7 +87,7 @@ export class PersonsService {
 
   createPerson(currentId: string, variables: CreatePersonMutationVariables) {
     this.createPersonGQL.mutate(variables).subscribe((result) => {
-      const newPerson = result.data.createPerson;
+      const newPerson = result?.data?.createPerson;
       this.tableData.next([newPerson, ...this.tableData.value]);
       this.successfullyCreatedRowWithId.next(currentId);
     });
@@ -98,7 +98,7 @@ export class PersonsService {
     this.updatePersonGQL
       .mutate(variables)
       .subscribe((result) => {
-        this.updateDataRowFromResponse(result.data.updatePerson);
+        this.updateDataRowFromResponse(result?.data?.updatePerson);
       })
       .add(() => {
         this.removeLoadingRowId(variables.person.id);
@@ -110,7 +110,7 @@ export class PersonsService {
     this.lockPersonGQL
       .mutate(variables)
       .subscribe((result) => {
-        this.updateDataRowFromResponse(result.data.lockPerson);
+        this.updateDataRowFromResponse(result?.data?.lockPerson);
       })
       .add(() => {
         this.removeLoadingRowId(variables.id);
@@ -122,7 +122,7 @@ export class PersonsService {
     this.unlockPersonGQL
       .mutate(variables)
       .subscribe((result) => {
-        this.updateDataRowFromResponse(result.data.unlockPerson);
+        this.updateDataRowFromResponse(result?.data?.unlockPerson);
       })
       .add(() => {
         this.removeLoadingRowId(variables.id);
@@ -134,7 +134,7 @@ export class PersonsService {
     this.deletePersonGQL
       .mutate(variables)
       .subscribe((result) => {
-        if (result.data) {
+        if (result?.data) {
           this.tableData.next(
             [...this.tableData.value].filter((person) => person.id !== variables.id)
           );

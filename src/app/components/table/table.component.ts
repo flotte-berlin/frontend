@@ -163,7 +163,7 @@ export class TableComponent implements AfterViewInit {
 
     this.dataService.tableData.subscribe((newTableDataSource) => {
       const tempDataSource = [];
-      if (newTableDataSource === null) {
+      if (newTableDataSource == null) {
         return;
       }
       this.reloadingTable = false;

@@ -50,13 +50,13 @@ export class EquipmentService {
   loadTableData() {
     this.tableData.next(null);
     this.getEquipmentsGQL.fetch().subscribe((result) => {
-      this.tableData.next(result.data.equipment);
+      this.tableData.next(result?.data?.equipment);
     });
   }
 
   create(currentId: string, variables: CreateEquipmentMutationVariables) {
     this.createEquipmentGQL.mutate(variables).subscribe((result) => {
-      const newRow = result.data.createEquipment;
+      const newRow = result?.data?.createEquipment;
       this.tableData.next([newRow, ...this.tableData.value]);
       this.successfullyCreatedRowWithId.next(currentId);
     });
@@ -67,7 +67,7 @@ export class EquipmentService {
     this.updateEquipmentGQL
       .mutate(variables)
       .subscribe((result) => {
-        this.updateDataRowFromResponse(result.data.updateEquipment);
+        this.updateDataRowFromResponse(result?.data?.updateEquipment);
       })
       .add(() => {
         this.removeLoadingRowId(variables.equipmentType.id);
@@ -79,7 +79,7 @@ export class EquipmentService {
     this.lockEquipmentGQL
       .mutate(variables)
       .subscribe((result) => {
-        this.updateDataRowFromResponse(result.data.lockEquipment);
+        this.updateDataRowFromResponse(result?.data?.lockEquipment);
       })
       .add(() => {
         this.removeLoadingRowId(variables.id);
@@ -91,7 +91,7 @@ export class EquipmentService {
     this.unlockEquipmentGQL
       .mutate(variables)
       .subscribe((result) => {
-        this.updateDataRowFromResponse(result.data.unlockEquipment);
+        this.updateDataRowFromResponse(result?.data?.unlockEquipment);
       })
       .add(() => {
         this.removeLoadingRowId(variables.id);
@@ -103,7 +103,7 @@ export class EquipmentService {
     this.deleteEquipmentGQL
       .mutate(variables)
       .subscribe((result) => {
-        if (result.data) {
+        if (result?.data) {
           this.tableData.next(
             [...this.tableData.value].filter((bike) => bike.id !== variables.id)
           );
