@@ -26,8 +26,9 @@ export function customTableFilterFunction(data: any, filter: any) {
             return false;
           }
           if (!filterElement.options.caseSensitive) {
-            searchString = searchString.toLowerCase();
-            dataElement = dataElement.toLowerCase();
+            searchString = searchString.toLowerCase().replace(/\s/g, '');
+            dataElement = dataElement.toLowerCase().replace(/\s/g, '');
+            console.log(searchString, dataElement);
           }
           if (
             (filterElement.options.exact && dataElement !== searchString) ||
