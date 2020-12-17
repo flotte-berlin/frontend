@@ -1,7 +1,9 @@
 <div class="table-page-wrapper">
   <h1 class="headline" *ngIf="headline">
     {{ headline }}
-    <mat-icon id="table-icon" (click)="$event.target.classList.add('drive')">{{ headlineIconName }}</mat-icon>
+    <mat-icon id="table-icon" (click)="$event.target.classList.add('drive')">{{
+      headlineIconName
+    }}</mat-icon>
   </h1>
   <div class="table-control">
     <!--<button
@@ -26,7 +28,7 @@
       mat-raised-button
       class="table-control-button"
       (click)="addNewObject()"
-      [disabled]="reloadingTable"
+      [disabled]="reloadingTable || !isLoaded || loadingErrorOccurred"
     >
       <mat-icon class="spin">add</mat-icon>
     </button>
@@ -376,6 +378,9 @@
       ></tr>
     </table>
   </div>
+  <span class="loading-error-message" *ngIf="isLoaded && !isProcessing && loadingErrorOccurred"
+    >Die Daten konnten leider nicht geladen werden :(</span
+  >
   <mat-spinner
     class="idle-spinner"
     *ngIf="!isLoaded || isProcessing"

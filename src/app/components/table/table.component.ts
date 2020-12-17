@@ -97,6 +97,7 @@ export class TableComponent implements AfterViewInit {
 
   isLoaded = false;
   isProcessing = false;
+  loadingErrorOccurred = false;
 
   @Output() createEvent = new EventEmitter();
   @Output() lockEvent = new EventEmitter();
@@ -163,11 +164,14 @@ export class TableComponent implements AfterViewInit {
 
     this.dataService.tableData.subscribe((newTableDataSource) => {
       const tempDataSource = [];
+      this.isLoaded = true;
+      this.reloadingTable = false;
+      this.loadingErrorOccurred = false;
       if (newTableDataSource == null) {
+        this.data.data = [];
+        this.loadingErrorOccurred = true;
         return;
       }
-      this.reloadingTable = false;
-      this.isLoaded = true;
       for (const row of newTableDataSource) {
         if (row.newObject) {
           // its a copied object
@@ -201,6 +205,7 @@ export class TableComponent implements AfterViewInit {
       });
     });
     this.dataService.loadTableData();
+    this.isLoaded = false;
 
     this.relockingInterval = setInterval(() => {
       for (const row of this.data.data) {

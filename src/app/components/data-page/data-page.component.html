@@ -3,7 +3,7 @@
   [diameter]="32"
   class="page-loading-spinner"
 ></mat-spinner>
-<div class="page-wrapper" *ngIf="!isLoading && !data">
+<div class="loading-error-message" *ngIf="!isLoading && !data">
   <h1>Seite konnte nicht gefunden werden :(</h1>
 </div>
 
@@ -128,7 +128,7 @@
     *ngIf="!data?.isLockedByMe && !data?.isLocked"
     class="floating-fab-button"
     color="primary"
-    [disabled]="isSavingOrLocking || isLoading"
+    [disabled]="isSavingOrLocking || isLoading || !data"
   >
     <mat-icon>edit</mat-icon>
   </button>
