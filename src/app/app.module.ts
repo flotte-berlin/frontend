@@ -91,6 +91,7 @@ import {FormSelectSearchComponent} from './components/from-select-search/form-se
 import {DeleteDialogComponent} from './components/dialogs/delete/delete.dialog.component';
 import {AddDialogComponent} from './components/dialogs/add/add.dialog.component';
 import {EditDialogComponent} from './components/dialogs/edit/edit.dialog.component';
+import { PageNotFoundComponent } from './pages/page-not-found/page-not-found.component';
 
 
 @NgModule({
@@ -141,6 +142,7 @@ import {EditDialogComponent} from './components/dialogs/edit/edit.dialog.compone
     BikeEventTypesComponent,
     WorkshopTypesComponent,
     FilterRowComponent,
+    PageNotFoundComponent,
   ],
   imports: [
     BrowserModule,

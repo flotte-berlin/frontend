@@ -28,6 +28,7 @@ import { EngagementsComponent } from './pages/tables/engagements/engagements.com
 import { BikeEventsComponent } from './pages/tables/bike-events/bike-events.component';
 import { BikeEventComponent } from './pages/dataPages/bike-event/bike-event.component';
 import { BikeEventTypesComponent } from './pages/tables/bike-event-types/bike-event-types.component';
+import { PageNotFoundComponent } from './pages/page-not-found/page-not-found.component';
 
 const routes: Routes = [
   { path: 'login', component: LoginComponent },
@@ -60,7 +61,7 @@ const routes: Routes = [
   { path: 'table/workshopTypes', component: WorkshopTypesComponent, canActivate: [AuthGuard] },
   { path: '', redirectTo: 'tableOverview', pathMatch: 'full' },
   { path: 'table', redirectTo: 'tableOverview', pathMatch: 'full' },
-  { path: '**', redirectTo: 'tableOverview' },
+  { path: '**', component: PageNotFoundComponent },
 ];
 
 @NgModule({

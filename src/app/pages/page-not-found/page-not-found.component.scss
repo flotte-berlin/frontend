@@ -1,0 +1,32 @@
+.page-wrapper {
+  height: 100%;
+  width: 100%;
+  overflow: hidden;
+  display: flex;
+  align-items: center;
+  flex-direction: column;
+  .text-box {
+    flex: none;
+    margin: 1em;
+  }
+  .img-box {
+    flex: 1;
+    display: flex;
+    align-items: center;
+    img {
+      align-self: center;
+      animation-name: translate; // Name der Animation
+      animation-duration: 10s; // Dauer der Animation
+      animation-iteration-count: 1; // Anzahl der Wiederholungen
+    }
+  }
+}
+
+@keyframes translate {
+  0% {
+    transform: translate(200vh, -25vh);
+  }
+  100% {
+    transform: translateX(0px);
+  }
+}
