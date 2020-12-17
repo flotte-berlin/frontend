@@ -31,12 +31,12 @@ export const tableLinks = [
       route: '/table/timeFrames'
     },
     {
-      displayName: 'Lastenfahrrad-Eventtypen',
+      displayName: 'Lastenradeventtypen',
       iconName: 'build',
       route: '/table/bikeEventTypes'
     },
     {
-      displayName: 'Lastenfahrrad-Events',
+      displayName: 'Lastenradevents',
       iconName: 'event',
       route: '/table/bikeEvents'
     },
@@ -46,7 +46,7 @@ export const tableLinks = [
       route: '/table/equipmentTypes'
     },
     {
-      displayName: 'Equipment',
+      displayName: 'Equipments',
       iconName: 'battery_full',
       route: '/table/equipments'
     },
