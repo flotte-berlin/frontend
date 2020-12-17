@@ -21,7 +21,7 @@ export class ParticipantsComponent implements OnInit {
       dataPath: 'contactInformation.person.name',
       translation: 'Nachname',
       link: (row: any) => {
-        return '/person/' + row['contactInformation.person.id'];
+        return '/participant/' + row['id'];
       },
       possibleObjects: [],
       nameToShowInSelection: (contact) => {

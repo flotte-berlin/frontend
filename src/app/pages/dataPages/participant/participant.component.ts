@@ -69,7 +69,13 @@ export class ParticipantComponent implements OnInit {
       dataPath: 'workshops',
       dataService: null,
       columnInfo: [
-        { dataPath: 'title', translation: 'Workshopname' },
+        {
+          dataPath: 'title',
+          translation: 'Workshopname',
+          link: (element) => {
+            return '/workshop/' + element['id'];
+          },
+        },
         { dataPath: 'description', translation: 'Details' },
       ],
       nameToShowInSelection: (workshop) => {
