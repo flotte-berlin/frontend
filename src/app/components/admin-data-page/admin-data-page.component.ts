@@ -112,7 +112,7 @@ export class AdminDataPageComponent implements OnInit {
 
   deleteItem(user : User) {
     if (user.id === this.authService.getCurrentUserValue.user.id){
-      this.snackBarService.openSnackBar("Du kannst dich nicht selbst löschen","Ok Im an Idiot", true);
+      this.snackBarService.openSnackBar("Du kannst dich nicht selbst löschen","Ok", true);
       return;
     }
     const dialogRef = this.dialog.open(DeleteDialogComponent, {

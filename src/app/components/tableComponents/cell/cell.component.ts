@@ -161,7 +161,7 @@ export class CellComponent implements AfterViewInit {
       this.value = [];
     }
     // Add element
-    if ((value || '').trim()) {
+    if ((value ?? '').trim()) {
       this.value.push(value.trim());
     }
     // Reset the input value

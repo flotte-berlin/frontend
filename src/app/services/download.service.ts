@@ -27,14 +27,14 @@ export class DownloadService {
           cellData = cellData.join('", "');
         } else if (column.type === 'NumRange') {
           cellData =
-            (row[column.dataPath + '.min'] || '') +
+            (row[column.dataPath + '.min'] ?? '') +
             ' bis ' +
-            (row[column.dataPath + '.max'] || '');
+            (row[column.dataPath + '.max'] ?? '');
         } else if (column.type === 'DateRange') {
           cellData =
-            (row[column.dataPath + '.from'] || '') +
+            (row[column.dataPath + '.from'] ?? '') +
             ' bis ' +
-            (row[column.dataPath + '.to'] || '');
+            (row[column.dataPath + '.to'] ?? '');
         }
         return '"' + (cellData ?? '').toString().replace(/"/g, "''") + '"';
       });
