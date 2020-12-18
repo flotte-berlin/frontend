@@ -20,7 +20,7 @@
       class="table-control-button"
       matTooltip="Tabllendaten aktualisieren. Achtung! Alle ungespeicherten Änderungen gehen verloren."
       (click)="reloadTable()"
-      [disabled]="reloadingTable"
+      [disabled]="reloadingTable || !isLoaded"
     >
       <mat-icon class="spin">sync</mat-icon>
     </button>
@@ -76,7 +76,7 @@
       cdkDropListOrientation="horizontal"
       (cdkDropListDropped)="drop($event)"
       [dataSource]="data"
-      [ngClass]="{ 'idle-overlay': !isLoaded }"
+      [ngClass]="{ 'idle-overlay': !isLoaded || reloadingTable }"
     >
       <!--- Note that these columns can be defined in any order.
           The actual rendered columns are set as a property on the row definition" -->
@@ -383,7 +383,7 @@
   >
   <mat-spinner
     class="idle-spinner"
-    *ngIf="!isLoaded || isProcessing"
+    *ngIf="!isLoaded || isProcessing || reloadingTable"
     [diameter]="48"
   ></mat-spinner>
 </div>

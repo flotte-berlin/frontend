@@ -164,14 +164,14 @@ export class TableComponent implements AfterViewInit {
 
     this.dataService.tableData.subscribe((newTableDataSource) => {
       const tempDataSource = [];
+      if (newTableDataSource == null) {
+        this.data.data = [];
+        this.loadingErrorOccurred = false;
+        return;
+      }
       this.isLoaded = true;
       this.reloadingTable = false;
       this.loadingErrorOccurred = false;
-      if (newTableDataSource == null) {
-        this.data.data = [];
-        this.loadingErrorOccurred = true;
-        return;
-      }
       for (const row of newTableDataSource) {
         if (row.newObject) {
           // its a copied object
