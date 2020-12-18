@@ -24,6 +24,7 @@ import { Subject } from 'rxjs';
 import { debounceTime } from 'rxjs/internal/operators/debounceTime';
 import { SelectObjectDialogComponent } from '../select-object-dialog/select-object-dialog.component';
 import { filter } from 'rxjs/operators';
+import { DownloadService } from 'src/app/services/download.service';
 
 @Component({
   selector: 'app-table',
@@ -110,7 +111,8 @@ export class TableComponent implements AfterViewInit {
     private schemaService: SchemaService,
     public dialog: MatDialog,
     private activatedroute: ActivatedRoute,
-    private cdRef: ChangeDetectorRef
+    private cdRef: ChangeDetectorRef,
+    private downloadServive: DownloadService
   ) {}
 
   ngOnInit() {
@@ -431,6 +433,10 @@ export class TableComponent implements AfterViewInit {
 
   getRowById(id: string) {
     return this.data.data.find((row) => row.id === id);
+  }
+
+  downloadCSV() {
+    this.downloadServive.saveTableDataAsCSV(this.data.data, this.columnInfo, this.headline);
   }
 
   drop(event: CdkDragDrop<string[]>) {
