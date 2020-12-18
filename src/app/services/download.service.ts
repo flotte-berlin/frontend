@@ -24,13 +24,19 @@ export class DownloadService {
       const newRow = columnInfo.map((column) => {
         let cellData = row[column.dataPath];
         if (Array.isArray(cellData)) {
-          cellData = cellData.join(', ');
+          cellData = cellData.join('", "');
         } else if (column.type === 'NumRange') {
-          cellData = (row[column.dataPath + ".min"] || '') + " bis " + (row[column.dataPath + ".max"] || ''); 
+          cellData =
+            (row[column.dataPath + '.min'] || '') +
+            ' bis ' +
+            (row[column.dataPath + '.max'] || '');
         } else if (column.type === 'DateRange') {
-          cellData = (row[column.dataPath + ".from"] || '') + " bis " + (row[column.dataPath + ".to"] || ''); 
+          cellData =
+            (row[column.dataPath + '.from'] || '') +
+            ' bis ' +
+            (row[column.dataPath + '.to'] || '');
         }
-        return JSON.stringify(cellData || '');
+        return '"' + (cellData ?? '').toString().replace(/"/g, "''") + '"';
       });
       csvData.push(newRow.join(this.csvChar));
     }
