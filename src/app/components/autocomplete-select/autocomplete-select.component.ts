@@ -18,7 +18,9 @@ export class AutocompleteSelectComponent implements OnInit {
   @Input()
   set possibleObjects(objects: any[]) {
     this._possibleObjects = objects;
-    this.filterPossibleObjects();
+    setTimeout(() => {
+      this.filterPossibleObjects();
+    });
   }
   get possibleObjects(): any[] {
     return this._possibleObjects;
@@ -69,13 +71,14 @@ export class AutocompleteSelectComponent implements OnInit {
   }
 
   onOptionSelected(element: any, trigger: MatAutocompleteTrigger) {
-    if (this.keepAutocompleteOpenAfterClick) {
-      trigger.openPanel();
-    }
-    this.addForm.get('addGroup').setValue('');
+    setTimeout(() => {
+      this.addForm.get('addGroup').reset();
+      if (this.keepAutocompleteOpenAfterClick) {
+        trigger.openPanel();
+      }
+      this.filterPossibleObjects();
+    });
     this.selectedElementChange.emit(element);
-
-    this.filterPossibleObjects();
   }
 
   filterPossibleObjects() {
@@ -87,7 +90,7 @@ export class AutocompleteSelectComponent implements OnInit {
     if (!searchString) {
       return;
     }
-    searchString = searchString.toLocaleLowerCase();
+    searchString = searchString.toLocaleLowerCase().trim();
     this.filteredPossibleObjects = this.filteredPossibleObjects.filter(
       (element) =>
         this.nameToShowInSelection(element)
