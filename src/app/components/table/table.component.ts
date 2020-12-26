@@ -53,6 +53,13 @@ export class TableComponent implements AfterViewInit {
     list?: boolean; //whether the type is a list
     link?: (row: any) => string;
     highlighted: boolean; // whether this column is a bit darker
+
+    //** properties needed when the column is an editable reference */
+    possibleObjects?: [];
+    nameToShowInSelection?: (object: any) => string;
+    propertyPrefixToOverwrite?: string;
+    currentlySelectedObjectId?: (object: any) => string;
+    propertyNameOfReferenceId?: string; // e.g. 'cargoBikeId'
   }[] = [];
 
   @Input()
@@ -367,11 +374,27 @@ export class TableComponent implements AfterViewInit {
   }
 
   save(row: any) {
+    row = this.setExistingReferenceIds(row);
+
     const deepenRow = this.schemaService.filterObject(
       this.tableDataGQLUpdateInputType,
       deepen(row)
     );
     this.saveEvent.emit(deepenRow);
+  }
+
+  /** reference ids to connected objects are transfered to graphQL by passing the ids in a specified property e.g. EngagementTypeId: "5"
+   * these propertyNames are specified in the columnInfo - column object and have to be reset on save if they already exist
+   */
+  setExistingReferenceIds(flattenedDataRow: any) {
+    for (const column of this.columnInfo) {
+      if (column.propertyNameOfReferenceId) {
+        // its a reference column so we should set the referenceId
+        flattenedDataRow[column.propertyNameOfReferenceId] =
+          column.currentlySelectedObjectId(flattenedDataRow) || null;
+      }
+    }
+    return flattenedDataRow;
   }
 
   copy(row: any) {
@@ -436,7 +459,11 @@ export class TableComponent implements AfterViewInit {
   }
 
   downloadCSV() {
-    this.downloadServive.saveTableDataAsCSV(this.data.data, this.columnInfo, this.headline);
+    this.downloadServive.saveTableDataAsCSV(
+      this.data.data,
+      this.columnInfo,
+      this.headline
+    );
   }
 
   drop(event: CdkDragDrop<string[]>) {
