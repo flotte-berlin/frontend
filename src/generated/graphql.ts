@@ -906,6 +906,8 @@ export type LendingStation = {
   __typename?: 'LendingStation';
   id: Scalars['ID'];
   name: Scalars['String'];
+  longName: Scalars['String'];
+  district?: Maybe<Scalars['String']>;
   contactInformationIntern?: Maybe<ContactInformation>;
   contactInformationExtern?: Maybe<ContactInformation>;
   address: Address;
@@ -926,6 +928,8 @@ export type LendingStation = {
 /** If you want to create LendingStation with cargoBikes, use createTimeFrame and set to: Date = null */
 export type LendingStationCreateInput = {
   name: Scalars['String'];
+  longName: Scalars['String'];
+  district?: Maybe<Scalars['String']>;
   contactInformationInternId?: Maybe<Scalars['ID']>;
   contactInformationExternId?: Maybe<Scalars['ID']>;
   address: AddressCreateInput;
@@ -938,6 +942,8 @@ export type LendingStationCreateInput = {
 export type LendingStationUpdateInput = {
   id: Scalars['ID'];
   name?: Maybe<Scalars['String']>;
+  longName?: Maybe<Scalars['String']>;
+  district?: Maybe<Scalars['String']>;
   contactInformationInternId?: Maybe<Scalars['ID']>;
   contactInformationExternId?: Maybe<Scalars['ID']>;
   address?: Maybe<AddressUpdateInput>;
@@ -951,6 +957,7 @@ export type LendingStationUpdateInput = {
 export type LoanPeriod = {
   __typename?: 'LoanPeriod';
   generalRemark?: Maybe<Scalars['String']>;
+  particularities?: Maybe<Scalars['String']>;
   holidays?: Maybe<Scalars['String']>;
   mo?: Maybe<Scalars['String']>;
   tu?: Maybe<Scalars['String']>;
@@ -964,6 +971,7 @@ export type LoanPeriod = {
 /** (dt. Ausleihzeiten) */
 export type LoanPeriodInput = {
   generalRemark?: Maybe<Scalars['String']>;
+  particularities?: Maybe<Scalars['String']>;
   holidays?: Maybe<Scalars['String']>;
   mo?: Maybe<Scalars['String']>;
   tu?: Maybe<Scalars['String']>;
@@ -2438,7 +2446,7 @@ export type EquipmentFieldsForTableFragment = { __typename?: 'Equipment', id: st
 
 export type EquipmentTypeFieldsFragment = { __typename?: 'EquipmentType', id: string, name: string, description: string, isLocked: boolean, isLockedByMe: boolean, lockedBy?: Maybe<string>, lockedUntil?: Maybe<any> };
 
-export type LendingStationFieldsForBikePageFragment = { __typename?: 'LendingStation', id: string, name: string, address: (
+export type LendingStationFieldsForBikePageFragment = { __typename?: 'LendingStation', id: string, name: string, longName: string, district?: Maybe<string>, address: (
     { __typename?: 'Address' }
     & AddressFieldsFragment
   ), organisation?: Maybe<(
@@ -2446,7 +2454,7 @@ export type LendingStationFieldsForBikePageFragment = { __typename?: 'LendingSta
     & OrganisationFieldsGeneralFragment
   )> };
 
-export type LendingStationFieldsForTableFragment = { __typename?: 'LendingStation', id: string, name: string, remark?: Maybe<string>, isLocked: boolean, isLockedByMe: boolean, lockedBy?: Maybe<string>, lockedUntil?: Maybe<any>, contactInformationIntern?: Maybe<(
+export type LendingStationFieldsForTableFragment = { __typename?: 'LendingStation', id: string, name: string, longName: string, district?: Maybe<string>, remark?: Maybe<string>, isLocked: boolean, isLockedByMe: boolean, lockedBy?: Maybe<string>, lockedUntil?: Maybe<any>, contactInformationIntern?: Maybe<(
     { __typename?: 'ContactInformation' }
     & ContactInformationFieldsGeneralFragment
   )>, contactInformationExtern?: Maybe<(
@@ -2464,7 +2472,7 @@ export type LendingStationFieldsForPageFragment = (
   { __typename?: 'LendingStation', cargoBikes?: Maybe<Array<{ __typename?: 'CargoBike', id: string, name: string }>>, timeFrames: Array<(
     { __typename?: 'TimeFrame' }
     & TimeFrameFieldsForLendingStationFragment
-  )>, loanPeriod?: Maybe<{ __typename?: 'LoanPeriod', generalRemark?: Maybe<string>, holidays?: Maybe<string>, mo?: Maybe<string>, tu?: Maybe<string>, we?: Maybe<string>, th?: Maybe<string>, fr?: Maybe<string>, sa?: Maybe<string>, su?: Maybe<string> }> }
+  )>, loanPeriod?: Maybe<{ __typename?: 'LoanPeriod', generalRemark?: Maybe<string>, particularities?: Maybe<string>, holidays?: Maybe<string>, mo?: Maybe<string>, tu?: Maybe<string>, we?: Maybe<string>, th?: Maybe<string>, fr?: Maybe<string>, sa?: Maybe<string>, su?: Maybe<string> }> }
   & LendingStationFieldsForTableFragment
 );
 
@@ -3216,6 +3224,8 @@ export const LendingStationFieldsForBikePageFragmentDoc = gql`
     fragment LendingStationFieldsForBikePage on LendingStation {
   id
   name
+  longName
+  district
   address {
     ...AddressFields
   }
@@ -3566,6 +3576,8 @@ export const LendingStationFieldsForTableFragmentDoc = gql`
     fragment LendingStationFieldsForTable on LendingStation {
   id
   name
+  longName
+  district
   contactInformationIntern {
     ...ContactInformationFieldsGeneral
   }
@@ -3613,6 +3625,7 @@ export const LendingStationFieldsForPageFragmentDoc = gql`
   }
   loanPeriod {
     generalRemark
+    particularities
     holidays
     mo
     tu
