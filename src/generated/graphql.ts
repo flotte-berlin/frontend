@@ -54,6 +54,7 @@ export type CargoBike = {
    * TODO: Should this be called Security?
    */
   security?: Maybe<Security>;
+  spareKeyLocations?: Maybe<SpareKeyLocations>;
   /** Does not refer to an extra table in the database. */
   technicalEquipment?: Maybe<TechnicalEquipment>;
   /** Does not refer to an extra table in the database. */
@@ -73,6 +74,9 @@ export type CargoBike = {
   insuranceData?: Maybe<InsuranceData>;
   lendingStation?: Maybe<LendingStation>;
   taxes?: Maybe<Taxes>;
+  miscellaneous?: Maybe<Scalars['String']>;
+  ownUse?: Maybe<Scalars['String']>;
+  preDamage?: Maybe<Scalars['String']>;
   currentEngagements?: Maybe<Array<Maybe<Engagement>>>;
   /** If offset or limit is not provided, both values are ignored */
   engagement?: Maybe<Array<Maybe<Engagement>>>;
@@ -125,6 +129,7 @@ export type CargoBikeCreateInput = {
   numberOfChildren?: Maybe<Scalars['Int']>;
   /** Safety is a custom type, that stores information about security features. */
   security?: Maybe<SecurityCreateInput>;
+  spareKeyLocations?: Maybe<SpareKeyLocationsCreateInput>;
   /** Does not refer to an extra table in the database. */
   technicalEquipment?: Maybe<TechnicalEquipmentCreateInput>;
   /** Does not refer to an extra table in the database. */
@@ -146,6 +151,9 @@ export type CargoBikeCreateInput = {
   providerId?: Maybe<Scalars['ID']>;
   insuranceData?: Maybe<InsuranceDataCreateInput>;
   taxes?: Maybe<TaxesCreateInput>;
+  miscellaneous?: Maybe<Scalars['String']>;
+  ownUse?: Maybe<Scalars['String']>;
+  preDamage?: Maybe<Scalars['String']>;
 };
 
 /** If you want to add bike to a lending station, create a new timeFrame with to: Date = null */
@@ -162,6 +170,7 @@ export type CargoBikeUpdateInput = {
   numberOfChildren?: Maybe<Scalars['Int']>;
   /** Safety is a custom type, that stores information about security features. */
   security?: Maybe<SecurityUpdateInput>;
+  spareKeyLocations?: Maybe<SpareKeyLocationsUpdateInput>;
   /** Does not refer to an extra table in the database. */
   technicalEquipment?: Maybe<TechnicalEquipmentUpdateInput>;
   /** Does not refer to an extra table in the database. */
@@ -187,6 +196,9 @@ export type CargoBikeUpdateInput = {
   providerId?: Maybe<Scalars['ID']>;
   insuranceData?: Maybe<InsuranceDataUpdateInput>;
   taxes?: Maybe<TaxesUpdateInput>;
+  miscellaneous?: Maybe<Scalars['String']>;
+  ownUse?: Maybe<Scalars['String']>;
+  preDamage?: Maybe<Scalars['String']>;
   /** will keep Bike locked if set to true, default = false */
   keepLock?: Maybe<Scalars['Boolean']>;
 };
@@ -213,6 +225,7 @@ export type InsuranceData = {
    * The kind of currency depends on the database.
    */
   projectAllowance?: Maybe<Scalars['Money']>;
+  frameworkAgreement?: Maybe<Scalars['String']>;
   notes?: Maybe<Scalars['String']>;
 };
 
@@ -237,6 +250,7 @@ export type InsuranceDataCreateInput = {
    * The kind of currency depends on the database.
    */
   projectAllowance?: Maybe<Scalars['Money']>;
+  frameworkAgreement?: Maybe<Scalars['String']>;
   notes?: Maybe<Scalars['String']>;
 };
 
@@ -261,6 +275,7 @@ export type InsuranceDataUpdateInput = {
    * The kind of currency depends on the database.
    */
   projectAllowance?: Maybe<Scalars['Money']>;
+  frameworkAgreement?: Maybe<Scalars['String']>;
   notes?: Maybe<Scalars['String']>;
 };
 
@@ -382,6 +397,26 @@ export type SecurityUpdateInput = {
   keyNumberAXAChain?: Maybe<Scalars['String']>;
   policeCoding?: Maybe<Scalars['String']>;
   adfcCoding?: Maybe<Scalars['String']>;
+};
+
+/** Locations where spare keys are stored */
+export type SpareKeyLocations = {
+  __typename?: 'SpareKeyLocations';
+  projectOffice?: Maybe<Scalars['Boolean']>;
+  lendingStation?: Maybe<Scalars['Boolean']>;
+  provider?: Maybe<Scalars['Boolean']>;
+};
+
+export type SpareKeyLocationsCreateInput = {
+  projectOffice?: Maybe<Scalars['Boolean']>;
+  lendingStation?: Maybe<Scalars['Boolean']>;
+  provider?: Maybe<Scalars['Boolean']>;
+};
+
+export type SpareKeyLocationsUpdateInput = {
+  projectOffice?: Maybe<Scalars['Boolean']>;
+  lendingStation?: Maybe<Scalars['Boolean']>;
+  provider?: Maybe<Scalars['Boolean']>;
 };
 
 export enum StickerBikeNameState {
@@ -2307,7 +2342,7 @@ export type ActionLogFieldsFragment = { __typename?: 'ActionLog', id: string, ac
 
 export type AddressFieldsFragment = { __typename?: 'Address', street: string, number: string, zip: string, city?: Maybe<string> };
 
-export type CargoBikeFieldsForTableFragment = { __typename?: 'CargoBike', id: string, group: Group, name: string, modelName?: Maybe<string>, state?: Maybe<BikeState>, numberOfChildren?: Maybe<number>, numberOfWheels?: Maybe<number>, forCargo?: Maybe<boolean>, forChildren?: Maybe<boolean>, stickerBikeNameState?: Maybe<StickerBikeNameState>, note?: Maybe<string>, isLocked: boolean, isLockedByMe: boolean, lockedBy?: Maybe<string>, lockedUntil?: Maybe<any>, insuranceData?: Maybe<{ __typename?: 'InsuranceData', billing?: Maybe<string>, hasFixedRate?: Maybe<boolean>, name?: Maybe<string>, benefactor?: Maybe<string>, noPnP?: Maybe<string>, maintenanceResponsible?: Maybe<string>, maintenanceBenefactor?: Maybe<string>, maintenanceAgreement?: Maybe<string>, fixedRate?: Maybe<number>, projectAllowance?: Maybe<any>, notes?: Maybe<string> }>, dimensionsAndLoad?: Maybe<{ __typename?: 'DimensionsAndLoad', bikeLength?: Maybe<number>, bikeWeight?: Maybe<number>, bikeHeight?: Maybe<number>, bikeWidth?: Maybe<number>, hasCoverBox?: Maybe<boolean>, lockable?: Maybe<boolean>, maxWeightBox?: Maybe<number>, maxWeightLuggageRack?: Maybe<number>, maxWeightTotal?: Maybe<number>, boxHeightRange?: Maybe<{ __typename?: 'NumRange', max?: Maybe<number>, min?: Maybe<number> }>, boxLengthRange?: Maybe<{ __typename?: 'NumRange', min?: Maybe<number>, max?: Maybe<number> }>, boxWidthRange?: Maybe<{ __typename?: 'NumRange', min?: Maybe<number>, max?: Maybe<number> }> }>, security?: Maybe<{ __typename?: 'Security', frameNumber?: Maybe<string>, adfcCoding?: Maybe<string>, keyNumberAXAChain?: Maybe<string>, keyNumberFrameLock?: Maybe<string>, policeCoding?: Maybe<string> }>, technicalEquipment?: Maybe<{ __typename?: 'TechnicalEquipment', bicycleShift?: Maybe<string>, isEBike?: Maybe<boolean>, hasLightSystem?: Maybe<boolean>, specialFeatures?: Maybe<string> }>, taxes?: Maybe<{ __typename?: 'Taxes', costCenter?: Maybe<string>, organisationArea?: Maybe<OrganisationArea> }>, provider?: Maybe<(
+export type CargoBikeFieldsForTableFragment = { __typename?: 'CargoBike', id: string, group: Group, name: string, modelName?: Maybe<string>, state?: Maybe<BikeState>, numberOfChildren?: Maybe<number>, numberOfWheels?: Maybe<number>, forCargo?: Maybe<boolean>, forChildren?: Maybe<boolean>, stickerBikeNameState?: Maybe<StickerBikeNameState>, note?: Maybe<string>, miscellaneous?: Maybe<string>, ownUse?: Maybe<string>, preDamage?: Maybe<string>, isLocked: boolean, isLockedByMe: boolean, lockedBy?: Maybe<string>, lockedUntil?: Maybe<any>, insuranceData?: Maybe<{ __typename?: 'InsuranceData', billing?: Maybe<string>, hasFixedRate?: Maybe<boolean>, name?: Maybe<string>, benefactor?: Maybe<string>, noPnP?: Maybe<string>, maintenanceResponsible?: Maybe<string>, maintenanceBenefactor?: Maybe<string>, maintenanceAgreement?: Maybe<string>, fixedRate?: Maybe<number>, projectAllowance?: Maybe<any>, frameworkAgreement?: Maybe<string>, notes?: Maybe<string> }>, dimensionsAndLoad?: Maybe<{ __typename?: 'DimensionsAndLoad', bikeLength?: Maybe<number>, bikeWeight?: Maybe<number>, bikeHeight?: Maybe<number>, bikeWidth?: Maybe<number>, hasCoverBox?: Maybe<boolean>, lockable?: Maybe<boolean>, maxWeightBox?: Maybe<number>, maxWeightLuggageRack?: Maybe<number>, maxWeightTotal?: Maybe<number>, boxHeightRange?: Maybe<{ __typename?: 'NumRange', max?: Maybe<number>, min?: Maybe<number> }>, boxLengthRange?: Maybe<{ __typename?: 'NumRange', min?: Maybe<number>, max?: Maybe<number> }>, boxWidthRange?: Maybe<{ __typename?: 'NumRange', min?: Maybe<number>, max?: Maybe<number> }> }>, security?: Maybe<{ __typename?: 'Security', frameNumber?: Maybe<string>, adfcCoding?: Maybe<string>, keyNumberAXAChain?: Maybe<string>, keyNumberFrameLock?: Maybe<string>, policeCoding?: Maybe<string> }>, spareKeyLocations?: Maybe<{ __typename?: 'SpareKeyLocations', projectOffice?: Maybe<boolean>, lendingStation?: Maybe<boolean>, provider?: Maybe<boolean> }>, technicalEquipment?: Maybe<{ __typename?: 'TechnicalEquipment', bicycleShift?: Maybe<string>, isEBike?: Maybe<boolean>, hasLightSystem?: Maybe<boolean>, specialFeatures?: Maybe<string> }>, taxes?: Maybe<{ __typename?: 'Taxes', costCenter?: Maybe<string>, organisationArea?: Maybe<OrganisationArea> }>, provider?: Maybe<(
     { __typename?: 'Provider' }
     & ProviderFieldsGeneralFragment
   )>, lendingStation?: Maybe<(
@@ -3208,6 +3243,7 @@ export const CargoBikeFieldsForTableFragmentDoc = gql`
     maintenanceAgreement
     fixedRate
     projectAllowance
+    frameworkAgreement
     notes
   }
   dimensionsAndLoad {
@@ -3243,6 +3279,11 @@ export const CargoBikeFieldsForTableFragmentDoc = gql`
     keyNumberAXAChain
     keyNumberFrameLock
     policeCoding
+  }
+  spareKeyLocations {
+    projectOffice
+    lendingStation
+    provider
   }
   technicalEquipment {
     bicycleShift
@@ -3286,12 +3327,16 @@ export const CargoBikeFieldsForTableFragmentDoc = gql`
     hasFixedRate
     fixedRate
     projectAllowance
+    frameworkAgreement
     notes
   }
   taxes {
     costCenter
     organisationArea
   }
+  miscellaneous
+  ownUse
+  preDamage
   provider {
     ...ProviderFieldsGeneral
   }

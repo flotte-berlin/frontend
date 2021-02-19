@@ -22,44 +22,6 @@ export class BikeComponent implements OnInit {
     },
     {
       type: 'Group',
-      title: 'Versicherungsdaten',
-      properties: [
-        {
-          dataPath: 'insuranceData.billing',
-          translation: 'Versicherung Abrechnung',
-        },
-        {
-          dataPath: 'insuranceData.hasFixedRate',
-          translation: 'Pauschale j/n',
-        },
-        {
-          dataPath: 'insuranceData.fixedRate',
-          translation: 'Pauschale Betrag',
-        },
-        { dataPath: 'insuranceData.name', translation: 'Versicherer' },
-        { dataPath: 'insuranceData.benefactor', translation: 'Kostenträger' },
-        { dataPath: 'insuranceData.noPnP', translation: 'Nr. P&P' },
-        {
-          dataPath: 'insuranceData.maintenanceResponsible',
-          translation: 'Wartung zuständig',
-        },
-        {
-          dataPath: 'insuranceData.maintenanceBenefactor',
-          translation: 'Wartung Kostenträger',
-        },
-        {
-          dataPath: 'insuranceData.maintenanceAgreement',
-          translation: 'Wartungsvereinbarung',
-        },
-        {
-          dataPath: 'insuranceData.projectAllowance',
-          translation: 'Projektzuschuss',
-        },
-        { dataPath: 'insuranceData.notes', translation: 'Sonstiges' },
-      ],
-    },
-    {
-      type: 'Group',
       title: 'Maße und Ladung',
       properties: [
         { dataPath: 'dimensionsAndLoad.bikeLength', translation: 'Länge' },
@@ -123,6 +85,15 @@ export class BikeComponent implements OnInit {
     },
     {
       type: 'Group',
+      title: 'hinterlegte Ersatzschlüssel',
+      properties: [
+        { dataPath: 'spareKeyLocations.projectOffice', translation: 'Projektbüro' },
+        { dataPath: 'spareKeyLocations.lendingStation', translation: 'Standort' },
+        { dataPath: 'spareKeyLocations.provider', translation: 'Anbieter' },
+      ]
+    },
+    {
+      type: 'Group',
       title: 'Ausstattung',
       properties: [
         {
@@ -151,6 +122,9 @@ export class BikeComponent implements OnInit {
           dataPath: 'taxes.organisationArea',
           translation: 'Steuern Vereinsbereich',
         },
+        { dataPath: 'miscellaneous', translation: 'Anmerkungen' },
+        { dataPath: 'ownUse', translation: 'Eigennutzung' },
+        { dataPath: 'preDamage', translation: 'Vorschäden' },
       ],
     },
     {
@@ -328,6 +302,51 @@ export class BikeComponent implements OnInit {
         return { "cargoBike.name": bike.name};
       },
     },
+    {
+      type: 'Group',
+      title: 'Versicherung',
+      properties: [
+        { dataPath: 'insuranceData.name', translation: 'Versicherer' },
+        { dataPath: 'insuranceData.benefactor', translation: 'Kostenträger' },
+        { dataPath: 'insuranceData.billing', translation: 'Abrechnung' },
+        { dataPath: 'insuranceData.noPnP', translation: 'Nr. P&P' },        
+      ],
+    },
+    {
+      type: 'Group',
+      title: 'Betriebsfinanzierung',
+      properties: [
+        {
+          dataPath: 'insuranceData.maintenanceResponsible',
+          translation: 'Wartung zuständig',
+        },
+        {
+          dataPath: 'insuranceData.maintenanceBenefactor',
+          translation: 'Wartung Kostenträger',
+        },
+        {
+          dataPath: 'insuranceData.maintenanceAgreement',
+          translation: 'Art d. Vereinbarung',
+        },
+        {
+          dataPath: 'insuranceData.hasFixedRate',
+          translation: 'Pauschale j/n',
+        },
+        {
+          dataPath: 'insuranceData.fixedRate',
+          translation: 'Pauschale Betrag',
+        },
+        {
+          dataPath: 'insuranceData.projectAllowance',
+          translation: 'Projektzuschuss',
+        },
+        {
+          dataPath: 'insuranceData.frameworkAgreement',
+          translation: 'Rahmenvertrag',
+        },
+        { dataPath: 'insuranceData.notes', translation: 'Sonstiges' },
+      ]
+    }
   ];
 
   headlineDataPath = 'name';
