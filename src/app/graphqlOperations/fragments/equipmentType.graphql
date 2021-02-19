@@ -2,6 +2,7 @@ fragment EquipmentTypeFields on EquipmentType {
   id
   name
   description
+  availableForSupply
   isLocked
   isLockedByMe
   lockedBy

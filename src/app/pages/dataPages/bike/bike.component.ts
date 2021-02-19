@@ -217,6 +217,7 @@ export class BikeComponent implements OnInit {
       columnInfo: [
         { dataPath: 'name', translation: 'Name' },
         { dataPath: 'description', translation: 'Beschreibung' },
+        { dataPath: 'availableForSupply', translation: 'verfügbares Zubehör' },
       ],
       nameToShowInSelection: (element) => {
         return element?.name;
@@ -235,6 +236,7 @@ export class BikeComponent implements OnInit {
         { dataPath: 'serialNo', translation: 'Seriennummer' },
         { dataPath: 'title', translation: 'Name' },
         { dataPath: 'description', translation: 'Beschreibung' },
+        { dataPath: 'availableForSupply', translation: 'verfügbares Zubehör' },
       ],
       nameToShowInSelection: (element) => {
         return (

@@ -15,6 +15,7 @@ export class EquipmentComponent implements OnInit {
     { dataPath: 'serialNo', translation: 'Seriennummer' },
     { dataPath: 'title', translation: 'Name' },
     { dataPath: 'description', translation: 'Beschreibung' },
+    { dataPath: 'availableForSupply', translation: 'verfügbares Zubehör' },
     {
       dataPath: 'cargoBike.name',
       translation: 'Lastenrad',

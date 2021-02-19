@@ -641,6 +641,7 @@ export type Equipment = {
   serialNo: Scalars['String'];
   title: Scalars['String'];
   description?: Maybe<Scalars['String']>;
+  availableForSupply?: Maybe<Scalars['Boolean']>;
   cargoBike?: Maybe<CargoBike>;
   isLocked: Scalars['Boolean'];
   isLockedByMe: Scalars['Boolean'];
@@ -653,6 +654,7 @@ export type EquipmentCreateInput = {
   serialNo: Scalars['String'];
   title: Scalars['String'];
   description?: Maybe<Scalars['String']>;
+  availableForSupply?: Maybe<Scalars['Boolean']>;
   cargoBikeId?: Maybe<Scalars['ID']>;
 };
 
@@ -661,6 +663,7 @@ export type EquipmentUpdateInput = {
   serialNo?: Maybe<Scalars['String']>;
   title?: Maybe<Scalars['String']>;
   description?: Maybe<Scalars['String']>;
+  availableForSupply?: Maybe<Scalars['Boolean']>;
   cargoBikeId?: Maybe<Scalars['ID']>;
   /** will keep Bike locked if set to true, default = false */
   keepLock?: Maybe<Scalars['Boolean']>;
@@ -675,6 +678,7 @@ export type EquipmentType = {
   id: Scalars['ID'];
   name: Scalars['String'];
   description: Scalars['String'];
+  availableForSupply?: Maybe<Scalars['Boolean']>;
   isLocked: Scalars['Boolean'];
   isLockedByMe: Scalars['Boolean'];
   /** null if not locked by other user */
@@ -685,12 +689,14 @@ export type EquipmentType = {
 export type EquipmentTypeCreateInput = {
   name: Scalars['String'];
   description?: Maybe<Scalars['String']>;
+  availableForSupply?: Maybe<Scalars['Boolean']>;
 };
 
 export type EquipmentTypeUpdateInput = {
   id: Scalars['ID'];
   name?: Maybe<Scalars['String']>;
   description?: Maybe<Scalars['String']>;
+  availableForSupply?: Maybe<Scalars['Boolean']>;
   keepLock?: Maybe<Scalars['Boolean']>;
 };
 
@@ -2440,11 +2446,11 @@ export type EngagementFieldsFragment = { __typename?: 'Engagement', id: string, 
 
 export type EngagementTypeFieldsFragment = { __typename?: 'EngagementType', id: string, name: string, description: string, isLocked: boolean, isLockedByMe: boolean, lockedBy?: Maybe<string>, lockedUntil?: Maybe<any> };
 
-export type EquipmentFieldsForBikePageFragment = { __typename?: 'Equipment', id: string, serialNo: string, title: string, description?: Maybe<string>, cargoBike?: Maybe<{ __typename?: 'CargoBike', name: string }> };
+export type EquipmentFieldsForBikePageFragment = { __typename?: 'Equipment', id: string, serialNo: string, title: string, description?: Maybe<string>, availableForSupply?: Maybe<boolean>, cargoBike?: Maybe<{ __typename?: 'CargoBike', name: string }> };
 
-export type EquipmentFieldsForTableFragment = { __typename?: 'Equipment', id: string, serialNo: string, title: string, description?: Maybe<string>, isLocked: boolean, isLockedByMe: boolean, lockedBy?: Maybe<string>, lockedUntil?: Maybe<any>, cargoBike?: Maybe<{ __typename?: 'CargoBike', id: string, name: string }> };
+export type EquipmentFieldsForTableFragment = { __typename?: 'Equipment', id: string, serialNo: string, title: string, description?: Maybe<string>, availableForSupply?: Maybe<boolean>, isLocked: boolean, isLockedByMe: boolean, lockedBy?: Maybe<string>, lockedUntil?: Maybe<any>, cargoBike?: Maybe<{ __typename?: 'CargoBike', id: string, name: string }> };
 
-export type EquipmentTypeFieldsFragment = { __typename?: 'EquipmentType', id: string, name: string, description: string, isLocked: boolean, isLockedByMe: boolean, lockedBy?: Maybe<string>, lockedUntil?: Maybe<any> };
+export type EquipmentTypeFieldsFragment = { __typename?: 'EquipmentType', id: string, name: string, description: string, availableForSupply?: Maybe<boolean>, isLocked: boolean, isLockedByMe: boolean, lockedBy?: Maybe<string>, lockedUntil?: Maybe<any> };
 
 export type LendingStationFieldsForBikePageFragment = { __typename?: 'LendingStation', id: string, name: string, longName: string, district?: Maybe<string>, address: (
     { __typename?: 'Address' }
@@ -3403,6 +3409,7 @@ export const EquipmentFieldsForBikePageFragmentDoc = gql`
   serialNo
   title
   description
+  availableForSupply
   cargoBike {
     name
   }
@@ -3413,6 +3420,7 @@ export const EquipmentTypeFieldsFragmentDoc = gql`
   id
   name
   description
+  availableForSupply
   isLocked
   isLockedByMe
   lockedBy
@@ -3562,6 +3570,7 @@ export const EquipmentFieldsForTableFragmentDoc = gql`
   serialNo
   title
   description
+  availableForSupply
   cargoBike {
     id
     name
