@@ -74,11 +74,11 @@ export class BikeComponent implements OnInit {
         { dataPath: 'security.adfcCoding', translation: 'ADFC Codierung' },
         {
           dataPath: 'security.keyNumberAXAChain',
-          translation: 'Schlüsselnrummer Rahmenschloss',
+          translation: 'Schlüsselnr. Kettenschloss',
         },
         {
           dataPath: 'security.keyNumberFrameLock',
-          translation: 'Schlüsselnrummer AXA-Kette',
+          translation: 'Schlüsselnr. Rahmenschloss',
         },
         { dataPath: 'security.policeCoding', translation: 'Polizei Codierung' },
       ],
@@ -115,16 +115,16 @@ export class BikeComponent implements OnInit {
       type: 'Group',
       title: 'Sonstiges',
       properties: [
-        { dataPath: 'stickerBikeNameState', translation: 'Aufkleber Status' },
-        { dataPath: 'note', translation: 'Aufkleber Kommentar' },
-        { dataPath: 'taxes.costCenter', translation: 'Steuern Kostenstelle' },
+        { dataPath: 'taxes.costCenter', translation: 'Kostenstelle' },
         {
           dataPath: 'taxes.organisationArea',
-          translation: 'Steuern Vereinsbereich',
+          translation: 'Vereinsbereich',
         },
         { dataPath: 'miscellaneous', translation: 'Anmerkungen' },
         { dataPath: 'ownUse', translation: 'Eigennutzung' },
         { dataPath: 'preDamage', translation: 'Vorschäden' },
+        { dataPath: 'stickerBikeNameState', translation: 'Aufkleber Status' },
+        { dataPath: 'note', translation: 'Aufkleber Kommentar' },
       ],
     },
     {
