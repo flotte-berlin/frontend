@@ -85,15 +85,6 @@ export class BikeComponent implements OnInit {
     },
     {
       type: 'Group',
-      title: 'hinterlegte Ersatzschlüssel',
-      properties: [
-        { dataPath: 'spareKeyLocations.projectOffice', translation: 'Projektbüro' },
-        { dataPath: 'spareKeyLocations.lendingStation', translation: 'Standort' },
-        { dataPath: 'spareKeyLocations.provider', translation: 'Anbieter' },
-      ]
-    },
-    {
-      type: 'Group',
       title: 'Ausstattung',
       properties: [
         {
@@ -113,6 +104,15 @@ export class BikeComponent implements OnInit {
     },
     {
       type: 'Group',
+      title: 'hinterlegte Ersatzschlüssel',
+      properties: [
+        { dataPath: 'spareKeyLocations.projectOffice', translation: 'Projektbüro' },
+        { dataPath: 'spareKeyLocations.lendingStation', translation: 'Standort' },
+        { dataPath: 'spareKeyLocations.provider', translation: 'Anbieter' },
+      ]
+    },
+    {
+      type: 'Group',
       title: 'Sonstiges',
       properties: [
         { dataPath: 'taxes.costCenter', translation: 'Kostenstelle' },
@@ -123,6 +123,7 @@ export class BikeComponent implements OnInit {
         { dataPath: 'miscellaneous', translation: 'Anmerkungen' },
         { dataPath: 'ownUse', translation: 'Eigennutzung' },
         { dataPath: 'preDamage', translation: 'Vorschäden' },
+        { dataPath: 'supplier', translation: 'Lieferant' },
         { dataPath: 'stickerBikeNameState', translation: 'Aufkleber Status' },
         { dataPath: 'note', translation: 'Aufkleber Kommentar' },
       ],

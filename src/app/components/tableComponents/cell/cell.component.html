@@ -117,10 +117,7 @@
   </ng-template>
 </div>
 
-<div
-  #otherInputType
-  *ngIf="htmlInputType === 'number' || htmlInputType === 'text'"
->
+<div *ngIf="htmlInputType === 'number'">
   <mat-form-field *ngIf="editable || label; else nonEditableText">
     <mat-label *ngIf="label">{{ label }}</mat-label>
     <input
@@ -132,6 +129,30 @@
       (ngModelChange)="change($event)"
       [required]="required"
     />
+  </mat-form-field>
+  <ng-template #nonEditableText>
+    <span *ngIf="!link">{{ value }}</span>
+    <a mat-button color="primary" *ngIf="link" [routerLink]="link">{{
+      value
+    }}</a>
+  </ng-template>
+</div>
+
+<div *ngIf="htmlInputType === 'text'">
+  <mat-form-field *ngIf="editable || label; else nonEditableText">
+    <mat-label *ngIf="label">{{ label }}</mat-label>
+    <textarea 
+      #input="ngModel"
+      matInput
+      [disabled]="!editable"
+      [ngModel]="value"
+      (ngModelChange)="change($event)"
+      [required]="required"
+      cdkTextareaAutosize
+      #autosize="cdkTextareaAutosize"
+      cdkAutosizeMinRows="1"
+      cdkAutosizeMaxRows="5">
+    </textarea>
   </mat-form-field>
   <ng-template #nonEditableText>
     <span *ngIf="!link">{{ value }}</span>

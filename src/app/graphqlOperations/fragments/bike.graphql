@@ -80,6 +80,7 @@ fragment CargoBikeFieldsForTable on CargoBike {
   miscellaneous
   ownUse
   preDamage
+  supplier
   provider {
     ...ProviderFieldsGeneral
   }

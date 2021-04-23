@@ -42,4 +42,12 @@ h2:before {
 
 .simple-snack-bar .mat-simple-snackbar {
     justify-content: center;
-  }
+}
+
+.dark-theme .mat-form-field-appearance-legacy .mat-form-field-label {
+    color: rgba(255, 255, 255, 0.9);
+}
+
+.mat-form-field:not(.number-range-form-field) .mat-form-field-infix {
+    width: 280px !important;
+}
