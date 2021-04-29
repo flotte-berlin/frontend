@@ -13,7 +13,9 @@ export class LendingStationComponent implements OnInit {
       type: 'Group',
       title: 'Allgemein',
       properties: [
-        { dataPath: 'name', translation: 'Name' },
+        { dataPath: 'longName', translation: 'vollständiger Name' },
+        { dataPath: 'name', translation: 'Name (Formular)' },
+        { dataPath: 'district', translation: 'Bezirk' },
         { dataPath: 'remark', translation: 'Anmerkung' },
       ],
     },
@@ -31,8 +33,6 @@ export class LendingStationComponent implements OnInit {
       type: 'Group',
       title: 'Ausleihzeiten',
       properties: [
-        { dataPath: 'loanPeriod.generalRemark', translation: 'Anmerkung' },
-        { dataPath: 'loanPeriod.holidays', translation: 'An Feiertagen' },
         { dataPath: 'loanPeriod.mo', translation: 'Montag' },
         { dataPath: 'loanPeriod.tu', translation: 'Dienstag' },
         { dataPath: 'loanPeriod.we', translation: 'Mittwoch' },
@@ -40,6 +40,9 @@ export class LendingStationComponent implements OnInit {
         { dataPath: 'loanPeriod.fr', translation: 'Freitag' },
         { dataPath: 'loanPeriod.sa', translation: 'Samstag' },
         { dataPath: 'loanPeriod.su', translation: 'Sonntag' },
+        { dataPath: 'loanPeriod.holidays', translation: 'An Feiertagen' },
+        { dataPath: 'loanPeriod.generalRemark', translation: 'Anmerkung' },
+        { dataPath: 'loanPeriod.particularities', translation: 'Besonderheiten' },
       ],
     },
     {

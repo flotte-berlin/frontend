@@ -14,6 +14,7 @@ export class EquipmentTypesComponent implements OnInit {
     { dataPath: 'id', translation: 'ID', readonly: true },
     { dataPath: 'name', translation: 'Name', requiredForCreation: true },
     { dataPath: 'description', translation: 'Beschreibung' },
+    { dataPath: 'availableForSupply', translation: 'verfügbares Zubehör' },
   ];
 
   dataService: EquipmentTypeService;

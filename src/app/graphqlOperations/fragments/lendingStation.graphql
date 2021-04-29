@@ -1,6 +1,8 @@
 fragment LendingStationFieldsForBikePage on LendingStation {
   id
   name
+  longName
+  district
   address {
     ...AddressFields
   }
@@ -12,6 +14,8 @@ fragment LendingStationFieldsForBikePage on LendingStation {
 fragment LendingStationFieldsForTable on LendingStation {
   id
   name
+  longName
+  district
   contactInformationIntern {
     ...ContactInformationFieldsGeneral
   }
@@ -42,6 +46,7 @@ fragment LendingStationFieldsForPage on LendingStation {
   }
   loanPeriod {
     generalRemark
+    particularities
     holidays
     mo
     tu

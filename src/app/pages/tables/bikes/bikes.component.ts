@@ -19,32 +19,6 @@ export class BikesComponent implements OnInit {
     { dataPath: 'group', translation: 'Gruppe' },
     { dataPath: 'modelName', translation: 'Modell' },
     { dataPath: 'state', translation: 'Status' },
-    { dataPath: 'insuranceData.name', translation: 'Versicherer' },
-    { dataPath: 'insuranceData.benefactor', translation: 'Kostenträger' },
-    { dataPath: 'insuranceData.noPnP', translation: 'Nr. P&P' },
-    {
-      dataPath: 'insuranceData.billing',
-      translation: 'Versicherung Abrechnung',
-    },
-    { dataPath: 'insuranceData.hasFixedRate', translation: 'Pauschale j/n' },
-    { dataPath: 'insuranceData.fixedRate', translation: 'Pauschale Betrag' },
-    {
-      dataPath: 'insuranceData.maintenanceResponsible',
-      translation: 'Wartung zuständig',
-    },
-    {
-      dataPath: 'insuranceData.maintenanceBenefactor',
-      translation: 'Wartung Kostenträger',
-    },
-    {
-      dataPath: 'insuranceData.maintenanceAgreement',
-      translation: 'Wartungsvereinbarung',
-    },
-    {
-      dataPath: 'insuranceData.projectAllowance',
-      translation: 'Projektzuschuss',
-    },
-    { dataPath: 'insuranceData.notes', translation: 'Sonstiges' },
     { dataPath: 'dimensionsAndLoad.bikeLength', translation: 'Länge' },
     { dataPath: 'dimensionsAndLoad.bikeWeight', translation: 'Gewicht' },
     { dataPath: 'dimensionsAndLoad.bikeHeight', translation: 'Höhe' },
@@ -77,11 +51,11 @@ export class BikesComponent implements OnInit {
     { dataPath: 'security.adfcCoding', translation: 'ADFC Codierung' },
     {
       dataPath: 'security.keyNumberAXAChain',
-      translation: 'Schlüsselnrummer Rahmenschloss',
+      translation: 'Schlüsselnr. Kettenschloss',
     },
     {
       dataPath: 'security.keyNumberFrameLock',
-      translation: 'Schlüsselnrummer AXA-Kette',
+      translation: 'Schlüsselnr. Rahmenschloss',
     },
     { dataPath: 'security.policeCoding', translation: 'Polizei Codierung' },
     { dataPath: 'technicalEquipment.bicycleShift', translation: 'Schaltung' },
@@ -94,13 +68,17 @@ export class BikesComponent implements OnInit {
       dataPath: 'technicalEquipment.specialFeatures',
       translation: 'Besonderheiten',
     },
-    { dataPath: 'stickerBikeNameState', translation: 'Aufkleber Status' },
-    { dataPath: 'note', translation: 'Aufkleber Kommentar' },
-    { dataPath: 'taxes.costCenter', translation: 'Steuern Kostenstelle' },
+    { dataPath: 'taxes.costCenter', translation: 'Kostenstelle' },
     {
       dataPath: 'taxes.organisationArea',
-      translation: 'Steuern Vereinsbereich',
+      translation: 'Vereinsbereich',
     },
+    { dataPath: 'spareKeyLocations.projectOffice', translation: 'Schlüssel Projektbüro' },
+    { dataPath: 'spareKeyLocations.lendingStation', translation: 'Schlüssel Standort' },
+    { dataPath: 'spareKeyLocations.provider', translation: 'Schlüssel Anbieter' },
+    { dataPath: 'supplier', translation: 'Lieferant' },
+    { dataPath: 'stickerBikeNameState', translation: 'Aufkleber Status' },
+    { dataPath: 'note', translation: 'Aufkleber Kommentar' },
     { dataPath: 'provider.formName', translation: 'Anbieter Formular Name' },
     {
       dataPath: 'provider.privatePerson.person.firstName',
@@ -148,6 +126,36 @@ export class BikesComponent implements OnInit {
     { dataPath: 'lendingStation.address.number', translation: 'Hausnummer' },
     { dataPath: 'lendingStation.address.zip', translation: 'PLZ' },
     { dataPath: 'lendingStation.address.city', translation: 'Ort' },
+    { dataPath: 'insuranceData.name', translation: 'Versicherer' },
+    { dataPath: 'insuranceData.benefactor', translation: 'Kostenträger' },
+    { dataPath: 'insuranceData.noPnP', translation: 'Nr. P&P' },
+    {
+      dataPath: 'insuranceData.billing',
+      translation: 'Versicherung Abrechnung',
+    },
+    { dataPath: 'insuranceData.hasFixedRate', translation: 'Pauschale j/n' },
+    { dataPath: 'insuranceData.fixedRate', translation: 'Pauschale Betrag' },
+    {
+      dataPath: 'insuranceData.maintenanceResponsible',
+      translation: 'Wartung zuständig',
+    },
+    {
+      dataPath: 'insuranceData.maintenanceBenefactor',
+      translation: 'Wartung Kostenträger',
+    },
+    {
+      dataPath: 'insuranceData.maintenanceAgreement',
+      translation: 'Wartungsvereinbarung',
+    },
+    {
+      dataPath: 'insuranceData.projectAllowance',
+      translation: 'Projektzuschuss',
+    },
+    {
+      dataPath: 'insuranceData.frameworkAgreement',
+      translation: 'Rahmenvertrag',
+    },
+    { dataPath: 'insuranceData.notes', translation: 'Sonstiges' },
   ];
 
   dataService: any;
