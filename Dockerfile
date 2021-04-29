@@ -7,7 +7,8 @@ RUN mv node_modules ./frontend
 WORKDIR /frontend
 COPY . .
 
-RUN ng build --prod --crossOrigin=anonymous
+ARG BUILD_ENV=production
+RUN ng build --configuration=$BUILD_ENV --crossOrigin=anonymous
 
 FROM golang:1.13.4-alpine as builder2
 ARG ARCH=amd64
