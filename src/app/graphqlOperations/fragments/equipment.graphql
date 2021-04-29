@@ -3,6 +3,7 @@ fragment EquipmentFieldsForBikePage on Equipment {
     serialNo
     title
     description
+    availableForSupply
     cargoBike {
         name
     }
@@ -13,6 +14,7 @@ fragment EquipmentFieldsForTable on Equipment {
     serialNo
     title
     description
+    availableForSupply
     cargoBike {
         id 
         name

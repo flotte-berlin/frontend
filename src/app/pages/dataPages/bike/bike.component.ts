@@ -22,44 +22,6 @@ export class BikeComponent implements OnInit {
     },
     {
       type: 'Group',
-      title: 'Versicherungsdaten',
-      properties: [
-        {
-          dataPath: 'insuranceData.billing',
-          translation: 'Versicherung Abrechnung',
-        },
-        {
-          dataPath: 'insuranceData.hasFixedRate',
-          translation: 'Pauschale j/n',
-        },
-        {
-          dataPath: 'insuranceData.fixedRate',
-          translation: 'Pauschale Betrag',
-        },
-        { dataPath: 'insuranceData.name', translation: 'Versicherer' },
-        { dataPath: 'insuranceData.benefactor', translation: 'Kostenträger' },
-        { dataPath: 'insuranceData.noPnP', translation: 'Nr. P&P' },
-        {
-          dataPath: 'insuranceData.maintenanceResponsible',
-          translation: 'Wartung zuständig',
-        },
-        {
-          dataPath: 'insuranceData.maintenanceBenefactor',
-          translation: 'Wartung Kostenträger',
-        },
-        {
-          dataPath: 'insuranceData.maintenanceAgreement',
-          translation: 'Wartungsvereinbarung',
-        },
-        {
-          dataPath: 'insuranceData.projectAllowance',
-          translation: 'Projektzuschuss',
-        },
-        { dataPath: 'insuranceData.notes', translation: 'Sonstiges' },
-      ],
-    },
-    {
-      type: 'Group',
       title: 'Maße und Ladung',
       properties: [
         { dataPath: 'dimensionsAndLoad.bikeLength', translation: 'Länge' },
@@ -112,11 +74,11 @@ export class BikeComponent implements OnInit {
         { dataPath: 'security.adfcCoding', translation: 'ADFC Codierung' },
         {
           dataPath: 'security.keyNumberAXAChain',
-          translation: 'Schlüsselnrummer Rahmenschloss',
+          translation: 'Schlüsselnr. Kettenschloss',
         },
         {
           dataPath: 'security.keyNumberFrameLock',
-          translation: 'Schlüsselnrummer AXA-Kette',
+          translation: 'Schlüsselnr. Rahmenschloss',
         },
         { dataPath: 'security.policeCoding', translation: 'Polizei Codierung' },
       ],
@@ -142,15 +104,28 @@ export class BikeComponent implements OnInit {
     },
     {
       type: 'Group',
+      title: 'hinterlegte Ersatzschlüssel',
+      properties: [
+        { dataPath: 'spareKeyLocations.projectOffice', translation: 'Projektbüro' },
+        { dataPath: 'spareKeyLocations.lendingStation', translation: 'Standort' },
+        { dataPath: 'spareKeyLocations.provider', translation: 'Anbieter' },
+      ]
+    },
+    {
+      type: 'Group',
       title: 'Sonstiges',
       properties: [
-        { dataPath: 'stickerBikeNameState', translation: 'Aufkleber Status' },
-        { dataPath: 'note', translation: 'Aufkleber Kommentar' },
-        { dataPath: 'taxes.costCenter', translation: 'Steuern Kostenstelle' },
+        { dataPath: 'taxes.costCenter', translation: 'Kostenstelle' },
         {
           dataPath: 'taxes.organisationArea',
-          translation: 'Steuern Vereinsbereich',
+          translation: 'Vereinsbereich',
         },
+        { dataPath: 'miscellaneous', translation: 'Anmerkungen' },
+        { dataPath: 'ownUse', translation: 'Eigennutzung' },
+        { dataPath: 'preDamage', translation: 'Vorschäden' },
+        { dataPath: 'supplier', translation: 'Lieferant' },
+        { dataPath: 'stickerBikeNameState', translation: 'Aufkleber Status' },
+        { dataPath: 'note', translation: 'Aufkleber Kommentar' },
       ],
     },
     {
@@ -243,6 +218,7 @@ export class BikeComponent implements OnInit {
       columnInfo: [
         { dataPath: 'name', translation: 'Name' },
         { dataPath: 'description', translation: 'Beschreibung' },
+        { dataPath: 'availableForSupply', translation: 'verfügbares Zubehör' },
       ],
       nameToShowInSelection: (element) => {
         return element?.name;
@@ -261,6 +237,7 @@ export class BikeComponent implements OnInit {
         { dataPath: 'serialNo', translation: 'Seriennummer' },
         { dataPath: 'title', translation: 'Name' },
         { dataPath: 'description', translation: 'Beschreibung' },
+        { dataPath: 'availableForSupply', translation: 'verfügbares Zubehör' },
       ],
       nameToShowInSelection: (element) => {
         return (
@@ -328,6 +305,51 @@ export class BikeComponent implements OnInit {
         return { "cargoBike.name": bike.name};
       },
     },
+    {
+      type: 'Group',
+      title: 'Versicherung',
+      properties: [
+        { dataPath: 'insuranceData.name', translation: 'Versicherer' },
+        { dataPath: 'insuranceData.benefactor', translation: 'Kostenträger' },
+        { dataPath: 'insuranceData.billing', translation: 'Abrechnung' },
+        { dataPath: 'insuranceData.noPnP', translation: 'Nr. P&P' },        
+      ],
+    },
+    {
+      type: 'Group',
+      title: 'Betriebsfinanzierung',
+      properties: [
+        {
+          dataPath: 'insuranceData.maintenanceResponsible',
+          translation: 'Wartung zuständig',
+        },
+        {
+          dataPath: 'insuranceData.maintenanceBenefactor',
+          translation: 'Wartung Kostenträger',
+        },
+        {
+          dataPath: 'insuranceData.maintenanceAgreement',
+          translation: 'Art d. Vereinbarung',
+        },
+        {
+          dataPath: 'insuranceData.hasFixedRate',
+          translation: 'Pauschale j/n',
+        },
+        {
+          dataPath: 'insuranceData.fixedRate',
+          translation: 'Pauschale Betrag',
+        },
+        {
+          dataPath: 'insuranceData.projectAllowance',
+          translation: 'Projektzuschuss',
+        },
+        {
+          dataPath: 'insuranceData.frameworkAgreement',
+          translation: 'Rahmenvertrag',
+        },
+        { dataPath: 'insuranceData.notes', translation: 'Sonstiges' },
+      ]
+    }
   ];
 
   headlineDataPath = 'name';

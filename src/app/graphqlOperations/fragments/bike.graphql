@@ -23,6 +23,11 @@ fragment CargoBikeFieldsForTable on CargoBike {
     keyNumberFrameLock
     policeCoding
   }
+  spareKeyLocations {
+    projectOffice
+    lendingStation
+    provider
+  }
   technicalEquipment {
     bicycleShift
     isEBike
@@ -65,12 +70,17 @@ fragment CargoBikeFieldsForTable on CargoBike {
     hasFixedRate
     fixedRate
     projectAllowance
+    frameworkAgreement
     notes
   }
   taxes {
     costCenter
     organisationArea
   }
+  miscellaneous
+  ownUse
+  preDamage
+  supplier
   provider {
     ...ProviderFieldsGeneral
   }

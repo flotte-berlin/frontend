@@ -11,12 +11,14 @@ export class LendingStationsComponent implements OnInit {
   columnInfo = [
     {
       dataPath: 'name',
-      translation: 'Name',
+      translation: 'Name (Formular)',
       sticky: true,
       link: (row: any) => {
         return '/lendingStation/' + row.id;
       },
     },
+    { dataPath: 'longName', translation: 'vollst. Name' },
+    { dataPath: 'district', translation: 'Bezirk' },
     { dataPath: 'address.street', translation: 'Straße' },
     { dataPath: 'address.number', translation: 'Hausnummer' },
     { dataPath: 'address.zip', translation: 'Postleitzahl' },
