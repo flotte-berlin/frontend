@@ -17,7 +17,7 @@ export class ProviderComponent implements OnInit {
       title: 'Allgemein',
       hideCondition: (data) => data.privatePerson === null,
       properties: [
-        { dataPath: 'formName', translation: 'Formular Name' },
+        { dataPath: 'formName', translation: 'Formular-Name' },
         {
           type: 'Link',
           linkText: "Zur Person",
@@ -26,29 +26,31 @@ export class ProviderComponent implements OnInit {
           },
         },
         { dataPath: 'privatePerson.person.firstName', translation: 'Vorname' },
-        {
-          dataPath: 'privatePerson.person.name',
-          translation: 'Nachname',
-        },
-        {
-          dataPath: 'privatePerson.phone',
-          translation: 'Telefonnummer',
-        },
-        {
-          dataPath: 'privatePerson.phone2',
-          translation: 'Telefonnummer 2',
-        },
+        { dataPath: 'privatePerson.person.name', translation: 'Nachname' },
+      ],
+    },
+    {
+      type: 'Group',
+      title: 'Kontaktinformationen',
+      hideCondition: (data) => data.privatePerson === null,
+      properties: [
+        { dataPath: 'privatePerson.phone', translation: 'Telefonnummer' },
+        { dataPath: 'privatePerson.phone2', translation: 'Telefonnummer 2' },
         { dataPath: 'privatePerson.email', translation: 'Email' },
         { dataPath: 'privatePerson.email2', translation: 'Email 2' },
+        { dataPath: 'privatePerson.address.number', translation: 'Hausnummer' },
+        { dataPath: 'privatePerson.address.street', translation: 'Straße' },
+        { dataPath: 'privatePerson.address.zip', translation: 'Postleitzahl' },
+        { dataPath: 'privatePerson.address.city', translation: 'Ort' },
         { dataPath: 'privatePerson.note', translation: 'Anmerkung' },
-      ],
+      ]
     },
     {
       type: 'Group',
       title: 'Allgemein',
       hideCondition: (data) => data.organisation === null,
       properties: [
-        { dataPath: 'formName', translation: 'Formular Name' },
+        { dataPath: 'formName', translation: 'Formular-Name' },
         {
           type: 'Link',
           linkText: "Zur Organisation",
@@ -62,6 +64,20 @@ export class ProviderComponent implements OnInit {
         { dataPath: 'organisation.address.zip', translation: 'Postleitzahl' },
         { dataPath: 'organisation.address.city', translation: 'Ort' },
       ],
+    },
+    {
+      type: 'Group',
+      title: 'Ansprechpartner',
+      hideCondition: (data) => data.organisation === null,
+      properties: [
+        { dataPath: 'organisation.contactInformation.person.firstName', translation: 'Vorname' },
+        { dataPath: 'organisation.contactInformation.person.name', translation: 'Nachnname' },
+        { dataPath: 'organisation.contactInformation.phone', translation: 'Telefonnummer' },
+        { dataPath: 'organisation.contactInformation.phone2', translation: 'Telefonnummer 2' },
+        { dataPath: 'organisation.contactInformation.email', translation: 'Email' },
+        { dataPath: 'organisation.contactInformation.email2', translation: 'Email 2' },
+        { dataPath: 'organisation.contactInformation.note', translation: 'Anmerkung' },
+      ]
     },
     {
       type: 'ReferenceTable',
@@ -80,6 +96,8 @@ export class ProviderComponent implements OnInit {
       },
       linkToTable: (element) => '/table/bikes',
       propertyNameOfUpdateInput: 'cargoBikeIds',
+      editableReferences: true,
+      deletableReferences: false,
     },
   ];
 

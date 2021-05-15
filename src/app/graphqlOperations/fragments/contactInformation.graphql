@@ -7,6 +7,9 @@ fragment ContactInformationFieldsGeneral on ContactInformation {
     phone2
     email
     email2
+    address {
+      ...AddressFields
+    }
     note
 }
 

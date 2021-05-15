@@ -79,7 +79,6 @@ export class BikesComponent implements OnInit {
     { dataPath: 'supplier', translation: 'Lieferant' },
     { dataPath: 'stickerBikeNameState', translation: 'Aufkleber Status' },
     { dataPath: 'note', translation: 'Aufkleber Kommentar' },
-    { dataPath: 'provider.formName', translation: 'Anbieter Formular Name' },
     {
       dataPath: 'provider.privatePerson.person.firstName',
       translation: 'Anbieter (Person) Vorname',
@@ -98,23 +97,6 @@ export class BikesComponent implements OnInit {
         return '/provider/' + data['provider.id'];
       },
     },
-    {
-      dataPath: 'provider.organisation.address.street',
-      translation: 'Straße',
-    },
-    {
-      dataPath: 'provider.organisation.address.number', 
-      translation: 'Hausnummer',
-    },
-    {
-      dataPath: 'provider.organisation.address.zip',
-      translation: 'Postleitzahl',
-    },
-    {
-      dataPath: 'provider.organisation.address.city',
-      translation: 'Ort',
-    },
-
     {
       dataPath: 'lendingStation.name',
       translation: 'Standort',

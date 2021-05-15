@@ -54,6 +54,19 @@ export class ReferenceTableComponent {
   _editableReferences: boolean = true;
 
   @Input()
+  set deletableReferences(value: boolean) {
+    if (value === false) {
+      this._deletableReferences = false;
+    } else {
+      this._deletableReferences = true;
+    }
+  }
+  get deletableReferences(): boolean {
+    return this._deletableReferences;
+  }
+  _deletableReferences: boolean = true;
+
+  @Input()
   set data(newdata) {
     if (!newdata) {
       return;
@@ -102,7 +115,7 @@ export class ReferenceTableComponent {
     this.columnInfo.forEach((column) => {
       this.displayedColumns.push(column.dataPath);
     });
-    if (this.editableReferences) {
+    if (this.editableReferences && this.deletableReferences) { //because we only have a delete button, we can hide "all" buttons
       this.displayedColumns.push('buttons');
     }
     this.displayedFilterColumns = this.displayedColumns.map(
