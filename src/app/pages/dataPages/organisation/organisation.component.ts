@@ -67,22 +67,7 @@ export class OrganisationComponent implements OnInit {
         { dataPath: 'contactInformation.note', translation: 'Anmerkung' },
       ],
     },
-    {
-      type: 'Group',
-      title: 'Anbieterinformationen',
-      hideCondition: (data) => data.provider === null,
-      properties: [
-        { dataPath: 'provider.formName', translation: 'Formularname' },
-        {
-          type: 'Link',
-          linkText: "Zur Anbieterseite",
-          link: (data) => {
-            return '/provider/' + data['provider.id'];
-          },
-        },
-      ],
-    },
-    {
+    /*{
       type: 'ReferenceTable',
       hideCondition: (data) => data.provider === null,
       title: 'Bereitgestellte Lastenräder',
@@ -100,7 +85,7 @@ export class OrganisationComponent implements OnInit {
       linkToTableParams: (organisation) => {
         return { "provider.organisation.name": organisation.name,};
       },
-    },
+    },*/
   ];
 
   headlineDataPath = 'name';

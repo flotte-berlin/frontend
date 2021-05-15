@@ -840,6 +840,7 @@ export type ContactInformation = {
   phone2?: Maybe<Scalars['String']>;
   email?: Maybe<Scalars['String']>;
   email2?: Maybe<Scalars['String']>;
+  address?: Maybe<Address>;
   note?: Maybe<Scalars['String']>;
   isLocked: Scalars['Boolean'];
   isLockedByMe: Scalars['Boolean'];
@@ -854,6 +855,7 @@ export type ContactInformationCreateInput = {
   phone2?: Maybe<Scalars['String']>;
   email?: Maybe<Scalars['String']>;
   email2?: Maybe<Scalars['String']>;
+  address?: Maybe<AddressUpdateInput>;
   note?: Maybe<Scalars['String']>;
 };
 
@@ -864,6 +866,7 @@ export type ContactInformationUpdateInput = {
   phone2?: Maybe<Scalars['String']>;
   email?: Maybe<Scalars['String']>;
   email2?: Maybe<Scalars['String']>;
+  address?: Maybe<AddressUpdateInput>;
   note?: Maybe<Scalars['String']>;
   keepLock?: Maybe<Scalars['Boolean']>;
 };
@@ -1044,14 +1047,14 @@ export type Address = {
   street: Scalars['String'];
   number: Scalars['String'];
   zip: Scalars['String'];
-  city?: Maybe<Scalars['String']>;
+  city: Scalars['String'];
 };
 
 export type AddressCreateInput = {
   street: Scalars['String'];
   number: Scalars['String'];
   zip: Scalars['String'];
-  city?: Maybe<Scalars['String']>;
+  city: Scalars['String'];
 };
 
 export type AddressUpdateInput = {
@@ -2357,7 +2360,7 @@ export type DeleteEquipmentTypeMutation = { __typename?: 'Mutation', deleteEquip
 
 export type ActionLogFieldsFragment = { __typename?: 'ActionLog', id: string, action: string, date: any, entity: string, entriesNew: string, entriesOld: string, userId: string };
 
-export type AddressFieldsFragment = { __typename?: 'Address', street: string, number: string, zip: string, city?: Maybe<string> };
+export type AddressFieldsFragment = { __typename?: 'Address', street: string, number: string, zip: string, city: string };
 
 export type CargoBikeFieldsForTableFragment = { __typename?: 'CargoBike', id: string, group: Group, name: string, modelName?: Maybe<string>, state?: Maybe<BikeState>, numberOfChildren?: Maybe<number>, numberOfWheels?: Maybe<number>, forCargo?: Maybe<boolean>, forChildren?: Maybe<boolean>, stickerBikeNameState?: Maybe<StickerBikeNameState>, note?: Maybe<string>, miscellaneous?: Maybe<string>, ownUse?: Maybe<string>, preDamage?: Maybe<string>, supplier?: Maybe<string>, isLocked: boolean, isLockedByMe: boolean, lockedBy?: Maybe<string>, lockedUntil?: Maybe<any>, insuranceData?: Maybe<{ __typename?: 'InsuranceData', billing?: Maybe<string>, hasFixedRate?: Maybe<boolean>, name?: Maybe<string>, benefactor?: Maybe<string>, noPnP?: Maybe<string>, maintenanceResponsible?: Maybe<string>, maintenanceBenefactor?: Maybe<string>, maintenanceAgreement?: Maybe<string>, fixedRate?: Maybe<number>, projectAllowance?: Maybe<any>, frameworkAgreement?: Maybe<string>, notes?: Maybe<string> }>, dimensionsAndLoad?: Maybe<{ __typename?: 'DimensionsAndLoad', bikeLength?: Maybe<number>, bikeWeight?: Maybe<number>, bikeHeight?: Maybe<number>, bikeWidth?: Maybe<number>, hasCoverBox?: Maybe<boolean>, lockable?: Maybe<boolean>, maxWeightBox?: Maybe<number>, maxWeightLuggageRack?: Maybe<number>, maxWeightTotal?: Maybe<number>, boxHeightRange?: Maybe<{ __typename?: 'NumRange', max?: Maybe<number>, min?: Maybe<number> }>, boxLengthRange?: Maybe<{ __typename?: 'NumRange', min?: Maybe<number>, max?: Maybe<number> }>, boxWidthRange?: Maybe<{ __typename?: 'NumRange', min?: Maybe<number>, max?: Maybe<number> }> }>, security?: Maybe<{ __typename?: 'Security', frameNumber?: Maybe<string>, adfcCoding?: Maybe<string>, keyNumberAXAChain?: Maybe<string>, keyNumberFrameLock?: Maybe<string>, policeCoding?: Maybe<string> }>, spareKeyLocations?: Maybe<{ __typename?: 'SpareKeyLocations', projectOffice?: Maybe<string>, lendingStation?: Maybe<string>, provider?: Maybe<string> }>, technicalEquipment?: Maybe<{ __typename?: 'TechnicalEquipment', bicycleShift?: Maybe<string>, isEBike?: Maybe<boolean>, hasLightSystem?: Maybe<boolean>, specialFeatures?: Maybe<string> }>, taxes?: Maybe<{ __typename?: 'Taxes', costCenter?: Maybe<string>, organisationArea?: Maybe<OrganisationArea> }>, provider?: Maybe<(
     { __typename?: 'Provider' }
@@ -2419,7 +2422,10 @@ export type BikeEventTypeFieldsFragment = { __typename?: 'BikeEventType', id: st
 export type ContactInformationFieldsGeneralFragment = { __typename?: 'ContactInformation', id: string, phone?: Maybe<string>, phone2?: Maybe<string>, email?: Maybe<string>, email2?: Maybe<string>, note?: Maybe<string>, person: (
     { __typename?: 'Person' }
     & PersonFieldsGeneralFragment
-  ) };
+  ), address?: Maybe<(
+    { __typename?: 'Address' }
+    & AddressFieldsFragment
+  )> };
 
 export type ContactInformationFieldsFragment = (
   { __typename?: 'ContactInformation', isLocked: boolean, isLockedByMe: boolean, lockedUntil?: Maybe<any> }
@@ -3178,6 +3184,14 @@ export const PersonFieldsGeneralFragmentDoc = gql`
   firstName
 }
     `;
+export const AddressFieldsFragmentDoc = gql`
+    fragment AddressFields on Address {
+  street
+  number
+  zip
+  city
+}
+    `;
 export const ContactInformationFieldsGeneralFragmentDoc = gql`
     fragment ContactInformationFieldsGeneral on ContactInformation {
   id
@@ -3188,17 +3202,13 @@ export const ContactInformationFieldsGeneralFragmentDoc = gql`
   phone2
   email
   email2
+  address {
+    ...AddressFields
+  }
   note
 }
-    ${PersonFieldsGeneralFragmentDoc}`;
-export const AddressFieldsFragmentDoc = gql`
-    fragment AddressFields on Address {
-  street
-  number
-  zip
-  city
-}
-    `;
+    ${PersonFieldsGeneralFragmentDoc}
+${AddressFieldsFragmentDoc}`;
 export const ProviderFieldsGeneralFragmentDoc = gql`
     fragment ProviderFieldsGeneral on Provider {
   id

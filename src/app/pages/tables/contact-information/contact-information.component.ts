@@ -36,6 +36,10 @@ export class ContactInformationComponent implements OnInit {
     { dataPath: 'phone', translation: 'Telefonnummer' },
     { dataPath: 'phone2', translation: 'Telefonnummer 2' },
     { dataPath: 'note', translation: 'Anmerkung' },
+    { dataPath: 'address.number', translation: 'Hausnummer' },
+    { dataPath: 'address.street', translation: 'Straße' },
+    { dataPath: 'address.zip', translation: 'Postleitzahl' },
+    { dataPath: 'address.city', translation: 'Ort' },
   ];
   dataService: any;
 

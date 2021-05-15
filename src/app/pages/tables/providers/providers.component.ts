@@ -13,7 +13,7 @@ export class ProvidersComponent implements OnInit {
   columnInfo = [
     {
       dataPath: 'formName',
-      translation: 'Formular Name',
+      translation: 'Formular-Name',
       sticky: true
     },
     {
@@ -33,6 +33,9 @@ export class ProvidersComponent implements OnInit {
     {
       dataPath: 'privatePerson.person.firstName',
       translation: 'Anbieter (Person) Vorname',
+      link: (row: any) => {
+        return '/provider/' + row['id'];
+      },
     },
     {
       dataPath: 'privatePerson.person.name',
@@ -60,18 +63,14 @@ export class ProvidersComponent implements OnInit {
       },
       propertyNameOfReferenceId: 'privatePersonId',
     },
-    {
+    /*{
       dataPath: 'privatePerson.email',
       translation: 'Anbieter (Person) Email',
     },
     {
       dataPath: 'privatePerson.phone',
       translation: 'Anbieter (Person) Telefonnummer',
-    },
-    {
-      dataPath: 'privatePerson.note',
-      translation: 'Anbieter (Person) Anmerkung',
-    },
+    },*/
   ];
 
   dataService: any;

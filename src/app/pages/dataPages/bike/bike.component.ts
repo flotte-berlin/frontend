@@ -140,7 +140,6 @@ export class BikeComponent implements OnInit {
             return '/provider/' + data['provider.id'];
           },
         },
-        { dataPath: 'provider.formName', translation: 'Formular Name' },
         {
           dataPath: 'provider.privatePerson.person.firstName',
           translation: 'Vorname',
@@ -148,6 +147,23 @@ export class BikeComponent implements OnInit {
         {
           dataPath: 'provider.privatePerson.person.name',
           translation: 'Nachname',
+        },
+        { dataPath: 'provider.formName', translation: 'Formular-Name' },
+        {
+          dataPath: 'provider.privatePerson.address.street',
+          translation: 'Straße',
+        },
+        {
+          dataPath: 'provider.privatePerson.address.number',
+          translation: 'Hausnummer',
+        },
+        {
+          dataPath: 'provider.privatePerson.address.zip',
+          translation: 'Postleitzahl',
+        },
+        {
+          dataPath: 'provider.privatePerson.address.city',
+          translation: 'Ort',
         },
         {
           dataPath: 'provider.privatePerson.email',
@@ -171,7 +187,8 @@ export class BikeComponent implements OnInit {
             return '/provider/' + data['provider.id'];
           },
         },
-        { dataPath: 'provider.organisation.name', translation: 'Name' },
+        { dataPath: 'provider.organisation.name', translation: 'Organisationsname' },
+        { dataPath: 'provider.formName', translation: 'Formular-Name' },
         {
           dataPath: 'provider.organisation.address.street',
           translation: 'Straße',
@@ -187,6 +204,22 @@ export class BikeComponent implements OnInit {
         {
           dataPath: 'provider.organisation.address.city',
           translation: 'Ort',
+        },
+        {
+          dataPath: 'provider.organisation.contactInformation.person.firstName',
+          translation: 'Ansprechpartner Vorname',
+        },
+        {
+          dataPath: 'provider.organisation.contactInformation.person.name',
+          translation: 'Ansprechpartner Nachname',
+        },
+        {
+          dataPath: 'provider.organisation.contactInformation.email',
+          translation: 'Ansprechpartner Email',
+        },
+        {
+          dataPath: 'provider.organisation.contactInformation.phone',
+          translation: 'Ansprechpartner Telefonnummer',
         },
       ],
     },
