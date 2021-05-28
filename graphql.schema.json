@@ -1115,6 +1115,18 @@
             "deprecationReason": null
           },
           {
+            "name": "fixedRateCycle",
+            "description": null,
+            "args": [],
+            "type": {
+              "kind": "SCALAR",
+              "name": "String",
+              "ofType": null
+            },
+            "isDeprecated": false,
+            "deprecationReason": null
+          },
+          {
             "name": "projectAllowance",
             "description": "Projektzuschuss",
             "args": [],
@@ -1279,6 +1291,18 @@
             "defaultValue": null
           },
           {
+            "name": "fixedRateCycle",
+            "description": null,
+            "args": [],
+            "type": {
+              "kind": "SCALAR",
+              "name": "String",
+              "ofType": null
+            },
+            "isDeprecated": false,
+            "deprecationReason": null
+          },
+          {
             "name": "projectAllowance",
             "description": "Projektzuschuss",
             "type": {
@@ -1398,6 +1422,18 @@
               "ofType": null
             },
             "defaultValue": null
+          },
+          {
+            "name": "fixedRateCycle",
+            "description": null,
+            "args": [],
+            "type": {
+              "kind": "SCALAR",
+              "name": "String",
+              "ofType": null
+            },
+            "isDeprecated": false,
+            "deprecationReason": null
           },
           {
             "name": "projectAllowance",
@@ -2355,19 +2391,19 @@
         "interfaces": null,
         "enumValues": [
           {
-            "name": "KL",
+            "name": "Kl",
             "description": null,
             "isDeprecated": false,
             "deprecationReason": null
           },
           {
-            "name": "LI",
+            "name": "Li",
             "description": null,
             "isDeprecated": false,
             "deprecationReason": null
           },
           {
-            "name": "SP",
+            "name": "Sp",
             "description": null,
             "isDeprecated": false,
             "deprecationReason": null

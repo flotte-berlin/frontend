@@ -16,19 +16,10 @@ export type Scalars = {
   DateTime: any;
   /** only time hh-mm-ss */
   Time: any;
-  /**
-   * is of american format [-]$[0-9]+.[0-9][0-9]
-   * commas every three digits and . for decimals with 2 digits after the .
-   * There can be a leading  -.
-   * There is a currency signe at the first position or second position if - is set.
-   * The kind of currency depends on the database.
-   */
-  Money: any;
   Link: any;
   /** The `Upload` scalar type represents a file upload. */
   Upload: any;
 };
-
 
 
 
@@ -218,16 +209,9 @@ export type InsuranceData = {
   maintenanceBenefactor?: Maybe<Scalars['String']>;
   maintenanceAgreement?: Maybe<Scalars['String']>;
   hasFixedRate?: Maybe<Scalars['Boolean']>;
-  fixedRate?: Maybe<Scalars['Float']>;
-  /**
-   * Projektzuschuss:
-   * is of american format [-]$[0-9]+.[0-9][0-9]
-   * commas every three digits and . for decimals with 2 digits after the .
-   * There can be a leading  -.
-   * There is a currency signe at the first position or second position if - is set.
-   * The kind of currency depends on the database.
-   */
-  projectAllowance?: Maybe<Scalars['Money']>;
+  fixedRate?: Maybe<Scalars['Int']>;
+  fixedRateCycle?: Maybe<Scalars['String']>;
+  projectAllowance?: Maybe<Scalars['Int']>;
   frameworkAgreement?: Maybe<Scalars['String']>;
   notes?: Maybe<Scalars['String']>;
 };
@@ -243,16 +227,9 @@ export type InsuranceDataCreateInput = {
   maintenanceBenefactor?: Maybe<Scalars['String']>;
   maintenanceAgreement?: Maybe<Scalars['String']>;
   hasFixedRate?: Maybe<Scalars['Boolean']>;
-  fixedRate?: Maybe<Scalars['Float']>;
-  /**
-   * Projektzuschuss:
-   * must be of format [+|-][$][0-9]*[.[0-9]*]
-   * commas are ignored, non numeric values except , and . lead to errors
-   * There can be a leading + or -.
-   * You can pass a currency signe at the first position or second position of + or - is set.
-   * The kind of currency depends on the database.
-   */
-  projectAllowance?: Maybe<Scalars['Money']>;
+  fixedRate?: Maybe<Scalars['Int']>;
+  fixedRateCycle?: Maybe<Scalars['String']>;
+  projectAllowance?: Maybe<Scalars['Int']>;
   frameworkAgreement?: Maybe<Scalars['String']>;
   notes?: Maybe<Scalars['String']>;
 };
@@ -268,16 +245,9 @@ export type InsuranceDataUpdateInput = {
   maintenanceBenefactor?: Maybe<Scalars['String']>;
   maintenanceAgreement?: Maybe<Scalars['String']>;
   hasFixedRate?: Maybe<Scalars['Boolean']>;
-  fixedRate?: Maybe<Scalars['Float']>;
-  /**
-   * Projektzuschuss:
-   * must be of format [+|-][$][0-9]*[.[0-9]*]
-   * commas are ignored, non numeric values except , and . lead to errors
-   * There can be a leading + or -.
-   * You can pass a currency signe at the first position or second position of + or - is set.
-   * The kind of currency depends on the database.
-   */
-  projectAllowance?: Maybe<Scalars['Money']>;
+  fixedRate?: Maybe<Scalars['Int']>;
+  fixedRateCycle?: Maybe<Scalars['String']>;
+  projectAllowance?: Maybe<Scalars['Int']>;
   frameworkAgreement?: Maybe<Scalars['String']>;
   notes?: Maybe<Scalars['String']>;
 };
@@ -2362,7 +2332,7 @@ export type ActionLogFieldsFragment = { __typename?: 'ActionLog', id: string, ac
 
 export type AddressFieldsFragment = { __typename?: 'Address', street: string, number: string, zip: string, city: string };
 
-export type CargoBikeFieldsForTableFragment = { __typename?: 'CargoBike', id: string, group: Group, name: string, modelName?: Maybe<string>, state?: Maybe<BikeState>, numberOfChildren?: Maybe<number>, numberOfWheels?: Maybe<number>, forCargo?: Maybe<boolean>, forChildren?: Maybe<boolean>, stickerBikeNameState?: Maybe<StickerBikeNameState>, note?: Maybe<string>, miscellaneous?: Maybe<string>, ownUse?: Maybe<string>, preDamage?: Maybe<string>, supplier?: Maybe<string>, isLocked: boolean, isLockedByMe: boolean, lockedBy?: Maybe<string>, lockedUntil?: Maybe<any>, insuranceData?: Maybe<{ __typename?: 'InsuranceData', billing?: Maybe<string>, hasFixedRate?: Maybe<boolean>, name?: Maybe<string>, benefactor?: Maybe<string>, noPnP?: Maybe<string>, maintenanceResponsible?: Maybe<string>, maintenanceBenefactor?: Maybe<string>, maintenanceAgreement?: Maybe<string>, fixedRate?: Maybe<number>, projectAllowance?: Maybe<any>, frameworkAgreement?: Maybe<string>, notes?: Maybe<string> }>, dimensionsAndLoad?: Maybe<{ __typename?: 'DimensionsAndLoad', bikeLength?: Maybe<number>, bikeWeight?: Maybe<number>, bikeHeight?: Maybe<number>, bikeWidth?: Maybe<number>, hasCoverBox?: Maybe<boolean>, lockable?: Maybe<boolean>, maxWeightBox?: Maybe<number>, maxWeightLuggageRack?: Maybe<number>, maxWeightTotal?: Maybe<number>, boxHeightRange?: Maybe<{ __typename?: 'NumRange', max?: Maybe<number>, min?: Maybe<number> }>, boxLengthRange?: Maybe<{ __typename?: 'NumRange', min?: Maybe<number>, max?: Maybe<number> }>, boxWidthRange?: Maybe<{ __typename?: 'NumRange', min?: Maybe<number>, max?: Maybe<number> }> }>, security?: Maybe<{ __typename?: 'Security', frameNumber?: Maybe<string>, adfcCoding?: Maybe<string>, keyNumberAXAChain?: Maybe<string>, keyNumberFrameLock?: Maybe<string>, policeCoding?: Maybe<string> }>, spareKeyLocations?: Maybe<{ __typename?: 'SpareKeyLocations', projectOffice?: Maybe<string>, lendingStation?: Maybe<string>, provider?: Maybe<string> }>, technicalEquipment?: Maybe<{ __typename?: 'TechnicalEquipment', bicycleShift?: Maybe<string>, isEBike?: Maybe<boolean>, hasLightSystem?: Maybe<boolean>, specialFeatures?: Maybe<string> }>, taxes?: Maybe<{ __typename?: 'Taxes', costCenter?: Maybe<string>, organisationArea?: Maybe<OrganisationArea> }>, provider?: Maybe<(
+export type CargoBikeFieldsForTableFragment = { __typename?: 'CargoBike', id: string, group: Group, name: string, modelName?: Maybe<string>, state?: Maybe<BikeState>, numberOfChildren?: Maybe<number>, numberOfWheels?: Maybe<number>, forCargo?: Maybe<boolean>, forChildren?: Maybe<boolean>, stickerBikeNameState?: Maybe<StickerBikeNameState>, note?: Maybe<string>, miscellaneous?: Maybe<string>, ownUse?: Maybe<string>, preDamage?: Maybe<string>, supplier?: Maybe<string>, isLocked: boolean, isLockedByMe: boolean, lockedBy?: Maybe<string>, lockedUntil?: Maybe<any>, insuranceData?: Maybe<{ __typename?: 'InsuranceData', billing?: Maybe<string>, hasFixedRate?: Maybe<boolean>, name?: Maybe<string>, benefactor?: Maybe<string>, noPnP?: Maybe<string>, maintenanceResponsible?: Maybe<string>, maintenanceBenefactor?: Maybe<string>, maintenanceAgreement?: Maybe<string>, fixedRate?: Maybe<number>, fixedRateCycle?: Maybe<Scalars['String']>, projectAllowance?: Maybe<number>, frameworkAgreement?: Maybe<string>, notes?: Maybe<string> }>, dimensionsAndLoad?: Maybe<{ __typename?: 'DimensionsAndLoad', bikeLength?: Maybe<number>, bikeWeight?: Maybe<number>, bikeHeight?: Maybe<number>, bikeWidth?: Maybe<number>, hasCoverBox?: Maybe<boolean>, lockable?: Maybe<boolean>, maxWeightBox?: Maybe<number>, maxWeightLuggageRack?: Maybe<number>, maxWeightTotal?: Maybe<number>, boxHeightRange?: Maybe<{ __typename?: 'NumRange', max?: Maybe<number>, min?: Maybe<number> }>, boxLengthRange?: Maybe<{ __typename?: 'NumRange', min?: Maybe<number>, max?: Maybe<number> }>, boxWidthRange?: Maybe<{ __typename?: 'NumRange', min?: Maybe<number>, max?: Maybe<number> }> }>, security?: Maybe<{ __typename?: 'Security', frameNumber?: Maybe<string>, adfcCoding?: Maybe<string>, keyNumberAXAChain?: Maybe<string>, keyNumberFrameLock?: Maybe<string>, policeCoding?: Maybe<string> }>, spareKeyLocations?: Maybe<{ __typename?: 'SpareKeyLocations', projectOffice?: Maybe<string>, lendingStation?: Maybe<string>, provider?: Maybe<string> }>, technicalEquipment?: Maybe<{ __typename?: 'TechnicalEquipment', bicycleShift?: Maybe<string>, isEBike?: Maybe<boolean>, hasLightSystem?: Maybe<boolean>, specialFeatures?: Maybe<string> }>, taxes?: Maybe<{ __typename?: 'Taxes', costCenter?: Maybe<string>, organisationArea?: Maybe<OrganisationArea> }>, provider?: Maybe<(
     { __typename?: 'Provider' }
     & ProviderFieldsGeneralFragment
   )>, lendingStation?: Maybe<(
@@ -3271,6 +3241,7 @@ export const CargoBikeFieldsForTableFragmentDoc = gql`
     maintenanceBenefactor
     maintenanceAgreement
     fixedRate
+    fixedRateCycle
     projectAllowance
     frameworkAgreement
     notes
@@ -3355,6 +3326,7 @@ export const CargoBikeFieldsForTableFragmentDoc = gql`
     maintenanceAgreement
     hasFixedRate
     fixedRate
+    fixedRateCycle
     projectAllowance
     frameworkAgreement
     notes

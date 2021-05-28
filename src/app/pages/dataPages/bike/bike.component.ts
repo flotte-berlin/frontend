@@ -354,31 +354,35 @@ export class BikeComponent implements OnInit {
       properties: [
         {
           dataPath: 'insuranceData.maintenanceResponsible',
-          translation: 'Wartung zuständig',
+          translation: 'Wartung - zuständig',
         },
         {
           dataPath: 'insuranceData.maintenanceBenefactor',
-          translation: 'Wartung Kostenträger',
+          translation: 'Wartung - Kostenträger',
         },
         {
           dataPath: 'insuranceData.maintenanceAgreement',
-          translation: 'Art d. Vereinbarung',
+          translation: 'Wartung - Vereinbarung',
         },
         {
           dataPath: 'insuranceData.hasFixedRate',
-          translation: 'Pauschale j/n',
-        },
-        {
-          dataPath: 'insuranceData.fixedRate',
-          translation: 'Pauschale Betrag',
-        },
-        {
-          dataPath: 'insuranceData.projectAllowance',
-          translation: 'Projektzuschuss',
+          translation: 'Pauschale - j/n',
         },
         {
           dataPath: 'insuranceData.frameworkAgreement',
           translation: 'Rahmenvertrag',
+        },
+        {
+          dataPath: 'insuranceData.fixedRate',
+          translation: 'Pauschale - Betrag',
+        },
+        {
+          dataPath: 'insuranceData.fixedRateCycle',
+          translation: 'Pauschale - Takt',
+        },
+        {
+          dataPath: 'insuranceData.projectAllowance',
+          translation: 'Projektzuschuss',
         },
         { dataPath: 'insuranceData.notes', translation: 'Sonstiges' },
       ]

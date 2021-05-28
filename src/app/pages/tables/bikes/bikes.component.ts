@@ -115,8 +115,6 @@ export class BikesComponent implements OnInit {
       dataPath: 'insuranceData.billing',
       translation: 'Versicherung Abrechnung',
     },
-    { dataPath: 'insuranceData.hasFixedRate', translation: 'Pauschale j/n' },
-    { dataPath: 'insuranceData.fixedRate', translation: 'Pauschale Betrag' },
     {
       dataPath: 'insuranceData.maintenanceResponsible',
       translation: 'Wartung zuständig',
@@ -129,13 +127,18 @@ export class BikesComponent implements OnInit {
       dataPath: 'insuranceData.maintenanceAgreement',
       translation: 'Wartungsvereinbarung',
     },
+    { dataPath: 'insuranceData.hasFixedRate', translation: 'Pauschale j/n' },
+    {
+      dataPath: 'insuranceData.frameworkAgreement', translation: 'Rahmenvertrag',
+    },
+    { dataPath: 'insuranceData.fixedRate', translation: 'Pauschale Betrag' },
+    {
+      dataPath: 'insuranceData.fixedRateCycle',
+      translation: 'Pauschale Takt',
+    },
     {
       dataPath: 'insuranceData.projectAllowance',
       translation: 'Projektzuschuss',
-    },
-    {
-      dataPath: 'insuranceData.frameworkAgreement',
-      translation: 'Rahmenvertrag',
     },
     { dataPath: 'insuranceData.notes', translation: 'Sonstiges' },
   ];
