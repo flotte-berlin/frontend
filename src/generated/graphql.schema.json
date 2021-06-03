@@ -2659,19 +2659,19 @@
         "interfaces": null,
         "enumValues": [
           {
-            "name": "KL",
+            "name": "Kl",
             "description": null,
             "isDeprecated": false,
             "deprecationReason": null
           },
           {
-            "name": "LI",
+            "name": "Li",
             "description": null,
             "isDeprecated": false,
             "deprecationReason": null
           },
           {
-            "name": "SP",
+            "name": "Sp",
             "description": null,
             "isDeprecated": false,
             "deprecationReason": null
@@ -2834,6 +2834,18 @@
                 "name": "Boolean",
                 "ofType": null
               }
+            },
+            "isDeprecated": false,
+            "deprecationReason": null
+          },
+          {
+            "name": "comment",
+            "description": null,
+            "args": [],
+            "type": {
+              "kind": "SCALAR",
+              "name": "String",
+              "ofType": null
             },
             "isDeprecated": false,
             "deprecationReason": null
@@ -3045,6 +3057,16 @@
             "defaultValue": null
           },
           {
+            "name": "comment",
+            "description": null,
+            "type": {
+              "kind": "SCALAR",
+              "name": "String",
+              "ofType": null
+            },
+            "defaultValue": null
+          },
+          {
             "name": "workshopIds",
             "description": null,
             "type": {
@@ -3153,6 +3175,16 @@
             "type": {
               "kind": "SCALAR",
               "name": "Boolean",
+              "ofType": null
+            },
+            "defaultValue": null
+          },
+          {
+            "name": "comment",
+            "description": null,
+            "type": {
+              "kind": "SCALAR",
+              "name": "String",
               "ofType": null
             },
             "defaultValue": null

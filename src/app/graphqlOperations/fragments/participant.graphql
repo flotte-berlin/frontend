@@ -16,6 +16,7 @@ fragment ParticipantFieldsForTable on Participant {
   memberADFC
   locationZIPs
   memberCoreTeam
+  comment
   distributedActiveBikeParte
 
   isLocked

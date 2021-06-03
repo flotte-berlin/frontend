@@ -33,6 +33,10 @@ export class ParticipantComponent implements OnInit {
           translation: 'Teil des Kernteams',
         },
         {
+          dataPath: 'comment',
+          translation: 'Kommentar'
+        },
+        {
           dataPath: 'distributedActiveBikeParte',
           translation: 'Verteiler aktive Radpat*innen',
         },

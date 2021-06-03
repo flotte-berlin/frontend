@@ -73,6 +73,10 @@ export class ParticipantsComponent implements OnInit {
       dataPath: 'distributedActiveBikeParte',
       translation: 'Verteiler aktive Radpat*innen',
     },
+    {
+      dataPath: 'comment',
+      translation: 'Kommentar'
+    },
   ];
 
   dataService: any;
